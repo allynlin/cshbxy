@@ -57,7 +57,6 @@ const LeaveForm = () => {
     const checkUploadFilesList = () => {
         checkLastTimeUploadFiles(tableName).then(res => {
             if (res.code === 200) {
-                console.log(res)
                 // 遍历 res.body
                 const fileList = res.body.map((item: any) => {
                     return {

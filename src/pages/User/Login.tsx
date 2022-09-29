@@ -1,4 +1,4 @@
-import React,{useEffect} from "react";
+import React from "react";
 import {Button, Form, Input, message, Switch, Radio, Layout} from 'antd';
 import './index.scss'
 import Cookie from 'js-cookie';
@@ -24,17 +24,6 @@ const StudentForm = () => {
     const channel = Form.useWatch('channel', form);
     const rememberme = Form.useWatch('rememberme', form);
     const navigate = useNavigate();
-
-    useEffect(() => {
-        // 获取地址栏中的参数
-        const url = window.location.hash;
-        // 获取地址栏中的参数是否有 403 字段
-        const is403 = url.indexOf('403') !== -1;
-        // 如果有 403 字段，就提示用户没有权限
-        if (is403) {
-            message.error('身份校验失败，请重新登录')
-        }
-    },[])
 
     const onFinish = () => {
         NProgress.inc();
