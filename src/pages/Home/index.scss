@@ -1,0 +1,143 @@
+$body-top: 10%;
+$body-left: 200px;
+$white: #ffffff;
+$black: #000000;
+.playOut-body {
+    /* Rectangle 1 */
+    position: absolute;
+    width: 100%;
+    min-width: 600px;
+    height: 100%;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    background: $white;
+    display: flex;
+    flex-flow: column nowrap;
+    //overflow: hidden;
+
+    .header {
+        position: absolute;
+        width: 100%;
+        height: $body-top;
+        top: 0;
+        left: 0;
+        background-color: $white;
+        outline: 1px solid rgb(219, 219, 219);
+        z-index: 120;
+        padding-left: $body-left;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        border-top-right-radius: 10px;
+
+        .right {
+            position: absolute;
+            right: 20px;
+            top: 0;
+            height: 100%;
+            width: 20%;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding-right: 10px;
+        }
+
+        .ant-breadcrumb {
+            padding-left: 20px;
+
+            li:last-child a {
+                color: #8395a7;
+            }
+        }
+    }
+
+    .container {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+
+        .silder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: $white;
+            width: $body-left;
+            outline: 1px solid rgb(219, 219, 219);
+            height: 100%;
+            z-index: 120;
+            display: flex;
+            flex-flow: column nowrap;
+            //justify-content: space-between;
+            .top {
+                //min-height: 70px;
+                height: $body-top;
+                width: 100%;
+                outline: 1px solid rgb(219, 219, 219);
+                display: flex;
+                overflow: hidden;
+
+                .logo {
+                    position: absolute;
+                    left: 25px;
+                    top: 23px;
+                }
+
+                .ant-typography {
+                    position: relative;
+                    left: 55px;
+                    top: 20px;
+                }
+            }
+
+            .silder_content {
+                display: flex;
+            }
+
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+        }
+
+        .content {
+            position: absolute;
+            //min-top: 70px;
+            top: $body-top;
+            left: $body-left;
+            width: calc(100% - #{$body-left});
+            height: calc(100% - #{$body-top});
+            align-items: center;
+            background-color: $white;
+            overflow-y: auto;
+            overflow-x: hidden;
+            //overflow-y: scroll;
+            //overflow-x: hidden;
+            //border: 1px solid rgb(219, 219, 219);
+            //border-top: none;
+            //border-bottom-left-radius: 10px;
+            //border-bottom-right-radius: 10px;
+            //display: flex;
+            //flex-flow: column nowrap;
+            //justify-content: space-between;
+            //align-items: center;
+        }
+
+        .footer {
+            position: absolute;
+            width: 100%;
+            //min-height: 70px;
+            height: 5%;
+            bottom: 0;
+            left: 0;
+            background-color: $white;
+            outline: 1px solid rgb(219, 219, 219);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-left: $body-left;
+            border-bottom-right-radius: 10px;
+            color: #8c8c8c;
+        }
+    }
+}
