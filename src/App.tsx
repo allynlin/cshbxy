@@ -11,7 +11,6 @@ import {checkTeacherToken, checkDepartmentToken, checkLeaderToken, getVersion} f
 import {login} from "./component/redux/isLoginSlice";
 import {teacher, department, leader} from "./component/redux/userTypeSlice";
 import {setVersion} from "./component/redux/serverVersionSlice";
-import {version} from "./baseInfo";
 
 
 function App() {

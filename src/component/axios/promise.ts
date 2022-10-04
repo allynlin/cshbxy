@@ -2,6 +2,7 @@ import axios from 'axios';
 import {message} from 'antd';
 import qs from 'qs';
 import NProgress from 'nprogress';
+import 'nprogress/nprogress.css'
 import Cookie from "js-cookie";
 import {BaseInfo, version} from "../../baseInfo";
 import {winRe} from "../../baseInfo";
@@ -55,9 +56,20 @@ const errorTip = (code: string) => {
     }
 }
 
-const instance = axios.create({
-    timeout: 120000,
-});
+// 判断是跳转到 home 下的错误页面还是根目录下的错误页面
+const toErrorPage = (to: string) => {
+    // 判断 URL 中是否有 home 字符串
+    const url = window.location.pathname;
+    // 遍历字符串，如果有 home 字符串，就跳转到 home 下的错误页面
+    for (let i = 0; i < url.length; i++) {
+        if (url[i] === 'h' && url[i + 1] === 'o' && url[i + 2] === 'm' && url[i + 3] === 'e') {
+            winRe(`/home${to}`);
+            return;
+        }
+    }
+    // 否则跳转到根目录下的错误页面
+    winRe(to);
+}
 
 /**
  * 模块说明:有api_token的请求
@@ -66,7 +78,7 @@ export const Request = (api: String, method = MethodType.GET, params = {}, confi
     const apiToken = Cookie.get('token');
     // 如果不是登录和注册接口（/login 或 /register 开头），POST 请求，没有获取到 token，就跳转到登录页面
     if (apiToken === undefined && method === MethodType.POST && !api.startsWith('/login') && !api.startsWith('/register')) {
-        winRe('/403')
+        toErrorPage('/403');
         return
     }
     const baseURL = BaseInfo;
@@ -85,7 +97,8 @@ export const Request = (api: String, method = MethodType.GET, params = {}, confi
     }
 
     return new Promise((resolve, reject) => {
-        instance({
+        NProgress.inc();
+        axios({
             url: `${baseURL}${api}`,
             method,
             [data]: qs.stringify(params),
@@ -112,10 +125,10 @@ export const Request = (api: String, method = MethodType.GET, params = {}, confi
                 Cookie.remove('token');
                 Cookie.remove('userType');
                 reject(res.data)
-                winRe(`/403`);
+                winRe('/403')
             } else if (res.data.code === 500) {
                 reject(res.data)
-                winRe(`/500`);
+                toErrorPage('/500');
             } else if (res.data.code >= 200 && res.data.code < 400) {
                 // 如果返回了 token 则更新本地 token
                 if (res.data.token !== null && res.data.token !== undefined)

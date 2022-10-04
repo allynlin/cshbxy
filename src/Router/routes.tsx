@@ -31,7 +31,38 @@ const routes: RoutesItemType[] = [
                     ...teacherApply,
                     ...teacherRecord
                 ]
-            },
+            }, {
+                path: '404',
+                component: () => import('../pages/Result/404'),
+                meta: {
+                    title: '404',
+                    Auth: 'public'
+                }
+            }, {
+                path: '500',
+                component: () => import('../pages/Result/500'),
+                meta: {
+                    title: '500',
+                    Auth: 'public'
+                }
+            }, {
+                path: 'success',
+                component: () => import('../pages/Result/Success'),
+                meta: {
+                    title: '成功',
+                    Auth: 'public'
+                }
+            }, {
+                path: 'info',
+                component: () => import('../pages/Result/Info'),
+                meta: {
+                    title: '信息',
+                    Auth: 'public'
+                }
+            }, {
+                path: '*',
+                redirect: '/home/404'
+            }
         ]
     },
     {
@@ -60,14 +91,14 @@ const routes: RoutesItemType[] = [
     },
     {
         path: '/403',
-        component: () => import('../pages/Error/403'),
+        component: () => import('../pages/Result/403'),
         meta: {
             title: '403',
             Auth: 'public'
         }
     }, {
         path: '/404',
-        component: () => import('../pages/Error/404'),
+        component: () => import('../pages/Result/404'),
         meta: {
             title: '404',
             Auth: 'public'
@@ -75,14 +106,14 @@ const routes: RoutesItemType[] = [
     },
     {
         path: '/500',
-        component: () => import('../pages/Error/500'),
+        component: () => import('../pages/Result/500'),
         meta: {
             title: '500',
             Auth: 'public'
         }
     }, {
         path: '/103',
-        component: () => import('../pages/Error/VersionLow'),
+        component: () => import('../pages/Result/VersionLow'),
         meta: {
             title: '版本过低',
             Auth: 'public'

@@ -1,4 +1,4 @@
-export const version = `0.4.2`;
+export const version = `0.4.21`;
 
 // export const BaseInfo = 'http://localhost:8080/cshbxy';
 // export const BaseInfo = 'http://localhost:8086/cshbxy';

@@ -9,7 +9,7 @@ import {
     Typography
 } from 'antd';
 import React, {useEffect, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {
     queryDepartmentMessage,
     teacherChangeDepartment,
@@ -19,6 +19,8 @@ import {
 import '../index.scss';
 import {DownLoadURL} from "../../../baseInfo";
 import FileUpLoad from "../../../component/FileUpLoad";
+import {LoadingOutlined} from "@ant-design/icons";
+import NProgress from "nprogress";
 
 const {Title} = Typography;
 const tableName = `changedepartmentbyteacher`;
@@ -33,10 +35,10 @@ const LeaveForm = () => {
     // 确认框状态
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-    // 展示表单还是提示信息,两种状态，分别是 info 或者 warning
-
+    // 展示表单还是提示信息,两种状态，分别是 info 或者 loading
     const [isRenderResult, setIsRenderResult] = useState<boolean>(true);
     const [RenderResultTitle, setRenderResultTitle] = useState<String>('正在获取部门变更申请记录');
+    const [isRenderInfo, setIsRenderInfo] = useState<boolean>(false);
     // 部门列表
     const [departmentOptions, setDepartmentOptions] = useState([]);
     // 监听表单数据
@@ -73,11 +75,12 @@ const LeaveForm = () => {
         }
         checkTeacherChangeDepartment().then(res => {
             if (res.code === 200) {
+                setRenderResultTitle("正在获取上次上传的文件")
                 checkUploadFilesList();
                 setIsQuery(false)
                 setWaitTime(0)
             } else {
-                message.warning(res.msg);
+                setIsRenderInfo(true)
                 setRenderResultTitle("您已经提交过部门变更申请，请等待审批结果")
             }
         })
@@ -108,6 +111,16 @@ const LeaveForm = () => {
             setConfirmLoading(false);
             message.success(res.msg);
             navigate('/home/teacher/record/departmentChange');
+            navigate('/home/success', {
+                state: {
+                    object: {
+                        title: '部门变更申请提交成功',
+                        describe: '请等待管理员审批',
+                        toPage: '查看审批记录',
+                        toURL: '/home/teacher/record/departmentChange',
+                    }
+                }
+            })
         }).catch(err => {
             setConfirmLoading(false);
         })
@@ -164,24 +177,22 @@ const LeaveForm = () => {
 
     return isRenderResult ? (
         <Result
-            status="warning"
+            status="info"
+            icon={
+                isRenderInfo ? '' : <LoadingOutlined
+                    style={{
+                        fontSize: 40,
+                    }}
+                    spin
+                />
+            }
             title={RenderResultTitle}
             extra={
-                <>
-                    <Button type="primary" key="console" onClick={() => {
-                        navigate('/home/teacher/record/departmentChange')
-                    }}>
-                        查看部门变更申请记录
-                    </Button>
-                    <Button type={'primary'} key="buy"
-                            onClick={() => {
-                                checkDepartmentChange();
-                            }}
-                            disabled={isQuery}
-                    >
-                        {isQuery ? `刷新(${waitTime})` : '刷新'}
-                    </Button>
-                </>
+                <Button disabled={isQuery} type="primary" onClick={() => {
+                    checkDepartmentChange()
+                }}>
+                    {isQuery ? `刷新(${waitTime})` : `刷新`}
+                </Button>
             }
         />) : (
         <div className={'body'}>

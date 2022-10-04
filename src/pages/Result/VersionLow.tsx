@@ -6,6 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {getVersion} from "../../component/axios/api";
 import {setVersion} from "../../component/redux/serverVersionSlice";
 import {useNavigate} from "react-router-dom";
+import './VersionLow.scss'
 
 const {Paragraph, Text} = Typography;
 

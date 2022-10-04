@@ -11,9 +11,7 @@ import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {login} from "../../component/redux/isLoginSlice";
 import {teacher, department, leader} from "../../component/redux/userTypeSlice";
-import NProgress from 'nprogress'
-import 'nprogress/nprogress.css'
-import {version} from "../../baseInfo";
+import {version, winRe} from "../../baseInfo";
 import {setVersion} from "../../component/redux/serverVersionSlice";
 
 const {Header, Footer, Content} = Layout;
@@ -28,7 +26,6 @@ const StudentForm = () => {
     const navigate = useNavigate();
 
     const onFinish = () => {
-        NProgress.inc();
         switch (channel) {
             case 'teacher':
                 onTeacherLogin()
@@ -47,7 +44,6 @@ const StudentForm = () => {
     // 登录函数
     const onTeacherLogin = () => {
         teacherLogin(username, password).then(res => {
-            NProgress.done(true);
             if (res.code === 200) {
                 dispatch(teacher())
                 message.success(res.msg);
@@ -62,7 +58,6 @@ const StudentForm = () => {
     }
     const onDepartmentLogin = () => {
         departmentLogin(username, password).then(res => {
-            NProgress.done(true);
             if (res.code === 200) {
                 dispatch(department())
                 message.success(res.msg);
@@ -77,7 +72,6 @@ const StudentForm = () => {
     }
     const onLeaderLogin = () => {
         leaderLogin(username, password).then(res => {
-            NProgress.done(true);
             if (res.code === 200) {
                 dispatch(leader())
                 message.success(res.msg)
@@ -249,7 +243,13 @@ const Login = () => {
     return (
         <Layout>
             <Header>
-                <span>校园 OA 系统登陆 {version}</span>
+                <span>
+                    校园 OA 系统登陆 {version}
+                    <Button type={"primary"} onClick={() => {
+                        // @ts-ignore
+                        window.location.reload(true)
+                    }}>刷新</Button>
+                </span>
             </Header>
             <Content>
                 <StudentForm/>

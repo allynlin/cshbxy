@@ -16,8 +16,6 @@ import {
     departmentLogin,
     leaderLogin, getVersion
 } from "../../component/axios/api";
-import NProgress from 'nprogress'
-import 'nprogress/nprogress.css'
 import {useDispatch, useSelector} from "react-redux";
 import {teacher, department, leader} from "../../component/redux/userTypeSlice";
 import {login} from "../../component/redux/isLoginSlice";
@@ -56,7 +54,6 @@ const RegisterStudent = () => {
             message.error("两次密码输入不一致");
             return
         }
-        NProgress.inc();
         switch (registerType) {
             case 'teacher':
                 registerTeacher()
@@ -109,7 +106,6 @@ const RegisterStudent = () => {
                             message.error(res.msg);
                             navigate('/login')
                         }
-                        NProgress.done(true);
                     })
                     break
                 case 'department':
@@ -124,7 +120,6 @@ const RegisterStudent = () => {
                             message.error(res.msg);
                             navigate('/login')
                         }
-                        NProgress.done(true);
                     })
                     break
                 case 'leader':
@@ -139,7 +134,7 @@ const RegisterStudent = () => {
                             message.error(res.msg);
                             navigate('/login')
                         }
-                        NProgress.done(true);
+
                     })
                     break
                 default:
@@ -149,7 +144,6 @@ const RegisterStudent = () => {
         } else {
             navigate('/login')
         }
-        NProgress.done(true);
     }
 
     const loginSuccess = (e: string) => {
@@ -206,9 +200,7 @@ const RegisterStudent = () => {
 
 
     const getDepartmentOptions = () => {
-        NProgress.inc();
         queryDepartmentMessage().then(res => {
-            NProgress.done(true);
             const options = res.body.map((item: { uid: string, realeName: string }) => {
                 return {
                     value: item.uid,
@@ -220,9 +212,7 @@ const RegisterStudent = () => {
     }
 
     const getLeaderOptions = () => {
-        NProgress.inc();
         queryLeaderMessage().then(res => {
-            NProgress.done(true);
             const options: [] = res.body.map((item: { uid: string; realeName: string; }) => {
                 return {
                     value: item.uid,

@@ -17,7 +17,10 @@ const RenderLogOut = () => {
     }
 
     return (
-        <Button type="primary" danger onClick={logOut}>
+        <Button type="primary" onClick={logOut} style={{
+            backgroundColor: '#f32401',
+            borderColor: '#f32401'
+        }}>
             退出登录
         </Button>
     )
