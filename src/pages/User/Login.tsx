@@ -5,7 +5,7 @@ import Cookie from 'js-cookie';
 import {
     teacherLogin,
     departmentLogin,
-    leaderLogin
+    leaderLogin, getVersion
 } from "../../component/axios/api";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
@@ -14,6 +14,7 @@ import {teacher, department, leader} from "../../component/redux/userTypeSlice";
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import {version} from "../../baseInfo";
+import {setVersion} from "../../component/redux/serverVersionSlice";
 
 const {Header, Footer, Content} = Layout;
 
@@ -216,11 +217,35 @@ const StudentForm = () => {
 };
 
 const Login = () => {
+
+    const dispatch = useDispatch();
+
     const serverVersion = useSelector((state: {
         serverVersion: {
             value: string
         }
     }) => state.serverVersion.value);
+
+    const getVer = () => {
+        getVersion().then(res => {
+            // 对比本地 version，如果本地版本低于服务器版本，就提示更新
+            if (res.body > version) {
+                message.warning("当前版本过低，请更新版本")
+            }
+            dispatch(setVersion(res.body))
+        })
+    }
+
+    const RenderRefresh = () => {
+        return (
+            <a
+                onClick={e => {
+                    e.preventDefault();
+                    getVer();
+                }}>刷新</a>
+        )
+    }
+
     return (
         <Layout>
             <Header>
@@ -229,8 +254,10 @@ const Login = () => {
             <Content>
                 <StudentForm/>
             </Content>
-            <Footer>
-                校园 OA 系统 &copy; 2022 Created by allynlin Version：{version} Server：{serverVersion}
+            <Footer style={{
+                backgroundColor: serverVersion > version ? "#ff8d00" : "",
+            }}>
+                校园 OA 系统 &copy; 2022 Created by allynlin Version：{version} Server：{serverVersion} <RenderRefresh/>
             </Footer>
         </Layout>
     )

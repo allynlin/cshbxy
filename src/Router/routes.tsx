@@ -81,6 +81,13 @@ const routes: RoutesItemType[] = [
             Auth: 'public'
         }
     }, {
+        path: '/103',
+        component: () => import('../pages/Error/VersionLow'),
+        meta: {
+            title: '版本过低',
+            Auth: 'public'
+        }
+    }, {
         path: '*',
         redirect: '/404'
     }

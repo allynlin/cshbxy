@@ -53,15 +53,8 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
                     // 字符串格式： Message{code=101, msg='版本校验失败'}
                     // 去除字符串多余元素，只保留 code 和 msg
                     const code = info.file.response.split('=')[1].split(',')[0].replace(/'/g, '"');
-                    const msg = info.file.response.split('=')[2].split('}')[0].replace(/'/g, '"');
                     if (code === '101' || code === '103') {
-                        // 去除 msg 的双引号
-                        message.error(`${msg.replace(/"/g, '')}，即将强制刷新页面`);
-                        // 2 秒后忽略缓存强制刷新页面
-                        setTimeout(() => {
-                            // @ts-ignore
-                            window.location.reload(true);
-                        }, 2000);
+                        winRe('/103')
                     } else if (code === "401" || code === "403") {
                         Cookie.remove('token');
                         Cookie.remove('userType');
