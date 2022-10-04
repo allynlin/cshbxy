@@ -3,37 +3,27 @@ import {
     Modal,
     Button,
     Form,
-    message,
-    Result,
     Select,
     Typography,
-    Upload, InputNumber
+    InputNumber
 } from 'antd';
-import type {UploadProps} from 'antd/es/upload/interface';
-import {InboxOutlined} from '@ant-design/icons';
 import React, {useEffect, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
 import {
-    deleteFile,
-    queryDepartmentMessage,
-    teacherChangeDepartment,
-    checkTeacherChangeDepartment,
     checkLastTimeUploadFiles
 } from "../../../component/axios/api";
 import '../index.scss';
-import Cookie from "js-cookie";
-import {BaseURL} from "../../../baseURL";
+import {BaseInfo} from "../../../baseInfo";
 import Spin from "../../../component/loading/Spin";
+import FileUpLoad from "../../../component/FileUpLoad";
 
 const {Title} = Typography;
 const {Option} = Select;
-const apiToken = Cookie.get('token');
+
 const tableName = `travelreimbursement`;
 
-const URL = `${BaseURL}/api`;
+const URL = `${BaseInfo}/api`;
 
 const LeaveForm = () => {
-    const navigate = useNavigate();
     // 费用类型
     const [moneyType, setMoneyType] = useState<String>('CNY');
     // 文件上传列表
@@ -71,75 +61,6 @@ const LeaveForm = () => {
             setIsRenderResult(false)
         })
     }
-
-    // 文件上传
-    const props: UploadProps = {
-        name: 'file',
-        headers: {
-            'Authorization': `${apiToken}`,
-            'tableUid': tableName
-        },
-        multiple: true,
-        action: `${URL}/uploadFile`,
-        fileList: fileList,
-        // 如果上传的文件大于 20M，就提示错误
-        beforeUpload: (file: any) => {
-            if (file.size / 1024 / 1024 > 20) {
-                message.warning('文件大小不能超过 20M');
-                // 将对应文件的状态设置为 error
-                file.status = 'error';
-                return false;
-            }
-            return true;
-        },
-        onChange(info) {
-            const {status} = info.file;
-            setFileList([...info.fileList]);
-            if (status !== 'uploading') {
-                console.log(info.file, info.fileList);
-            }
-            if (status === 'done') {
-                if (info.file.response.code === 200) {
-                    message.success(info.file.response.msg);
-                    // 找到对应的文件，将它的 uid 修改为 response.body
-                    const newFileList = fileList.map((item: any) => {
-                        if (item.uid === info.file.uid) {
-                            item.url = `${URL}/downloadFile?filename=${info.file.response.body}`;
-                            item.status = 'done';
-                            item.uid = info.file.response.body;
-                        }
-                        return item;
-                    })
-                    setFileList(newFileList);
-                } else {
-                    message.error(info.file.response.msg);
-                }
-            } else if (status === 'error') {
-                message.error(`${info.file.name} 文件上传失败`);
-            }
-        },
-        onDrop(e: any) {
-            console.log('Dropped files', e.dataTransfer.files);
-        },
-        onRemove(info: any) {
-            const status = info.status;
-            if (status === 'done') {
-                // 获取需要删除的文件的 uid
-                const uid = info.uid;
-                deleteFile(uid).then(res => {
-                    message.success(res.msg);
-                })
-            }
-        },
-        progress: {
-            strokeColor: {
-                '0%': '#108ee9',
-                '100%': '#87d068',
-            },
-            strokeWidth: 3,
-            format: percent => percent && `${parseFloat(percent.toFixed(2))}%`,
-        },
-    };
 
     // 表单提交
     const submitForm = () => {
@@ -188,16 +109,6 @@ const LeaveForm = () => {
     const onReset = () => {
         form.resetFields();
     };
-
-    // 出差费用类型选择
-    const selectAfter = (
-        <Select defaultValue="CNY" style={{width: 60}}>
-            <Option value="USD">$</Option>
-            <Option value="EUR">€</Option>
-            <Option value="GBP">£</Option>
-            <Option value="CNY">¥</Option>
-        </Select>
-    );
 
     return (
         isRenderResult ? <Spin/> :
@@ -255,15 +166,16 @@ const LeaveForm = () => {
                             name="file"
                             rules={[{required: true, message: '请上传附件材料'}]}
                         >
-                            <Upload.Dragger {...props}>
-                                <p className="ant-upload-drag-icon">
-                                    <InboxOutlined/>
-                                </p>
-                                <p className="ant-upload-text">单击或拖动文件到此区域进行上传</p>
-                                <p className="ant-upload-hint">
-                                    支持单个或批量上传（单文件不超过 20M）
-                                </p>
-                            </Upload.Dragger>
+                            <FileUpLoad
+                                setTableName={tableName}
+                                getList={(list: []) => {
+                                    setFileList(list)
+                                    form.setFieldsValue({
+                                        file: list
+                                    })
+                                }}
+                                setList={fileList}
+                            />
                         </Form.Item>
 
                         <Form.Item wrapperCol={{offset: 8, span: 16}} style={{textAlign: "center"}}>

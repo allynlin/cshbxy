@@ -1,12 +1,12 @@
-const teacherApply = [
+const teacherRecord = [
     {
-        path: 'apply',
+        path: 'record',
         children: [
             {
                 path: 'departmentChange',
-                component: () => import('../pages/Apply/DepartmentChange'),
+                component: () => import('../pages/Record/DepartmentChange'),
                 meta: {
-                    title: '申请变更部门',
+                    title: '申请变更部门记录',
                     Auth: 'teacher'
                 }
             },
@@ -22,4 +22,4 @@ const teacherApply = [
     }
 ]
 
-export default teacherApply;
+export default teacherRecord;

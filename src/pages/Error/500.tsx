@@ -5,8 +5,7 @@ import {useNavigate} from "react-router-dom";
 const Error500 = () => {
     const navigate = useNavigate();
     const toHome = () => {
-        const userType=localStorage.getItem('college_sys_userType')
-        userType==='student'?navigate('/student-home', {replace: true}):navigate('/department-home', {replace: true})
+        navigate('/home', {replace: true});
     }
     return (
         <Result

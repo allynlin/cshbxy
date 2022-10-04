@@ -6,37 +6,30 @@ import {
     message,
     Result,
     Select,
-    Typography,
-    Upload
+    Typography
 } from 'antd';
-import type {UploadProps} from 'antd/es/upload/interface';
-import {InboxOutlined} from '@ant-design/icons';
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {
-    deleteFile,
     queryDepartmentMessage,
     teacherChangeDepartment,
     checkTeacherChangeDepartment,
     checkLastTimeUploadFiles
 } from "../../../component/axios/api";
 import '../index.scss';
-import Cookie from "js-cookie";
-import {BaseURL} from "../../../baseURL";
+import {DownLoadURL} from "../../../baseInfo";
+import FileUpLoad from "../../../component/FileUpLoad";
 
 const {Title} = Typography;
-const apiToken = Cookie.get('token');
 const tableName = `changedepartmentbyteacher`;
-
-const URL = `${BaseURL}/api`;
 
 const LeaveForm = () => {
     const navigate = useNavigate();
     // 防止反复查询变更记录
     const [isQuery, setIsQuery] = useState<boolean>(false);
-    const [waitTime, setWaitTime] = useState<number>(9);
+    const [waitTime, setWaitTime] = useState<number>(0);
     // 文件上传列表
-    const [fileList, setFileList] = useState<any>([]);
+    const [fileList, setFileList] = useState<[]>([]);
     // 确认框状态
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
@@ -81,6 +74,8 @@ const LeaveForm = () => {
         checkTeacherChangeDepartment().then(res => {
             if (res.code === 200) {
                 checkUploadFilesList();
+                setIsQuery(false)
+                setWaitTime(0)
             } else {
                 message.warning(res.msg);
                 setRenderResultTitle("您已经提交过部门变更申请，请等待审批结果")
@@ -98,7 +93,7 @@ const LeaveForm = () => {
                         uid: item.fileName,
                         name: item.oldFileName,
                         status: 'done',
-                        url: `${URL}/downloadFile?filename=${item.fileName}`,
+                        url: `${DownLoadURL}/downloadFile?filename=${item.fileName}`,
                     }
                 })
                 setFileList(fileList)
@@ -107,82 +102,12 @@ const LeaveForm = () => {
         })
     }
 
-    // 文件上传
-    const props: UploadProps = {
-        name: 'file',
-        headers: {
-            'Authorization': `${apiToken}`,
-            'tableUid': tableName
-        },
-        multiple: true,
-        action: `${URL}/uploadFile`,
-        // action: 'https://www.allynlin.site:8080/cshbxy/api/uploadFile',
-        fileList: fileList,
-        // 如果上传的文件大于 20M，就提示错误
-        beforeUpload: (file: any) => {
-            if (file.size / 1024 / 1024 > 20) {
-                message.warning('文件大小不能超过 20M');
-                // 将对应文件的状态设置为 error
-                file.status = 'error';
-                return false;
-            }
-            return true;
-        },
-        onChange(info) {
-            const {status} = info.file;
-            setFileList([...info.fileList]);
-            if (status !== 'uploading') {
-                console.log(info.file, info.fileList);
-            }
-            if (status === 'done') {
-                if (info.file.response.code === 200) {
-                    message.success(info.file.response.msg);
-                    // 找到对应的文件，将它的 uid 修改为 response.body
-                    const newFileList = fileList.map((item: any) => {
-                        if (item.uid === info.file.uid) {
-                            item.url = `${URL}/downloadFile?filename=${info.file.response.body}`;
-                            item.status = 'done';
-                            item.uid = info.file.response.body;
-                        }
-                        return item;
-                    })
-                    setFileList(newFileList);
-                } else {
-                    message.error(info.file.response.msg);
-                }
-            } else if (status === 'error') {
-                message.error(`${info.file.name} 文件上传失败`);
-            }
-        },
-        onDrop(e: any) {
-            console.log('Dropped files', e.dataTransfer.files);
-        },
-        onRemove(info: any) {
-            const status = info.status;
-            if (status === 'done') {
-                // 获取需要删除的文件的 uid
-                const uid = info.uid;
-                deleteFile(uid).then(res => {
-                    message.success(res.msg);
-                })
-            }
-        },
-        progress: {
-            strokeColor: {
-                '0%': '#108ee9',
-                '100%': '#87d068',
-            },
-            strokeWidth: 3,
-            format: percent => percent && `${parseFloat(percent.toFixed(2))}%`,
-        },
-    };
-
     // 表单提交
     const submitForm = () => {
         teacherChangeDepartment(departmentUid, changeReason).then(res => {
             setConfirmLoading(false);
             message.success(res.msg);
-            navigate('/home');
+            navigate('/home/teacher/record/departmentChange');
         }).catch(err => {
             setConfirmLoading(false);
         })
@@ -244,7 +169,7 @@ const LeaveForm = () => {
             extra={
                 <>
                     <Button type="primary" key="console" onClick={() => {
-                        navigate('/record/leaveList', {replace: true})
+                        navigate('/home/teacher/record/departmentChange')
                     }}>
                         查看部门变更申请记录
                     </Button>
@@ -301,15 +226,24 @@ const LeaveForm = () => {
                         name="file"
                         rules={[{required: true, message: '请上传变更材料'}]}
                     >
-                        <Upload.Dragger {...props}>
-                            <p className="ant-upload-drag-icon">
-                                <InboxOutlined/>
-                            </p>
-                            <p className="ant-upload-text">单击或拖动文件到此区域进行上传</p>
-                            <p className="ant-upload-hint">
-                                支持单个或批量上传（单文件不超过 20M）
-                            </p>
-                        </Upload.Dragger>
+                        <FileUpLoad
+                            setTableName={tableName}
+                            getList={(list: []) => {
+                                console.log(list)
+                                // 如果 list 为空，说明用户删除了所有的文件，此时需要将 fileList 也置为空
+                                if (list.length === 0) {
+                                    console.log('list 为空')
+                                    setFileList([])
+                                    form.setFieldsValue({file: []})
+                                    return
+                                }
+                                setFileList(list)
+                                form.setFieldsValue({
+                                    file: list
+                                })
+                            }}
+                            setList={fileList}
+                        />
                     </Form.Item>
 
                     <Form.Item wrapperCol={{offset: 8, span: 16}} style={{textAlign: "center"}}>

@@ -18,9 +18,10 @@ import {
 } from "../../component/axios/api";
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {teacher, department, leader} from "../../component/redux/userTypeSlice";
 import {login} from "../../component/redux/isLoginSlice";
+import {version} from "../../baseInfo";
 
 const {Header, Footer, Content} = Layout;
 
@@ -442,15 +443,22 @@ const RegisterStudent = () => {
 };
 
 const DepartmentLogin = () => {
+    const serverVersion = useSelector((state: {
+        serverVersion: {
+            value: string
+        }
+    }) => state.serverVersion.value);
     return (
         <Layout>
             <Header>
-                <span>校园 OA 系统注册</span>
+                <span>校园 OA 系统注册 {version}</span>
             </Header>
             <Content>
                 <RegisterStudent/>
             </Content>
-            <Footer>校园 OA 系统 &copy; 2022 Created By allynlin</Footer>
+            <Footer>
+                校园 OA 系统 &copy; 2022 Created by allynlin Version：{version} Server：{serverVersion}
+            </Footer>
         </Layout>
     )
 }

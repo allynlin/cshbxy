@@ -6,10 +6,17 @@ import RenderLogOut from "./RenderLogOut";
 import './index.scss'
 import logo from './logo.png'
 import {Outlet} from 'react-router-dom';
+import {version} from "../../baseInfo";
+import {useSelector} from "react-redux";
 
 const {Title} = Typography;
 
 const Home = () => {
+    const serverVersion = useSelector((state: {
+        serverVersion: {
+            value: string
+        }
+    }) => state.serverVersion.value);
     return (
         <div className={'playOut-body'}>
             <div className={'header'}>
@@ -33,7 +40,7 @@ const Home = () => {
                     <Outlet/>
                 </div>
                 <div className={'footer'}>
-                    校园 OA 系统 &copy; 2022 Created by allynlin
+                    校园 OA 系统 &copy; 2022 Created by allynlin Version：{version} Server：{serverVersion}
                 </div>
             </div>
         </div>

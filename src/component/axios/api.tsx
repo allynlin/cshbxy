@@ -2,6 +2,11 @@ import {MethodType} from "./promise";
 
 const promise = require('./promise');
 
+// 获取服务器版本
+export const getVersion = async ()=>{
+    return await promise.Request('/api/getVersion', MethodType.GET)
+}
+
 // 登录
 export const teacherLogin = async (username: String, password: String) => {
     return await promise.Request('/login/teacher', MethodType.POST, {
@@ -124,4 +129,30 @@ export const checkTeacherChangeDepartment = async () => {
 // 查询上次上传的文件
 export const checkLastTimeUploadFiles = async (tableUid: String) => {
     return await promise.Request('/api/checkLastTimeUploadFiles', MethodType.POST, {}, {headers: {tableUid: tableUid}})
+}
+
+// 查询教师部门变更记录
+export const checkTeacherChangeDepartmentRecord = async () => {
+    return await promise.Request('/apply/findTeacherChangeDepartmentList', MethodType.POST)
+}
+
+// 查询教师部门变更记录查询上传的文件
+export const findUploadFilesByUid = async (RowUid: String, tableUid: String) => {
+    return await promise.Request('/api/findUploadFilesByUid', MethodType.POST, {
+        RowUid
+    }, {headers: {tableUid: tableUid}})
+}
+
+// 查询教师变更部门审批流程
+export const findChangeDepartmentByTeacherProcess = async (uid: String) => {
+    return await promise.Request('/apply/findChangeDepartmentByTeacherProcess', MethodType.POST, {
+        uid
+    })
+}
+
+// 删除申请
+export const deleteChangeDepartmentByTeacher = async (uid: String) => {
+    return await promise.Request('/apply/deleteChangeDepartmentByTeacher', MethodType.POST, {
+        uid
+    })
 }

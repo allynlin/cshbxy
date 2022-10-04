@@ -1,5 +1,6 @@
 import PlayOut from "../pages/Home/PlayOut";
 import teacherApply from './teacherApply'
+import teacherRecord from "./teacherRecord";
 import {RoutesItemType} from "react-router-waiter";
 
 const routes: RoutesItemType[] = [
@@ -27,7 +28,8 @@ const routes: RoutesItemType[] = [
                             Auth: 'teacher'
                         }
                     },
-                    ...teacherApply
+                    ...teacherApply,
+                    ...teacherRecord
                 ]
             },
         ]

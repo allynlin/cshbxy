@@ -18,6 +18,7 @@ const RenderBreadcrumb = () => {
         '/home/teacher/apply/leave': '请假申请',
         '/home/teacher/apply/procurement': '采购申请',
         '/home/teacher/apply/report': '工作报告',
+        '/home/teacher/record': '记录',
         '/home/teacher/record/departmentChange': '部门变更申请记录',
         '/home/teacher/record/travelReimbursement': '差旅报销申请记录',
         '/home/teacher/record/leave': '请假申请记录',
@@ -28,7 +29,7 @@ const RenderBreadcrumb = () => {
     const extraBreadcrumbItems = pathSnippets.map((_, index) => {
         const url = `/${pathSnippets.slice(0, index + 1).join('/')}`;
         // '/home' 不可以点击
-        if (index < 4) {
+        if (index < 2) {
             return (
                 <Breadcrumb.Item key={url}>
                     {breadcrumbNameMap[url]}

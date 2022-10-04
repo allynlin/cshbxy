@@ -2,14 +2,15 @@ import React, {useEffect, useState} from "react";
 import './App.scss';
 import routes from "./Router/routes";
 import RouterWaiter from "react-router-waiter"
-import {BrowserRouter, HashRouter} from 'react-router-dom'
+import {BrowserRouter} from 'react-router-dom'
 import Spin from "./component/loading/Spin";
 import {useSelector, useDispatch} from "react-redux";
 import {message} from "antd";
 import Cookie from "js-cookie";
-import {checkTeacherToken, checkDepartmentToken, checkLeaderToken} from "./component/axios/api";
+import {checkTeacherToken, checkDepartmentToken, checkLeaderToken, getVersion} from "./component/axios/api";
 import {login} from "./component/redux/isLoginSlice";
 import {teacher, department, leader} from "./component/redux/userTypeSlice";
+import {setVersion} from "./component/redux/serverVersionSlice";
 
 
 function App() {
@@ -29,6 +30,9 @@ function App() {
 
     // 页面渲染的时候，检查 cookie 中是否有 token，如果有 token，就校验 token 是否有效，如果有效可以继续执行，如果无效，就跳转到登录页面
     useEffect(() => {
+        getVersion().then(res => {
+            dispatch(setVersion(res.body))
+        })
         switch (Cookie.get('userType')) {
             case 'teacher':
                 checkTeacher()

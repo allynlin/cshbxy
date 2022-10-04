@@ -3,8 +3,8 @@ import {message} from 'antd';
 import qs from 'qs';
 import NProgress from 'nprogress';
 import Cookie from "js-cookie";
-import {BaseURL} from "../../baseURL";
-import {winto} from "../../baseURL";
+import {BaseInfo, version} from "../../baseInfo";
+import {winRe} from "../../baseInfo";
 
 export const MethodType = {
     GET: 'GET',
@@ -55,17 +55,27 @@ const errorTip = (code: string) => {
     }
 }
 
+const instance = axios.create({
+    timeout: 120000,
+});
+
 /**
  * 模块说明:有api_token的请求
  */
 export const Request = (api: String, method = MethodType.GET, params = {}, config = {headers: {}}) => {
     const apiToken = Cookie.get('token');
-    const baseURL = BaseURL;
+    // 如果不是登录和注册接口（/login 或 /register 开头），POST 请求，没有获取到 token，就跳转到登录页面
+    if (apiToken === undefined && method === MethodType.POST && !api.startsWith('/login') && !api.startsWith('/register')) {
+        winRe('/403')
+        return
+    }
+    const baseURL = BaseInfo;
     const data = (method === 'GET') ? 'params' : 'data';
     let headers = {
         'X-Requested-With': 'XMLHttpRequest',
         'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
         'Authorization': `${apiToken}`,
+        'version': `${version}`
     };
     if (config.headers) {
         headers = {
@@ -75,28 +85,47 @@ export const Request = (api: String, method = MethodType.GET, params = {}, confi
     }
 
     return new Promise((resolve, reject) => {
-        axios({
+        instance({
             url: `${baseURL}${api}`,
             method,
             [data]: qs.stringify(params),
             headers,
             timeout: 10000
         }).then(res => {
+            // 判断 res.data 是字符串还是 json 对象
+            if (typeof res.data === 'string') {
+                // 字符串格式： Message{code=101, msg='版本校验失败'}
+                // 去除字符串多余元素，只保留 code 和 msg
+                const code = res.data.split('=')[1].split(',')[0].replace(/'/g, '"');
+                const msg = res.data.split('=')[2].split('}')[0].replace(/'/g, '"');
+                if (code === '101' || code === '103') {
+                    // 去除 msg 的双引号
+                    message.error(`${msg.replace(/"/g, '')}，即将强制刷新页面`);
+                    // 2 秒后忽略缓存强制刷新页面
+                    setTimeout(() => {
+                        // @ts-ignore
+                        window.location.reload(true);
+                    }, 2000);
+                } else if (code === "401" || code === "403") {
+                    Cookie.remove('token');
+                    Cookie.remove('userType');
+                    winRe('/403')
+                }
+                return
+            }
             NProgress.done(true);
             // 如果后端返回 403 则拦截当前页面请求，返回登录页面
             if (res.data.code === 403) {
-                message.warning(res.data.msg)
                 Cookie.remove('token');
                 Cookie.remove('userType');
                 reject(res.data)
-                winto(`/403`);
+                winRe(`/403`);
             } else if (res.data.code === 500) {
-                message.error(res.data.msg)
                 reject(res.data)
-                winto(`/500`);
+                winRe(`/500`);
             } else if (res.data.code >= 200 && res.data.code < 400) {
                 // 如果返回了 token 则更新本地 token
-                if (res.data.token !== null)
+                if (res.data.token !== null && res.data.token !== undefined)
                     Cookie.set('token', res.data.token, {expires: 7, path: '/', sameSite: 'strict'})
                 resolve(res.data)
             } else {
