@@ -6,6 +6,9 @@ $body-bottom-min: 20px;
 $white: #ffffff;
 $black: #000000;
 .home-body {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     min-width: 600px;
     height: 100%;
@@ -61,6 +64,9 @@ $black: #000000;
     .home-right {
         width: calc(100% - #{$body-left});
         height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
 
         .header {
             width: 100%;
@@ -96,8 +102,8 @@ $black: #000000;
         .content {
             width: 100%;
             height: calc(100% - #{$body-top} - #{$body-bottom});
-            align-items: center;
-            overflow: auto;
+            overflow-x: hidden;
+            overflow-y: auto;
             background-color: $white;
         }
 
