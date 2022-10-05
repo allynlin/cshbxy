@@ -1,4 +1,6 @@
-export const version = `0.4.21`;
+import pa from '../package.json';
+
+export const version = pa.version;
 
 // export const BaseInfo = 'http://localhost:8080/cshbxy';
 // export const BaseInfo = 'http://localhost:8086/cshbxy';

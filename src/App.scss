@@ -1,1 +1,27 @@
 @import 'antd/dist/antd.css';
+
+.ant-modal-content {
+    background-color: transparent;
+
+    .ant-modal-header {
+        background: transparent;
+    }
+
+    .ant-modal-body {
+        background: transparent;
+    }
+
+    .ant-modal-footer {
+        background: transparent;
+    }
+}
+
+.ant-drawer-content {
+    background: transparent;
+}
+
+.ant-message-notice-content {
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    background-color: rgba(255, 255, 255, 0.6);
+}

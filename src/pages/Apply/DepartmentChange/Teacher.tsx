@@ -9,7 +9,7 @@ import {
     Typography
 } from 'antd';
 import React, {useEffect, useState} from 'react';
-import {Link, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import {
     queryDepartmentMessage,
     teacherChangeDepartment,
@@ -20,12 +20,11 @@ import '../index.scss';
 import {DownLoadURL} from "../../../baseInfo";
 import FileUpLoad from "../../../component/FileUpLoad";
 import {LoadingOutlined} from "@ant-design/icons";
-import NProgress from "nprogress";
 
 const {Title} = Typography;
 const tableName = `changedepartmentbyteacher`;
 
-const LeaveForm = () => {
+const ChangeForm = () => {
     const navigate = useNavigate();
     // 防止反复查询变更记录
     const [isQuery, setIsQuery] = useState<boolean>(false);
@@ -147,6 +146,11 @@ const LeaveForm = () => {
                 onOk={handleOk}
                 confirmLoading={confirmLoading}
                 onCancel={handleCancel}
+                mask={false}
+                style={{
+                    backdropFilter: 'blur(20px) saturate(180%)',
+                    backgroundColor: 'rgba(255,255,255,0.6)'
+                }}
             >
                 <p>变更部门：{departmentUid}</p>
                 <p>变更原因：{changeReason}</p>
@@ -197,85 +201,80 @@ const LeaveForm = () => {
         />) : (
         <div className={'body'}>
             <RenderModal/>
-            <div className="zent-alert-example">
-                <Title level={2} className={'tit'}>部门变更申请</Title>
-                <Form
-                    form={form}
-                    name="basic"
-                    labelCol={{span: 8}}
-                    wrapperCol={{span: 16}}
-                    onFinish={onFinish}
-                    initialValues={{
-                        file: fileList
-                    }}
+            <Title level={2} className={'tit'}>部门变更申请</Title>
+            <Form
+                form={form}
+                name="basic"
+                labelCol={{span: 8}}
+                wrapperCol={{span: 16}}
+                onFinish={onFinish}
+                initialValues={{
+                    file: fileList
+                }}
+            >
+                <Form.Item
+                    label="变更部门"
+                    name="departmentUid"
+                    rules={[{required: true, message: '请选择你需要变更的新部门'}]}
                 >
-                    <Form.Item
-                        label="变更部门"
-                        name="departmentUid"
-                        rules={[{required: true, message: '请选择你需要变更的新部门'}]}
-                    >
-                        <Select
-                            showSearch
-                            placeholder="请选择你需要变更的新部门"
-                            optionFilterProp="children"
-                            onFocus={getDepartmentOptions}
-                            options={departmentOptions}
-                        />
-                    </Form.Item>
+                    <Select
+                        showSearch
+                        placeholder="请选择你需要变更的新部门"
+                        optionFilterProp="children"
+                        onFocus={getDepartmentOptions}
+                        options={departmentOptions}
+                    />
+                </Form.Item>
 
-                    <Form.Item
-                        label="变更原因"
-                        name="changeReason"
-                        rules={[{required: true, message: '请输入变更原因'}]}
-                    >
-                        <Input.TextArea rows={4} placeholder={"请输入变更原因，如超出1000字请提交附件"} showCount={true}
-                                        maxLength={1000}/>
-                    </Form.Item>
+                <Form.Item
+                    label="变更原因"
+                    name="changeReason"
+                    rules={[{required: true, message: '请输入变更原因'}]}
+                >
+                    <Input.TextArea rows={4} placeholder={"请输入变更原因，如超出1000字请提交附件"} showCount={true}
+                                    maxLength={1000}/>
+                </Form.Item>
 
-                    <Form.Item
-                        label="变更材料"
-                        name="file"
-                        rules={[{required: true, message: '请上传变更材料'}]}
-                    >
-                        <FileUpLoad
-                            setTableName={tableName}
-                            getList={(list: []) => {
-                                console.log(list)
-                                // 如果 list 为空，说明用户删除了所有的文件，此时需要将 fileList 也置为空
-                                if (list.length === 0) {
-                                    console.log('list 为空')
-                                    setFileList([])
-                                    form.setFieldsValue({file: []})
-                                    return
-                                }
-                                setFileList(list)
-                                form.setFieldsValue({
-                                    file: list
-                                })
-                            }}
-                            setList={fileList}
-                        />
-                    </Form.Item>
+                <Form.Item
+                    label="变更材料"
+                    name="file"
+                    rules={[{required: true, message: '请上传变更材料'}]}
+                >
+                    <FileUpLoad
+                        setTableName={tableName}
+                        getList={(list: []) => {
+                            // 如果 list 为空，说明用户删除了所有的文件，此时需要将 fileList 也置为空
+                            if (list.length === 0) {
+                                setFileList([])
+                                form.setFieldsValue({file: []})
+                                return
+                            }
+                            setFileList(list)
+                            form.setFieldsValue({
+                                file: list
+                            })
+                        }}
+                        setList={fileList}
+                    />
+                </Form.Item>
 
-                    <Form.Item wrapperCol={{offset: 8, span: 16}} style={{textAlign: "center"}}>
-                        <Button type="primary" htmlType="submit">
-                            提交
-                        </Button>
-                        <Button htmlType="button" onClick={onReset} style={{marginLeft: 8}}>
-                            重置
-                        </Button>
-                    </Form.Item>
-                </Form>
-            </div>
+                <Form.Item wrapperCol={{offset: 8, span: 16}} style={{textAlign: "center"}}>
+                    <Button type="primary" htmlType="submit">
+                        提交
+                    </Button>
+                    <Button htmlType="button" onClick={onReset} style={{marginLeft: 8}}>
+                        重置
+                    </Button>
+                </Form.Item>
+            </Form>
         </div>
-    )
-        ;
+    );
 };
 
-const Index = () => {
+const Teacher = () => {
     return (
-        <LeaveForm/>
+        <ChangeForm/>
     )
 }
 
-export default Index;
+export default Teacher;

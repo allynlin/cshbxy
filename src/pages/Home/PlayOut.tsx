@@ -18,12 +18,8 @@ const Home = () => {
         }
     }) => state.serverVersion.value);
     return (
-        <div className={'playOut-body'}>
-            <div className={'header'}>
-                <span><RenderBreadcrumb/></span>
-                <span className={'right'}><RenderLogOut/></span>
-            </div>
-            <div className={'container'}>
+        <div className={'home-body'}>
+            <div className={'home-left'}>
                 <div className={'silder'}>
                     <div className={'top'}>
                         <div className={'logo'}>
@@ -36,13 +32,21 @@ const Home = () => {
                     </div>
                     <div className={'bottom'}></div>
                 </div>
+            </div>
+            <div className={'home-right'}>
+                <div className={'header'}>
+                    <span><RenderBreadcrumb/></span>
+                    <span className={'right'}><RenderLogOut/></span>
+                </div>
                 <div className={'content'}>
                     <Outlet/>
                 </div>
                 <div className={'footer'}>
-                    校园 OA 系统 &copy; 2022 Created by allynlin Version：{version} Server：{serverVersion}
+                    <span>校园 OA 系统 &copy; 2022 Created by allynlin Version：{version} Server：{serverVersion}</span>
                 </div>
             </div>
+
+
         </div>
     )
 }

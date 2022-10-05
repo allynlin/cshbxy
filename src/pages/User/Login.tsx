@@ -243,13 +243,7 @@ const Login = () => {
     return (
         <Layout>
             <Header>
-                <span>
-                    校园 OA 系统登陆 {version}
-                    <Button type={"primary"} onClick={() => {
-                        // @ts-ignore
-                        window.location.reload(true)
-                    }}>刷新</Button>
-                </span>
+                <span>校园 OA 系统登陆 {version}</span>
             </Header>
             <Content>
                 <StudentForm/>

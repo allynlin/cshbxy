@@ -77,6 +77,11 @@ const LeaveForm = () => {
         return (
             <Modal
                 title="确认提交"
+                mask={false}
+                style={{
+                    backdropFilter: 'blur(20px) saturate(180%)',
+                    backgroundColor: 'rgba(255,255,255,0.6)'
+                }}
                 open={isModalVisible}
                 onOk={handleOk}
                 confirmLoading={confirmLoading}
@@ -114,80 +119,78 @@ const LeaveForm = () => {
         isRenderResult ? <Spin/> :
             <div className={'body'}>
                 <RenderModal/>
-                <div className="zent-alert-example">
-                    <Title level={2} className={'tit'}>差旅报销申请</Title>
-                    <Form
-                        form={form}
-                        name="basic"
-                        labelCol={{span: 8}}
-                        wrapperCol={{span: 16}}
-                        onFinish={onFinish}
-                        initialValues={{
-                            file: fileList
-                        }}
+                <Title level={2} className={'tit'}>差旅报销申请</Title>
+                <Form
+                    form={form}
+                    name="basic"
+                    labelCol={{span: 8}}
+                    wrapperCol={{span: 16}}
+                    onFinish={onFinish}
+                    initialValues={{
+                        file: fileList
+                    }}
+                >
+                    <Form.Item
+                        label="出差目的地"
+                        name="destination"
+                        rules={[{required: true, message: '请输入你的出差目的地'}]}
                     >
-                        <Form.Item
-                            label="出差目的地"
-                            name="destination"
-                            rules={[{required: true, message: '请输入你的出差目的地'}]}
-                        >
-                            <Input showCount={true} maxLength={50}/>
-                        </Form.Item>
+                        <Input showCount={true} maxLength={50}/>
+                    </Form.Item>
 
-                        <Form.Item
-                            label="出差费用"
-                            name="expenses"
-                            rules={[{required: true, message: '请输入出差费用'}]}
-                        >
-                            <InputNumber addonAfter={
-                                <Select defaultValue={moneyType} style={{width: 60}} onChange={e => {
-                                    setMoneyType(e)
-                                }}>
-                                    <Option value="USD">$</Option>
-                                    <Option value="EUR">€</Option>
-                                    <Option value="GBP">£</Option>
-                                    <Option value="CNY">¥</Option>
-                                </Select>
-                            }/>
-                        </Form.Item>
+                    <Form.Item
+                        label="出差费用"
+                        name="expenses"
+                        rules={[{required: true, message: '请输入出差费用'}]}
+                    >
+                        <InputNumber addonAfter={
+                            <Select defaultValue={moneyType} style={{width: 60}} onChange={e => {
+                                setMoneyType(e)
+                            }}>
+                                <Option value="USD">$</Option>
+                                <Option value="EUR">€</Option>
+                                <Option value="GBP">£</Option>
+                                <Option value="CNY">¥</Option>
+                            </Select>
+                        }/>
+                    </Form.Item>
 
-                        <Form.Item
-                            label="出差原因"
-                            name="reason"
-                            rules={[{required: true, message: '请输入出差原因'}]}
-                        >
-                            <Input.TextArea rows={4} placeholder={"请输入出差原因，如超出1000字请提交附件"}
-                                            showCount={true}
-                                            maxLength={1000}/>
-                        </Form.Item>
+                    <Form.Item
+                        label="出差原因"
+                        name="reason"
+                        rules={[{required: true, message: '请输入出差原因'}]}
+                    >
+                        <Input.TextArea rows={4} placeholder={"请输入出差原因，如超出1000字请提交附件"}
+                                        showCount={true}
+                                        maxLength={1000}/>
+                    </Form.Item>
 
-                        <Form.Item
-                            label="附件材料"
-                            name="file"
-                            rules={[{required: true, message: '请上传附件材料'}]}
-                        >
-                            <FileUpLoad
-                                setTableName={tableName}
-                                getList={(list: []) => {
-                                    setFileList(list)
-                                    form.setFieldsValue({
-                                        file: list
-                                    })
-                                }}
-                                setList={fileList}
-                            />
-                        </Form.Item>
+                    <Form.Item
+                        label="附件材料"
+                        name="file"
+                        rules={[{required: true, message: '请上传附件材料'}]}
+                    >
+                        <FileUpLoad
+                            setTableName={tableName}
+                            getList={(list: []) => {
+                                setFileList(list)
+                                form.setFieldsValue({
+                                    file: list
+                                })
+                            }}
+                            setList={fileList}
+                        />
+                    </Form.Item>
 
-                        <Form.Item wrapperCol={{offset: 8, span: 16}} style={{textAlign: "center"}}>
-                            <Button type="primary" htmlType="submit">
-                                提交
-                            </Button>
-                            <Button htmlType="button" onClick={onReset} style={{marginLeft: 8}}>
-                                重置
-                            </Button>
-                        </Form.Item>
-                    </Form>
-                </div>
+                    <Form.Item wrapperCol={{offset: 8, span: 16}} style={{textAlign: "center"}}>
+                        <Button type="primary" htmlType="submit">
+                            提交
+                        </Button>
+                        <Button htmlType="button" onClick={onReset} style={{marginLeft: 8}}>
+                            重置
+                        </Button>
+                    </Form.Item>
+                </Form>
             </div>
     )
 };

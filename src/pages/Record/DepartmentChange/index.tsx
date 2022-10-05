@@ -23,7 +23,6 @@ import {
     findChangeDepartmentByTeacherProcess,
     deleteChangeDepartmentByTeacher
 } from '../../../component/axios/api';
-import '../index.scss';
 import {DownLoadURL} from "../../../baseInfo";
 
 const {Title} = Typography;
@@ -58,8 +57,13 @@ const Index: React.FC = () => {
                 onClose={() => {
                     setOpen(false)
                 }}
+                mask={false}
                 headerStyle={{
                     backgroundColor: content.status === '审批中' ? yellow : content.status === '审批通过' ? green : red
+                }}
+                bodyStyle={{
+                    backdropFilter: 'blur(20px) saturate(180%)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.6)'
                 }}
             >
                 <p style={{
@@ -157,9 +161,13 @@ const Index: React.FC = () => {
             okText: '确认',
             okType: 'danger',
             cancelText: '取消',
+            style: {
+                backdropFilter: 'blur(20px) saturate(180%)',
+                backgroundColor: 'rgba(255,255,255,0.6)'
+            },
             mask: false,
             onOk() {
-                deleteChangeDepartmentByTeacher(e).then((res: any) => {
+                deleteChangeDepartmentByTeacher(e, tableName).then((res: any) => {
                     if (res.code === 200) {
                         message.success('删除成功');
                         setOpen(false);

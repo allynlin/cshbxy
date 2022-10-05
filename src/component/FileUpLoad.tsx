@@ -10,6 +10,7 @@ interface FileUpLoadProps {
     setTableName: string
     getList: Function
     setList: []
+    max?: number
 }
 
 const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
@@ -32,6 +33,7 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
             'version': version
         },
         multiple: true,
+        maxCount: props.max ? props.max : undefined,
         action: `${DownLoadURL}/uploadFile`,
         fileList: fileList,
         // 如果上传的文件大于 20M，就提示错误
