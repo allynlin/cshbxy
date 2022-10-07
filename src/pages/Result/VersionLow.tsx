@@ -1,7 +1,7 @@
 import {CloseCircleOutlined} from '@ant-design/icons';
 import {Button, message, Result, Typography} from 'antd';
 import React from 'react';
-import {version, winTo} from "../../baseInfo";
+import {version} from "../../baseInfo";
 import {useDispatch, useSelector} from "react-redux";
 import {getVersion} from "../../component/axios/api";
 import {setVersion} from "../../component/redux/serverVersionSlice";

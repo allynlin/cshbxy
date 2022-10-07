@@ -1,9 +1,23 @@
-import {Menu, MenuProps} from 'antd';
-import {EditOutlined, FormOutlined, BarChartOutlined, HomeOutlined, CommentOutlined} from '@ant-design/icons';
-import React from 'react';
-import './index.scss'
+import {
+    Menu,
+    Button,
+    Switch
+} from 'antd';
+import {
+    EditOutlined,
+    FormOutlined,
+    BarChartOutlined,
+    HomeOutlined,
+    CommentOutlined,
+    MenuFoldOutlined,
+    MenuUnfoldOutlined,
+} from '@ant-design/icons';
+import React, {useEffect, useState} from 'react';
+import './playOut-light.scss'
 import {Link} from 'react-router-dom';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import type {MenuProps, MenuTheme} from 'antd/es/menu';
+import {light, dark} from "../../component/redux/themeSlice";
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -72,11 +86,44 @@ const leader: MenuProps['items'] = [
 const defaultMenu: MenuProps['items'] = [];
 
 const RenderMenu: React.FC = () => {
+    const [mode, setMode] = useState<'vertical' | 'inline'>('inline');
+    const [theme, setTheme] = useState<MenuTheme>('light');
+
+    const dispatch = useDispatch();
+
+    const themeColor: String = useSelector((state: {
+        themeColor: {
+            value: String
+        }
+    }) => state.themeColor.value)
+
+    useEffect(() => {
+        switch (themeColor) {
+            case 'light':
+                setTheme('light');
+                break;
+            case 'dark':
+                setTheme('dark');
+                break;
+            default:
+                setTheme('light');
+        }
+    }, [themeColor])
+
+    const changeMode = (value: boolean) => {
+        setMode(value ? 'vertical' : 'inline');
+    };
+
+    const changeTheme = (value: boolean) => {
+        dispatch(value ? dark() : light());
+    };
+
     const userType = useSelector((state: {
         userType: {
             value: string
         }
     }) => state.userType.value)
+
     // const [theme, setTheme] = useState('light');
     const RenderMenu = (): MenuProps['items'] => {
         switch (userType) {
@@ -90,14 +137,38 @@ const RenderMenu: React.FC = () => {
                 return defaultMenu
         }
     }
+
     const menu: MenuProps['items'] = RenderMenu()
+
     return (
-        <Menu
-            theme={"light"}
-            mode="inline"
-            items={menu}
-            style={{minWidth: 0, flex: 'auto'}}
-        />
+        <div className={"playout-menu"}>
+            <ul className={'ant-menu ant-menu-root ant-menu-inline ant-menu-light'}>
+                <li className={'ant-menu-item'}>
+                    <Switch onChange={changeMode}/>
+                    <span className={'ant-menu-title-content'} style={{
+                        marginLeft: '10px'
+                    }}>更改样式</span>
+                </li>
+                <li className={'ant-menu-item'}>
+                    <Switch
+                        checked={themeColor === 'dark'}
+                        onChange={changeTheme}
+                        checkedChildren="Dark"
+                        unCheckedChildren="Light"
+                    />
+                </li>
+            </ul>
+            <Menu
+                mode={mode}
+                items={menu}
+                theme={theme}
+                style={{
+                    minWidth: 0,
+                    flex: 'auto',
+                    width: '100%'
+                }}
+            />
+        </div>
     )
 }
 

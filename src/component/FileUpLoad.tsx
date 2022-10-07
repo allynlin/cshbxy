@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from "react";
 import {UploadProps} from "antd/es/upload/interface";
-import {DownLoadURL, version, winRe} from "../baseInfo";
+import {DownLoadURL, version} from "../baseInfo";
 import {message, Upload} from "antd";
 import {deleteFile} from "./axios/api";
 import Cookie from "js-cookie";
 import {InboxOutlined} from "@ant-design/icons";
+import {rootNavigate} from "../App";
 
 interface FileUpLoadProps {
     setTableName: string
@@ -56,11 +57,11 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
                     // 去除字符串多余元素，只保留 code 和 msg
                     const code = info.file.response.split('=')[1].split(',')[0].replace(/'/g, '"');
                     if (code === '101' || code === '103') {
-                        winRe('/103')
+                        rootNavigate('/103')
                     } else if (code === "401" || code === "403") {
                         Cookie.remove('token');
                         Cookie.remove('userType');
-                        winRe('/403')
+                        rootNavigate('/403')
                     }
                     // 将对应文件的状态设置为 error
                     info.file.status = 'error';

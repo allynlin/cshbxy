@@ -88,8 +88,7 @@ const routes: RoutesItemType[] = [
             title: '正在加载中',
             Auth: 'public'
         }
-    },
-    {
+    }, {
         path: '/403',
         component: () => import('../pages/Result/403'),
         meta: {

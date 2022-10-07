@@ -11,7 +11,7 @@ import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {login} from "../../component/redux/isLoginSlice";
 import {teacher, department, leader} from "../../component/redux/userTypeSlice";
-import {version, winRe} from "../../baseInfo";
+import {version} from "../../baseInfo";
 import {setVersion} from "../../component/redux/serverVersionSlice";
 
 const {Header, Footer, Content} = Layout;

@@ -12,10 +12,12 @@ import {
     checkLastTimeUploadFiles,
     submitWorkReport
 } from "../../../component/axios/api";
-import '../index.scss';
+import '../apply-light.scss';
+import '../apply-dark.scss';
 import {DownLoadURL} from "../../../baseInfo";
 import FileUpLoad from "../../../component/FileUpLoad";
 import {LoadingOutlined, ExclamationCircleOutlined} from "@ant-design/icons";
+import {useSelector} from "react-redux";
 
 const {Title} = Typography;
 const tableName = `workreportteacher`;
@@ -134,6 +136,24 @@ const ChangeForm = () => {
         form.resetFields();
     };
 
+    const themeColor: String = useSelector((state: {
+        themeColor: {
+            value: String
+        }
+    }) => state.themeColor.value)
+
+    // 根据不同的 themeColor，渲染不同的样式
+    const renderThemeColor = () => {
+        switch (themeColor) {
+            case 'dark':
+                return 'body-dark'
+            case 'light':
+                return 'body-light'
+            default:
+                return 'body-light'
+        }
+    }
+
     return isRenderResult ? (
         <Result
             status="info"
@@ -154,7 +174,7 @@ const ChangeForm = () => {
                 </Button>
             }
         />) : (
-        <div className={'body'}>
+        <div className={renderThemeColor()}>
             <Title level={2} className={'tit'}>工作报告</Title>
             <Form
                 form={form}

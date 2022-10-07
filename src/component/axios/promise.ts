@@ -5,7 +5,7 @@ import NProgress from 'nprogress';
 import 'nprogress/nprogress.css'
 import Cookie from "js-cookie";
 import {BaseInfo, version} from "../../baseInfo";
-import {winRe} from "../../baseInfo";
+import {rootNavigate} from "../../App";
 
 export const MethodType = {
     GET: 'GET',
@@ -56,21 +56,6 @@ const errorTip = (code: string) => {
     }
 }
 
-// 判断是跳转到 home 下的错误页面还是根目录下的错误页面
-const toErrorPage = (to: string) => {
-    // 判断 URL 中是否有 home 字符串
-    const url = window.location.pathname;
-    // 遍历字符串，如果有 home 字符串，就跳转到 home 下的错误页面
-    for (let i = 0; i < url.length; i++) {
-        if (url[i] === 'h' && url[i + 1] === 'o' && url[i + 2] === 'm' && url[i + 3] === 'e') {
-            winRe(`/home${to}`);
-            return;
-        }
-    }
-    // 否则跳转到根目录下的错误页面
-    winRe(to);
-}
-
 /**
  * 模块说明:有api_token的请求
  */
@@ -78,7 +63,7 @@ export const Request = (api: String, method = MethodType.GET, params = {}, confi
     const apiToken = Cookie.get('token');
     // 如果不是登录和注册接口（/login 或 /register 开头），POST 请求，没有获取到 token，就跳转到登录页面
     if (apiToken === undefined && method === MethodType.POST && !api.startsWith('/login') && !api.startsWith('/register')) {
-        toErrorPage('/403');
+        rootNavigate('/403');
         return
     }
     const baseURL = BaseInfo;
@@ -111,11 +96,11 @@ export const Request = (api: String, method = MethodType.GET, params = {}, confi
                 // 去除字符串多余元素，只保留 code 和 msg
                 const code = res.data.split('=')[1].split(',')[0].replace(/'/g, '"');
                 if (code === '101' || code === '103') {
-                    winRe('/103')
+                    rootNavigate('/103');
                 } else if (code === "401" || code === "403") {
                     Cookie.remove('token');
                     Cookie.remove('userType');
-                    winRe('/403')
+                    rootNavigate('/403');
                 }
                 return
             }
@@ -125,10 +110,10 @@ export const Request = (api: String, method = MethodType.GET, params = {}, confi
                 Cookie.remove('token');
                 Cookie.remove('userType');
                 reject(res.data)
-                winRe('/403')
+                rootNavigate('/403');
             } else if (res.data.code === 500) {
                 reject(res.data)
-                toErrorPage('/500');
+                rootNavigate('/500');
             } else if (res.data.code >= 200 && res.data.code < 400) {
                 // 如果返回了 token 则更新本地 token
                 if (res.data.token !== null && res.data.token !== undefined)

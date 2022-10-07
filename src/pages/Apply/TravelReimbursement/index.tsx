@@ -11,10 +11,12 @@ import React, {useEffect, useState} from 'react';
 import {
     checkLastTimeUploadFiles
 } from "../../../component/axios/api";
-import '../index.scss';
+import '../apply-light.scss';
+import '../apply-dark.scss';
 import {BaseInfo} from "../../../baseInfo";
 import Spin from "../../../component/loading/Spin";
 import FileUpLoad from "../../../component/FileUpLoad";
+import {useSelector} from "react-redux";
 
 const {Title} = Typography;
 const {Option} = Select;
@@ -115,9 +117,27 @@ const LeaveForm = () => {
         form.resetFields();
     };
 
+    const themeColor: String = useSelector((state: {
+        themeColor: {
+            value: String
+        }
+    }) => state.themeColor.value)
+
+    // 根据不同的 themeColor，渲染不同的样式
+    const renderThemeColor = () => {
+        switch (themeColor) {
+            case 'dark':
+                return 'body-dark'
+            case 'light':
+                return 'body-light'
+            default:
+                return 'body-light'
+        }
+    }
+
     return (
         isRenderResult ? <Spin/> :
-            <div className={'body'}>
+            <div className={renderThemeColor()}>
                 <RenderModal/>
                 <Title level={2} className={'tit'}>差旅报销申请</Title>
                 <Form

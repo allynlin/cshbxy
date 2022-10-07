@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from "react";
-import './App.scss';
+import './App-light.scss';
 import routes from "./Router/routes";
 import RouterWaiter from "react-router-waiter"
-import {BrowserRouter} from 'react-router-dom'
 import Spin from "./component/loading/Spin";
 import {useSelector, useDispatch} from "react-redux";
 import {message} from "antd";
@@ -11,17 +10,45 @@ import {checkTeacherToken, checkDepartmentToken, checkLeaderToken, getVersion} f
 import {login} from "./component/redux/isLoginSlice";
 import {teacher, department, leader} from "./component/redux/userTypeSlice";
 import {setVersion} from "./component/redux/serverVersionSlice";
+import {unstable_HistoryRouter as HistoryRouter} from 'react-router-dom'
+import {createBrowserHistory} from 'history'
+import {dark, light} from "./component/redux/themeSlice";
+
+const history = createBrowserHistory({window});
+
+export const rootNavigate = (to: string) => {
+    history.push(`${process.env.PUBLIC_URL}${to}`)
+};
 
 
 function App() {
     const [isRender, setIsRender] = useState(false);
 
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        // 检测当前是深色还是浅色模式
+        dispatch(isDark ? dark() : light());
+    }, [])
+
+    // 当用户更改系统主题时，更新redux中的主题
+    useEffect(() => {
+        const listener = (e: MediaQueryListEvent) => {
+            dispatch(e.matches ? dark() : light());
+        };
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', listener);
+        return () => {
+            window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', listener);
+        };
+    }, []);
+
     const isLogin = useSelector((state: {
         isLogin: {
             value: boolean
         }
     }) => state.isLogin.value)
+
     const userType: String = useSelector((state: {
         userType: {
             value: String
@@ -91,8 +118,7 @@ function App() {
 
     // 路由跳转鉴权
     const onRouteBefore = ({pathname, meta}: any) => {
-        // 判断是否放行，还是转到 login 页面
-        // console.log('onRouteBefore', pathname, meta);
+        if (!isRender) return false
         if (meta.title !== undefined) {
             document.title = meta.title as string
         }
@@ -108,9 +134,9 @@ function App() {
     }
 
     return (
-        isRender ? <BrowserRouter basename={process.env.PUBLIC_URL}>
+        <HistoryRouter basename={process.env.PUBLIC_URL} history={history}>
             <RouterWaiter routes={routes} loading={<Spin/>} onRouteBefore={onRouteBefore}/>
-        </BrowserRouter> : <Spin/>
+        </HistoryRouter>
     );
 }
 
