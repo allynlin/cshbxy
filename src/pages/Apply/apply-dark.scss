@@ -55,6 +55,7 @@ $dark-2: #434343;
 
                                 textarea {
                                     background-color: $dark;
+                                    color: $font-light;
                                 }
 
                                 &::after {
@@ -84,6 +85,29 @@ $dark-2: #434343;
                                     }
                                 }
                             }
+
+                            .ant-picker {
+                                background-color: $dark;
+                                color: $font-light;
+
+                                .ant-picker-range-separator {
+                                    color: $font-light;
+
+                                    .ant-picker-separator {
+                                        color: $font-light;
+                                    }
+                                }
+
+                                .ant-picker-suffix {
+                                    color: $font-light;
+                                }
+
+                                .ant-picker-input {
+                                    input {
+                                        color: $font-light;
+                                    }
+                                }
+                            }
                         }
                     }
 
@@ -106,19 +130,98 @@ $dark-2: #434343;
     }
 }
 
-.ant-result {
-    .ant-result-title {
-        color: $font-light;
-    }
+//.ant-picker-dropdown {
+//    background-color: $dark;
+//
+//    .ant-picker-panel-container {
+//        background-color: $dark;
+//
+//        .ant-picker-panel {
+//            background-color: $dark;
+//
+//            .ant-picker-header {
+//                background-color: $dark;
+//
+//
+//                .ant-picker-header-view {
+//                    .ant-picker-year-btn {
+//                        color: $font-light;
+//                    }
+//
+//                    .ant-picker-month-btn {
+//                        color: $font-light;
+//                    }
+//
+//                    .ant-picker-decade-btn {
+//                        color: $font-light;
+//                    }
+//                }
+//
+//                .ant-picker-header-super-prev-btn {
+//                    color: $font-light;
+//                }
+//
+//                .ant-picker-header-prev-btn {
+//                    color: $font-light;
+//                }
+//
+//                .ant-picker-header-next-btn {
+//                    color: $font-light;
+//                }
+//
+//                .ant-picker-header-super-next-btn {
+//                    color: $font-light;
+//                }
+//            }
+//
+//            .ant-picker-content {
+//                th {
+//                    color: $font-light;
+//                }
+//
+//                .ant-picker-cell-in-view {
+//                    color: $font-light;
+//                }
+//
+//                .ant-picker-time-panel-column {
+//                    .ant-picker-time-panel-cell {
+//                        .ant-picker-time-panel-cell-inner {
+//                            color: $font-light;
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
 
-    .ant-result-extra {
-        button[disabled] {
-            border-color: $dark-2;
-            background: $dark-2;
+//.ant-result {
+//    .ant-result-title {
+//        color: $font-light;
+//    }
+//
+//    .ant-result-extra {
+//        button[disabled] {
+//            border-color: $dark-2;
+//            background: $dark-2;
+//
+//            span {
+//                color: $font-light-45;
+//            }
+//        }
+//    }
+//}
 
-            span {
-                color: $font-light-45;
-            }
-        }
-    }
-}
+//.ant-modal-content {
+//    .ant-modal-close {
+//        color: $font-light;
+//    }
+//
+//    .ant-modal-title {
+//        color: $font-light;
+//    }
+//
+//    .ant-modal-body {
+//        color: $font-light;
+//    }
+//}

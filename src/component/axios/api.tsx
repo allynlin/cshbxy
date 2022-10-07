@@ -185,3 +185,36 @@ export const findWorkReportByTeacherProcess = async (uid: String) => {
         uid
     });
 }
+
+// 提交请假申请
+export const addLeave = async (reason: String, start_time: String, end_time: String) => {
+    return promise.Request('/leave/addLeave', MethodType.POST, {
+        reason,
+        start_time,
+        end_time
+    });
+}
+
+// 查询请假记录
+export const findLeaveList = async () => {
+    return promise.Request('/leave/findLeaveList', MethodType.POST);
+}
+
+// 查询请假审批流程
+export const findLeaveProcess = async (uid: String) => {
+    return promise.Request('/leave/findLeaveProcess', MethodType.POST, {
+        uid
+    });
+}
+
+// 删除提交的请假申请
+export const deleteLeave = async (uid: String) => {
+    return promise.Request('/leave/deleteLeave', MethodType.POST, {
+        uid
+    });
+}
+
+// 检查上一次提交的请假申请
+export const checkLastTimeLeave = async () => {
+    return promise.Request('/leave/checkLastTimeLeave', MethodType.POST);
+}

@@ -23,6 +23,13 @@ const teacherRecord = [
                     title: '工作报告记录',
                     Auth: 'teacher'
                 }
+            }, {
+                path: 'leave',
+                component: () => import('../pages/Record/Leave'),
+                meta: {
+                    title: '请假记录',
+                    Auth: 'teacher'
+                }
             }
         ]
     }

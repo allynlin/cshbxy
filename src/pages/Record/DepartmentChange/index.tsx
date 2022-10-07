@@ -4,34 +4,30 @@ import {
     Button,
     Drawer,
     Modal,
-    Tag,
     message,
     Card,
-    Steps
+    Steps,
+    Result
 } from 'antd';
-import {
-    ExclamationCircleOutlined,
-    SyncOutlined,
-    CheckCircleOutlined,
-    CloseCircleOutlined
-} from '@ant-design/icons';
+import {ExclamationCircleOutlined, LoadingOutlined} from '@ant-design/icons';
 import type {ColumnsType} from 'antd/es/table';
 import React, {useEffect, useState} from 'react';
 import {
     checkTeacherChangeDepartmentRecord,
     findUploadFilesByUid,
     findChangeDepartmentByTeacherProcess,
-    deleteChangeDepartmentByTeacher
+    deleteChangeDepartmentByTeacher, checkTeacherChangeDepartment
 } from '../../../component/axios/api';
 import {DownLoadURL} from "../../../baseInfo";
+import {red} from "../../../baseInfo";
+import {RenderStatusTag} from "../../../component/Tag/RenderStatusTag";
+import {RenderStatusColor} from "../../../component/Tag/RenderStatusColor";
+import '../index.scss'
 
 const {Title} = Typography;
 const {Step} = Steps;
 
 const tableName = `changedepartmentbyteacher`;
-const red = '#f32401';
-const green = '#006c01';
-const yellow = '#ff8d00';
 
 interface DataType {
     key: React.Key;
@@ -41,17 +37,38 @@ interface DataType {
 }
 
 const Index: React.FC = () => {
+    // 防止反复查询变更记录
+    const [isQuery, setIsQuery] = useState<boolean>(false);
+    const [waitTime, setWaitTime] = useState<number>(0);
+    const [isRenderResult, setIsRenderResult] = useState<boolean>(true);
+    const [RenderResultTitle, setRenderResultTitle] = useState<String>('正在获取部门变更记录');
+    const [isRenderInfo, setIsRenderInfo] = useState<boolean>(false);
     const [dataSource, setDataSource] = useState([]);
     const [content, setContent] = useState<any>({});
     const [fileList, setFileList] = useState<any>([]);
     const [processList, setProcessList] = useState<any>([]);
     const [open, setOpen] = useState(false);
 
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (waitTime > 1) {
+                setIsQuery(true)
+                setWaitTime(e => e - 1)
+                setIsQuery(true)
+            } else {
+                setIsQuery(false)
+            }
+        }, 1000)
+        return () => {
+            clearTimeout(timer)
+        }
+    }, [waitTime])
+
     // 渲染抽屉
     const RenderDrawer = () => {
         return (
             <Drawer
-                title={<span style={{color: '#ffffff'}}>{content.status}</span>}
+                title={<span>{RenderStatusTag(content.status)}</span>}
                 placement="right"
                 open={open}
                 onClose={() => {
@@ -59,7 +76,7 @@ const Index: React.FC = () => {
                 }}
                 mask={false}
                 headerStyle={{
-                    backgroundColor: content.status === '审批中' ? yellow : content.status === '审批通过' ? green : red
+                    backgroundColor: RenderStatusColor(content.status)
                 }}
                 bodyStyle={{
                     backdropFilter: 'blur(20px) saturate(180%)',
@@ -69,12 +86,12 @@ const Index: React.FC = () => {
                 <p style={{
                     textAlign: 'center',
                     color: red,
-                    fontSize: 20,
+                    fontSize: 16,
                     fontWeight: 'bold'
                 }}>暂不支持修改<br/>如需修改请重新提交</p>
                 <p>变更部门：{content.departmentUid}</p>
                 <p>变更原因：{content.changeReason}</p>
-                <p>变更状态：{content.status}</p>
+                <p>变更状态：{RenderStatusTag(content.status)}</p>
                 <p>提交时间：{content.create_time}</p>
                 <p>更新时间：{content.update_time}</p>
                 <div style={{
@@ -173,6 +190,11 @@ const Index: React.FC = () => {
                         setOpen(false);
                         const arr = dataSource.filter((item: any) => item.uid !== e);
                         setDataSource(arr);
+                        if (arr.length === 0) {
+                            setIsRenderResult(true);
+                            setIsRenderInfo(true);
+                            setRenderResultTitle('暂无部门变更记录');
+                        }
                     } else {
                         message.error('删除失败');
                     }
@@ -211,28 +233,9 @@ const Index: React.FC = () => {
             key: 'status',
             width: 150,
             align: 'center',
-            render: (text: string, record: any) => {
+            render: (text: number, record: any) => {
                 return (
-                    <Tag
-                        icon={record.status === '审批中' ? <SyncOutlined spin/> : record.status === '审批通过' ?
-                            <CheckCircleOutlined/> : <CloseCircleOutlined/>}
-                        color={text === '审批中' ? yellow : text === '审批通过' ? green : red}
-                        onClick={() => {
-                            switch (text) {
-                                case '审批中':
-                                    message.warning('您的申请正在审批中，请耐心等待');
-                                    break;
-                                case '审批通过':
-                                    message.success('您的申请已通过');
-                                    break;
-                                case '审批未通过':
-                                    message.error('您的申请未通过');
-                                    break;
-                            }
-                        }}
-                    >
-                        {text}
-                    </Tag>
+                    RenderStatusTag(text)
                 )
             }
         },
@@ -265,18 +268,10 @@ const Index: React.FC = () => {
                             setContent(record)
                             getInfo(text)
                         }}
-                        style={
-                            record.status === '审批通过' ? {
-                                backgroundColor: green,
-                                borderColor: green
-                            } : record.status === '审批中' ? {
-                                backgroundColor: yellow,
-                                borderColor: yellow
-                            } : {
-                                backgroundColor: red,
-                                borderColor: red
-                            }
-                        }
+                        style={{
+                            backgroundColor: RenderStatusColor(record.status),
+                            borderColor: RenderStatusColor(record.status)
+                        }}
                     >查看</Button>
                 );
             }
@@ -289,6 +284,12 @@ const Index: React.FC = () => {
 
     // 获取所有数据
     const getDataSource = () => {
+        setIsQuery(true)
+        setWaitTime(10)
+        // 防止多次点击
+        if (isQuery) {
+            return
+        }
         checkTeacherChangeDepartmentRecord().then((res: any) => {
             if (res.code === 200) {
                 const arr = res.body.map((item: any, index: number) => {
@@ -297,7 +298,7 @@ const Index: React.FC = () => {
                         id: index + 1,
                         departmentUid: item.departmentUid,
                         changeReason: item.changeReason,
-                        status: parseInt(item.status) === 0 ? '审批中' : parseInt(item.status) === 1 ? '审批通过' : '审批未通过',
+                        status: parseInt(item.status),
                         nextUid: item.nextUid,
                         count: parseInt(item.count),
                         create_time: item.create_time,
@@ -306,14 +307,41 @@ const Index: React.FC = () => {
                     }
                 })
                 setDataSource(arr)
+                setIsQuery(false)
+                setWaitTime(0)
+                setIsRenderResult(false)
             } else {
-                message.warning(res.msg)
+                setIsRenderInfo(true)
+                setRenderResultTitle(res.msg)
             }
+        }).catch(err => {
+            setIsRenderInfo(true)
+            setRenderResultTitle(err.message)
+            setIsRenderResult(true)
         })
     }
 
-    return (
-        <div className={'body'}>
+    return isRenderResult ? (
+        <Result
+            status="info"
+            icon={
+                isRenderInfo ? '' : <LoadingOutlined
+                    style={{
+                        fontSize: 40,
+                    }}
+                    spin
+                />
+            }
+            title={RenderResultTitle}
+            extra={
+                <Button disabled={isQuery} type="primary" onClick={() => {
+                    getDataSource()
+                }}>
+                    {isQuery ? `刷新(${waitTime})` : `刷新`}
+                </Button>
+            }
+        />) : (
+        <div className={'record-body'}>
             <RenderDrawer/>
             <Title level={2} className={'tit'}>部门变更申请记录</Title>
             <Table

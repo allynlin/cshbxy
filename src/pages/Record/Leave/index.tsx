@@ -6,28 +6,25 @@ import {
     Modal,
     Tag,
     message,
-    Card,
-    Steps, Result
+    Steps,
+    Result
 } from 'antd';
 import {
-    ExclamationCircleOutlined, LoadingOutlined,
+    CheckCircleOutlined, CloseCircleOutlined,
+    ExclamationCircleOutlined, LoadingOutlined, SyncOutlined,
 } from '@ant-design/icons';
 import React, {useEffect, useState} from 'react';
 import {
-    deleteWorkReport,
-    findUploadFilesByUid,
-    findWorkReportByTeacherProcess,
-    findWorkReportList
+    findLeaveProcess,
+    deleteLeave,
+    findLeaveList
 } from '../../../component/axios/api';
 import '../index.scss';
-import {DownLoadURL} from "../../../baseInfo";
 import {RenderStatusTag} from "../../../component/Tag/RenderStatusTag";
 import {red, blue, green, yellow} from "../../../baseInfo";
 
 const {Title} = Typography;
 const {Step} = Steps;
-
-const tableName = `workreportteacher`;
 
 const Index: React.FC = () => {
     // 防止反复查询变更记录
@@ -35,11 +32,10 @@ const Index: React.FC = () => {
     const [waitTime, setWaitTime] = useState<number>(0);
     // 展示表单还是提示信息,两种状态，分别是 info 或者 loading
     const [isRenderResult, setIsRenderResult] = useState<boolean>(true);
-    const [RenderResultTitle, setRenderResultTitle] = useState<String>('正在获取工作报告提交记录');
+    const [RenderResultTitle, setRenderResultTitle] = useState<String>('正在获取请假记录');
     const [isRenderInfo, setIsRenderInfo] = useState<boolean>(false);
     const [dataSource, setDataSource] = useState([]);
     const [content, setContent] = useState<any>({});
-    const [fileList, setFileList] = useState<any>([]);
     const [processList, setProcessList] = useState<any>([]);
     const [open, setOpen] = useState(false);
 
@@ -70,7 +66,7 @@ const Index: React.FC = () => {
                 }}
                 mask={false}
                 headerStyle={{
-                    backgroundColor: content.status === 0 ? yellow : content.status === 1 ? green : red
+                    backgroundColor: content.status === 0 ? yellow : content.status === 1 ? green : content.status === 2 ? red : blue,
                 }}
                 bodyStyle={{
                     backdropFilter: 'blur(20px) saturate(180%)',
@@ -83,8 +79,15 @@ const Index: React.FC = () => {
                     fontSize: 20,
                     fontWeight: 'bold'
                 }}>暂不支持修改<br/>如需修改请重新提交</p>
+                <p>请假时间：{content.start_time}</p>
+                <p>销假时间：{content.end_time}</p>
+                <p>请假原因：{content.reason}</p>
+                {content.reject_reason ?
+                    <p style={{
+                        backgroundColor: red,
+                        color: '#ffffff'
+                    }}>驳回原因：{content.reject_reason}</p> : null}
                 <p>审批状态：{RenderStatusTag(content.status)}</p>
-                <p>提交时间：{content.create_time}</p>
                 <p>更新时间：{content.update_time}</p>
                 <div style={{
                     display: 'flex',
@@ -102,22 +105,6 @@ const Index: React.FC = () => {
                         }}
                     >删除</Button>
                 </div>
-                {
-                    // 循环输出 Card，数据来源 fileList
-                    fileList.map((item: any, index: number) => {
-                        return (
-                            <Card
-                                key={index}
-                                title={`附件${index + 1}`}
-                                style={{width: "auto", marginTop: 16}}
-                                extra={<a href={`${DownLoadURL}/downloadFile?filename=${item.fileName}`}
-                                          target="_self">下载</a>}
-                            >
-                                <p>{item.oldFileName}</p>
-                            </Card>
-                        )
-                    })
-                }
                 <div style={{marginTop: 16}}>
                     审批流程：
                     <Steps
@@ -145,20 +132,13 @@ const Index: React.FC = () => {
     }
 
     // 获取当前记录上传的文件和当前审批流程
-    const getInfo = async (uid: string) => {
-        const hide = message.loading('正在获取文件列表和审批流程', 0);
-        const list: boolean = await findWorkReportByTeacherProcess(uid).then((res: any) => {
+    const getInfo = (uid: string) => {
+        const hide = message.loading('正在获取审批流程', 0);
+        findLeaveProcess(uid).then((res: any) => {
             setProcessList(res.body);
-            return true;
-        })
-        const file: boolean = await findUploadFilesByUid(uid, tableName).then((res: any) => {
-            setFileList(res.body);
-            return true;
-        })
-        if (list && file) {
             hide();
             setOpen(true)
-        }
+        })
     }
 
     // 删除确认框
@@ -176,7 +156,7 @@ const Index: React.FC = () => {
             },
             mask: false,
             onOk() {
-                deleteWorkReport(e, tableName).then((res: any) => {
+                deleteLeave(e).then((res: any) => {
                     if (res.code === 200) {
                         message.success(res.msg);
                         setOpen(false);
@@ -185,7 +165,7 @@ const Index: React.FC = () => {
                         if (arr.length === 0) {
                             setIsRenderResult(true);
                             setIsRenderInfo(true);
-                            setRenderResultTitle('暂无工作报告提交记录');
+                            setRenderResultTitle('暂无请假记录');
                         }
                     } else {
                         message.error(res.msg);
@@ -207,7 +187,7 @@ const Index: React.FC = () => {
         if (isQuery) {
             return
         }
-        findWorkReportList().then(res => {
+        findLeaveList().then(res => {
             if (res.code === 200) {
                 setDataSource(res.body);
                 setIsQuery(false)
@@ -232,7 +212,8 @@ const Index: React.FC = () => {
                     dataSource.map((item: any) => {
                         return (
                             <Timeline.Item
-                                color={item.status === 0 ? yellow : item.status === 1 ? green : red}>
+                                key={item.uid}
+                                color={item.status === 0 ? yellow : item.status === 1 ? green : item.status === 2 ? red : blue}>
                                 <p>{item.create_time}</p>
                                 <Button
                                     type={"primary"}
@@ -281,7 +262,7 @@ const Index: React.FC = () => {
             }
         />) : (<div className={'record-body'}>
             <RenderDrawer/>
-            <Title level={2} className={'tit'}>工作报告提交记录</Title>
+            <Title level={2} className={'tit'}>请假记录</Title>
             <RenderTimeLine/>
         </div>
     );
