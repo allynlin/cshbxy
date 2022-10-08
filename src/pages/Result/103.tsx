@@ -1,19 +1,17 @@
 import {CloseCircleOutlined} from '@ant-design/icons';
-import {Button, message, Result, Typography} from 'antd';
-import React from 'react';
+import {Button, Result, Typography} from 'antd';
+import React, {useEffect} from 'react';
 import {version} from "../../baseInfo";
-import {useDispatch, useSelector} from "react-redux";
-import {getVersion} from "../../component/axios/api";
-import {setVersion} from "../../component/redux/serverVersionSlice";
+import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
-import './VersionLow.scss'
+import RenderRefreshButton from "../../component/Version/RenderRefreshButton";
+import './103.scss'
 
 const {Paragraph, Text} = Typography;
 
 const VersionLow: React.FC = () => {
 
     const navigate = useNavigate();
-    const dispatch = useDispatch();
 
     const serverVersion = useSelector((state: {
         serverVersion: {
@@ -21,17 +19,11 @@ const VersionLow: React.FC = () => {
         }
     }) => state.serverVersion.value);
 
-    const getVer = () => {
-        getVersion().then(res => {
-            dispatch(setVersion(res.body))
-            // 对比本地 version，如果本地版本低于服务器版本，就提示更新
-            if (res.body > version) {
-                message.warning("当前版本过低，请更新版本")
-            } else {
-                navigate('/login', {replace: true});
-            }
-        })
-    }
+    useEffect(() => {
+        if (version >= serverVersion) {
+            navigate(-1)
+        }
+    }, [serverVersion])
 
     const RenderVersion = () => {
         return (
@@ -50,14 +42,10 @@ const VersionLow: React.FC = () => {
         title={`版本过低`}
         subTitle={<RenderVersion/>}
         extra={[
-            <Button type="primary" key="buy" onClick={() => {
-                navigate('/login', {replace: true});
-            }}>刷新后去登录</Button>,
-            <Button key="console" onClick={() => {
-                getVer()
-            }}>
-                重新获取服务器版本
-            </Button>,
+            version >= serverVersion ? <Button type="primary" key="console" onClick={() => {
+                navigate(-1)
+            }}>返回</Button> : null,
+            <RenderRefreshButton/>
         ]}
     >
         <div className="desc">

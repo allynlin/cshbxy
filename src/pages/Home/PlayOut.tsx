@@ -1,18 +1,37 @@
 import {Typography} from 'antd';
-import React from 'react';
+import React, {useEffect} from 'react';
 import RenderMenu from "./RenderMenu";
 import RenderBreadcrumb from "./RenderBreadcrumb";
 import RenderLogOut from "./RenderLogOut";
+import RenderFooter from "./RenderFooter";
+import RenderGetServerVersion from "../../component/Version/RenderGetServerVersion";
 import './playOut-light.scss'
 import './playOut-dark.scss'
 import logo from './logo.png'
-import {Outlet} from 'react-router-dom';
-import {version} from "../../baseInfo";
+import {Outlet, useNavigate} from 'react-router-dom';
 import {useSelector} from "react-redux";
+import {version} from "../../baseInfo";
 
 const {Title} = Typography;
 
 const Home = () => {
+
+    const navigate = useNavigate();
+
+    const serverVersion = useSelector((state: {
+        serverVersion: {
+            value: string
+        }
+    }) => state.serverVersion.value);
+
+    useEffect(() => {
+        if (serverVersion === "0.0.0") {
+            return;
+        }
+        if (version < serverVersion) {
+            navigate('/103')
+        }
+    }, [serverVersion])
 
     const themeColor: String = useSelector((state: {
         themeColor: {
@@ -31,12 +50,6 @@ const Home = () => {
                 return 'home-body-light'
         }
     }
-
-    const serverVersion = useSelector((state: {
-        serverVersion: {
-            value: string
-        }
-    }) => state.serverVersion.value);
 
     return (
         <div className={renderThemeColor()}>
@@ -63,7 +76,7 @@ const Home = () => {
                     <Outlet/>
                 </div>
                 <div className={'footer'}>
-                    <span>校园 OA 系统 &copy; 2022 Created by allynlin Version：{version} Server：{serverVersion}</span>
+                    <RenderGetServerVersion/>
                 </div>
             </div>
 

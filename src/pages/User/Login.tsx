@@ -1,20 +1,20 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {Button, Form, Input, message, Switch, Radio, Layout} from 'antd';
 import './index.scss'
 import Cookie from 'js-cookie';
 import {
     teacherLogin,
     departmentLogin,
-    leaderLogin, getVersion
+    leaderLogin
 } from "../../component/axios/api";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {login} from "../../component/redux/isLoginSlice";
 import {teacher, department, leader} from "../../component/redux/userTypeSlice";
 import {version} from "../../baseInfo";
-import {setVersion} from "../../component/redux/serverVersionSlice";
+import RenderGetServerVersionPublic from "../../component/Version/RenderGetServerVersionPublic";
 
-const {Header, Footer, Content} = Layout;
+const {Header, Content} = Layout;
 
 const StudentForm = () => {
     const dispatch = useDispatch();
@@ -212,7 +212,7 @@ const StudentForm = () => {
 
 const Login = () => {
 
-    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const serverVersion = useSelector((state: {
         serverVersion: {
@@ -220,25 +220,14 @@ const Login = () => {
         }
     }) => state.serverVersion.value);
 
-    const getVer = () => {
-        getVersion().then(res => {
-            // 对比本地 version，如果本地版本低于服务器版本，就提示更新
-            if (res.body > version) {
-                message.warning("当前版本过低，请更新版本")
-            }
-            dispatch(setVersion(res.body))
-        })
-    }
-
-    const RenderRefresh = () => {
-        return (
-            <a
-                onClick={e => {
-                    e.preventDefault();
-                    getVer();
-                }}>刷新</a>
-        )
-    }
+    useEffect(() => {
+        if (serverVersion === "0.0.0") {
+            return;
+        }
+        if (version < serverVersion) {
+            navigate('/103')
+        }
+    }, [serverVersion])
 
     return (
         <Layout>
@@ -248,11 +237,7 @@ const Login = () => {
             <Content>
                 <StudentForm/>
             </Content>
-            <Footer style={{
-                backgroundColor: serverVersion > version ? "#ff8d00" : "",
-            }}>
-                校园 OA 系统 &copy; 2022 Created by allynlin Version：{version} Server：{serverVersion} <RenderRefresh/>
-            </Footer>
+            <RenderGetServerVersionPublic/>
         </Layout>
     )
 }

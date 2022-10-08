@@ -1,7 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit'
 
 const initialState: { value: string } = {
-    value: '版本获取失败',
+    value: '0.0.0',
 }
 
 export const serverVersionSlice = createSlice({

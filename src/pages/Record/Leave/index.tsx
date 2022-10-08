@@ -9,10 +9,7 @@ import {
     Steps,
     Result
 } from 'antd';
-import {
-    CheckCircleOutlined, CloseCircleOutlined,
-    ExclamationCircleOutlined, LoadingOutlined, SyncOutlined,
-} from '@ant-design/icons';
+import {ExclamationCircleOutlined, LoadingOutlined} from '@ant-design/icons';
 import React, {useEffect, useState} from 'react';
 import {
     findLeaveProcess,
@@ -22,6 +19,7 @@ import {
 import '../index.scss';
 import {RenderStatusTag} from "../../../component/Tag/RenderStatusTag";
 import {red, blue, green, yellow} from "../../../baseInfo";
+import {UpdateLeave} from "./UpdateLeave";
 
 const {Title} = Typography;
 const {Step} = Steps;
@@ -73,12 +71,6 @@ const Index: React.FC = () => {
                     backgroundColor: 'rgba(255, 255, 255, 0.6)'
                 }}
             >
-                <p style={{
-                    textAlign: 'center',
-                    color: red,
-                    fontSize: 20,
-                    fontWeight: 'bold'
-                }}>暂不支持修改<br/>如需修改请重新提交</p>
                 <p>请假时间：{content.start_time}</p>
                 <p>销假时间：{content.end_time}</p>
                 <p>请假原因：{content.reason}</p>
@@ -92,8 +84,17 @@ const Index: React.FC = () => {
                 <div style={{
                     display: 'flex',
                     justifyContent: 'end',
-                    marginTop: 16
+                    marginTop: 16,
                 }}>
+                    <UpdateLeave state={content} getNewContent={(newContent: object) => {
+                        // 对比旧 content 查看是否有变化，有变化则重新查询
+                        if (JSON.stringify(newContent) !== JSON.stringify(content)) {
+                            getDataSource()
+                            // 将新的内容更新到content中
+                            setContent({...content, ...newContent})
+                        }
+                    }}/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
                     <Button
                         type="primary"
                         style={{
@@ -137,9 +138,12 @@ const Index: React.FC = () => {
         findLeaveProcess(uid).then((res: any) => {
             setProcessList(res.body);
             hide();
-            setOpen(true)
+            setOpen(true);
+        }).catch(() => {
+            hide();
         })
     }
+
 
     // 删除确认框
     const showDeleteConfirm = (e: string) => {
@@ -218,8 +222,9 @@ const Index: React.FC = () => {
                                 <Button
                                     type={"primary"}
                                     onClick={() => {
+                                        setOpen(false)
                                         setContent(item)
-                                        getInfo(item.uid);
+                                        getInfo(item.uid)
                                     }}
                                 >查看</Button>
                                 &nbsp;&nbsp;

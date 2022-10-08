@@ -112,7 +112,7 @@ const routes: RoutesItemType[] = [
         }
     }, {
         path: '/103',
-        component: () => import('../pages/Result/VersionLow'),
+        component: () => import('../pages/Result/103'),
         meta: {
             title: '版本过低',
             Auth: 'public'

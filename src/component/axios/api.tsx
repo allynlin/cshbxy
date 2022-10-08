@@ -218,3 +218,13 @@ export const deleteLeave = async (uid: String) => {
 export const checkLastTimeLeave = async () => {
     return promise.Request('/leave/checkLastTimeLeave', MethodType.POST);
 }
+
+// 修改请假申请
+export const updateLeave = async (uid: String, reason: String, start_time: String, end_time: String) => {
+    return promise.Request('/leave/updateLeave', MethodType.POST, {
+        uid,
+        reason,
+        start_time,
+        end_time
+    });
+}

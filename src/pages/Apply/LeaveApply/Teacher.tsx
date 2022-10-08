@@ -99,7 +99,7 @@ const LeaveForm = () => {
 
     // 表单提交
     const submitForm = () => {
-        addLeave(reason, leaveTime[0].format('YYYY-MM-DD HH:mm'), leaveTime[1].format('YYYY-MM-DD HH:mm')).then(res => {
+        addLeave(reason, leaveTime[0].format('YYYY-MM-DD HH:mm:ss'), leaveTime[1].format('YYYY-MM-DD HH:mm:ss')).then(res => {
             setConfirmLoading(false);
             navigate('/home/success', {
                 state: {
@@ -134,8 +134,8 @@ const LeaveForm = () => {
                 confirmLoading={confirmLoading}
                 onCancel={handleCancel}
             >
-                <p>请假时间：{leaveTime ? leaveTime[0].format('YYYY-MM-DD HH:mm') : '未选择请假时间'}</p>
-                <p>销假时间：{leaveTime ? leaveTime[1].format('YYYY-MM-DD HH:mm') : '未选择销假时间'}</p>
+                <p>请假时间：{leaveTime ? leaveTime[0].format('YYYY-MM-DD HH:mm:ss') : '未选择请假时间'}</p>
+                <p>销假时间：{leaveTime ? leaveTime[1].format('YYYY-MM-DD HH:mm:ss') : '未选择销假时间'}</p>
                 <p>请假原因：{reason}</p>
             </Modal>
         )
