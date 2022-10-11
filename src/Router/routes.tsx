@@ -2,6 +2,7 @@ import PlayOut from "../pages/Home/PlayOut";
 import teacherApply from './teacherApply'
 import teacherRecord from "./teacherRecord";
 import {RoutesItemType} from "react-router-waiter";
+import {Error404, Error403, Error500, Error103, Success} from "../pages/Result/Result";
 
 const routes: RoutesItemType[] = [
     {
@@ -19,6 +20,10 @@ const routes: RoutesItemType[] = [
         children: [
             {
                 path: 'teacher',
+                meta: {
+                    title: '教师',
+                    Auth: 'teacher'
+                },
                 children: [
                     {
                         path: 'index',
@@ -27,36 +32,36 @@ const routes: RoutesItemType[] = [
                             title: '教师首页',
                             Auth: 'teacher'
                         }
+                    }, {
+                        path: 'setting',
+                        component: () => import('../pages/Setting/TeacherSetting'),
+                        meta: {
+                            title: '设置',
+                            Auth: 'teacher'
+                        }
                     },
                     ...teacherApply,
                     ...teacherRecord
                 ]
             }, {
                 path: '404',
-                component: () => import('../pages/Result/404'),
+                element: <Error404/>,
                 meta: {
                     title: '404',
                     Auth: 'public'
                 }
             }, {
                 path: '500',
-                component: () => import('../pages/Result/500'),
+                element: <Error500/>,
                 meta: {
                     title: '500',
                     Auth: 'public'
                 }
             }, {
                 path: 'success',
-                component: () => import('../pages/Result/Success'),
+                element: <Success/>,
                 meta: {
                     title: '成功',
-                    Auth: 'public'
-                }
-            }, {
-                path: 'info',
-                component: () => import('../pages/Result/Info'),
-                meta: {
-                    title: '信息',
                     Auth: 'public'
                 }
             }, {
@@ -90,14 +95,14 @@ const routes: RoutesItemType[] = [
         }
     }, {
         path: '/403',
-        component: () => import('../pages/Result/403'),
+        element: <Error403/>,
         meta: {
             title: '403',
             Auth: 'public'
         }
     }, {
         path: '/404',
-        component: () => import('../pages/Result/404'),
+        element: <Error404/>,
         meta: {
             title: '404',
             Auth: 'public'
@@ -105,14 +110,14 @@ const routes: RoutesItemType[] = [
     },
     {
         path: '/500',
-        component: () => import('../pages/Result/500'),
+        element: <Error500/>,
         meta: {
             title: '500',
             Auth: 'public'
         }
     }, {
         path: '/103',
-        component: () => import('../pages/Result/103'),
+        element: <Error103/>,
         meta: {
             title: '版本过低',
             Auth: 'public'

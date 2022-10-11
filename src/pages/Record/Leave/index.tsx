@@ -4,7 +4,6 @@ import {
     Button,
     Drawer,
     Modal,
-    Tag,
     message,
     Steps,
     Result
@@ -79,7 +78,7 @@ const Index: React.FC = () => {
                         backgroundColor: red,
                         color: '#ffffff'
                     }}>驳回原因：{content.reject_reason}</p> : null}
-                <p>审批状态：{RenderStatusTag(content.status)}</p>
+                <p>审批状态：{RenderStatusTag(content.status, '请假申请')}</p>
                 <p>更新时间：{content.update_time}</p>
                 <div style={{
                     display: 'flex',
@@ -265,7 +264,8 @@ const Index: React.FC = () => {
                     {isQuery ? `刷新(${waitTime})` : `刷新`}
                 </Button>
             }
-        />) : (<div className={'record-body'}>
+        />) : (
+        <div className={'record-body'}>
             <RenderDrawer/>
             <Title level={2} className={'tit'}>请假记录</Title>
             <RenderTimeLine/>

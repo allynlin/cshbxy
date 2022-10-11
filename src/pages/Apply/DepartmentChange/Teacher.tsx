@@ -173,7 +173,7 @@ const ChangeForm = () => {
         submitForm();
     };
 
-    const onFinish = (values: any) => {
+    const onFinish = () => {
         setIsModalVisible(true)
     };
 

@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit'
 
-const initialState: { value: 'light' | 'dark' } = {
+const initialState: { value: 'light' | 'dark'} = {
     value: 'light',
 }
 

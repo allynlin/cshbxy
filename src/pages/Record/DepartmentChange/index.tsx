@@ -5,8 +5,8 @@ import {
     Drawer,
     Modal,
     message,
-    Card,
     Steps,
+    Collapse,
     Result
 } from 'antd';
 import {ExclamationCircleOutlined, LoadingOutlined} from '@ant-design/icons';
@@ -16,7 +16,7 @@ import {
     checkTeacherChangeDepartmentRecord,
     findUploadFilesByUid,
     findChangeDepartmentByTeacherProcess,
-    deleteChangeDepartmentByTeacher, checkTeacherChangeDepartment
+    deleteChangeDepartmentByTeacher
 } from '../../../component/axios/api';
 import {DownLoadURL} from "../../../baseInfo";
 import {red} from "../../../baseInfo";
@@ -26,6 +26,7 @@ import '../index.scss'
 
 const {Title} = Typography;
 const {Step} = Steps;
+const {Panel} = Collapse;
 
 const tableName = `changedepartmentbyteacher`;
 
@@ -88,10 +89,10 @@ const Index: React.FC = () => {
                     color: red,
                     fontSize: 16,
                     fontWeight: 'bold'
-                }}>暂不支持修改<br/>如需修改请重新提交</p>
+                }}>如需修改请重新提交</p>
                 <p>变更部门：{content.departmentUid}</p>
                 <p>变更原因：{content.changeReason}</p>
-                <p>变更状态：{RenderStatusTag(content.status)}</p>
+                <p>变更状态：{RenderStatusTag(content.status, '部门变更申请')}</p>
                 <p>提交时间：{content.create_time}</p>
                 <p>更新时间：{content.update_time}</p>
                 <div style={{
@@ -111,20 +112,21 @@ const Index: React.FC = () => {
                     >删除</Button>
                 </div>
                 {
-                    // 循环输出 Card，数据来源 fileList
-                    fileList.map((item: any, index: number) => {
-                        return (
-                            <Card
-                                key={index}
-                                title={`附件${index + 1}`}
-                                style={{width: "auto", marginTop: 16}}
-                                extra={<a href={`${DownLoadURL}/downloadFile?filename=${item.fileName}`}
-                                          target="_self">下载</a>}
-                            >
-                                <p>{item.oldFileName}</p>
-                            </Card>
-                        )
-                    })
+                    // 如果 fileList 不为空则渲染
+                    fileList.length > 0 ? (
+                        <Collapse ghost>
+                            {/*循环输出 Card，数据来源 fileList*/}
+                            {fileList.map((item: any, index: number) => {
+                                return (
+                                    <Panel header={`附件${index + 1}`} key={index}>
+                                        <p>{item.oldFileName}</p>
+                                        <a href={`${DownLoadURL}/downloadFile?filename=${item.fileName}`}
+                                           target="_self">下载</a>
+                                    </Panel>
+                                )
+                            })}
+                        </Collapse>
+                    ) : null
                 }
                 <div style={{marginTop: 16}}>
                     审批流程：
@@ -186,7 +188,7 @@ const Index: React.FC = () => {
             onOk() {
                 deleteChangeDepartmentByTeacher(e, tableName).then((res: any) => {
                     if (res.code === 200) {
-                        message.success('删除成功');
+                        message.success(res.msg);
                         setOpen(false);
                         const arr = dataSource.filter((item: any) => item.uid !== e);
                         setDataSource(arr);
@@ -235,7 +237,7 @@ const Index: React.FC = () => {
             align: 'center',
             render: (text: number, record: any) => {
                 return (
-                    RenderStatusTag(text)
+                    RenderStatusTag(text, "部门变更申请")
                 )
             }
         },

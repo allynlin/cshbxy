@@ -11,7 +11,6 @@ const Teacher: React.FC = () => {
             <p>这是父组件{childCount}</p>
             <button onClick={() => {
                 setCount(count + 1)
-                LStorage.set('count', count + 1)
             }}>点击
             </button>
             {/*传递 count 给子组件*/}

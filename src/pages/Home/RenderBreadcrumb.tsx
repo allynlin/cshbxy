@@ -24,6 +24,7 @@ const RenderBreadcrumb = () => {
         '/home/teacher/record/leave': '请假申请记录',
         '/home/teacher/record/procurement': '采购申请记录',
         '/home/teacher/record/report': '工作报告记录',
+        '/home/teacher/setting': '设置',
     };
     const pathSnippets = location.pathname.split('/').filter((i) => i);
     const extraBreadcrumbItems = pathSnippets.map((_, index) => {

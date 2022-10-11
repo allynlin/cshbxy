@@ -1,6 +1,6 @@
 import {
-    Menu,
     Button,
+    Menu, message,
     Switch
 } from 'antd';
 import {
@@ -9,15 +9,12 @@ import {
     BarChartOutlined,
     HomeOutlined,
     CommentOutlined,
-    MenuFoldOutlined,
-    MenuUnfoldOutlined,
 } from '@ant-design/icons';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import './playOut-light.scss'
 import {Link} from 'react-router-dom';
-import {useDispatch, useSelector} from "react-redux";
-import type {MenuProps, MenuTheme} from 'antd/es/menu';
-import {light, dark} from "../../component/redux/themeSlice";
+import {useSelector} from "react-redux";
+import type {MenuProps} from 'antd/es/menu';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -56,6 +53,7 @@ const teacher: MenuProps['items'] = [
         getItem((<Link to={'/home/teacher/record/procurement'}>采购申请记录</Link>), 'leaveProcurement'),
         getItem((<Link to={'/home/teacher/record/report'}>工作报告记录</Link>), 'teacherRecordReport'),
     ]),
+    getItem((<Link to={'/home/teacher/setting'}>设置</Link>), 'teacherSetting', <FormOutlined/>)
 ];
 const department: MenuProps['items'] = [
     getItem((<Link to={'/home/department'}>首页</Link>), 'department', <HomeOutlined/>),
@@ -85,44 +83,31 @@ const leader: MenuProps['items'] = [
 ];
 const defaultMenu: MenuProps['items'] = [];
 
-const RenderMenu: React.FC = () => {
-    const [mode, setMode] = useState<'vertical' | 'inline'>('inline');
-    const [theme, setTheme] = useState<MenuTheme>('light');
-
-    const dispatch = useDispatch();
+const RenderMenu = () => {
 
     const themeColor: String = useSelector((state: {
         themeColor: {
-            value: String
+            value: 'light' | 'dark'
         }
     }) => state.themeColor.value)
-
-    useEffect(() => {
-        switch (themeColor) {
-            case 'light':
-                setTheme('light');
-                break;
-            case 'dark':
-                setTheme('dark');
-                break;
-            default:
-                setTheme('light');
-        }
-    }, [themeColor])
-
-    const changeMode = (value: boolean) => {
-        setMode(value ? 'vertical' : 'inline');
-    };
-
-    const changeTheme = (value: boolean) => {
-        dispatch(value ? dark() : light());
-    };
 
     const userType = useSelector((state: {
         userType: {
             value: string
         }
     }) => state.userType.value)
+
+    const menuModeSlice = useSelector((state: {
+        menuMode: {
+            value: string
+        }
+    }) => state.menuMode.value)
+
+    const isLogin = useSelector((state: {
+        isLogin: {
+            value: boolean
+        }
+    }) => state.isLogin.value)
 
     // const [theme, setTheme] = useState('light');
     const RenderMenu = (): MenuProps['items'] => {
@@ -140,35 +125,43 @@ const RenderMenu: React.FC = () => {
 
     const menu: MenuProps['items'] = RenderMenu()
 
-    return (
-        <div className={"playout-menu"}>
-            <ul className={'ant-menu ant-menu-root ant-menu-inline ant-menu-light'}>
-                <li className={'ant-menu-item'}>
-                    <Switch onChange={changeMode}/>
-                    <span className={'ant-menu-title-content'} style={{
-                        marginLeft: '10px'
-                    }}>更改样式</span>
-                </li>
-                <li className={'ant-menu-item'}>
-                    <Switch
-                        checked={themeColor === 'dark'}
-                        onChange={changeTheme}
-                        checkedChildren="Dark"
-                        unCheckedChildren="Light"
-                    />
-                </li>
-            </ul>
-            <Menu
-                mode={mode}
-                items={menu}
-                theme={theme}
+    const RenderButton = () => {
+        return (
+            <Button
+                type="primary"
                 style={{
-                    minWidth: 0,
-                    flex: 'auto',
-                    width: '100%'
+                    width: '100%',
+                    marginTop: 16,
+                    display: 'flex',
+                    justifyContent: 'center',
                 }}
-            />
-        </div>
+            >
+                <Link to={'/login'}>重新登录</Link>
+            </Button>
+        )
+    }
+
+    return (
+        isLogin ?
+            (
+                <div className={"playout-menu"}>
+                    <Menu
+                        mode={menuModeSlice === 'inline' ? 'inline' : 'vertical'}
+                        items={menu}
+                        theme={themeColor === 'light' ? 'light' : 'dark'}
+                        style={{
+                            minWidth: 0,
+                            flex: 'auto',
+                            width: '100%'
+                        }}
+                    />
+                </div>
+            ) :
+            (
+                <div className={"playout-menu"}>
+                    <RenderButton/>
+                </div>
+            )
     )
 }
 

@@ -7,12 +7,15 @@ import {useSelector, useDispatch} from "react-redux";
 import {message} from "antd";
 import Cookie from "js-cookie";
 import {checkTeacherToken, checkDepartmentToken, checkLeaderToken, getVersion} from "./component/axios/api";
-import {login} from "./component/redux/isLoginSlice";
-import {teacher, department, leader} from "./component/redux/userTypeSlice";
+import {login, logout} from "./component/redux/isLoginSlice";
+import {teacher, department, leader, all} from "./component/redux/userTypeSlice";
 import {setVersion} from "./component/redux/serverVersionSlice";
-import {unstable_HistoryRouter as HistoryRouter} from 'react-router-dom'
+import {unstable_HistoryRouter as HistoryRouter, useNavigate} from 'react-router-dom'
 import {createBrowserHistory} from 'history'
-import {dark, light} from "./component/redux/themeSlice";
+import {darkTheme, lightTheme, sysTheme} from "./component/redux/sysColorSlice";
+import {light, dark} from "./component/redux/themeSlice";
+import {LStorage} from "./component/localStrong";
+import {inline, vertical} from "./component/redux/menuModeSlice";
 
 const history = createBrowserHistory({window});
 
@@ -27,21 +30,49 @@ function App() {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        // 检测当前是深色还是浅色模式
-        dispatch(isDark ? dark() : light());
+        LStorage.get('menuMode') === 'inline' ? dispatch(inline()) : dispatch(vertical())
+        // 如果在 localStrong 中有颜色设置就使用 localStrong 中的颜色设置
+        const sysColor = LStorage.get('themeColor');
+        switch (sysColor) {
+            case 'light':
+                dispatch(lightTheme());
+                break;
+            case 'dark':
+                dispatch(darkTheme());
+                break;
+            case 'sys':
+                dispatch(sysTheme());
+                break;
+            default:
+                dispatch(lightTheme());
+        }
     }, [])
 
-    // 当用户更改系统主题时，更新redux中的主题
+    const sysColor: String = useSelector((state: {
+        sysColor: {
+            value: 'light' | 'dark' | 'sys'
+        }
+    }) => state.sysColor.value)
+
+    // 当 themeColor 为 sys 时，根据系统颜色设置主题颜色
     useEffect(() => {
-        const listener = (e: MediaQueryListEvent) => {
-            dispatch(e.matches ? dark() : light());
-        };
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', listener);
-        return () => {
-            window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', listener);
-        };
-    }, []);
+        switch (sysColor) {
+            case 'sys':
+                const themeColor = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                dispatch(themeColor === 'dark' ? dark() : light());
+                // 监听系统颜色变化
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                    dispatch(e.matches ? dark() : light());
+                })
+                break;
+            case 'light':
+                dispatch(light());
+                break;
+            case 'dark':
+                dispatch(dark());
+                break;
+        }
+    }, [sysColor])
 
     const isLogin = useSelector((state: {
         isLogin: {

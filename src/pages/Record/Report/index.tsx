@@ -4,10 +4,8 @@ import {
     Button,
     Drawer,
     Modal,
-    Tag,
     message,
-    Card,
-    Steps, Result
+    Steps, Result, Collapse
 } from 'antd';
 import {
     ExclamationCircleOutlined, LoadingOutlined,
@@ -22,10 +20,11 @@ import {
 import '../index.scss';
 import {DownLoadURL} from "../../../baseInfo";
 import {RenderStatusTag} from "../../../component/Tag/RenderStatusTag";
-import {red, blue, green, yellow} from "../../../baseInfo";
+import {red, green, yellow} from "../../../baseInfo";
 
 const {Title} = Typography;
 const {Step} = Steps;
+const {Panel} = Collapse;
 
 const tableName = `workreportteacher`;
 
@@ -80,10 +79,10 @@ const Index: React.FC = () => {
                 <p style={{
                     textAlign: 'center',
                     color: red,
-                    fontSize: 20,
+                    fontSize: 16,
                     fontWeight: 'bold'
-                }}>暂不支持修改<br/>如需修改请重新提交</p>
-                <p>审批状态：{RenderStatusTag(content.status)}</p>
+                }}>如需修改请重新提交</p>
+                <p>审批状态：{RenderStatusTag(content.status, '工作报告')}</p>
                 <p>提交时间：{content.create_time}</p>
                 <p>更新时间：{content.update_time}</p>
                 <div style={{
@@ -103,20 +102,21 @@ const Index: React.FC = () => {
                     >删除</Button>
                 </div>
                 {
-                    // 循环输出 Card，数据来源 fileList
-                    fileList.map((item: any, index: number) => {
-                        return (
-                            <Card
-                                key={index}
-                                title={`附件${index + 1}`}
-                                style={{width: "auto", marginTop: 16}}
-                                extra={<a href={`${DownLoadURL}/downloadFile?filename=${item.fileName}`}
-                                          target="_self">下载</a>}
-                            >
-                                <p>{item.oldFileName}</p>
-                            </Card>
-                        )
-                    })
+                    // 如果 fileList 不为空则渲染
+                    fileList.length > 0 ? (
+                        <Collapse ghost>
+                            {/*循环输出 Card，数据来源 fileList*/}
+                            {fileList.map((item: any, index: number) => {
+                                return (
+                                    <Panel header={`附件${index + 1}`} key={index}>
+                                        <p>{item.oldFileName}</p>
+                                        <a href={`${DownLoadURL}/downloadFile?filename=${item.fileName}`}
+                                           target="_self">下载</a>
+                                    </Panel>
+                                )
+                            })}
+                        </Collapse>
+                    ) : null
                 }
                 <div style={{marginTop: 16}}>
                     审批流程：

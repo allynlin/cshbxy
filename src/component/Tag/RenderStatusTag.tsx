@@ -11,29 +11,31 @@ import React from "react";
 
 import {red, yellow, green, blue} from "../../baseInfo";
 
-export const RenderStatusTag = (status: number) => {
+export const RenderStatusTag = (status: number, msg = "申请") => {
     switch (status) {
         case 0:
             return (
-                <Tag icon={<SyncOutlined spin/>} color={yellow} onClick={() => message.warning('您的申请正在审批中')}>
+                <Tag icon={<SyncOutlined spin/>} color={yellow} onClick={() => message.warning(`您的${msg}正在审批中`)}>
                     审批中
                 </Tag>
             )
         case 1:
             return (
-                <Tag icon={<CheckCircleOutlined/>} color={green} onClick={() => message.success('您的申请已审批通过')}>
+                <Tag icon={<CheckCircleOutlined/>} color={green}
+                     onClick={() => message.success(`您的${msg}已审批通过`)}>
                     审批通过
                 </Tag>
             )
         case 2:
             return (
-                <Tag icon={<CloseCircleOutlined/>} color={red} onClick={() => message.error('您的申请被驳回')}>
+                <Tag icon={<CloseCircleOutlined/>} color={red} onClick={() => message.error(`您的${msg}被驳回`)}>
                     审批驳回
                 </Tag>
             )
         default:
             return (
-                <Tag icon={<ExclamationCircleOutlined/>} color={blue} onClick={() => message.info('您的申请状态异常')}>
+                <Tag icon={<ExclamationCircleOutlined/>} color={blue}
+                     onClick={() => message.info(`您的${msg}状态异常`)}>
                     状态异常
                 </Tag>
             )

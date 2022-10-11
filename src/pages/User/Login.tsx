@@ -11,6 +11,7 @@ import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {login} from "../../component/redux/isLoginSlice";
 import {teacher, department, leader} from "../../component/redux/userTypeSlice";
+import {setUser} from "../../component/redux/userInfoSlice";
 import {version} from "../../baseInfo";
 import RenderGetServerVersionPublic from "../../component/Version/RenderGetServerVersionPublic";
 
@@ -45,6 +46,7 @@ const StudentForm = () => {
     const onTeacherLogin = () => {
         teacherLogin(username, password).then(res => {
             if (res.code === 200) {
+                dispatch(setUser(res.body))
                 dispatch(teacher())
                 message.success(res.msg);
                 loginSuccess("teacher")
@@ -59,6 +61,7 @@ const StudentForm = () => {
     const onDepartmentLogin = () => {
         departmentLogin(username, password).then(res => {
             if (res.code === 200) {
+                dispatch(setUser(res.body))
                 dispatch(department())
                 message.success(res.msg);
                 loginSuccess("department")
@@ -73,6 +76,7 @@ const StudentForm = () => {
     const onLeaderLogin = () => {
         leaderLogin(username, password).then(res => {
             if (res.code === 200) {
+                dispatch(setUser(res.body))
                 dispatch(leader())
                 message.success(res.msg)
                 loginSuccess("leader")
