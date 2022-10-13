@@ -3,7 +3,6 @@ import {
     Modal,
     Button,
     Form,
-    message,
     Result,
     Select,
     Typography
@@ -110,8 +109,6 @@ const ChangeForm = () => {
     const submitForm = () => {
         teacherChangeDepartment(departmentUid, changeReason).then(res => {
             setConfirmLoading(false);
-            message.success(res.msg);
-            navigate('/home/teacher/record/departmentChange');
             navigate('/home/success', {
                 state: {
                     object: {

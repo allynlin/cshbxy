@@ -10,13 +10,6 @@ const teacherRecord = [
                     Auth: 'teacher'
                 }
             }, {
-                path: 'TravelReimbursement',
-                component: () => import('../pages/Apply/TravelReimbursement'),
-                meta: {
-                    title: '差旅报销申请',
-                    Auth: 'teacher'
-                }
-            }, {
                 path: 'report',
                 component: () => import('../pages/Record/Report'),
                 meta: {
@@ -28,6 +21,13 @@ const teacherRecord = [
                 component: () => import('../pages/Record/Leave'),
                 meta: {
                     title: '请假记录',
+                    Auth: 'teacher'
+                }
+            }, {
+                path: 'travelReimbursement',
+                component: () => import('../pages/Record/TravelReimbursement'),
+                meta: {
+                    title: '差旅报销记录',
                     Auth: 'teacher'
                 }
             }

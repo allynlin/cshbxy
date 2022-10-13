@@ -92,31 +92,29 @@ export const Request = (api: String, method = MethodType.GET, params = {}, confi
             headers,
             timeout: 10000
         }).then(res => {
-            // 判断 res.data 是字符串还是 json 对象
-            if (typeof res.data === 'string') {
-                // 字符串格式： Message{code=101, msg='版本校验失败'}
-                // 去除字符串多余元素，只保留 code 和 msg
-                const code = res.data.split('=')[1].split(',')[0].replace(/'/g, '"');
-                if (code === '101' || code === '103') {
-                    rootNavigate('/103');
-                } else if (code === "401" || code === "403") {
+            NProgress.done(true);
+            switch (res.data.code) {
+                case 101:
+                    reject(res.data)
+                    rootNavigate('/101')
+                    break;
+                case 103:
+                    reject(res.data)
+                    rootNavigate('/103')
+                    break;
+                case 403:
                     Cookie.remove('token');
                     Cookie.remove('userType');
+                    reject(res.data)
                     rootNavigate('/403');
-                }
-                return
+                    break;
+                case 500:
+                    reject(res.data)
+                    rootNavigate('/500');
+                    break;
             }
-            NProgress.done(true);
-            // 如果后端返回 403 则拦截当前页面请求，返回登录页面
-            if (res.data.code === 403) {
-                Cookie.remove('token');
-                Cookie.remove('userType');
-                reject(res.data)
-                rootNavigate('/403');
-            } else if (res.data.code === 500) {
-                reject(res.data)
-                rootNavigate('/500');
-            } else if (res.data.code >= 200 && res.data.code < 400) {
+            // // 如果后端返回 403 则拦截当前页面请求，返回登录页面
+            if (res.data.code >= 200 && res.data.code < 400) {
                 // 如果返回了 token 则更新本地 token
                 if (res.data.token !== null && res.data.token !== undefined)
                     Cookie.set('token', res.data.token, {expires: 7, path: '/', sameSite: 'strict'})

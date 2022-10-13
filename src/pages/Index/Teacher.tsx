@@ -1,21 +1,35 @@
-import React from "react";
-import Test from "./Test";
-import {LStorage} from "../../component/localStrong";
+import {Tabs} from 'antd';
+import React from 'react';
 
-const Teacher: React.FC = () => {
-    const [count, setCount] = React.useState<number>(0);
-    const [childCount, setChildCount] = React.useState<number>(0);
-    return (
-        <div>
-            {/*<p>这是教师首页{count}</p>*/}
-            <p>这是父组件{childCount}</p>
-            <button onClick={() => {
-                setCount(count + 1)
-            }}>点击
-            </button>
-            {/*传递 count 给子组件*/}
-            <Test msg={count} changeCount={(code: number) => setChildCount(childCount + code)}/>
-        </div>
-    )
-}
-export default Teacher;
+const onChange = (key: string) => {
+    console.log(key);
+};
+
+const App: React.FC = () => (
+    <Tabs
+        defaultActiveKey="1"
+        onChange={onChange}
+        style={{
+            padding: 16
+        }}
+        items={[
+            {
+                label: `Tab 1`,
+                key: '1',
+                children: `Content of Tab Pane 1`,
+            },
+            {
+                label: `Tab 2`,
+                key: '2',
+                children: `Content of Tab Pane 2`,
+            },
+            {
+                label: `Tab 3`,
+                key: '3',
+                children: `Content of Tab Pane 3`,
+            },
+        ]}
+    />
+);
+
+export default App;

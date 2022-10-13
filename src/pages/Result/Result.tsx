@@ -48,6 +48,40 @@ export const Error500 = () => (
     />
 );
 
+export const Error101: React.FC = () => {
+    return (
+        <Result
+            status="error"
+            title={`版本获取失败`}
+        >
+            <div className="desc">
+                <Paragraph>
+                    <Text
+                        strong
+                        style={{
+                            fontSize: 16,
+                        }}
+                    >
+                        可能造成版本获取失败的原因有：
+                    </Text>
+                </Paragraph>
+                <Paragraph>
+                    <CloseCircleOutlined className="site-result-demo-error-icon"/>
+                    &nbsp;您的系统存在异常
+                </Paragraph>
+                <Paragraph>
+                    <CloseCircleOutlined className="site-result-demo-error-icon"/>
+                    &nbsp;您使用的非正式发行版
+                </Paragraph>
+                <Paragraph>
+                    <CloseCircleOutlined className="site-result-demo-error-icon"/>
+                    &nbsp;当前版本存在异常，请联系发行方更新版本
+                </Paragraph>
+            </div>
+        </Result>
+    )
+};
+
 export const Error103: React.FC = () => {
 
     const navigate = useNavigate();
@@ -81,12 +115,16 @@ export const Error103: React.FC = () => {
             status="error"
             title={`版本过低`}
             subTitle={<RenderVersion/>}
-            extra={[
-                version >= serverVersion ? <Button type="primary" key="console" onClick={() => {
-                    navigate(-1)
-                }}>返回</Button> : null,
-                <RenderRefreshButton/>
-            ]}
+            extra={
+                <>
+                    {
+                        version >= serverVersion ? <Button type="primary" key="console" onClick={() => {
+                            navigate(-1)
+                        }}>返回</Button> : null
+                    }
+                    <RenderRefreshButton/>
+                </>
+            }
         >
             <div className="desc">
                 <Paragraph>
@@ -139,9 +177,11 @@ export const Success: React.FC = () => {
                         <Button type="primary" key="console">{object.toPage}</Button>
                     </Link>
 
-                    object.againTitle ? <Button key="again" onClick={() => {
-                    navigate(-1)
-                }}>{object.againTitle}</Button> : ''
+                    {
+                        object.againTitle ? <Button key="again" onClick={() => {
+                            navigate(-1)
+                        }}>{object.againTitle}</Button> : ''
+                    }
                 </div>
             }
         />

@@ -4,12 +4,15 @@ import {
     Button,
     Form,
     Select,
+    message,
     Typography,
     InputNumber
 } from 'antd';
 import React, {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {
-    checkLastTimeUploadFiles
+    checkLastTimeUploadFiles,
+    addTravelReimbursement
 } from "../../../component/axios/api";
 import '../apply-light.scss';
 import '../apply-dark.scss';
@@ -26,6 +29,9 @@ const tableName = `travelreimbursement`;
 const URL = `${BaseInfo}/api`;
 
 const LeaveForm = () => {
+
+    const navigate = useNavigate();
+
     // 费用类型
     const [moneyType, setMoneyType] = useState<String>('CNY');
     // 文件上传列表
@@ -66,13 +72,19 @@ const LeaveForm = () => {
 
     // 表单提交
     const submitForm = () => {
-        // teacherChangeDepartment(destination, expenses,reason).then(res => {
-        //     setConfirmLoading(false);
-        //     message.success(res.msg);
-        //     navigate('/home');
-        // }).catch(err => {
-        //     setConfirmLoading(false);
-        // })
+        addTravelReimbursement(destination, (expenses + moneyType), reason, tableName).then(res => {
+            setConfirmLoading(false);
+            navigate('/home/success', {
+                state: {
+                    object: {
+                        title: '差旅报销申请提交成功',
+                        describe: '请等待管理员审批',
+                        toPage: '查看审批记录',
+                        toURL: '/home/teacher/record/travelReimbursement',
+                    }
+                }
+            })
+        })
     }
 
     const RenderModal: React.FC = () => {

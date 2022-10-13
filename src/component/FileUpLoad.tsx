@@ -51,24 +51,27 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
             const {status} = info.file;
             setFileList([...info.fileList]);
             if (status !== 'uploading') {
-                console.log(info.file, info.fileList);
-                if (typeof info.file.response === 'string') {
-                    // 字符串格式： Message{code=101, msg='版本校验失败'}
-                    // 去除字符串多余元素，只保留 code 和 msg
-                    const code = info.file.response.split('=')[1].split(',')[0].replace(/'/g, '"');
-                    if (code === '101' || code === '103') {
-                        rootNavigate('/103')
-                    } else if (code === "401" || code === "403") {
+                // console.log(info.file, info.fileList);
+                switch (info.file.response.code) {
+                    case 101:
+                        info.file.status = 'error';
+                        rootNavigate('/101');
+                        break;
+                    case 103:
+                        info.file.status = 'error';
+                        rootNavigate('/103');
+                        break;
+                    case 401:
+                    case 403:
                         Cookie.remove('token');
                         Cookie.remove('userType');
-                        rootNavigate('/403')
-                    }
-                    // 将对应文件的状态设置为 error
-                    info.file.status = 'error';
-                    return
+                        info.file.status = 'error';
+                        rootNavigate('/403');
+                        break;
+                    default:
+                        // 传递参数给父组件, 用于更新父组件的 fileList，如果 info.fileList 为空，就传递一个空数组
+                        props.getList(info.fileList.length === 0 ? [] : fileList)
                 }
-                // 传递参数给父组件, 用于更新父组件的 fileList，如果 info.fileList 为空，就传递一个空数组
-                props.getList(info.fileList.length === 0 ? [] : fileList)
             }
             if (status === 'done') {
                 if (info.file.response.code === 200) {

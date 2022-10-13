@@ -147,6 +147,7 @@ const Index: React.FC = () => {
     // 获取当前记录上传的文件和当前审批流程
     const getInfo = async (uid: string) => {
         const hide = message.loading('正在获取文件列表和审批流程', 0);
+        setTimeout(hide, 10000);
         const list: boolean = await findWorkReportByTeacherProcess(uid).then((res: any) => {
             setProcessList(res.body);
             return true;

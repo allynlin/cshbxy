@@ -228,3 +228,35 @@ export const updateLeave = async (uid: String, reason: String, start_time: Strin
         end_time
     });
 }
+
+// 提交差旅报销申请
+export const addTravelReimbursement = async (destination: String, expenses: String, reason: String, tableUid: String) => {
+    return promise.Request('/apply/addTravelReimbursement', MethodType.POST, {
+        destination,
+        expenses,
+        reason
+    }, {headers: {tableUid: tableUid}});
+}
+
+// 查询差旅报销申请记录
+export const findTravelReimbursementApplyList = async (destination?: String, expenses?: String, reason?: String) => {
+    return promise.Request('/apply/findTravelReimbursementApplyList', MethodType.POST, {
+        destination,
+        expenses,
+        reason
+    });
+}
+
+// 查询差旅报销审批流程
+export const findTravelProcess = async (uid: String) => {
+    return promise.Request('/apply/findTravelProcess', MethodType.POST, {
+        uid
+    });
+}
+
+// 删除差旅报销申请
+export const deleteTravelReimbursementApply = async (uid: String) => {
+    return promise.Request('/apply/deleteTravelReimbursementApply', MethodType.POST, {
+        uid
+    });
+}
