@@ -18,7 +18,7 @@ import '../apply-light.scss';
 import '../apply-dark.scss';
 import {BaseInfo} from "../../../baseInfo";
 import Spin from "../../../component/loading/Spin";
-import FileUpLoad from "../../../component/FileUpLoad";
+import FileUpLoad from "../../../component/axios/FileUpLoad";
 import {useSelector} from "react-redux";
 
 const {Title} = Typography;

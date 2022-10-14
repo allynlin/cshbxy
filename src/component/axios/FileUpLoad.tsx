@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from "react";
 import {UploadProps} from "antd/es/upload/interface";
-import {DownLoadURL, version} from "../baseInfo";
+import {DownLoadURL, version} from "../../baseInfo";
 import {message, Upload} from "antd";
-import {deleteFile} from "./axios/api";
+import {deleteFile} from "./api";
 import Cookie from "js-cookie";
 import {InboxOutlined} from "@ant-design/icons";
-import {rootNavigate} from "../App";
+import {rootNavigate} from "../../App";
 
 interface FileUpLoadProps {
     setTableName: string

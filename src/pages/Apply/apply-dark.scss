@@ -108,6 +108,19 @@ $dark-2: #434343;
                                     }
                                 }
                             }
+
+                            .ant-select {
+                                background-color: $dark;
+
+                                .ant-select-selector {
+                                    background-color: $dark;
+                                    color: $font-light;
+                                }
+
+                                svg {
+                                    color: $font-light;
+                                }
+                            }
                         }
                     }
 

@@ -1,3 +1,5 @@
+// @ts-ignore
+
 import React, {useEffect, useState} from "react";
 import './App-light.scss';
 import routes from "./Router/routes";
@@ -7,10 +9,10 @@ import {useSelector, useDispatch} from "react-redux";
 import {message} from "antd";
 import Cookie from "js-cookie";
 import {checkTeacherToken, checkDepartmentToken, checkLeaderToken, getVersion} from "./component/axios/api";
-import {login, logout} from "./component/redux/isLoginSlice";
-import {teacher, department, leader, all} from "./component/redux/userTypeSlice";
+import {login} from "./component/redux/isLoginSlice";
+import {teacher, department, leader} from "./component/redux/userTypeSlice";
 import {setVersion} from "./component/redux/serverVersionSlice";
-import {unstable_HistoryRouter as HistoryRouter, useNavigate} from 'react-router-dom'
+import {unstable_HistoryRouter as HistoryRouter} from 'react-router-dom'
 import {createBrowserHistory} from 'history'
 import {darkTheme, lightTheme, sysTheme} from "./component/redux/sysColorSlice";
 import {light, dark} from "./component/redux/themeSlice";
@@ -24,7 +26,7 @@ export const rootNavigate = (to: string) => {
 };
 
 
-function App() {
+export default function App() {
     const [isRender, setIsRender] = useState(false);
 
     const dispatch = useDispatch();
@@ -170,5 +172,3 @@ function App() {
         </HistoryRouter>
     );
 }
-
-export default App;

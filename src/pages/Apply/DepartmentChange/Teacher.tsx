@@ -18,7 +18,7 @@ import {
 import '../apply-light.scss';
 import '../apply-dark.scss';
 import {DownLoadURL} from "../../../baseInfo";
-import FileUpLoad from "../../../component/FileUpLoad";
+import FileUpLoad from "../../../component/axios/FileUpLoad";
 import {LoadingOutlined} from "@ant-design/icons";
 import {useSelector} from "react-redux";
 

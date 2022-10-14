@@ -23,6 +23,8 @@ import {red} from "../../../baseInfo";
 import {RenderStatusTag} from "../../../component/Tag/RenderStatusTag";
 import {RenderStatusColor} from "../../../component/Tag/RenderStatusColor";
 import '../index.scss'
+import {UpdateLeave} from "../Leave/UpdateLeave";
+import {UpdateTravel} from "./UpdateTravel";
 
 const {Title} = Typography;
 const {Step} = Steps;
@@ -101,6 +103,17 @@ const Index: React.FC = () => {
                     justifyContent: 'end',
                     marginTop: 16
                 }}>
+                    <UpdateTravel
+                        state={content}
+                        getNewContent={(newContent: object) => {
+                            // 对比旧 content 查看是否有变化，有变化则重新查询
+                            if (JSON.stringify(newContent) !== JSON.stringify(content)) {
+                                getDataSource()
+                                // 将新的内容更新到content中
+                                setContent({...content, ...newContent})
+                            }
+                        }}
+                    />
                     <Button
                         type="primary"
                         style={{
