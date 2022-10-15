@@ -1,6 +1,6 @@
 {
   "name": "cshbxy",
-  "version": "0.5.425",
+  "version": "0.5.426",
   "private": true,
   "homepage": "https://allynlin.netlify.app/",
   "dependencies": {
@@ -41,9 +41,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "CI=false && react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "deploy": "gh-pages -d build"
+    "test": "react-scripts test"
   },
   "eslintConfig": {
     "extends": [
