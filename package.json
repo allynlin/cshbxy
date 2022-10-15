@@ -2,7 +2,7 @@
   "name": "cshbxy",
   "version": "0.5.422",
   "private": true,
-  "homepage": "https://allynlin.gitee.io/cshbxy/",
+  "homepage": "https://allynlin.github.io/cshbxy/",
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@reduxjs/toolkit": "^1.8.5",
