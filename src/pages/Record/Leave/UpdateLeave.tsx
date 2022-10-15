@@ -102,6 +102,7 @@ export const UpdateLeave = (props: prop) => {
                 onCancel={handleCancel}
                 width={800}
                 style={{
+                    top: 20,
                     backdropFilter: 'blur(20px) saturate(180%)',
                     backgroundColor: 'rgba(255,255,255,0.6)'
                 }}

@@ -260,3 +260,13 @@ export const deleteTravelReimbursementApply = async (uid: String) => {
         uid
     });
 }
+
+// 修改差旅报销申请
+export const updateTravelReimbursementApply = async (uid: String, destination: String, expenses: String, reason: String, tableUid: String) => {
+    return promise.Request('/apply/updateTravelReimbursementApply', MethodType.POST, {
+        uid,
+        destination,
+        expenses,
+        reason
+    }, {headers: {tableUid: tableUid}});
+}

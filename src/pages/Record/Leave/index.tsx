@@ -93,7 +93,6 @@ const Index: React.FC = () => {
                             setContent({...content, ...newContent})
                         }
                     }}/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
                     <Button
                         type="primary"
                         style={{

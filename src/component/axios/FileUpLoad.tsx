@@ -52,25 +52,31 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
             setFileList([...info.fileList]);
             if (status !== 'uploading') {
                 // console.log(info.file, info.fileList);
-                switch (info.file.response.code) {
-                    case 101:
-                        info.file.status = 'error';
-                        rootNavigate('/101');
-                        break;
-                    case 103:
-                        info.file.status = 'error';
-                        rootNavigate('/103');
-                        break;
-                    case 401:
-                    case 403:
-                        Cookie.remove('token');
-                        Cookie.remove('userType');
-                        info.file.status = 'error';
-                        rootNavigate('/403');
-                        break;
-                    default:
-                        // 传递参数给父组件, 用于更新父组件的 fileList，如果 info.fileList 为空，就传递一个空数组
-                        props.getList(info.fileList.length === 0 ? [] : fileList)
+                // 如果 fileList 为空，就传递一个空数组
+                if (info.file.response !== undefined) {
+                    switch (info.file.response.code) {
+                        case 101:
+                            info.file.status = 'error';
+                            rootNavigate('/101');
+                            break;
+                        case 103:
+                            info.file.status = 'error';
+                            rootNavigate('/103');
+                            break;
+                        case 401:
+                        case 403:
+                            Cookie.remove('token');
+                            Cookie.remove('userType');
+                            info.file.status = 'error';
+                            rootNavigate('/403');
+                            break;
+                        default:
+                            // 传递参数给父组件, 用于更新父组件的 fileList，如果 info.fileList 为空，就传递一个空数组
+                            props.getList(info.fileList.length === 0 ? [] : fileList)
+                    }
+                } else {
+                    // 传递参数给父组件, 用于更新父组件的 fileList，如果 info.fileList 为空，就传递一个空数组
+                    props.getList(info.fileList.length === 0 ? [] : fileList)
                 }
             }
             if (status === 'done') {

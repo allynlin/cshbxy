@@ -1,11 +1,13 @@
 import {Button, DatePicker, Form, Input, InputNumber, message, Modal, Select} from 'antd';
-import React, {useState} from 'react';
-import {updateLeave} from "../../../component/axios/api";
+import React, {useEffect, useState} from 'react';
+import {checkLastTimeUploadFiles, updateTravelReimbursementApply} from "../../../component/axios/api";
 import {ExclamationCircleOutlined} from "@ant-design/icons";
 import FileUpLoad from "../../../component/axios/FileUpLoad";
+import {DownLoadURL} from "../../../baseInfo";
 
 interface prop {
     state: any,
+    fileList: any,
     getNewContent: any
 }
 
@@ -14,24 +16,63 @@ const {Option} = Select;
 const tableName = `travelreimbursement`;
 
 export const UpdateTravel = (props: prop) => {
+    const content = props.state;
+    const list = props.fileList;
     // 费用类型
-    const [moneyType, setMoneyType] = useState<String>('CNY');
+    const [moneyType, setMoneyType] = useState<String>(content.expenses.substring(content.expenses.length - 3, content.expenses.length));
     // 文件上传列表
     const [fileList, setFileList] = useState<any>([]);
-    const content = props.state;
     // 监听表单数据
     const [form] = Form.useForm();
+    const destination = Form.useWatch('destination', form);
+    const expenses = Form.useWatch('expenses', form);
     const reason = Form.useWatch('reason', form);
-    const leaveTime = Form.useWatch('leaveTime', form);
     const [open, setOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
+
+    useEffect(() => {
+        // 遍历 list,转换成 fileList 需要的 uid,status,url,name
+        let file = list.map((item: any) => {
+            return {
+                uid: item.fileName,
+                name: item.oldFileName,
+                status: 'done',
+                url: `${DownLoadURL}/downloadFile?filename=${item.fileName}`,
+
+            }
+        })
+        checkLastTimeUploadFiles(tableName).then(res => {
+            if (res.code === 200) {
+                // 遍历 res.body
+                let oldList = res.body.map((item: any) => {
+                    return {
+                        uid: item.fileName,
+                        name: item.oldFileName,
+                        status: 'done',
+                        url: `${DownLoadURL}/downloadFile?filename=${item.fileName}`,
+                    }
+                })
+                // 合并 file 数组和 oldList 数组
+                let newList = file.concat(oldList);
+                setFileList(newList);
+                console.log(newList);
+                return;
+            }
+        })
+        setFileList(file);
+    }, [])
 
     const showModal = () => {
         setOpen(true);
     };
 
     const handleOk = () => {
-        showUpdateConfirm();
+        // 校验表单是否填写完整
+        form.validateFields().then(() => {
+            showUpdateConfirm();
+        }).catch(() => {
+            message.error('表单填写不完整');
+        })
     };
 
     const handleCancel = () => {
@@ -64,7 +105,7 @@ export const UpdateTravel = (props: prop) => {
         Modal.confirm({
             title: '放弃修改？',
             icon: <ExclamationCircleOutlined/>,
-            content: '放弃修改后将不会保存修改，是否确认放弃？',
+            content: '放弃修改后将不会保存修改修改内容，已上传文件将会保留在上传列表中，下次提交仍可使用，是否确认放弃？',
             okText: '放弃',
             okType: 'danger',
             cancelText: '继续修改',
@@ -80,16 +121,11 @@ export const UpdateTravel = (props: prop) => {
     };
 
     const updateForm = () => {
-        updateLeave(content.uid, reason, leaveTime[0].format('YYYY-MM-DD HH:mm'), leaveTime[1].format('YYYY-MM-DD HH:mm')).then(res => {
-            message.success(res.msg);
+        updateTravelReimbursementApply(content.uid, destination, (expenses + moneyType), reason, tableName).then(res => {
+            message.success(res.msg)
             setOpen(false);
             setConfirmLoading(false);
-            // props.getNewContent 返回给父组件,父组件接收一个对象，对象中有 reason,start_time,end_time
-            props.getNewContent({
-                reason: reason,
-                start_time: leaveTime[0].format('YYYY-MM-DD HH:mm'),
-                end_time: leaveTime[1].format('YYYY-MM-DD HH:mm')
-            });
+            props.getNewContent();
         }).catch(err => {
             message.error(err.msg);
             setConfirmLoading(false);
@@ -110,6 +146,7 @@ export const UpdateTravel = (props: prop) => {
                 onCancel={handleCancel}
                 width={800}
                 style={{
+                    top: 20,
                     backdropFilter: 'blur(20px) saturate(180%)',
                     backgroundColor: 'rgba(255,255,255,0.6)'
                 }}
@@ -123,7 +160,8 @@ export const UpdateTravel = (props: prop) => {
                         file: fileList,
                         destination: content.destination,
                         reason: content.reason,
-                        expenses: content.expenses
+                        // 截取字符串，expenses 后三位不要
+                        expenses: content.expenses.substring(0, content.expenses.length - 3),
                     }}
                 >
                     <Form.Item
@@ -140,7 +178,9 @@ export const UpdateTravel = (props: prop) => {
                         rules={[{required: true, message: '请输入出差费用'}]}
                     >
                         <InputNumber addonAfter={
-                            <Select defaultValue={content.moneyType} style={{width: 60}} onChange={e => {
+                            <Select
+                                defaultValue={content.expenses.substring(content.expenses.length - 3, content.expenses.length)}
+                                style={{width: 60}} onChange={e => {
                                 setMoneyType(e)
                             }}>
                                 <Option value="USD">$</Option>

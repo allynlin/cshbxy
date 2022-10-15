@@ -1,5 +1,3 @@
-// @ts-ignore
-
 import React, {useEffect, useState} from "react";
 import './App-light.scss';
 import routes from "./Router/routes";

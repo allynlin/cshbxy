@@ -23,7 +23,6 @@ import {red} from "../../../baseInfo";
 import {RenderStatusTag} from "../../../component/Tag/RenderStatusTag";
 import {RenderStatusColor} from "../../../component/Tag/RenderStatusColor";
 import '../index.scss'
-import {UpdateLeave} from "../Leave/UpdateLeave";
 import {UpdateTravel} from "./UpdateTravel";
 
 const {Title} = Typography;
@@ -86,12 +85,6 @@ const Index: React.FC = () => {
                     backgroundColor: 'rgba(255, 255, 255, 0.6)'
                 }}
             >
-                <p style={{
-                    textAlign: 'center',
-                    color: red,
-                    fontSize: 16,
-                    fontWeight: 'bold'
-                }}>如需修改请重新提交</p>
                 <p>目的地：{content.destination}</p>
                 <p>出差费用：{content.expenses}</p>
                 <p>出差原因：{content.reason}</p>
@@ -105,13 +98,10 @@ const Index: React.FC = () => {
                 }}>
                     <UpdateTravel
                         state={content}
-                        getNewContent={(newContent: object) => {
-                            // 对比旧 content 查看是否有变化，有变化则重新查询
-                            if (JSON.stringify(newContent) !== JSON.stringify(content)) {
-                                getDataSource()
-                                // 将新的内容更新到content中
-                                setContent({...content, ...newContent})
-                            }
+                        fileList={fileList}
+                        getNewContent={() => {
+                            setOpen(false)
+                            getDataSource()
                         }}
                     />
                     <Button
