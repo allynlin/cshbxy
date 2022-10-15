@@ -1,8 +1,7 @@
 {
-  "name": "demo-ts",
-  "version": "0.5.42",
+  "name": "cshbxy",
+  "version": "0.5.421",
   "private": true,
-  "homepage": "https://allynlin.gitee.io/cshbxy/",
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@reduxjs/toolkit": "^1.8.5",
