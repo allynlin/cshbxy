@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {message} from 'antd';
+import {MessagePlugin} from 'tdesign-react';
 import qs from 'qs';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css'
@@ -16,45 +17,37 @@ export const MethodType = {
 };
 
 // 对于请求错误的提示
-const errorTip = (code: string) => {
+const errorTip = (code: string, message: string) => {
     switch (code) {
-        case '400':
-            message.error('请求错误');
+        case 'ERR_NETWORK':
+            MessagePlugin.error('网络错误');
             break;
-        case '401':
-            message.error('未授权，请登录');
+        case 'ECONNABORTED':
+            MessagePlugin.error('请求超时');
             break;
-        case '403':
-            message.error('拒绝访问');
+        case 'ERR_ABORT':
+            MessagePlugin.error('请求被终止');
             break;
-        case '404':
-            message.error(`请求地址出错: ${code}`);
-            rootNavigate('/404')
+        case 'ERR_NOT_FOUND':
+            MessagePlugin.error('请求资源不存在');
             break;
-        case '408':
-            message.error('请求超时');
+        case 'ERR_UNAUTHORIZED':
+            MessagePlugin.error('未授权，请登录');
             break;
-        case '500':
-            message.error('服务器内部错误');
-            rootNavigate('/500');
+        case 'ERR_FORBIDDEN':
+            MessagePlugin.error('请求被拒绝');
             break;
-        case '501':
-            message.error('服务未实现');
+        case 'ERR_INTERNAL':
+            MessagePlugin.error('服务器内部错误');
             break;
-        case '502':
-            message.error('网关错误');
+        case 'ERR_SERVICE_UNAVAILABLE':
+            MessagePlugin.error('服务不可用，服务器暂时过载或维护');
             break;
-        case '503':
-            message.error('服务不可用');
-            break;
-        case '504':
-            message.error('网关超时');
-            break;
-        case '505':
-            message.error('HTTP版本不受支持');
+        case 'ERR_GATEWAY_TIMEOUT':
+            MessagePlugin.error('网关超时');
             break;
         default:
-            message.error(`连接出错: ${code}`);
+            MessagePlugin.error(message);
     }
 }
 
@@ -125,12 +118,7 @@ export const Request = (api: String, method = MethodType.GET, params = {}, confi
             }
         }).catch(error => {
             NProgress.done(true);
-            console.error(error);
-            if (error.response) {
-                errorTip(error.response.status);
-            } else {
-                message.error('连接服务器失败');
-            }
+            errorTip(error.code, error.message);
             reject(error);
         });
     });

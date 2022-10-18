@@ -51,7 +51,7 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
             const {status} = info.file;
             setFileList([...info.fileList]);
             if (status !== 'uploading') {
-                // console.log(info.file, info.fileList);
+                console.log(info.file, info.fileList);
                 // 如果 fileList 为空，就传递一个空数组
                 if (info.file.response !== undefined) {
                     switch (info.file.response.code) {
