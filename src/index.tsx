@@ -4,8 +4,6 @@ import './index.scss'
 import App from './App';
 import {Provider} from "react-redux";
 import store from "./component/redux/store";
-import zhCN from 'antd/es/locale/zh_CN';
-import {ConfigProvider} from 'antd';
 import 'tdesign-react/es/style/index.css';
 
 const root = ReactDOM.createRoot(
@@ -14,9 +12,7 @@ const root = ReactDOM.createRoot(
 root.render(
     <React.StrictMode>
         <Provider store={store}>
-            <ConfigProvider locale={zhCN}>
-                <App/>
-            </ConfigProvider>
+            <App/>
         </Provider>
     </React.StrictMode>
 );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {version} from "../../baseInfo";
 import {useDispatch, useSelector} from "react-redux";
 import {getVersion} from "../../component/axios/api";
@@ -9,6 +9,17 @@ import {yellow} from "../../baseInfo";
 export default function RenderFooter() {
 
     const dispatch = useDispatch();
+    const [isEnglish, setIsEnglish] = useState(true);
+
+    const userLanguage: String = useSelector((state: {
+        userLanguage: {
+            value: 'Chinese' | 'English'
+        }
+    }) => state.userLanguage.value)
+
+    useEffect(() => {
+        setIsEnglish(userLanguage === 'English')
+    }, [userLanguage])
 
     const serverVersion = useSelector((state: {
         serverVersion: {
@@ -32,7 +43,7 @@ export default function RenderFooter() {
                 onClick={e => {
                     e.preventDefault();
                     getVer();
-                }}>刷新</a>
+                }}>{isEnglish ? 'Refresh' : '刷新'}</a>
         )
     }
 
@@ -42,7 +53,7 @@ export default function RenderFooter() {
             width: "100%",
             height: "100%",
         }}>
-            <span>校园 OA 系统 &copy; 2022 Created by allynlin Version：{version} Server：{serverVersion}&nbsp;
+            <span>{isEnglish ? 'College OA System' : '校园 OA 系统'} &copy; 2022 Created by allynlin Version：{version} Server：{serverVersion}&nbsp;
                 <RenderRefresh/></span>
         </div>
     )

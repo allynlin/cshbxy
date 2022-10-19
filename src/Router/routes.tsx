@@ -13,7 +13,8 @@ const routes: RoutesItemType[] = [
         path: '/home',
         element: <PlayOut/>,
         meta: {
-            title: '首页',
+            title: 'Home',
+            titleCN: '首页',
             Auth: 'public'
         },
         // 根元素使用 element 的方式导入，避免路由导航的时候刷新根元素
@@ -21,7 +22,8 @@ const routes: RoutesItemType[] = [
             {
                 path: 'teacher',
                 meta: {
-                    title: '教师',
+                    title: 'Teacher',
+                    titleCN: '教师',
                     Auth: 'teacher'
                 },
                 children: [
@@ -29,14 +31,16 @@ const routes: RoutesItemType[] = [
                         path: 'index',
                         component: () => import('../pages/Index/Teacher'),
                         meta: {
-                            title: '教师首页',
+                            title: 'Home',
+                            titleCN: '教师首页',
                             Auth: 'teacher'
                         }
                     }, {
                         path: 'setting',
                         component: () => import('../pages/Setting/TeacherSetting'),
                         meta: {
-                            title: '设置',
+                            title: 'Setting',
+                            titleCN: '设置',
                             Auth: 'teacher'
                         }
                     },
@@ -61,7 +65,8 @@ const routes: RoutesItemType[] = [
                 path: 'success',
                 element: <Success/>,
                 meta: {
-                    title: '成功',
+                    title: 'Success',
+                    titleCN: '成功',
                     Auth: 'public'
                 }
             }, {
@@ -74,7 +79,8 @@ const routes: RoutesItemType[] = [
         path: '/login',
         component: () => import('../pages/User/Login'),
         meta: {
-            title: '登录',
+            title: 'Login',
+            titleCN: '登录',
             Auth: 'public'
         }
     },
@@ -82,7 +88,8 @@ const routes: RoutesItemType[] = [
         path: '/register',
         component: () => import('../pages/User/Register'),
         meta: {
-            title: '注册',
+            title: 'Register',
+            titleCN: '注册',
             Auth: 'public'
         }
     },
@@ -90,7 +97,8 @@ const routes: RoutesItemType[] = [
         path: '/Spin',
         component: () => import('../component/loading/Spin'),
         meta: {
-            title: '正在加载中',
+            title: 'Spin',
+            titleCN: '正在加载中',
             Auth: 'public'
         }
     }, {
@@ -119,14 +127,16 @@ const routes: RoutesItemType[] = [
         path: '/101',
         element: <Error101/>,
         meta: {
-            title: '版本获取失败',
+            title: 'Version Error',
+            titleCN: '版本获取失败',
             Auth: 'public'
         }
     }, {
         path: '/103',
         element: <Error103/>,
         meta: {
-            title: '版本过低',
+            title: 'Low Version',
+            titleCN: '版本过低',
             Auth: 'public'
         }
     }, {

@@ -46,6 +46,18 @@ const ChangeForm = () => {
     const departmentUid = Form.useWatch('departmentUid', form);
     const changeReason = Form.useWatch('changeReason', form);
 
+    const [isEnglish, setIsEnglish] = useState(true);
+
+    const userLanguage: String = useSelector((state: {
+        userLanguage: {
+            value: 'Chinese' | 'English'
+        }
+    }) => state.userLanguage.value)
+
+    useEffect(() => {
+        setIsEnglish(userLanguage === 'English')
+    }, [userLanguage])
+
     useEffect(() => {
         checkDepartmentChange();
     }, [])
@@ -75,13 +87,13 @@ const ChangeForm = () => {
         }
         checkTeacherChangeDepartment().then(res => {
             if (res.code === 200) {
-                setRenderResultTitle("正在获取上次上传的文件")
+                setRenderResultTitle(isEnglish ? 'Getting the list of last uploads' : "正在获取上次上传的文件")
                 checkUploadFilesList();
                 setIsQuery(false)
                 setWaitTime(0)
             } else {
                 setIsRenderInfo(true)
-                setRenderResultTitle("您已经提交过部门变更申请，请等待审批结果")
+                setRenderResultTitle(isEnglish ? 'You have a department change application in progress, please wait for the approval to complete before applying again.' : "您已经提交过部门变更申请，请等待审批结果")
             }
         })
     }
@@ -112,14 +124,14 @@ const ChangeForm = () => {
             navigate('/home/success', {
                 state: {
                     object: {
-                        title: '部门变更申请提交成功',
-                        describe: '请等待管理员审批',
-                        toPage: '查看审批记录',
+                        title: isEnglish ? 'Your application has been submitted successfully' : '部门变更申请提交成功',
+                        describe: isEnglish ? 'please wait for the approval result' : '请等待管理员审批',
+                        toPage: isEnglish ? 'See the application record' : '查看申请记录',
                         toURL: '/home/teacher/record/departmentChange',
                     }
                 }
             })
-        }).catch(err => {
+        }).catch(() => {
             setConfirmLoading(false);
         })
     }
@@ -140,7 +152,7 @@ const ChangeForm = () => {
     const RenderModal: React.FC = () => {
         return (
             <Modal
-                title="确认提交"
+                title={isEnglish ? 'Confirm' : '确认提交'}
                 open={isModalVisible}
                 onOk={handleOk}
                 confirmLoading={confirmLoading}
@@ -151,10 +163,10 @@ const ChangeForm = () => {
                     backgroundColor: 'rgba(255,255,255,0.6)'
                 }}
             >
-                <p>变更部门：{departmentUid}</p>
-                <p>变更原因：{changeReason}</p>
+                <p>{isEnglish ? 'Department' : '变更部门：'}{departmentUid}</p>
+                <p>{isEnglish ? 'Reason' : '变更原因：'}{changeReason}</p>
                 {/*将变更材料 changeFile 中的 fileList 数组中的状态为 done 的每一项 name 输出出来*/}
-                <p>变更材料：{
+                <p>{isEnglish ? 'FileList' : '变更材料：'}{
                     fileList.filter((item: any) => item.status === 'done').map((item: any) => item.name).join('、')
                 }</p>
             </Modal>
@@ -212,7 +224,7 @@ const ChangeForm = () => {
                 <Button disabled={isQuery} type="primary" onClick={() => {
                     checkDepartmentChange()
                 }}>
-                    {isQuery ? `刷新(${waitTime})` : `刷新`}
+                    {isQuery ? `${isEnglish ? 'Refresh' : '刷新'}(${waitTime})` : `${isEnglish ? 'Refresh' : '刷新'}`}
                 </Button>
             }
         />) : (

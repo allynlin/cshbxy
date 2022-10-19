@@ -1,6 +1,6 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {version} from "../../baseInfo";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {getVersion} from "../axios/api";
 import {message} from "antd";
 import {setVersion} from "../redux/serverVersionSlice";
@@ -8,14 +8,25 @@ import {setVersion} from "../redux/serverVersionSlice";
 export default function RenderRefresh() {
 
     const dispatch = useDispatch();
+    const [isEnglish, setIsEnglish] = useState(true);
+
+    const userLanguage: String = useSelector((state: {
+        userLanguage: {
+            value: 'Chinese' | 'English'
+        }
+    }) => state.userLanguage.value)
+
+    useEffect(() => {
+        setIsEnglish(userLanguage === 'English')
+    }, [userLanguage])
 
     const getVer = () => {
         getVersion().then(res => {
             // 对比本地 version，如果本地版本低于服务器版本，就提示更新
             if (res.body > version) {
-                message.warning("当前版本过低，请更新版本")
+                message.warning(isEnglish ? 'Current version is too low, please update' : '当前版本过低，请更新版本')
             } else {
-                message.success("当前版本已是最新版本")
+                message.success(isEnglish ? 'Current version is the latest' : '当前版本为最新版本')
             }
             dispatch(setVersion(res.body))
         })
@@ -26,6 +37,6 @@ export default function RenderRefresh() {
             onClick={e => {
                 e.preventDefault();
                 getVer();
-            }}>刷新</a>
+            }}>{isEnglish ? 'Refresh' : '刷新'}</a>
     );
 }

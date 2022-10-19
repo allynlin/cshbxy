@@ -6,6 +6,7 @@ import themeSlice from "./themeSlice";
 import menuModeSlice from "./menuModeSlice";
 import sysColorSlice from "./sysColorSlice";
 import userInfoSlice from "./userInfoSlice";
+import userLanguageSlice from "./userLanguageSlice";
 
 export default configureStore({
     reducer: {
@@ -15,6 +16,7 @@ export default configureStore({
         themeColor: themeSlice,
         sysColor: sysColorSlice,
         menuMode: menuModeSlice,
-        userInfo: userInfoSlice
+        userInfo: userInfoSlice,
+        userLanguage: userLanguageSlice,
     },
 })

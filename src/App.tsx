@@ -4,7 +4,7 @@ import routes from "./Router/routes";
 import RouterWaiter from "react-router-waiter"
 import Spin from "./component/loading/Spin";
 import {useSelector, useDispatch} from "react-redux";
-import {message} from "antd";
+import {ConfigProvider, message} from "antd";
 import Cookie from "js-cookie";
 import {checkTeacherToken, checkDepartmentToken, checkLeaderToken, getVersion} from "./component/axios/api";
 import {login} from "./component/redux/isLoginSlice";
@@ -16,6 +16,9 @@ import {darkTheme, lightTheme, sysTheme} from "./component/redux/sysColorSlice";
 import {light, dark} from "./component/redux/themeSlice";
 import {LStorage} from "./component/localStrong";
 import {inline, vertical} from "./component/redux/menuModeSlice";
+import {Chinese, English} from "./component/redux/userLanguageSlice";
+import enUS from "antd/es/locale/en_US";
+import zhCN from "antd/es/locale/zh_CN";
 
 const history = createBrowserHistory({window});
 
@@ -28,8 +31,21 @@ export default function App() {
     const [isRender, setIsRender] = useState(false);
 
     const dispatch = useDispatch();
+    const [isEnglish, setIsEnglish] = useState(true);
+
+    const userLanguage: String = useSelector((state: {
+        userLanguage: {
+            value: 'Chinese' | 'English'
+        }
+    }) => state.userLanguage.value)
 
     useEffect(() => {
+        setIsEnglish(userLanguage === 'English')
+        document.title = isEnglish ? 'OA System' : '校园 OA 系统'
+    }, [userLanguage])
+
+    useEffect(() => {
+        LStorage.get('userLanguage') === 'English' ? dispatch(English()) : dispatch(Chinese());
         LStorage.get('menuMode') === 'inline' ? dispatch(inline()) : dispatch(vertical())
         // 如果在 localStrong 中有颜色设置就使用 localStrong 中的颜色设置
         const sysColor = LStorage.get('themeColor');
@@ -150,23 +166,29 @@ export default function App() {
     // 路由跳转鉴权
     const onRouteBefore = ({pathname, meta}: any) => {
         if (!isRender) return false
-        if (meta.title !== undefined) {
-            document.title = meta.title as string
+        if (meta.title) {
+            if (meta.titleCN === undefined) {
+                document.title = meta.title
+                return
+            }
+            isEnglish ? document.title = meta.title : document.title = meta.titleCN
         }
         if (meta.Auth === 'public')
             return pathname
         if (userType === meta.Auth)
             return pathname
         if (!isLogin) {
-            message.warning('请先登录')
+            message.warning(isEnglish ? 'Plaese Login' : '请先登录')
             return '/login'
         }
         return '/403'
     }
 
     return (
-        <HistoryRouter basename={process.env.PUBLIC_URL} history={history}>
-            <RouterWaiter routes={routes} loading={<Spin/>} onRouteBefore={onRouteBefore}/>
-        </HistoryRouter>
+        <ConfigProvider locale={isEnglish ? enUS : zhCN}>
+            <HistoryRouter basename={process.env.PUBLIC_URL} history={history}>
+                <RouterWaiter routes={routes} loading={<Spin/>} onRouteBefore={onRouteBefore}/>
+            </HistoryRouter>
+        </ConfigProvider>
     );
 }

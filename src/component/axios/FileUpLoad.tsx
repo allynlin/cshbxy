@@ -6,6 +6,7 @@ import {deleteFile} from "./api";
 import Cookie from "js-cookie";
 import {InboxOutlined} from "@ant-design/icons";
 import {rootNavigate} from "../../App";
+import {useSelector} from "react-redux";
 
 interface FileUpLoadProps {
     setTableName: string
@@ -16,6 +17,17 @@ interface FileUpLoadProps {
 
 const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
     const [fileList, setFileList] = useState<any>([]);
+    const [isEnglish, setIsEnglish] = useState(true);
+
+    const userLanguage: String = useSelector((state: {
+        userLanguage: {
+            value: 'Chinese' | 'English'
+        }
+    }) => state.userLanguage.value)
+
+    useEffect(() => {
+        setIsEnglish(userLanguage === 'English')
+    }, [userLanguage])
 
     const apiToken = Cookie.get('token');
     const tableName = props.setTableName;
@@ -40,7 +52,7 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
         // 如果上传的文件大于 20M，就提示错误
         beforeUpload: (file: any) => {
             if (file.size / 1024 / 1024 > 20) {
-                message.warning('文件大小不能超过 20M');
+                message.warning(isEnglish ? 'File size cannot exceed 20M' : '文件大小不能超过 20M');
                 // 将对应文件的状态设置为 error
                 file.status = 'error';
                 return false;
@@ -96,7 +108,7 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
                     message.error(info.file.response.msg);
                 }
             } else if (status === 'error') {
-                message.error(`${info.file.name} 文件上传失败`);
+                message.error(`${info.file.name} ${isEnglish ? 'file upload failed' : '文件上传失败.'}`);
             }
         },
         onRemove(info: any) {
@@ -128,9 +140,9 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
             <p className="ant-upload-drag-icon">
                 <InboxOutlined/>
             </p>
-            <p className="ant-upload-text">单击或拖动文件到此区域进行上传</p>
+            <p className="ant-upload-text">{isEnglish ? 'Click or drag file to this area to upload' : '点击或拖拽文件到此区域进行上传'}</p>
             <p className="ant-upload-hint">
-                支持单个文件或批量上传（单文件不超过 20M）
+                {isEnglish ? 'Support for a single or bulk upload. Maximum 20M per file' : '支持单个或批量上传。每个文件最大 20M'}
             </p>
         </Upload.Dragger>
     )

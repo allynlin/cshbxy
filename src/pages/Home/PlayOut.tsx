@@ -1,5 +1,5 @@
 import {Typography} from 'antd';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import RenderMenu from "./RenderMenu";
 import RenderBreadcrumb from "./RenderBreadcrumb";
 import RenderLogOut from "./RenderLogOut";
@@ -17,6 +17,18 @@ const {Title} = Typography;
 const Home = () => {
 
     const navigate = useNavigate();
+
+    const [isEnglish, setIsEnglish] = useState(true);
+
+    const userLanguage: String = useSelector((state: {
+        userLanguage: {
+            value: 'Chinese' | 'English'
+        }
+    }) => state.userLanguage.value)
+
+    useEffect(() => {
+        setIsEnglish(userLanguage === 'English')
+    }, [userLanguage])
 
     const serverVersion = useSelector((state: {
         serverVersion: {
@@ -59,7 +71,7 @@ const Home = () => {
                         <div className={'logo'}>
                             <img src={logo} width={'20px'} height={'20px'} alt={'logo'}/>
                         </div>
-                        <Title level={4}>校园 OA 系统</Title>
+                        <Title level={4}>{isEnglish ? 'OA System' : '校园 OA 系统'}</Title>
                     </div>
                     <div className={'silder_content'}>
                         <RenderMenu/>
