@@ -14,8 +14,7 @@ const routes: RoutesItemType[] = [
         element: <User/>,
         meta: {
             title: 'User',
-            titleCN: '用户',
-            Auth: 'public'
+            titleCN: '用户'
         },
         children: [
             {
@@ -23,16 +22,14 @@ const routes: RoutesItemType[] = [
                 component: () => import('../pages/User/Login'),
                 meta: {
                     title: 'Login',
-                    titleCN: '登录',
-                    Auth: 'public'
+                    titleCN: '登录'
                 }
             }, {
                 path: 'register',
                 component: () => import('../pages/User/Register'),
                 meta: {
                     title: 'Register',
-                    titleCN: '注册',
-                    Auth: 'public'
+                    titleCN: '注册'
                 }
             }
         ]
@@ -41,8 +38,7 @@ const routes: RoutesItemType[] = [
         element: <PlayOut/>,
         meta: {
             title: 'Home',
-            titleCN: '首页',
-            Auth: 'public'
+            titleCN: '首页'
         },
         // 根元素使用 element 的方式导入，避免路由导航的时候刷新根元素
         children: [
@@ -72,46 +68,40 @@ const routes: RoutesItemType[] = [
         component: () => import('../component/loading/Spin'),
         meta: {
             title: 'Spin',
-            titleCN: '正在加载中',
-            Auth: 'public'
+            titleCN: '正在加载中'
         }
     }, {
         path: '/403',
         element: <Error403/>,
         meta: {
-            title: '403',
-            Auth: 'public'
+            title: '403'
         }
     }, {
         path: '/404',
         element: <Error404/>,
         meta: {
-            title: '404',
-            Auth: 'public'
+            title: '404'
         }
     },
     {
         path: '/500',
         element: <Error500/>,
         meta: {
-            title: '500',
-            Auth: 'public'
+            title: '500'
         }
     }, {
         path: '/101',
         element: <Error101/>,
         meta: {
             title: 'Version Error',
-            titleCN: '版本获取失败',
-            Auth: 'public'
+            titleCN: '版本获取失败'
         }
     }, {
         path: '/103',
         element: <Error103/>,
         meta: {
             title: 'Low Version',
-            titleCN: '版本过低',
-            Auth: 'public'
+            titleCN: '版本过低'
         }
     }, {
         path: '*',
