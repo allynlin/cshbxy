@@ -6,8 +6,6 @@ import {darkTheme, lightTheme, sysTheme} from "../../component/redux/sysColorSli
 import {LStorage} from "../../component/localStrong";
 import intl from "react-intl-universal";
 
-import less from 'less';
-
 const ThemeSetting = () => {
 
     const dispatch = useDispatch();
@@ -22,15 +20,9 @@ const ThemeSetting = () => {
         switch (e.target.value) {
             case 'light':
                 dispatch(lightTheme())
-                less.modifyVars({
-                    dark: 'false',
-                })
                 break;
             case 'dark':
                 dispatch(darkTheme())
-                // less.modifyVars({
-                //     dark: 'true',
-                // })
                 break;
             case 'sys':
                 dispatch(sysTheme());

@@ -21,10 +21,6 @@ import enUS from "antd/es/locale/en_US";
 import zhCN from "antd/es/locale/zh_CN";
 import intl from 'react-intl-universal';
 
-// import './custom-dark.css'
-// import './custom-light.css'
-import './App.less'
-
 const locals = {
     'English': require('./component/Language/en-US.json'),
     'Chinese': require('./component/Language/zh-CN.json')
@@ -217,12 +213,10 @@ export default function App() {
     }
 
     return (
-        // <ConfigProvider prefixCls={prefix}>
         <ConfigProvider locale={userLanguage === 'English' ? enUS : zhCN}>
             <HistoryRouter basename={process.env.PUBLIC_URL} history={history}>
                 <RouterWaiter routes={routes} loading={<Spin/>} onRouteBefore={onRouteBefore}/>
             </HistoryRouter>
         </ConfigProvider>
-        // </ConfigProvider>
     );
 }

@@ -1,27 +1,37 @@
-//@import 'antd/dist/antd.css';
+@use 'sass:meta';
+// 使用媒体查询
 
-//.ant-modal-content {
-//    background-color: transparent;
-//
-//    .ant-modal-header {
-//        background: transparent;
-//    }
-//
-//    .ant-modal-body {
-//        background: transparent;
-//    }
-//
-//    .ant-modal-footer {
-//        background: transparent;
-//    }
-//}
+body.light {
+    // 如果有 dark 的 class 则自动使用浅色模式
+    @include meta.load-css('node_modules/antd/dist/antd.css', $with: null);
+}
 
-//.ant-drawer-content {
-//    background: transparent;
-//}
-//
-//.ant-message-notice-content {
-//    backdrop-filter: blur(20px) saturate(180%);
-//    -webkit-backdrop-filter: blur(20px) saturate(180%);
-//    background-color: rgba(255, 255, 255, 0.6);
-//}
+body.dark {
+    @include meta.load-css('node_modules/antd/dist/antd.dark.css', $with: null);
+}
+
+.ant-modal-content {
+    background-color: transparent;
+
+    .ant-modal-header {
+        background: transparent;
+    }
+
+    .ant-modal-body {
+        background: transparent;
+    }
+
+    .ant-modal-footer {
+        background: transparent;
+    }
+}
+
+.ant-drawer-content {
+    background: transparent;
+}
+
+.ant-message-notice-content {
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    background-color: rgba(255, 255, 255, 0.6);
+}
