@@ -7,6 +7,11 @@ export const getVersion = async () => {
     return promise.Request('/api/getVersion', MethodType.GET);
 }
 
+// 获取服务器最低支持版本
+export const getLowVersion = async () => {
+    return promise.Request('/api/getLowVersion', MethodType.GET);
+}
+
 // 登录
 export const teacherLogin = async (username: String, password: String) => {
     return promise.Request('/login/teacher', MethodType.POST, {

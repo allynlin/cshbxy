@@ -28,6 +28,7 @@ const LeaveForm = () => {
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
     // 展示表单前查询上次提交的文件
     const [isRenderResult, setIsRenderResult] = useState<boolean>(true);
+    const [isUpFile, setIsUpFile] = useState<boolean>(false);
     // 监听表单数据
     const [form] = Form.useForm();
     const destination = Form.useWatch('destination', form);
@@ -203,7 +204,9 @@ const LeaveForm = () => {
                     </Form.Item>
 
                     <Form.Item wrapperCol={{offset: 8, span: 16}} style={{textAlign: "center"}}>
-                        <Button type="primary" htmlType="submit">
+                        <Button type="primary" htmlType="submit" onClick={() => {
+                            setIsUpFile(true)
+                        }}>
                             {isEnglish ? 'Submit' : '提交'}
                         </Button>
                         <Button htmlType="button" onClick={onReset} style={{marginLeft: 8}}>

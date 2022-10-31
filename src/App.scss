@@ -2,10 +2,12 @@
 
 body.light {
     @include meta.load-css('node_modules/antd/dist/antd.css', $with: null);
+    background-color: #fff;
 }
 
 body.dark {
     @include meta.load-css('node_modules/antd/dist/antd.dark.css', $with: null);
+    background-color: #323130;
 }
 
 

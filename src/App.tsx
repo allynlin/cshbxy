@@ -6,7 +6,12 @@ import Spin from "./component/loading/Spin";
 import {useDispatch, useSelector} from "react-redux";
 import {ConfigProvider, message} from "antd";
 import Cookie from "js-cookie";
-import {checkDepartmentToken, checkLeaderToken, checkTeacherToken, getVersion} from "./component/axios/api";
+import {
+    checkDepartmentToken,
+    checkLeaderToken,
+    checkTeacherToken,
+    getVersion
+} from "./component/axios/api";
 import {login} from "./component/redux/isLoginSlice";
 import {department, leader, teacher} from "./component/redux/userTypeSlice";
 import {setVersion} from "./component/redux/serverVersionSlice";
@@ -35,7 +40,6 @@ export const rootNavigate = (to: string) => {
 
 export default function App() {
     const [isRender, setIsRender] = useState(false);
-    const [prefix, setPrefix] = useState("custom-light");
 
     const themeColor = useSelector((state: {
         themeColor: {
@@ -46,13 +50,10 @@ export default function App() {
     useEffect(() => {
         switch (themeColor) {
             case 'dark':
-                setPrefix('custom-dark')
                 break;
             case 'light':
-                setPrefix('custom-light')
                 break;
             default:
-                setPrefix('custom-light')
         }
     }, [themeColor])
 
