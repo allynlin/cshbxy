@@ -13,5 +13,4 @@ const antIcon = (
 );
 
 const App = () => <Spin indicator={antIcon} delay={500}/>;
-
 export default App;
