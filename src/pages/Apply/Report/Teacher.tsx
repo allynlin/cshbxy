@@ -1,23 +1,11 @@
-import {
-    Button,
-    Form,
-    Modal,
-    Result,
-    Typography
-} from 'antd';
+import {Button, Form, Modal, Result, Typography} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {
-    checkLastWeekWorkReport,
-    checkLastTimeUploadFiles,
-    submitWorkReport
-} from "../../../component/axios/api";
-import '../apply-light.scss';
-import '../apply-dark.scss';
+import {checkLastTimeUploadFiles, checkLastWeekWorkReport, submitWorkReport} from "../../../component/axios/api";
+import '../apply.scss';
 import {DownLoadURL} from "../../../baseInfo";
 import FileUpLoad from "../../../component/axios/FileUpLoad";
-import {LoadingOutlined, ExclamationCircleOutlined} from "@ant-design/icons";
-import {useSelector} from "react-redux";
+import {ExclamationCircleOutlined, LoadingOutlined} from "@ant-design/icons";
 
 const {Title} = Typography;
 const tableName = `workreportteacher`;
@@ -136,24 +124,6 @@ const ChangeForm = () => {
         form.resetFields();
     };
 
-    const themeColor: String = useSelector((state: {
-        themeColor: {
-            value: String
-        }
-    }) => state.themeColor.value)
-
-    // 根据不同的 themeColor，渲染不同的样式
-    const renderThemeColor = () => {
-        switch (themeColor) {
-            case 'dark':
-                return 'body-dark'
-            case 'light':
-                return 'body-light'
-            default:
-                return 'body-light'
-        }
-    }
-
     return isRenderResult ? (
         <Result
             status="info"
@@ -174,7 +144,7 @@ const ChangeForm = () => {
                 </Button>
             }
         />) : (
-        <div className={renderThemeColor()}>
+        <div className={'body'}>
             <Title level={2} className={'tit'}>工作报告</Title>
             <Form
                 form={form}

@@ -29,6 +29,11 @@ $font-light: #ffffff;
         button {
             margin-top: 3px;
         }
+
+        span {
+            display: inline-flex;
+            align-items: center;
+        }
     }
 
     .ant-layout-content {

@@ -1,24 +1,16 @@
 import type {RadioChangeEvent} from 'antd';
 import {Radio} from 'antd';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {lightTheme, darkTheme, sysTheme} from "../../component/redux/sysColorSlice";
+import {darkTheme, lightTheme, sysTheme} from "../../component/redux/sysColorSlice";
 import {LStorage} from "../../component/localStrong";
+import intl from "react-intl-universal";
+
+import less from 'less';
 
 const ThemeSetting = () => {
 
     const dispatch = useDispatch();
-    const [isEnglish, setIsEnglish] = useState(true);
-
-    const userLanguage: String = useSelector((state: {
-        userLanguage: {
-            value: 'Chinese' | 'English'
-        }
-    }) => state.userLanguage.value)
-
-    useEffect(() => {
-        setIsEnglish(userLanguage === 'English')
-    }, [userLanguage])
 
     const sysColor: String = useSelector((state: {
         sysColor: {
@@ -30,9 +22,15 @@ const ThemeSetting = () => {
         switch (e.target.value) {
             case 'light':
                 dispatch(lightTheme())
+                less.modifyVars({
+                    dark: 'false',
+                })
                 break;
             case 'dark':
                 dispatch(darkTheme())
+                // less.modifyVars({
+                //     dark: 'true',
+                // })
                 break;
             case 'sys':
                 dispatch(sysTheme());
@@ -45,9 +43,9 @@ const ThemeSetting = () => {
 
     return (
         <Radio.Group onChange={onChange} value={sysColor}>
-            <Radio value={"light"}>{isEnglish ? 'light' : '浅色'}</Radio>
-            <Radio value={"dark"}>{isEnglish ? 'dark' : '深色'}</Radio>
-            <Radio value={"sys"}>{isEnglish ? 'sys' : '跟随系统'}</Radio>
+            <Radio value={"light"}>{intl.get('Light-Mode')}</Radio>
+            <Radio value={"dark"}>{intl.get('Dark-Mode')}</Radio>
+            <Radio value={"sys"}>{intl.get('System-Mode')}</Radio>
         </Radio.Group>
     );
 };

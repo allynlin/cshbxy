@@ -1,23 +1,10 @@
-import {
-    Timeline,
-    Typography,
-    Button,
-    Drawer,
-    Modal,
-    message,
-    Steps,
-    Result
-} from 'antd';
+import {Button, Drawer, message, Modal, Result, Steps, Timeline, Typography} from 'antd';
 import {ExclamationCircleOutlined, LoadingOutlined} from '@ant-design/icons';
 import React, {useEffect, useState} from 'react';
-import {
-    findLeaveProcess,
-    deleteLeave,
-    findLeaveList
-} from '../../../component/axios/api';
+import {deleteLeave, findLeaveList, findLeaveProcess} from '../../../component/axios/api';
 import '../index.scss';
 import {RenderStatusTag} from "../../../component/Tag/RenderStatusTag";
-import {red, blue, green, yellow} from "../../../baseInfo";
+import {blue, green, red, yellow} from "../../../baseInfo";
 import {UpdateLeave} from "./UpdateLeave";
 
 const {Title} = Typography;

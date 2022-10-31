@@ -1,25 +1,14 @@
-import {
-    Table,
-    Typography,
-    Button,
-    Drawer,
-    Modal,
-    message,
-    Steps,
-    Collapse,
-    Result
-} from 'antd';
+import {Button, Collapse, Drawer, message, Modal, Result, Steps, Table, Typography} from 'antd';
 import {ExclamationCircleOutlined, LoadingOutlined} from '@ant-design/icons';
 import type {ColumnsType} from 'antd/es/table';
 import React, {useEffect, useState} from 'react';
 import {
-    findTravelProcess,
-    findUploadFilesByUid,
     deleteTravelReimbursementApply,
-    findTravelReimbursementApplyList
+    findTravelProcess,
+    findTravelReimbursementApplyList,
+    findUploadFilesByUid
 } from '../../../component/axios/api';
-import {DownLoadURL} from "../../../baseInfo";
-import {red} from "../../../baseInfo";
+import {DownLoadURL, red} from "../../../baseInfo";
 import {RenderStatusTag} from "../../../component/Tag/RenderStatusTag";
 import {RenderStatusColor} from "../../../component/Tag/RenderStatusColor";
 import '../index.scss'
@@ -82,7 +71,7 @@ const Index: React.FC = () => {
                 }}
                 bodyStyle={{
                     backdropFilter: 'blur(20px) saturate(180%)',
-                    backgroundColor: 'rgba(255, 255, 255, 0.6)'
+                    // backgroundColor: 'rgba(255, 255, 255, 0.6)'
                 }}
             >
                 <p>目的地：{content.destination}</p>

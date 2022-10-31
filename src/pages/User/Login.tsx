@@ -1,30 +1,36 @@
-import React, {useEffect} from "react";
-import {Button, Form, Input, message, Switch, Radio, Layout} from 'antd';
+import React, {useEffect, useState} from "react";
+import {Button, Form, Input, message, Radio, Switch} from 'antd';
 import './index.scss'
 import Cookie from 'js-cookie';
-import {
-    teacherLogin,
-    departmentLogin,
-    leaderLogin
-} from "../../component/axios/api";
+import {departmentLogin, leaderLogin, teacherLogin} from "../../component/axios/api";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {login} from "../../component/redux/isLoginSlice";
-import {teacher, department, leader} from "../../component/redux/userTypeSlice";
+import {department, leader, teacher} from "../../component/redux/userTypeSlice";
 import {setUser} from "../../component/redux/userInfoSlice";
-import {version} from "../../baseInfo";
-import RenderGetServerVersionPublic from "../../component/Version/RenderGetServerVersionPublic";
-
-const {Header, Content} = Layout;
+import {Chinese, English} from "../../component/redux/userLanguageSlice";
 
 const StudentForm = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const [form] = Form.useForm();
     const username = Form.useWatch('username', form);
     const password = Form.useWatch('password', form);
     const channel = Form.useWatch('channel', form);
     const rememberme = Form.useWatch('rememberme', form);
-    const navigate = useNavigate();
+
+    const [isEnglish, setIsEnglish] = useState(true);
+
+    const userLanguage: String = useSelector((state: {
+        userLanguage: {
+            value: 'Chinese' | 'English'
+        }
+    }) => state.userLanguage.value)
+
+    useEffect(() => {
+        setIsEnglish(userLanguage === 'English')
+    }, [userLanguage])
 
     const onFinish = () => {
         switch (channel) {
@@ -135,12 +141,12 @@ const StudentForm = () => {
             }}
         >
             <Form.Item
-                label="用户名"
+                label={isEnglish ? 'Username' : '用户名'}
                 name="username"
                 rules={[
                     {
                         required: true,
-                        message: '请输入用户名',
+                        message: isEnglish ? 'Please enter your Username' : '请输入用户名',
                         pattern: /^[a-zA-Z0-9]{1,20}$/
                     },
                 ]}
@@ -149,12 +155,12 @@ const StudentForm = () => {
             </Form.Item>
 
             <Form.Item
-                label="密码"
+                label={isEnglish ? 'Password' : "密码"}
                 name="password"
                 rules={[
                     {
                         required: true,
-                        message: '请输入密码',
+                        message: isEnglish ? 'Please enter your Password' : '请输入密码',
                         pattern: /^[a-zA-Z0-9]{8,20}$/
                     },
                 ]}
@@ -163,87 +169,60 @@ const StudentForm = () => {
             </Form.Item>
 
             <Form.Item
-                label="登录渠道"
+                label={isEnglish ? 'Channel' : "登录渠道"}
                 name="channel"
                 rules={[
                     {
                         required: true,
-                        message: '必须选择登陆渠道',
+                        message: isEnglish ? 'Must choose channel' : '必须选择登陆渠道',
                     },
                 ]}
             >
                 <Radio.Group style={{display: "flex"}} buttonStyle="solid">
-                    <Radio.Button value="teacher">教师</Radio.Button>
-                    <Radio.Button value="department">部门</Radio.Button>
-                    <Radio.Button value="leader">领导</Radio.Button>
+                    <Radio.Button value="teacher">{isEnglish ? 'Teacher' : '教师'}</Radio.Button>
+                    <Radio.Button value="department">{isEnglish ? 'Department' : '部门'}</Radio.Button>
+                    <Radio.Button value="leader">{isEnglish ? 'Leader' : '领导'}</Radio.Button>
                 </Radio.Group>
             </Form.Item>
 
             <Form.Item
-                label="记住密码"
+                label={isEnglish ? 'Remember me' : "记住密码"}
                 name='rememberme'
                 valuePropName='checked'
                 rules={[
                     {
                         required: true,
-                        message: '必须选择是否记住密码',
+                        message: isEnglish ? 'Must choose is remember me' : '必须选择是否记住密码',
                     },
                 ]}
             >
-                <Switch style={{display: "flex"}} checkedChildren="是" unCheckedChildren="否"/>
+                <Switch style={{display: "flex"}} checkedChildren={isEnglish ? 'Yes' : "是"}
+                        unCheckedChildren={isEnglish ? 'No' : "否"}/>
             </Form.Item>
 
             <Form.Item
                 wrapperCol={{}}
             >
                 <Button type="primary" htmlType="submit">
-                    登录
+                    {isEnglish ? 'Login' : '登录'}
                 </Button>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <Button htmlType="button" onClick={onReset}>
-                    重置
+                    {isEnglish ? 'Reset' : '重置'}
                 </Button>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <Button htmlType="button" onClick={() => {
                     navigate('/register')
                 }}>
-                    注册
+                    {isEnglish ? 'Register' : '注册'}
                 </Button>
             </Form.Item>
         </Form>
     )
 };
 
-const Login = () => {
-
-    const navigate = useNavigate();
-
-    const serverVersion = useSelector((state: {
-        serverVersion: {
-            value: string
-        }
-    }) => state.serverVersion.value);
-
-    useEffect(() => {
-        if (serverVersion === "0.0.0") {
-            return;
-        }
-        if (version < serverVersion) {
-            navigate('/103')
-        }
-    }, [serverVersion])
-
-    return (
-        <Layout>
-            <Header>
-                <span>校园 OA 系统登陆 {version}</span>
-            </Header>
-            <Content>
-                <StudentForm/>
-            </Content>
-            <RenderGetServerVersionPublic/>
-        </Layout>
-    )
-}
+const Login = () => (
+    <StudentForm/>
+)
 
 export default Login;

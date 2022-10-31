@@ -1,37 +1,24 @@
-import type {RadioChangeEvent} from 'antd';
 import {Radio} from 'antd';
 import React from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {Chinese, English} from "../../component/redux/userLanguageSlice";
-import {LStorage} from "../../component/localStrong";
+import intl from "react-intl-universal";
 
 const ThemeSetting = () => {
 
     const dispatch = useDispatch();
 
-    const userLanguage: String = useSelector((state: {
+    const userLanguage = useSelector((state: {
         userLanguage: {
             value: 'Chinese' | 'English'
         }
     }) => state.userLanguage.value)
 
-    const onChange = (e: RadioChangeEvent) => {
-        switch (e.target.value) {
-            case 'Chinese':
-                dispatch(Chinese())
-                break;
-            case 'English':
-                dispatch(English())
-                break;
-            default:
-                dispatch(English())
-        }
-        LStorage.set('userLanguage', e.target.value)
-    };
-
     return (
-        <Radio.Group onChange={onChange} value={userLanguage}>
-            <Radio value={"Chinese"}>中文</Radio>
+        <Radio.Group onChange={e => {
+            e.target.value === 'Chinese' ? dispatch(Chinese()) : dispatch(English())
+        }} value={userLanguage}>
+            <Radio value={"Chinese"}>简体中文（Simple Chinses）</Radio>
             <Radio value={"English"}>English</Radio>
         </Radio.Group>
     );

@@ -5,22 +5,32 @@ import {useSelector} from "react-redux";
 import {version} from "../../baseInfo";
 import RenderRefreshButton from "../../component/Version/RenderRefreshButton";
 import {CloseCircleOutlined} from "@ant-design/icons";
+import {Chinese, English} from "../../component/redux/userLanguageSlice";
 import './103.scss'
+import {RenderToggleLanguageButton} from "../../component/Language/RenderToggleLanguageButton";
 
 const {Paragraph, Text} = Typography;
 
-export const Error404 = () => (
-    <Result
-        status="404"
-        title="404"
-        subTitle="您访问的页面不存在"
-        extra={
-            <Link to={'/home'}>
-                <Button type="primary">返回首页</Button>
-            </Link>
+export const Error404 = () => {
+    const userType = useSelector((state: {
+        userType: {
+            value: string
         }
-    />
-);
+    }) => state.userType.value)
+    return (
+        <Result
+            status="404"
+            title="404"
+            subTitle="您访问的页面不存在"
+            extra={
+                <Link
+                    to={userType === 'teacher' ? '/home/teacher' : userType === 'department' ? '/home/department' : '/home/leader'}>
+                    <Button type="primary">返回首页</Button>
+                </Link>
+            }
+        />
+    )
+};
 
 export const Error403 = () => (
     <Result
@@ -112,10 +122,10 @@ export const Error103: React.FC = () => {
     const RenderVersion = () => {
         return (
             <div>
-                <Text>{isEnglish ? 'System Version' : '当前版本：'}</Text>
+                <Text>{isEnglish ? 'System Version' : '系统版本：'}</Text>
                 <Text code>{version}</Text>
                 &nbsp;&nbsp;
-                <Text>{isEnglish ? 'Server Version' : '服务器版本：'}</Text>
+                <Text>{isEnglish ? 'Support Low Version' : '最低受支持版本：'}</Text>
                 <Text code>{serverVersion}</Text>
             </div>
         )
@@ -134,6 +144,7 @@ export const Error103: React.FC = () => {
                         }}>{isEnglish ? 'Back' : '返回'}</Button> : null
                     }
                     <RenderRefreshButton/>
+                    <RenderToggleLanguageButton/>
                 </>
             }
         >

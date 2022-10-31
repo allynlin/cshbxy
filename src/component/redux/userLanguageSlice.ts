@@ -1,4 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit'
+import {LStorage} from "../localStrong";
+import intl from "react-intl-universal";
 
 const initialState: { value: 'Chinese' | 'English' } = {
     value: 'English',
@@ -10,9 +12,11 @@ export const userLanguageSlice = createSlice({
     reducers: {
         Chinese: state => {
             state.value = "Chinese"
+            LStorage.set('userLanguage', 'Chinese')
         },
         English: state => {
             state.value = "English"
+            LStorage.set('userLanguage', 'English')
         }
     },
 })

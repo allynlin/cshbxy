@@ -1,24 +1,34 @@
 import React, {useEffect, useState} from "react";
-import './App-light.scss';
+import './App.scss';
 import routes from "./Router/routes";
 import RouterWaiter from "react-router-waiter"
 import Spin from "./component/loading/Spin";
-import {useSelector, useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {ConfigProvider, message} from "antd";
 import Cookie from "js-cookie";
-import {checkTeacherToken, checkDepartmentToken, checkLeaderToken, getVersion} from "./component/axios/api";
+import {checkDepartmentToken, checkLeaderToken, checkTeacherToken, getVersion} from "./component/axios/api";
 import {login} from "./component/redux/isLoginSlice";
-import {teacher, department, leader} from "./component/redux/userTypeSlice";
+import {department, leader, teacher} from "./component/redux/userTypeSlice";
 import {setVersion} from "./component/redux/serverVersionSlice";
 import {unstable_HistoryRouter as HistoryRouter} from 'react-router-dom'
 import {createBrowserHistory} from 'history'
 import {darkTheme, lightTheme, sysTheme} from "./component/redux/sysColorSlice";
-import {light, dark} from "./component/redux/themeSlice";
+import {dark, light} from "./component/redux/themeSlice";
 import {LStorage} from "./component/localStrong";
 import {inline, vertical} from "./component/redux/menuModeSlice";
 import {Chinese, English} from "./component/redux/userLanguageSlice";
 import enUS from "antd/es/locale/en_US";
 import zhCN from "antd/es/locale/zh_CN";
+import intl from 'react-intl-universal';
+
+// import './custom-dark.css'
+// import './custom-light.css'
+import './App.less'
+
+const locals = {
+    'English': require('./component/Language/en-US.json'),
+    'Chinese': require('./component/Language/zh-CN.json')
+}
 
 const history = createBrowserHistory({window});
 
@@ -29,19 +39,41 @@ export const rootNavigate = (to: string) => {
 
 export default function App() {
     const [isRender, setIsRender] = useState(false);
+    const [prefix, setPrefix] = useState("custom-light");
+
+    const themeColor = useSelector((state: {
+        themeColor: {
+            value: 'light' | 'dark'
+        }
+    }) => state.themeColor.value)
+
+    useEffect(() => {
+        switch (themeColor) {
+            case 'dark':
+                setPrefix('custom-dark')
+                break;
+            case 'light':
+                setPrefix('custom-light')
+                break;
+            default:
+                setPrefix('custom-light')
+        }
+    }, [themeColor])
 
     const dispatch = useDispatch();
-    const [isEnglish, setIsEnglish] = useState(true);
 
-    const userLanguage: String = useSelector((state: {
+    const userLanguage = useSelector((state: {
         userLanguage: {
             value: 'Chinese' | 'English'
         }
     }) => state.userLanguage.value)
 
     useEffect(() => {
-        setIsEnglish(userLanguage === 'English')
-        document.title = isEnglish ? 'OA System' : '校园 OA 系统'
+        document.title = intl.get('SysName');
+        intl.init({
+            currentLocale: userLanguage,
+            locales: locals
+        })
     }, [userLanguage])
 
     useEffect(() => {
@@ -64,7 +96,7 @@ export default function App() {
         }
     }, [])
 
-    const sysColor: String = useSelector((state: {
+    const sysColor = useSelector((state: {
         sysColor: {
             value: 'light' | 'dark' | 'sys'
         }
@@ -171,24 +203,26 @@ export default function App() {
                 document.title = meta.title
                 return
             }
-            isEnglish ? document.title = meta.title : document.title = meta.titleCN
+            userLanguage === 'English' ? document.title = meta.title : document.title = meta.titleCN
         }
         if (meta.Auth === 'public')
             return pathname
         if (userType === meta.Auth)
             return pathname
         if (!isLogin) {
-            message.warning(isEnglish ? 'Plaese Login' : '请先登录')
+            message.warning(intl.get('Please-Login'))
             return '/login'
         }
         return '/403'
     }
 
     return (
-        <ConfigProvider locale={isEnglish ? enUS : zhCN}>
+        // <ConfigProvider prefixCls={prefix}>
+        <ConfigProvider locale={userLanguage === 'English' ? enUS : zhCN}>
             <HistoryRouter basename={process.env.PUBLIC_URL} history={history}>
                 <RouterWaiter routes={routes} loading={<Spin/>} onRouteBefore={onRouteBefore}/>
             </HistoryRouter>
         </ConfigProvider>
+        // </ConfigProvider>
     );
 }

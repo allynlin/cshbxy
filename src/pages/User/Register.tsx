@@ -1,31 +1,39 @@
 import React, {useEffect, useState} from "react";
-import {Button, Form, Input, message, Switch, Select, Layout, Radio} from 'antd';
+import {Button, Form, Input, message, Radio, Select, Switch} from 'antd';
 import './index.scss'
 import Cookie from 'js-cookie';
 import {useNavigate} from "react-router-dom";
 import {
+    departmentLogin,
+    departmentRegister,
+    leaderLogin,
+    leaderRegister,
     queryDepartmentMessage,
-    queryLeaderMessage,
     queryDepartmentUsername,
+    queryLeaderMessage,
     queryLeaderUsername,
     queryTeacherUsername,
-    teacherRegister,
-    departmentRegister,
-    leaderRegister,
     teacherLogin,
-    departmentLogin,
-    leaderLogin
+    teacherRegister
 } from "../../component/axios/api";
 import {useDispatch, useSelector} from "react-redux";
-import {teacher, department, leader} from "../../component/redux/userTypeSlice";
+import {department, leader, teacher} from "../../component/redux/userTypeSlice";
 import {login} from "../../component/redux/isLoginSlice";
-import {version} from "../../baseInfo";
-import RenderGetServerVersionPublic from "../../component/Version/RenderGetServerVersionPublic";
-
-const {Header, Content} = Layout;
 
 const RegisterStudent = () => {
     const dispatch = useDispatch();
+
+    const [isEnglish, setIsEnglish] = useState(true);
+
+    const userLanguage: String = useSelector((state: {
+        userLanguage: {
+            value: 'Chinese' | 'English'
+        }
+    }) => state.userLanguage.value)
+
+    useEffect(() => {
+        setIsEnglish(userLanguage === 'English')
+    }, [userLanguage])
 
     const [form] = Form.useForm();
     const username = Form.useWatch('username', form);
@@ -226,12 +234,12 @@ const RegisterStudent = () => {
     // 动态渲染不同注册所需要填写的表单
     const RenderField = () => {
         return registerType === 'teacher' ? (<Form.Item
-            label="部门"
+            label={isEnglish ? 'Department' : "部门"}
             name="departmentUid"
             rules={[
                 {
                     required: true,
-                    message: '请选择您的上级部门',
+                    message: isEnglish ? 'Please choose your department' : '请选择您的上级部门',
                 },
             ]}
         >
@@ -241,16 +249,16 @@ const RegisterStudent = () => {
                     width: '100%',
                 }}
                 onFocus={getDepartmentOptions}
-                placeholder="请选择你的上级部门"
+                placeholder={isEnglish ? 'Please choose your department' : "请选择你的上级部门"}
                 options={departmentOptions}
             />
         </Form.Item>) : registerType === 'department' ? (<Form.Item
-            label="领导"
+            label={isEnglish ? 'Leader' : "领导"}
             name="leaderUid"
             rules={[
                 {
                     required: true,
-                    message: '请选择您的上级领导',
+                    message: isEnglish ? 'Please choose your leader' : '请选择您的上级领导',
                 },
             ]}
         >
@@ -259,7 +267,7 @@ const RegisterStudent = () => {
                 style={{
                     width: '100%',
                 }}
-                placeholder="请选择您的上级领导"
+                placeholder={isEnglish ? 'Please choose your leader' : "请选择您的上级领导"}
                 onFocus={getLeaderOptions}
                 options={leaderOptions}
             />
@@ -288,19 +296,19 @@ const RegisterStudent = () => {
                 <Radio.Group defaultValue="teacher" buttonStyle="solid" onChange={e => {
                     setRegisterType(e.target.value)
                 }}>
-                    <Radio.Button value="leader">领导注册</Radio.Button>
-                    <Radio.Button value="department">部门注册</Radio.Button>
-                    <Radio.Button value="teacher">教师注册</Radio.Button>
+                    <Radio.Button value="leader">{isEnglish ? 'Leader register' : '领导注册'}</Radio.Button>
+                    <Radio.Button value="department">{isEnglish ? 'Department register' : '部门注册'}</Radio.Button>
+                    <Radio.Button value="teacher">{isEnglish ? 'Teacher register' : '教师注册'}</Radio.Button>
                 </Radio.Group>
             </Form.Item>
 
             <Form.Item
-                label="用户名"
+                label={isEnglish ? 'Username' : "用户名"}
                 name="username"
                 rules={[
                     {
                         required: true,
-                        message: '请填写用户名（不超过20字符）',
+                        message: isEnglish ? 'Please enter your username (no more than 20 characters)' : '请填写用户名（不超过20字符）',
                         pattern: /^[a-zA-Z0-9]{1,20}$/
                     },
                 ]}
@@ -311,12 +319,12 @@ const RegisterStudent = () => {
             </Form.Item>
 
             <Form.Item
-                label="密码"
+                label={isEnglish ? 'Password' : "密码"}
                 name="password"
                 rules={[
                     {
                         required: true,
-                        message: '密码必须为8-20位字母或数字',
+                        message: isEnglish ? 'Password must 8-20 number or letters' : '密码必须为8-20位字母或数字',
                         pattern: /^[a-zA-Z0-9]{8,20}$/
                     },
                 ]}
@@ -325,12 +333,12 @@ const RegisterStudent = () => {
             </Form.Item>
 
             <Form.Item
-                label="确认密码"
+                label={isEnglish ? 'Confirm Password' : "确认密码"}
                 name="enterPassword"
                 rules={[
                     {
                         required: true,
-                        message: '密码必须为8-20位字母或数字',
+                        message: isEnglish ? 'Password must 8-20 number or letters' : '密码必须为8-20位字母或数字',
                         pattern: /^[a-zA-Z0-9]{8,20}$/
                     },
                 ]}
@@ -339,12 +347,12 @@ const RegisterStudent = () => {
             </Form.Item>
 
             <Form.Item
-                label="真实姓名"
+                label={isEnglish ? 'RealeName' : "真实姓名"}
                 name="realeName"
                 rules={[
                     {
                         required: true,
-                        message: '请输入您的真实姓名',
+                        message: isEnglish ? 'Please enter your realeName' : '请输入您的真实姓名',
                         pattern: /^[\u4e00-\u9fa5]{2,4}$/
                     },
                 ]}
@@ -353,28 +361,28 @@ const RegisterStudent = () => {
             </Form.Item>
 
             <Form.Item
-                label="性别"
+                label={isEnglish ? 'Gender' : "性别"}
                 name="gender"
                 rules={[
                     {
                         required: true,
-                        message: '请选择您的性别',
+                        message: isEnglish ? 'Please choose your gender' : '请选择您的性别',
                     },
                 ]}
             >
                 <Radio.Group buttonStyle="solid" style={{display: "flex"}}>
-                    <Radio.Button value="男">男</Radio.Button>
-                    <Radio.Button value="女">女</Radio.Button>
+                    <Radio.Button value="男">{isEnglish ? 'Man' : '男'}</Radio.Button>
+                    <Radio.Button value="女">{isEnglish ? 'Woman' : '女'}</Radio.Button>
                 </Radio.Group>
             </Form.Item>
 
             <Form.Item
-                label="联系电话"
+                label={isEnglish ? 'Tel' : "联系电话"}
                 name="tel"
                 rules={[
                     {
                         required: true,
-                        message: '请输入您的联系电话',
+                        message: isEnglish ? 'Please enter your tel' : '请输入您的联系电话',
                         pattern: /^1[3456789]\d{9}$/
                     },
                 ]}
@@ -383,12 +391,12 @@ const RegisterStudent = () => {
             </Form.Item>
 
             <Form.Item
-                label="电子邮件"
+                label={isEnglish ? 'Email' : "电子邮件"}
                 name="email"
                 rules={[
                     {
                         required: true,
-                        message: '请输入您的电子邮件地址',
+                        message: isEnglish ? 'Please enter your email' : '请输入您的电子邮件地址',
                         pattern: /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/,
                     },
                 ]}
@@ -399,70 +407,43 @@ const RegisterStudent = () => {
             {RenderField()}
 
             <Form.Item
-                label={"是否自动登录"}
+                label={isEnglish ? 'Auto login' : "是否自动登录"}
                 name='rememberme'
                 valuePropName='checked'
                 rules={[
                     {
                         required: true,
-                        message: '请选择是否自动登录',
+                        message: isEnglish ? 'Please Choose auto login' : '请选择是否自动登录',
                     },
                 ]}
             >
-                <Switch style={{display: "flex"}} checkedChildren="是" unCheckedChildren="否"/>
+                <Switch style={{display: "flex"}} checkedChildren={isEnglish ? 'Yes' : "是"}
+                        unCheckedChildren={isEnglish ? 'No' : "否"}/>
             </Form.Item>
 
             <Form.Item
                 wrapperCol={{}}
             >
                 <Button type="primary" htmlType="submit">
-                    注册
+                    {isEnglish ? 'Login' : '登录'}
                 </Button>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <Button htmlType="button" onClick={onReset}>
-                    重置
+                    {isEnglish ? 'Reset' : '重置'}
                 </Button>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <Button htmlType="button" onClick={() => {
                     navigate('/login')
                 }}>
-                    登录
+                    {isEnglish ? 'Login' : '登录'}
                 </Button>
             </Form.Item>
         </Form>
     )
 };
 
-const DepartmentLogin = () => {
-
-    const navigate = useNavigate();
-
-    const serverVersion = useSelector((state: {
-        serverVersion: {
-            value: string
-        }
-    }) => state.serverVersion.value);
-
-    useEffect(() => {
-        if (serverVersion === "0.0.0") {
-            return;
-        }
-        if (version < serverVersion) {
-            navigate('/103')
-        }
-    }, [serverVersion])
-
-    return (
-        <Layout>
-            <Header>
-                <span>校园 OA 系统注册 {version}</span>
-            </Header>
-            <Content>
-                <RegisterStudent/>
-            </Content>
-            <RenderGetServerVersionPublic/>
-        </Layout>
-    )
-}
+const DepartmentLogin = () => (
+    <RegisterStudent/>
+)
 
 export default DepartmentLogin;

@@ -4,23 +4,13 @@ import {logout} from "../../component/redux/isLoginSlice";
 import {all} from "../../component/redux/userTypeSlice";
 import {useDispatch, useSelector} from "react-redux";
 import Cookie from "js-cookie";
-import {useEffect, useState} from "react";
+import React from "react";
+import intl from "react-intl-universal";
 
 const RenderLogOut = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [isEnglish, setIsEnglish] = useState(true);
-
-    const userLanguage: String = useSelector((state: {
-        userLanguage: {
-            value: 'Chinese' | 'English'
-        }
-    }) => state.userLanguage.value)
-
-    useEffect(() => {
-        setIsEnglish(userLanguage === 'English')
-    }, [userLanguage])
 
     const isLogin = useSelector((state: {
         isLogin: {
@@ -42,7 +32,7 @@ const RenderLogOut = () => {
                 backgroundColor: '#f32401',
                 borderColor: '#f32401'
             }}>
-                {isEnglish ? 'LogOut' : '退出登录'}
+                {intl.get('logOut')}
             </Button> : null
     )
 }

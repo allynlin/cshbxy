@@ -1,23 +1,11 @@
 import React, {useEffect, useState} from "react";
-import {version} from "../../baseInfo";
+import {version, yellow} from "../../baseInfo";
 import {useSelector} from "react-redux";
 import {Layout} from "antd";
-import {yellow} from "../../baseInfo";
 import RenderRefresh from "./RenderRefresh";
+import intl from "react-intl-universal";
 
 export default function RenderGetServerVersion() {
-
-    const [isEnglish, setIsEnglish] = useState(true);
-
-    const userLanguage: String = useSelector((state: {
-        userLanguage: {
-            value: 'Chinese' | 'English'
-        }
-    }) => state.userLanguage.value)
-
-    useEffect(() => {
-        setIsEnglish(userLanguage === 'English')
-    }, [userLanguage])
 
     const serverVersion = useSelector((state: {
         serverVersion: {
@@ -29,8 +17,9 @@ export default function RenderGetServerVersion() {
         <Layout.Footer style={{
             backgroundColor: serverVersion > version ? yellow : "",
         }}>
-            {isEnglish ? 'College OA System' : '校园 OA 系统'} &copy; 2022 Created by allynlin
-            Version：{version} Server：{serverVersion} <RenderRefresh/>
+            {intl.get('SysName')} &copy; 2022 Created by allynlin
+            Version：{version} Server：{serverVersion}&nbsp;
+            <RenderRefresh/>
         </Layout.Footer>
     );
 }

@@ -1,19 +1,11 @@
-import {
-    Button,
-    Menu
-} from 'antd';
-import {
-    EditOutlined,
-    FormOutlined,
-    BarChartOutlined,
-    HomeOutlined,
-    CommentOutlined,
-} from '@ant-design/icons';
+import {Button, Menu} from 'antd';
+import {BarChartOutlined, CommentOutlined, EditOutlined, FormOutlined, HomeOutlined,} from '@ant-design/icons';
 import React, {useEffect, useState} from 'react';
 import './playOut-light.scss'
 import {Link} from 'react-router-dom';
 import {useSelector} from "react-redux";
 import type {MenuProps} from 'antd/es/menu';
+import intl from "react-intl-universal";
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -48,22 +40,22 @@ const RenderMenu = () => {
     }, [userLanguage])
 
     const teacher: MenuProps['items'] = [
-        getItem((<Link to={'/home/teacher/index'}>{isEnglish ? 'Home' : '首页'}</Link>), 'teacherHome',
+        getItem((<Link to={'/home/teacher'}>{isEnglish ? 'Home' : '首页'}</Link>), 'Home',
             <HomeOutlined/>),
-        getItem(isEnglish ? 'Apply' : '申请', 'apply', <EditOutlined/>, [
+        getItem(intl.get('apply'), 'apply', <EditOutlined/>, [
             getItem((
                 <Link
-                    to={'/home/teacher/apply/departmentChange'}>{isEnglish ? 'Department Change' : '部门变更'}</Link>), 'teacherApplyDepartmentChange'),
+                    to={'/home/teacher/apply/departmentChange'}>{intl.get('DepartmentChange')}</Link>), 'teacherApplyDepartmentChange'),
             getItem((<Link
-                to={'/home/teacher/apply/travelReimbursement'}>{isEnglish ? 'Travel Reimbursement' : '差旅报销'}</Link>), 'teacherApplyTravelReimbursement'),
+                to={'/home/teacher/apply/travelReimbursement'}>{intl.get('TravelReimbursement')}</Link>), 'teacherApplyTravelReimbursement'),
             getItem((
-                <Link to={'/home/teacher/apply/leave'}>{isEnglish ? 'Leave' : '请假'}</Link>), 'teacherApplyLeave'),
+                <Link to={'/home/teacher/apply/leave'}>{intl.get('Leave')}</Link>), 'teacherApplyLeave'),
             getItem((<Link
-                to={'/home/teacher/apply/procurement'}>{isEnglish ? 'Procurement' : '采购'}</Link>), 'teacherApplyProcurement'),
+                to={'/home/teacher/apply/procurement'}>{intl.get('Procurement')}</Link>), 'teacherApplyProcurement'),
             getItem((<Link
-                to={'/home/teacher/apply/report'}>{isEnglish ? 'Report' : '工作报告'}</Link>), 'teacherApplyReport'),
+                to={'/home/teacher/apply/report'}>{intl.get('Report')}</Link>), 'teacherApplyReport'),
         ]),
-        getItem(isEnglish ? 'Record' : '申请记录', 'record', <BarChartOutlined/>, [
+        getItem(intl.get('Record'), 'record', <BarChartOutlined/>, [
             getItem((
                 <Link
                     to={'/home/teacher/record/departmentChange'}>{isEnglish ? 'Travel Reimbursement Record' : '部门变更记录'}</Link>), 'teacherRecordLeaveList'),
@@ -79,7 +71,7 @@ const RenderMenu = () => {
             <FormOutlined/>)
     ];
     const department: MenuProps['items'] = [
-        getItem((<Link to={'/home/department'}>首页</Link>), 'department', <HomeOutlined/>),
+        getItem((<Link to={'/home/department'}>首页</Link>), 'Home', <HomeOutlined/>),
         getItem('申请', 'apply', <FormOutlined/>, [
             getItem((<Link to={'/home/department/Apply/notice'}>发布公告</Link>), 'notice'),
             getItem((<Link to={'/home/department/Apply/departmentChange'}>部门变更申请</Link>), 'departmentChange'),
@@ -90,7 +82,7 @@ const RenderMenu = () => {
         ]),
     ];
     const leader: MenuProps['items'] = [
-        getItem((<Link to={'/home/department'}>首页</Link>), 'home', <HomeOutlined/>),
+        getItem((<Link to={'/home/department'}>首页</Link>), 'Home', <HomeOutlined/>),
         getItem('申请', 'apply', <FormOutlined/>, [
             getItem((<Link to={'/home/department/Apply/notice'}>发布公告</Link>), 'notice'),
             getItem((<Link to={'/home/department/Apply/departmentChange'}>部门变更申请</Link>), 'departmentChange'),
@@ -169,6 +161,7 @@ const RenderMenu = () => {
                     <Menu
                         mode={menuModeSlice === 'inline' ? 'inline' : 'vertical'}
                         items={menu}
+                        defaultSelectedKeys={['Home']}
                         theme={themeColor === 'light' ? 'light' : 'dark'}
                         style={{
                             minWidth: 0,

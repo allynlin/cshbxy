@@ -1,4 +1,4 @@
-import {Button, Col, Descriptions, Divider, message, PageHeader, Row, Tag} from 'antd';
+import {Button, Col, Divider, message, PageHeader, Row, Tag} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {blue, red, yellow} from "../../baseInfo";
 import MenuModeSetting from "./MenuModeSetting";
@@ -11,29 +11,26 @@ import {inline} from "../../component/redux/menuModeSlice";
 import {lightTheme} from "../../component/redux/sysColorSlice";
 import {LStorage} from "../../component/localStrong";
 import {English} from "../../component/redux/userLanguageSlice";
+import intl from "react-intl-universal";
 
 const TeacherSetting = () => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const [isEnglish, setIsEnglish] = useState(true);
-
-    const userLanguage: String = useSelector((state: {
-        userLanguage: {
-            value: 'Chinese' | 'English'
+    const themeColor = useSelector((state: {
+        themeColor: {
+            value: 'light' | 'dark'
         }
-    }) => state.userLanguage.value)
+    }) => state.themeColor.value)
 
-    useEffect(() => {
-        setIsEnglish(userLanguage === 'English')
-    }, [userLanguage])
+    const backColor = themeColor === 'light' ? 'rgba(236, 243, 249, 1)' : 'rgba(236, 243, 249, 0.4)'
 
     // 监听 Ctrl + S 保存
     const handleKeyDown = (e: any) => {
         if (e.ctrlKey && e.keyCode === 83) {
             e.preventDefault();
-            message.success(isEnglish ? 'Settings saved' : '已自动保存，无需手动保存');
+            message.success(intl.get('SaveMessage'));
         }
     }
 
@@ -46,7 +43,7 @@ const TeacherSetting = () => {
     }, [])
 
     const resertSetting = () => {
-        message.success(isEnglish ? 'Reset success' : '已重置为默认设置');
+        message.success(intl.get('ResetMessage'));
         dispatch(inline());
         dispatch(lightTheme());
         dispatch(English());
@@ -58,9 +55,9 @@ const TeacherSetting = () => {
     return (
         <PageHeader
             onBack={() => navigate(-1)}
-            title={isEnglish ? 'Setting' : "设置"}
-            tags={<Tag color={yellow}>{isEnglish ? 'Attention' : '注意'}</Tag>}
-            subTitle={isEnglish ? 'Effective only on this computer' : "设置项仅对此电脑有效"}
+            title={intl.get('Setting')}
+            tags={<Tag color={yellow}>{intl.get('Attention')}</Tag>}
+            subTitle={intl.get('Setting-Scope')}
             extra={[
                 <Button
                     key="2"
@@ -70,32 +67,32 @@ const TeacherSetting = () => {
                         borderColor: red
                     }}
                     onClick={resertSetting}
-                >{isEnglish ? 'Reset' : '重置'}</Button>,
+                >{intl.get('Reset')}</Button>,
                 <Button key="1" type="primary"
-                        onClick={() => message.success(isEnglish ? 'Settings saved' : "已自动保存，无需手动保存")}>
-                    {isEnglish ? 'Save' : '保存'}
+                        onClick={() => message.success(intl.get('SaveMessage'))}>
+                    {intl.get('Save')}
                 </Button>,
             ]}
         >
             <UserInfo/>
             <Divider style={{
                 color: blue
-            }}>{isEnglish ? 'Setting item' : '设置项'}</Divider>
+            }}>{intl.get('Setting-item')}</Divider>
             <Row gutter={16} style={{
                 borderRadius: '6px',
-                backgroundColor: '#ecf3f9',
+                backgroundColor: backColor,
                 padding: '16px'
             }}>
                 <Col className="gutter-row" span={8}>
-                    <Divider orientation="left">{isEnglish ? 'Menu Mode' : '菜单样式'}</Divider>
+                    <Divider orientation="left">{intl.get('Menu-Mode')}</Divider>
                     <MenuModeSetting/>
                 </Col>
                 <Col className="gutter-row" span={8}>
-                    <Divider orientation="left">{isEnglish ? 'Theme color' : '主题颜色'}</Divider>
+                    <Divider orientation="left">{intl.get('Theme-Color')}</Divider>
                     <ThemeSetting/>
                 </Col>
                 <Col className="gutter-row" span={8}>
-                    <Divider orientation="left">{isEnglish ? 'Language setting' : '语言设置'}</Divider>
+                    <Divider orientation="left">{intl.get('Language-Setting')}</Divider>
                     <LanguageSetting/>
                 </Col>
             </Row>

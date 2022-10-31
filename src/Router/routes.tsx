@@ -2,14 +2,41 @@ import PlayOut from "../pages/Home/PlayOut";
 import teacherApply from './teacherApply'
 import teacherRecord from "./teacherRecord";
 import {RoutesItemType} from "react-router-waiter";
-import {Error404, Error403, Error500, Error101, Error103, Success} from "../pages/Result/Result";
+import {Error101, Error103, Error403, Error404, Error500, Success} from "../pages/Result/Result";
+import {User} from "../pages/User";
 
 const routes: RoutesItemType[] = [
     {
         path: '/',
         redirect: '/login'
-    },
-    {
+    }, {
+        path: '/',
+        element: <User/>,
+        meta: {
+            title: 'User',
+            titleCN: '用户',
+            Auth: 'public'
+        },
+        children: [
+            {
+                path: 'login',
+                component: () => import('../pages/User/Login'),
+                meta: {
+                    title: 'Login',
+                    titleCN: '登录',
+                    Auth: 'public'
+                }
+            }, {
+                path: 'register',
+                component: () => import('../pages/User/Register'),
+                meta: {
+                    title: 'Register',
+                    titleCN: '注册',
+                    Auth: 'public'
+                }
+            }
+        ]
+    }, {
         path: '/home',
         element: <PlayOut/>,
         meta: {
@@ -28,7 +55,7 @@ const routes: RoutesItemType[] = [
                 },
                 children: [
                     {
-                        path: 'index',
+                        path: '',
                         component: () => import('../pages/Index/Teacher'),
                         meta: {
                             title: 'Home',
@@ -74,26 +101,7 @@ const routes: RoutesItemType[] = [
                 redirect: '/home/404'
             }
         ]
-    },
-    {
-        path: '/login',
-        component: () => import('../pages/User/Login'),
-        meta: {
-            title: 'Login',
-            titleCN: '登录',
-            Auth: 'public'
-        }
-    },
-    {
-        path: '/register',
-        component: () => import('../pages/User/Register'),
-        meta: {
-            title: 'Register',
-            titleCN: '注册',
-            Auth: 'public'
-        }
-    },
-    {
+    }, {
         path: '/Spin',
         component: () => import('../component/loading/Spin'),
         meta: {
