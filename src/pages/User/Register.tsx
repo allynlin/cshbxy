@@ -160,6 +160,7 @@ const RegisterStudent = memo(() => {
         switch (registerType) {
             case 'teacher':
                 queryTeacherUsername(e.target.value).then(res => {
+                    console.log(res)
                     if (res.code !== 200) {
                         setUsernameUse(false)
                         message.error(res.msg)
