@@ -1,7 +1,6 @@
-import React, {memo, useEffect} from "react";
-import {Button, Form, Input, message, Switch, Radio, Layout} from 'antd';
-import './index.scss'
-import './index-dark.scss'
+import React, {memo} from "react";
+import {Button, Form, Input, message, Switch, Radio} from 'antd';
+import './index-light.scss'
 import Cookie from 'js-cookie';
 import {
     teacherLogin,
@@ -9,15 +8,10 @@ import {
     leaderLogin
 } from "../../component/axios/api";
 import {useNavigate} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {login} from "../../component/redux/isLoginSlice";
 import {teacher, department, leader} from "../../component/redux/userTypeSlice";
 import {setUser} from "../../component/redux/userInfoSlice";
-import {version} from "../../baseInfo";
-import RenderGetServerVersionPublic from "../../component/Version/RenderGetServerVersionPublic";
-import axios from "axios";
-
-const {Header, Content} = Layout;
 
 const StudentForm = memo(() => {
     const dispatch = useDispatch();
@@ -216,42 +210,9 @@ const StudentForm = memo(() => {
     )
 })
 
-const Login = () => {
+const Login = () => (
+    <StudentForm/>
+)
 
-    const navigate = useNavigate();
 
-    const serverVersion = useSelector((state: {
-        serverVersion: {
-            value: string
-        }
-    }) => state.serverVersion.value);
-
-    const themeColor: String = useSelector((state: {
-        themeColor: {
-            value: String
-        }
-    }) => state.themeColor.value)
-
-    useEffect(() => {
-        if (serverVersion === "0.0.0") {
-            return;
-        }
-        if (version < serverVersion) {
-            navigate('/103')
-        }
-    }, [serverVersion])
-
-    return (
-        <Layout className={themeColor === 'dark' ? 'user-dark' : 'user-light'}>
-            <Header>
-                <span>校园 OA 系统登陆 {version}</span>
-            </Header>
-            <Content>
-                <StudentForm/>
-            </Content>
-            <RenderGetServerVersionPublic/>
-        </Layout>
-    )
-}
-
-export default Login;
+export default Login

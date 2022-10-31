@@ -89,7 +89,7 @@ const LeaveForm = () => {
                         title: '请假申请提交成功',
                         describe: '请等待上级部门审批',
                         toPage: '查看申请记录',
-                        toURL: '/home/teacher/record/leave',
+                        toURL: '/home/record/leave',
                         againTitle: '继续提交新的申请'
                     }
                 }

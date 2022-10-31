@@ -1,9 +1,9 @@
 import React, {useEffect} from "react";
-import {Layout} from 'antd';
-import './index.scss'
+import {Button, Layout} from 'antd';
+import './index-light.scss'
 import {Outlet, useNavigate} from "react-router-dom";
-import {useSelector} from "react-redux";
-import {version} from "../../baseInfo";
+import {useDispatch, useSelector} from "react-redux";
+import {version, yellow} from "../../baseInfo";
 import RenderGetServerVersionPublic from "../../component/Version/RenderGetServerVersionPublic";
 import {RenderToggleLanguageButton} from "../../component/Language/RenderToggleLanguageButton";
 import intl from "react-intl-universal";
@@ -20,6 +20,12 @@ export const User = () => {
         }
     }) => state.serverVersion.value);
 
+    const themeColor: String = useSelector((state: {
+        themeColor: {
+            value: String
+        }
+    }) => state.themeColor.value)
+
     useEffect(() => {
         if (serverVersion === "0.0.0") {
             return;
@@ -29,8 +35,11 @@ export const User = () => {
         }
     }, [serverVersion])
 
+    const dispatch = useDispatch();
+
+
     return (
-        <Layout>
+        <Layout className={themeColor === 'dark' ? 'user-dark' : 'user-light'}>
             <Header>
                 <span>{intl.get('SysName')} {version}&nbsp;<RenderToggleLanguageButton/></span>
             </Header>

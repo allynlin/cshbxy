@@ -48,58 +48,24 @@ const routes: RoutesItemType[] = [
         children: [
             {
                 path: 'teacher',
+                component: () => import('../pages/Index/Teacher'),
                 meta: {
-                    title: 'Teacher',
-                    titleCN: '教师',
+                    title: 'Home',
+                    titleCN: '教师首页',
                     Auth: 'teacher'
-                },
-                children: [
-                    {
-                        path: '',
-                        component: () => import('../pages/Index/Teacher'),
-                        meta: {
-                            title: 'Home',
-                            titleCN: '教师首页',
-                            Auth: 'teacher'
-                        }
-                    }, {
-                        path: 'setting',
-                        component: () => import('../pages/Setting/TeacherSetting'),
-                        meta: {
-                            title: 'Setting',
-                            titleCN: '设置',
-                            Auth: 'teacher'
-                        }
-                    },
-                    ...teacherApply,
-                    ...teacherRecord
-                ]
-            }, {
-                path: '404',
-                element: <Error404/>,
-                meta: {
-                    title: '404',
-                    Auth: 'public'
                 }
-            }, {
-                path: '500',
-                element: <Error500/>,
-                meta: {
-                    title: '500',
-                    Auth: 'public'
-                }
-            }, {
-                path: 'success',
-                element: <Success/>,
-                meta: {
-                    title: 'Success',
-                    titleCN: '成功',
-                    Auth: 'public'
-                }
-            }, {
-                path: '*',
-                redirect: '/home/404'
             }
+            , {
+                path: 'setting',
+                component: () => import('../pages/Setting/TeacherSetting'),
+                meta: {
+                    title: 'Setting',
+                    titleCN: '设置',
+                    Auth: 'teacher'
+                }
+            },
+            ...teacherApply,
+            ...teacherRecord
         ]
     }, {
         path: '/Spin',

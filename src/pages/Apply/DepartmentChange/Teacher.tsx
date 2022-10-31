@@ -106,7 +106,7 @@ const ChangeForm = () => {
                         title: intl.get('Apply-submit-success', {name: intl.get('DepartmentChange')}),
                         describe: intl.get('Wait-desc'),
                         toPage: intl.get('Show-application-record'),
-                        toURL: '/home/teacher/record/departmentChange',
+                        toURL: '/home/record/departmentChange',
                     }
                 }
             })

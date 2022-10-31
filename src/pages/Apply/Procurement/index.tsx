@@ -31,7 +31,7 @@ const ProcurementForm = () => {
                         title: '部门变更申请提交成功',
                         describe: '请等待管理员审批',
                         toPage: '查看审批记录',
-                        toURL: '/home/teacher/record/departmentChange',
+                        toURL: '/home/record/departmentChange',
                     }
                 }
             })

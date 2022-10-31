@@ -79,7 +79,7 @@ const LeaveForm = () => {
                         title: isEnglish ? 'Your application has been submitted successfully' : '差旅报销申请提交成功',
                         describe: isEnglish ? 'please wait for the approval result' : '请等待管理员审批',
                         toPage: isEnglish ? 'See the application record' : '查看审批记录',
-                        toURL: '/home/teacher/record/travelReimbursement',
+                        toURL: '/home/record/travelReimbursement',
                     }
                 }
             })

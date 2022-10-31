@@ -45,29 +45,29 @@ const RenderMenu = () => {
         getItem(intl.get('apply'), 'apply', <EditOutlined/>, [
             getItem((
                 <Link
-                    to={'/home/teacher/apply/departmentChange'}>{intl.get('DepartmentChange')}</Link>), 'teacherApplyDepartmentChange'),
+                    to={'/home/apply/departmentChange'}>{intl.get('DepartmentChange')}</Link>), 'teacherApplyDepartmentChange'),
             getItem((<Link
-                to={'/home/teacher/apply/travelReimbursement'}>{intl.get('TravelReimbursement')}</Link>), 'teacherApplyTravelReimbursement'),
+                to={'/home/apply/travelReimbursement'}>{intl.get('TravelReimbursement')}</Link>), 'teacherApplyTravelReimbursement'),
             getItem((
-                <Link to={'/home/teacher/apply/leave'}>{intl.get('Leave')}</Link>), 'teacherApplyLeave'),
+                <Link to={'/home/apply/leave'}>{intl.get('Leave')}</Link>), 'teacherApplyLeave'),
             getItem((<Link
-                to={'/home/teacher/apply/procurement'}>{intl.get('Procurement')}</Link>), 'teacherApplyProcurement'),
+                to={'/home/apply/procurement'}>{intl.get('Procurement')}</Link>), 'teacherApplyProcurement'),
             getItem((<Link
-                to={'/home/teacher/apply/report'}>{intl.get('Report')}</Link>), 'teacherApplyReport'),
+                to={'/home/apply/report'}>{intl.get('Report')}</Link>), 'teacherApplyReport'),
         ]),
         getItem(intl.get('Record'), 'record', <BarChartOutlined/>, [
             getItem((
                 <Link
-                    to={'/home/teacher/record/departmentChange'}>{isEnglish ? 'Travel Reimbursement Record' : '部门变更记录'}</Link>), 'teacherRecordLeaveList'),
+                    to={'/home/record/departmentChange'}>{isEnglish ? 'Travel Reimbursement Record' : '部门变更记录'}</Link>), 'teacherRecordLeaveList'),
             getItem((<Link
-                to={'/home/teacher/record/travelReimbursement'}>{isEnglish ? 'Travel Reimbursement Record' : '差旅报销记录'}</Link>), 'teacherTravelReimbursement'),
+                to={'/home/record/travelReimbursement'}>{isEnglish ? 'Travel Reimbursement Record' : '差旅报销记录'}</Link>), 'teacherTravelReimbursement'),
             getItem((<Link
-                to={'/home/teacher/record/leave'}>{isEnglish ? 'Leave Record' : '请假记录'}</Link>), 'teacherRecordLeave'),
-            getItem((<Link to={'/home/teacher/record/procurement'}>采购申请记录</Link>), 'leaveProcurement'),
+                to={'/home/record/leave'}>{isEnglish ? 'Leave Record' : '请假记录'}</Link>), 'teacherRecordLeave'),
+            getItem((<Link to={'/home/record/procurement'}>采购申请记录</Link>), 'leaveProcurement'),
             getItem((<Link
-                to={'/home/teacher/record/report'}>{isEnglish ? 'Report Record' : '工作报告记录'}</Link>), 'teacherRecordReport'),
+                to={'/home/record/report'}>{isEnglish ? 'Report Record' : '工作报告记录'}</Link>), 'teacherRecordReport'),
         ]),
-        getItem((<Link to={'/home/teacher/setting'}>{isEnglish ? 'Setting' : '设置'}</Link>), 'teacherSetting',
+        getItem((<Link to={'/home/setting'}>{isEnglish ? 'Setting' : '设置'}</Link>), 'teacherSetting',
             <FormOutlined/>)
     ];
     const department: MenuProps['items'] = [

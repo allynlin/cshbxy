@@ -94,7 +94,7 @@ const ChangeForm = () => {
                         title: '工作报告提交成功',
                         describe: '',
                         toPage: '查看历史工作报告',
-                        toURL: '/home/teacher/record/report',
+                        toURL: '/home/record/report',
                     }
                 }
             })

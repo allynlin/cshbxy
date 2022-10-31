@@ -1,7 +1,6 @@
-import React, {memo, useEffect, useState} from "react";
-import {Button, Form, Input, message, Switch, Select, Layout, Radio} from 'antd';
-import './index.scss'
-import './index-dark.scss'
+import React, {memo, useState} from "react";
+import {Button, Form, Input, message, Switch, Select, Radio} from 'antd';
+import './index-light.scss'
 import Cookie from 'js-cookie';
 import {useNavigate} from "react-router-dom";
 import {
@@ -17,13 +16,9 @@ import {
     departmentLogin,
     leaderLogin
 } from "../../component/axios/api";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {teacher, department, leader} from "../../component/redux/userTypeSlice";
 import {login} from "../../component/redux/isLoginSlice";
-import {version} from "../../baseInfo";
-import RenderGetServerVersionPublic from "../../component/Version/RenderGetServerVersionPublic";
-
-const {Header, Content} = Layout;
 
 const RegisterStudent = memo(() => {
     const dispatch = useDispatch();
@@ -434,42 +429,9 @@ const RegisterStudent = memo(() => {
     )
 })
 
-const DepartmentLogin = () => {
+const DepartmentLogin = () => (
+    <RegisterStudent/>
+)
 
-    const navigate = useNavigate();
-
-    const themeColor: String = useSelector((state: {
-        themeColor: {
-            value: String
-        }
-    }) => state.themeColor.value)
-
-    const serverVersion = useSelector((state: {
-        serverVersion: {
-            value: string
-        }
-    }) => state.serverVersion.value);
-
-    useEffect(() => {
-        if (serverVersion === "0.0.0") {
-            return;
-        }
-        if (version < serverVersion) {
-            navigate('/103')
-        }
-    }, [serverVersion])
-
-    return (
-        <Layout className={themeColor === 'dark' ? 'user-dark' : 'user-light'}>
-            <Header>
-                <span>校园 OA 系统注册 {version}</span>
-            </Header>
-            <Content>
-                <RegisterStudent/>
-            </Content>
-            <RenderGetServerVersionPublic/>
-        </Layout>
-    )
-}
 
 export default DepartmentLogin;
