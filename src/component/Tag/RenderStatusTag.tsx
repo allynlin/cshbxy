@@ -5,38 +5,41 @@
  *  点击标签弹出全局 message，显示状态对应的文字
  *  update 2022-10-07
  */
-import {Tag, message} from "antd";
+import {message, Tag} from "antd";
 import {CheckCircleOutlined, CloseCircleOutlined, ExclamationCircleOutlined, SyncOutlined} from "@ant-design/icons";
 import React from "react";
+import intl from "react-intl-universal";
 
-import {red, yellow, green, blue} from "../../baseInfo";
+import {blue, green, red, yellow} from "../../baseInfo";
 
-export const RenderStatusTag = (status: number, msg = "申请") => {
+export const RenderStatusTag = (status: number, msg = intl.get('apply')) => {
     switch (status) {
         case 0:
             return (
-                <Tag icon={<SyncOutlined spin/>} color={yellow} onClick={() => message.warning(`您的${msg}正在审批中`)}>
-                    审批中
+                <Tag icon={<SyncOutlined spin/>} color={yellow}
+                     onClick={() => message.warning(intl.get('WaitExaminationMessage', {name: msg}))}>
+                    {intl.get('Examination-approval-ing')}
                 </Tag>
             )
         case 1:
             return (
                 <Tag icon={<CheckCircleOutlined/>} color={green}
-                     onClick={() => message.success(`您的${msg}已审批通过`)}>
-                    审批通过
+                     onClick={() => message.success(intl.get('PassExaminationMessage', {name: msg}))}>
+                    {intl.get('Examination-approval-Pass')}
                 </Tag>
             )
         case 2:
             return (
-                <Tag icon={<CloseCircleOutlined/>} color={red} onClick={() => message.error(`您的${msg}被驳回`)}>
-                    审批驳回
+                <Tag icon={<CloseCircleOutlined/>} color={red}
+                     onClick={() => message.error(intl.get('NotPassExaminationMessage', {name: msg}))}>
+                    {intl.get('Examination-approval-NotPass')}
                 </Tag>
             )
         default:
             return (
                 <Tag icon={<ExclamationCircleOutlined/>} color={blue}
-                     onClick={() => message.info(`您的${msg}状态异常`)}>
-                    状态异常
+                     onClick={() => message.info(intl.get('ErrorExaminationMessage', {name: msg}))}>
+                    {intl.get('Examination-approval-Error')}
                 </Tag>
             )
     }

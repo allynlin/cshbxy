@@ -4,7 +4,7 @@
  * @return {string} 颜色
  * update 2022-10-07
  */
-import {blue, red, yellow, green} from "../../baseInfo";
+import {blue, green, red, yellow} from "../../baseInfo";
 
 export const RenderStatusColor = (text: number) => {
     switch (text) {

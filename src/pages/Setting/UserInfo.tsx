@@ -1,10 +1,9 @@
-import {UserOutlined, EllipsisOutlined, SettingOutlined} from '@ant-design/icons';
-import {Avatar, Card, Typography, Divider, Row, Col} from 'antd';
+import {UserOutlined} from '@ant-design/icons';
+import {Avatar, Col, Divider, Row} from 'antd';
 import React from 'react';
 import './userInfo.scss'
 import {useSelector} from "react-redux";
-
-const {Paragraph} = Typography;
+import intl from "react-intl-universal";
 
 const style: React.CSSProperties = {padding: '8px 0'};
 
@@ -25,19 +24,19 @@ const UserInfo: React.FC = () => {
             </div>
             <div className={'info'}>
                 <div className="base-info">
-                    <Divider orientation="left">基本信息</Divider>
+                    <Divider orientation="left">{intl.get('Base-info')}</Divider>
                     <Row gutter={16}>
                         <Col className="gutter-row" span={6}>
-                            <div style={style}>姓名：{userInfo.realeName}</div>
+                            <div style={style}>{intl.get('UserName')}: {userInfo.realeName}</div>
                         </Col>
                         <Col className="gutter-row" span={6}>
-                            <div style={style}>性别：{userInfo.gender}</div>
+                            <div style={style}>{intl.get('Gender')}: {userInfo.gender}</div>
                         </Col>
                         <Col className="gutter-row" span={6}>
-                            <div style={style}>联系电话：{userInfo.tel}</div>
+                            <div style={style}>{intl.get('Tel')}: {userInfo.tel}</div>
                         </Col>
                         <Col className="gutter-row" span={6}>
-                            <div style={style}>电子邮件：{userInfo.email}</div>
+                            <div style={style}>{intl.get('Email')}: {userInfo.email}</div>
                         </Col>
                     </Row>
                 </div>

@@ -1,6 +1,5 @@
 import axios from 'axios';
 import {message} from 'antd';
-import {MessagePlugin} from 'tdesign-react';
 import qs from 'qs';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css'
@@ -10,10 +9,7 @@ import {rootNavigate} from "../../App";
 
 export const MethodType = {
     GET: 'GET',
-    POST: 'POST',
-    PUT: 'PUT',
-    DELETE: 'DELETE',
-    PATCH: 'PATCH'
+    POST: 'POST'
 };
 
 /**

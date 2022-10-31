@@ -1,9 +1,9 @@
-import React from "react";
-import {version} from "../../baseInfo";
+import React, {useEffect, useState} from "react";
+import {version, yellow} from "../../baseInfo";
 import {useSelector} from "react-redux";
 import {Layout} from "antd";
-import {yellow} from "../../baseInfo";
 import RenderRefresh from "./RenderRefresh";
+import intl from "react-intl-universal";
 
 export default function RenderGetServerVersion() {
 
@@ -17,7 +17,9 @@ export default function RenderGetServerVersion() {
         <Layout.Footer style={{
             backgroundColor: serverVersion > version ? yellow : "",
         }}>
-            校园 OA 系统 &copy; 2022 Created by allynlin Version：{version} Server：{serverVersion} <RenderRefresh/>
+            {intl.get('SysName')} &copy; 2022 Created by allynlin
+            Version：{version} Server：{serverVersion}&nbsp;
+            <RenderRefresh/>
         </Layout.Footer>
     );
 }

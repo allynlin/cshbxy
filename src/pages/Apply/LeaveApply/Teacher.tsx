@@ -1,23 +1,11 @@
-import {
-    Input,
-    Modal,
-    Button,
-    Form,
-    DatePicker,
-    Alert,
-    message,
-    Typography
-} from 'antd';
+import {Alert, Button, DatePicker, Form, Input, Modal, Typography} from 'antd';
 import React, {useEffect, useState} from 'react';
-import {Link, useNavigate} from 'react-router-dom';
-import {
-    addLeave, checkLastTimeLeave,
-} from "../../../component/axios/api";
-import '../apply-light.scss';
-import '../apply-dark.scss';
-import {useSelector} from "react-redux";
+import {useNavigate} from 'react-router-dom';
+import {addLeave, checkLastTimeLeave,} from "../../../component/axios/api";
+import '../apply.scss';
 import Marquee from 'react-fast-marquee';
 import moment from "moment";
+import intl from "react-intl-universal";
 
 const {Title} = Typography;
 const tableName = `changedepartmentbyteacher`;
@@ -39,12 +27,6 @@ const LeaveForm = () => {
     const [form] = Form.useForm();
     const reason = Form.useWatch('reason', form);
     const leaveTime = Form.useWatch('leaveTime', form);
-
-    const themeColor: String = useSelector((state: {
-        themeColor: {
-            value: String
-        }
-    }) => state.themeColor.value)
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -112,7 +94,7 @@ const LeaveForm = () => {
                     }
                 }
             })
-        }).catch(err => {
+        }).catch(() => {
             setConfirmLoading(false);
         })
     }
@@ -121,7 +103,7 @@ const LeaveForm = () => {
     const RenderModal: React.FC = () => {
         return (
             <Modal
-                title="确认提交"
+                title={intl.get('Confirm')}
                 mask={false}
                 style={
                     {
@@ -158,18 +140,6 @@ const LeaveForm = () => {
         form.resetFields();
     };
 
-    // 根据不同的 themeColor，渲染不同的样式
-    const renderThemeColor = () => {
-        switch (themeColor) {
-            case 'dark':
-                return 'body-dark'
-            case 'light':
-                return 'body-light'
-            default:
-                return 'body-light'
-        }
-    }
-
     // 渲染上次请假是否未销假、是否有未审批的请假申请、是否有已审批的请假申请
     const RenderAlert: React.FC = () => {
         return (
@@ -200,7 +170,7 @@ const LeaveForm = () => {
     );
 
     return (
-        <div className={renderThemeColor()}>
+        <div className={'body'}>
             {isHaveLastLeave ? <RenderAlert/> : null}
             <RenderModal/>
             <Title level={2} className={'tit'}>请假申请</Title>
@@ -237,20 +207,23 @@ const LeaveForm = () => {
                 </Form.Item>
 
                 <Form.Item
-                    label="请假原因"
+                    label={intl.get('Reason')}
                     name="reason"
-                    rules={[{required: true, message: '请输入请假原因'}]}
+                    rules={[{required: true, message: intl.get('input-required-message', {name: intl.get('Reason')})}]}
                 >
-                    <Input.TextArea rows={4} placeholder={"请输入请假原因，不超过500字"} showCount={true}
+                    <Input.TextArea rows={4} placeholder={intl.get('textarea-enter-placeholder', {
+                        name: intl.get('Reason'),
+                        max: 500
+                    })} showCount={true}
                                     maxLength={500}/>
                 </Form.Item>
 
                 <Form.Item wrapperCol={{offset: 8, span: 16}} style={{textAlign: "center"}}>
                     <Button type="primary" htmlType="submit">
-                        提交
+                        {intl.get('Submit')}
                     </Button>
                     <Button htmlType="button" onClick={onReset} style={{marginLeft: 8}}>
-                        重置
+                        {intl.get('Reset')}
                     </Button>
                 </Form.Item>
             </Form>

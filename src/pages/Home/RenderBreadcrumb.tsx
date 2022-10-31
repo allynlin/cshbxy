@@ -1,30 +1,44 @@
 import {Breadcrumb} from "antd";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Link, useLocation} from "react-router-dom";
+import {useSelector} from "react-redux";
 
 const RenderBreadcrumb = () => {
     const location = useLocation();
+
+    const [isEnglish, setIsEnglish] = useState(true);
+
+    const userLanguage: String = useSelector((state: {
+        userLanguage: {
+            value: 'Chinese' | 'English'
+        }
+    }) => state.userLanguage.value)
+
+    useEffect(() => {
+        setIsEnglish(userLanguage === 'English')
+    }, [userLanguage])
+
     const breadcrumbNameMap: Record<string, string> = {
-        '/home': 'OA 系统',
-        '/home/teacher': '教师',
-        '/home/departments': '部门',
-        '/home/leader': '领导',
-        '/home/teacher/index': '首页',
-        '/home/department/index': '首页',
-        '/home/leader/index': '首页',
-        '/home/teacher/apply': '申请',
-        '/home/teacher/apply/departmentChange': '部门变更申请',
-        '/home/teacher/apply/travelReimbursement': '差旅报销申请',
-        '/home/teacher/apply/leave': '请假申请',
-        '/home/teacher/apply/procurement': '采购申请',
-        '/home/teacher/apply/report': '工作报告',
-        '/home/teacher/record': '记录',
-        '/home/teacher/record/departmentChange': '部门变更申请记录',
-        '/home/teacher/record/travelReimbursement': '差旅报销申请记录',
-        '/home/teacher/record/leave': '请假申请记录',
-        '/home/teacher/record/procurement': '采购申请记录',
-        '/home/teacher/record/report': '工作报告记录',
-        '/home/teacher/setting': '设置',
+        '/home': isEnglish ? 'OA' : 'OA 系统',
+        '/home/teacher': isEnglish ? 'Teacher' : '教师',
+        '/home/departments': isEnglish ? 'Department' : '部门',
+        '/home/leader': isEnglish ? 'Leader' : '领导',
+        '/home/teacher/index': isEnglish ? 'Home' : '首页',
+        '/home/department/index': isEnglish ? 'Home' : '首页',
+        '/home/leader/index': isEnglish ? 'Home' : '首页',
+        '/home/teacher/apply': isEnglish ? 'Apply' : '申请',
+        '/home/teacher/apply/departmentChange': isEnglish ? 'Departmental change' : '部门变更申请',
+        '/home/teacher/apply/travelReimbursement': isEnglish ? 'Travel reimbursement' : '差旅报销申请',
+        '/home/teacher/apply/leave': isEnglish ? 'Travel reimbursement' : '请假申请',
+        '/home/teacher/apply/procurement': isEnglish ? 'Leave' : '采购申请',
+        '/home/teacher/apply/report': isEnglish ? 'Work report' : '工作报告',
+        '/home/teacher/record': isEnglish ? 'Report' : '记录',
+        '/home/teacher/record/departmentChange': isEnglish ? 'Travel reimbursement' : '部门变更申请记录',
+        '/home/teacher/record/travelReimbursement': isEnglish ? 'Travel reimbursement' : '差旅报销申请记录',
+        '/home/teacher/record/leave': isEnglish ? 'Travel reimbursement' : '请假申请记录',
+        '/home/teacher/record/procurement': isEnglish ? 'Travel reimbursement' : '采购申请记录',
+        '/home/teacher/record/report': isEnglish ? 'Travel reimbursement' : '工作报告记录',
+        '/home/teacher/setting': isEnglish ? 'Travel reimbursement' : '设置',
     };
     const pathSnippets = location.pathname.split('/').filter((i) => i);
     const extraBreadcrumbItems = pathSnippets.map((_, index) => {

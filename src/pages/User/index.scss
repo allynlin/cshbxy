@@ -29,6 +29,11 @@ $back-white: rgba(240, 242, 245, 0.8);
         button {
             margin-top: 3px;
         }
+
+        span {
+            display: inline-flex;
+            align-items: center;
+        }
     }
 
     .ant-layout-content {

@@ -1,26 +1,17 @@
-import {
-    Input,
-    Modal,
-    Button,
-    Form,
-    Result,
-    Select,
-    Typography
-} from 'antd';
+import {Button, Form, Input, Modal, Result, Select, Typography} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {
-    queryDepartmentMessage,
-    teacherChangeDepartment,
+    checkLastTimeUploadFiles,
     checkTeacherChangeDepartment,
-    checkLastTimeUploadFiles
+    queryDepartmentMessage,
+    teacherChangeDepartment
 } from "../../../component/axios/api";
-import '../apply-light.scss';
-import '../apply-dark.scss';
+import '../apply.scss';
 import {DownLoadURL} from "../../../baseInfo";
 import FileUpLoad from "../../../component/axios/FileUpLoad";
 import {LoadingOutlined} from "@ant-design/icons";
-import {useSelector} from "react-redux";
+import intl from "react-intl-universal";
 
 const {Title} = Typography;
 const tableName = `changedepartmentbyteacher`;
@@ -37,7 +28,7 @@ const ChangeForm = () => {
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
     // 展示表单还是提示信息,两种状态，分别是 info 或者 loading
     const [isRenderResult, setIsRenderResult] = useState<boolean>(true);
-    const [RenderResultTitle, setRenderResultTitle] = useState<String>('正在获取部门变更申请记录');
+    const [RenderResultTitle, setRenderResultTitle] = useState<String>(intl.get('Application-lastTime-submit', {name: intl.get('DepartmentChange')}));
     const [isRenderInfo, setIsRenderInfo] = useState<boolean>(false);
     // 部门列表
     const [departmentOptions, setDepartmentOptions] = useState([]);
@@ -75,13 +66,13 @@ const ChangeForm = () => {
         }
         checkTeacherChangeDepartment().then(res => {
             if (res.code === 200) {
-                setRenderResultTitle("正在获取上次上传的文件")
+                setRenderResultTitle(intl.get('Get-lastTime-file'))
                 checkUploadFilesList();
                 setIsQuery(false)
                 setWaitTime(0)
             } else {
                 setIsRenderInfo(true)
-                setRenderResultTitle("您已经提交过部门变更申请，请等待审批结果")
+                setRenderResultTitle(intl.get('Application-lastTime-submit', {name: intl.get('DepartmentChange')}))
             }
         })
     }
@@ -107,19 +98,19 @@ const ChangeForm = () => {
 
     // 表单提交
     const submitForm = () => {
-        teacherChangeDepartment(departmentUid, changeReason).then(res => {
+        teacherChangeDepartment(departmentUid, changeReason).then(() => {
             setConfirmLoading(false);
             navigate('/home/success', {
                 state: {
                     object: {
-                        title: '部门变更申请提交成功',
-                        describe: '请等待管理员审批',
-                        toPage: '查看审批记录',
+                        title: intl.get('Apply-submit-success', {name: intl.get('DepartmentChange')}),
+                        describe: intl.get('Wait-desc'),
+                        toPage: intl.get('Show-application-record'),
                         toURL: '/home/teacher/record/departmentChange',
                     }
                 }
             })
-        }).catch(err => {
+        }).catch(() => {
             setConfirmLoading(false);
         })
     }
@@ -140,7 +131,7 @@ const ChangeForm = () => {
     const RenderModal: React.FC = () => {
         return (
             <Modal
-                title="确认提交"
+                title={intl.get('Confirm')}
                 open={isModalVisible}
                 onOk={handleOk}
                 confirmLoading={confirmLoading}
@@ -151,10 +142,10 @@ const ChangeForm = () => {
                     backgroundColor: 'rgba(255,255,255,0.6)'
                 }}
             >
-                <p>变更部门：{departmentUid}</p>
-                <p>变更原因：{changeReason}</p>
+                <p>{intl.get('DepartmentChange') + ': '}{departmentUid}</p>
+                <p>{intl.get('Reason') + ': '}{changeReason}</p>
                 {/*将变更材料 changeFile 中的 fileList 数组中的状态为 done 的每一项 name 输出出来*/}
-                <p>变更材料：{
+                <p>{intl.get('File') + ': '}{
                     fileList.filter((item: any) => item.status === 'done').map((item: any) => item.name).join('、')
                 }</p>
             </Modal>
@@ -178,24 +169,6 @@ const ChangeForm = () => {
         form.resetFields();
     };
 
-    const themeColor: String = useSelector((state: {
-        themeColor: {
-            value: String
-        }
-    }) => state.themeColor.value)
-
-    // 根据不同的 themeColor，渲染不同的样式
-    const renderThemeColor = () => {
-        switch (themeColor) {
-            case 'dark':
-                return 'body-dark'
-            case 'light':
-                return 'body-light'
-            default:
-                return 'body-light'
-        }
-    }
-
     return isRenderResult ? (
         <Result
             status="info"
@@ -212,13 +185,13 @@ const ChangeForm = () => {
                 <Button disabled={isQuery} type="primary" onClick={() => {
                     checkDepartmentChange()
                 }}>
-                    {isQuery ? `刷新(${waitTime})` : `刷新`}
+                    {isQuery ? intl.get('Refresh') + '(' + waitTime + ')' : intl.get('Refresh')}
                 </Button>
             }
         />) : (
-        <div className={renderThemeColor()}>
+        <div className={'body'}>
             <RenderModal/>
-            <Title level={2} className={'tit'}>部门变更申请</Title>
+            <Title level={2} className={'tit'}>{intl.get('DepartmentChange') + intl.get('apply')}</Title>
             <Form
                 form={form}
                 name="basic"
@@ -230,13 +203,16 @@ const ChangeForm = () => {
                 }}
             >
                 <Form.Item
-                    label="变更部门"
+                    label={intl.get('DepartmentChange')}
                     name="departmentUid"
-                    rules={[{required: true, message: '请选择你需要变更的新部门'}]}
+                    rules={[{
+                        required: true,
+                        message: intl.get('select-required-message', {name: intl.get('DepartmentChange')})
+                    }]}
                 >
                     <Select
                         showSearch
-                        placeholder="请选择你需要变更的新部门"
+                        placeholder={intl.get('select-enter-placeholder', {name: intl.get('DepartmentChange')})}
                         optionFilterProp="children"
                         onFocus={getDepartmentOptions}
                         options={departmentOptions}
@@ -244,18 +220,26 @@ const ChangeForm = () => {
                 </Form.Item>
 
                 <Form.Item
-                    label="变更原因"
+                    label={intl.get('Reason')}
                     name="changeReason"
-                    rules={[{required: true, message: '请输入变更原因'}]}
+                    rules={[{
+                        required: true,
+                        message: intl.get('input-required-message', {name: intl.get('Reason')})
+                    }]}
                 >
-                    <Input.TextArea rows={4} placeholder={"请输入变更原因，如超出1000字请提交附件"} showCount={true}
+                    <Input.TextArea rows={4}
+                                    placeholder={intl.get('textarea-enter-placeholder', {
+                                        name: intl.get('Reason'),
+                                        max: 1000
+                                    })}
+                                    showCount={true}
                                     maxLength={1000}/>
                 </Form.Item>
 
                 <Form.Item
-                    label="变更材料"
+                    label={intl.get('File')}
                     name="file"
-                    rules={[{required: true, message: '请上传变更材料'}]}
+                    rules={[{required: true, message: intl.get('file-required-message', {name: intl.get('File')})}]}
                 >
                     <FileUpLoad
                         setTableName={tableName}
@@ -277,10 +261,10 @@ const ChangeForm = () => {
 
                 <Form.Item wrapperCol={{offset: 8, span: 16}} style={{textAlign: "center"}}>
                     <Button type="primary" htmlType="submit">
-                        提交
+                        {intl.get('Submit')}
                     </Button>
                     <Button htmlType="button" onClick={onReset} style={{marginLeft: 8}}>
-                        重置
+                        {intl.get('Reset')}
                     </Button>
                 </Form.Item>
             </Form>
@@ -288,10 +272,9 @@ const ChangeForm = () => {
     );
 };
 
-const Teacher = () => {
-    return (
-        <ChangeForm/>
-    )
-}
+const Teacher = () => (
+    <ChangeForm/>
+)
+
 
 export default Teacher;

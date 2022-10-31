@@ -1,15 +1,5 @@
-import {
-    Timeline,
-    Typography,
-    Button,
-    Drawer,
-    Modal,
-    message,
-    Steps, Result, Collapse
-} from 'antd';
-import {
-    ExclamationCircleOutlined, LoadingOutlined,
-} from '@ant-design/icons';
+import {Button, Collapse, Drawer, message, Modal, Result, Steps, Timeline, Typography} from 'antd';
+import {ExclamationCircleOutlined, LoadingOutlined,} from '@ant-design/icons';
 import React, {useEffect, useState} from 'react';
 import {
     deleteWorkReport,
@@ -18,9 +8,8 @@ import {
     findWorkReportList
 } from '../../../component/axios/api';
 import '../index.scss';
-import {DownLoadURL} from "../../../baseInfo";
+import {DownLoadURL, green, red, yellow} from "../../../baseInfo";
 import {RenderStatusTag} from "../../../component/Tag/RenderStatusTag";
-import {red, green, yellow} from "../../../baseInfo";
 
 const {Title} = Typography;
 const {Step} = Steps;

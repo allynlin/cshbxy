@@ -4,6 +4,7 @@ import React from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {inline, vertical} from "../../component/redux/menuModeSlice";
 import {LStorage} from "../../component/localStrong";
+import intl from "react-intl-universal";
 
 const MenuModeSetting = () => {
 
@@ -18,8 +19,8 @@ const MenuModeSetting = () => {
 
     return (
         <Radio.Group onChange={onChange} value={menuModeSlice}>
-            <Radio value={"inline"}>水平</Radio>
-            <Radio value={"vertical"}>垂直</Radio>
+            <Radio value={"inline"}>{intl.get('Horizontal-Menu')}</Radio>
+            <Radio value={"vertical"}>{intl.get('Vertical-Menu')}</Radio>
         </Radio.Group>
     );
 };
