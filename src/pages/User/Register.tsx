@@ -1,6 +1,7 @@
-import React, {useEffect, useState} from "react";
+import React, {memo, useEffect, useState} from "react";
 import {Button, Form, Input, message, Switch, Select, Layout, Radio} from 'antd';
 import './index.scss'
+import './index-dark.scss'
 import Cookie from 'js-cookie';
 import {useNavigate} from "react-router-dom";
 import {
@@ -24,7 +25,7 @@ import RenderGetServerVersionPublic from "../../component/Version/RenderGetServe
 
 const {Header, Content} = Layout;
 
-const RegisterStudent = () => {
+const RegisterStudent = memo(() => {
     const dispatch = useDispatch();
 
     const [form] = Form.useForm();
@@ -431,11 +432,17 @@ const RegisterStudent = () => {
             </Form.Item>
         </Form>
     )
-};
+})
 
 const DepartmentLogin = () => {
 
     const navigate = useNavigate();
+
+    const themeColor: String = useSelector((state: {
+        themeColor: {
+            value: String
+        }
+    }) => state.themeColor.value)
 
     const serverVersion = useSelector((state: {
         serverVersion: {
@@ -453,7 +460,7 @@ const DepartmentLogin = () => {
     }, [serverVersion])
 
     return (
-        <Layout>
+        <Layout className={themeColor === 'dark' ? 'user-dark' : 'user-light'}>
             <Header>
                 <span>校园 OA 系统注册 {version}</span>
             </Header>

@@ -1,4 +1,13 @@
-@import 'antd/dist/antd.css';
+@use 'sass:meta';
+
+body.light {
+    @include meta.load-css('node_modules/antd/dist/antd.css', $with: null);
+}
+
+body.dark {
+    @include meta.load-css('node_modules/antd/dist/antd.dark.css', $with: null);
+}
+
 
 .ant-modal-content {
     background-color: transparent;

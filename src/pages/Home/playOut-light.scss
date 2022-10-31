@@ -4,14 +4,27 @@ $body-left: 200px;
 $body-bottom: 5%;
 $body-bottom-min: 20px;
 $white: #ffffff;
+$dark-6: #bfbfbf;
 $black: #000000;
 .home-body-light {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     min-width: 600px;
     height: 100%;
     display: flex;
     background-color: $black;
     box-sizing: border-box;
+
+    ::-webkit-scrollbar {
+        width: 4px;
+        background-color: $white;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: $dark-6;
+    }
 
     .home-left {
         width: $body-left;
@@ -35,6 +48,9 @@ $black: #000000;
                 outline: 1px solid rgb(219, 219, 219);
                 display: flex;
                 overflow: hidden;
+                position: absolute;
+                top: 0;
+                left: 0;
 
                 .logo {
                     position: absolute;
@@ -52,9 +68,9 @@ $black: #000000;
             .silder_content {
                 display: flex;
                 width: 100%;
-                height: 100%;
-                position: relative;
-                top: 0;
+                height: calc(100% - #{$body-top});
+                position: absolute;
+                top: $body-top;
                 left: 0;
                 overflow-y: auto;
 
@@ -79,7 +95,10 @@ $black: #000000;
         justify-content: space-between;
 
         .header {
-            width: 100%;
+            position: absolute;
+            top: 0;
+            left: $body-left;
+            width: calc(100% - #{$body-left});
             height: $body-top;
             min-height: $body-top-min;
             background-color: $white;
@@ -110,10 +129,10 @@ $black: #000000;
         }
 
         .content {
-            position: relative;
-            left: 0;
-            top: 0;
-            width: 100%;
+            position: absolute;
+            left: $body-left;
+            top: $body-top;
+            width: calc(100% - #{$body-left});
             height: calc(100% - #{$body-top} - #{$body-bottom});
             overflow-x: hidden;
             overflow-y: auto;
@@ -121,7 +140,10 @@ $black: #000000;
         }
 
         .footer {
-            width: 100%;
+            position: absolute;
+            left: $body-left;
+            bottom: 0;
+            width: calc(100% - #{$body-left});
             height: $body-bottom;
             min-height: $body-bottom-min;
             background-color: $white;

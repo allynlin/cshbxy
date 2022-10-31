@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import './App-light.scss';
+import './App.scss';
 import routes from "./Router/routes";
 import RouterWaiter from "react-router-waiter"
 import Spin from "./component/loading/Spin";

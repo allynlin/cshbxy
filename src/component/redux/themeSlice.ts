@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit'
 
-const initialState: { value: 'light' | 'dark'} = {
+const initialState: { value: 'light' | 'dark' } = {
     value: 'light',
 }
 
@@ -10,9 +10,11 @@ export const themeSlice = createSlice({
     reducers: {
         light: state => {
             state.value = 'light'
+            document.body.className = 'light'
         },
         dark: state => {
             state.value = 'dark'
+            document.body.className = 'dark'
         }
     },
 })

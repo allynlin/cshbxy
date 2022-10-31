@@ -1,6 +1,7 @@
-import React, {useEffect} from "react";
+import React, {memo, useEffect} from "react";
 import {Button, Form, Input, message, Switch, Radio, Layout} from 'antd';
 import './index.scss'
+import './index-dark.scss'
 import Cookie from 'js-cookie';
 import {
     teacherLogin,
@@ -14,10 +15,11 @@ import {teacher, department, leader} from "../../component/redux/userTypeSlice";
 import {setUser} from "../../component/redux/userInfoSlice";
 import {version} from "../../baseInfo";
 import RenderGetServerVersionPublic from "../../component/Version/RenderGetServerVersionPublic";
+import axios from "axios";
 
 const {Header, Content} = Layout;
 
-const StudentForm = () => {
+const StudentForm = memo(() => {
     const dispatch = useDispatch();
     const [form] = Form.useForm();
     const username = Form.useWatch('username', form);
@@ -212,7 +214,7 @@ const StudentForm = () => {
             </Form.Item>
         </Form>
     )
-};
+})
 
 const Login = () => {
 
@@ -224,6 +226,12 @@ const Login = () => {
         }
     }) => state.serverVersion.value);
 
+    const themeColor: String = useSelector((state: {
+        themeColor: {
+            value: String
+        }
+    }) => state.themeColor.value)
+
     useEffect(() => {
         if (serverVersion === "0.0.0") {
             return;
@@ -234,7 +242,7 @@ const Login = () => {
     }, [serverVersion])
 
     return (
-        <Layout>
+        <Layout className={themeColor === 'dark' ? 'user-dark' : 'user-light'}>
             <Header>
                 <span>校园 OA 系统登陆 {version}</span>
             </Header>

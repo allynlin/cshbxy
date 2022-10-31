@@ -8,13 +8,16 @@ $dark: #434343;
 $dark-1: #141414;
 $dark-2: #323130;
 $dark-3: #001529;
-$dark-4: #141414;
+$dark-6: #bfbfbf;
 $outline-dark: #303030;
 $font-light: rgba(255, 255, 255, 1);
 $font-light-45: rgba(255, 255, 255, 0.45);
 $font-light-65: rgba(255, 255, 255, 0.65);
 $font-light-85: rgba(255, 255, 255, 0.85);
 .home-body-dark {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     min-width: 600px;
     height: 100%;
@@ -22,6 +25,15 @@ $font-light-85: rgba(255, 255, 255, 0.85);
     background-color: $white;
     box-sizing: border-box;
     color: $white;
+
+    ::-webkit-scrollbar {
+        width: 4px;
+        background-color: $dark-1;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: $dark-6;
+    }
 
     .home-left {
         width: $body-left;
@@ -43,10 +55,13 @@ $font-light-85: rgba(255, 255, 255, 0.85);
                 //min-height: 70px;
                 height: $body-top;
                 width: 100%;
-                outline: 1px solid $dark-4;
+                outline: 1px solid $dark-1;
                 display: flex;
                 overflow: hidden;
-                background-color: $dark-4;
+                background-color: $dark-1;
+                position: absolute;
+                top: 0;
+                left: 0;
 
                 .logo {
                     position: absolute;
@@ -65,9 +80,9 @@ $font-light-85: rgba(255, 255, 255, 0.85);
             .silder_content {
                 display: flex;
                 width: 100%;
-                height: 100%;
-                position: relative;
-                top: 0;
+                height: calc(100% - $body-top);
+                position: absolute;
+                top: $body-top;
                 left: 0;
                 overflow-y: auto;
 
@@ -97,7 +112,7 @@ $font-light-85: rgba(255, 255, 255, 0.85);
             width: 100%;
             height: $body-top;
             min-height: $body-top-min;
-            background-color: $dark-4;
+            background-color: $dark-1;
             outline: 1px solid $outline-dark;
             z-index: 120;
             display: flex;
@@ -134,10 +149,10 @@ $font-light-85: rgba(255, 255, 255, 0.85);
         }
 
         .content {
-            position: relative;
-            left: 0;
-            top: 0;
-            width: 100%;
+            position: absolute;
+            left: $body-left;
+            top: $body-top;
+            width: calc(100% - #{$body-left});
             height: calc(100% - #{$body-top} - #{$body-bottom});
             overflow-x: hidden;
             overflow-y: auto;
@@ -146,7 +161,10 @@ $font-light-85: rgba(255, 255, 255, 0.85);
         }
 
         .footer {
-            width: 100%;
+            position: absolute;
+            left: $body-left;
+            bottom: 0;
+            width: calc(100% - #{$body-left});
             height: $body-bottom;
             min-height: $body-bottom-min;
             background-color: $dark-1;
