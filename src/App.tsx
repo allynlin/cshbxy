@@ -197,19 +197,18 @@ export default function App() {
         if (meta.title) {
             if (meta.titleCN === undefined) {
                 document.title = meta.title
-                return
             }
             userLanguage === 'English' ? document.title = meta.title : document.title = meta.titleCN
         }
+        if (meta.Auth === 'public')
+            return pathname
+        if (userType === meta.Auth)
+            return pathname
         if (!isLogin) {
             message.warning(intl.get('Please-Login'))
             return '/login'
         }
-        if (userType !== meta.Auth)
-            return '/403'
-        if (meta.Auth !== 'public')
-            return '/403'
-        return pathname
+        return '/403'
     }
 
     return (
