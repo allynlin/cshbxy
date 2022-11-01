@@ -12,7 +12,6 @@ import {DownLoadURL, red} from "../../../baseInfo";
 import {RenderStatusTag} from "../../../component/Tag/RenderStatusTag";
 import {RenderStatusColor} from "../../../component/Tag/RenderStatusColor";
 import '../index.scss'
-import {UpdateTravel} from "./UpdateTravel";
 
 const {Title} = Typography;
 const {Step} = Steps;
@@ -65,13 +64,8 @@ const Index: React.FC = () => {
                 onClose={() => {
                     setOpen(false)
                 }}
-                mask={false}
                 headerStyle={{
                     backgroundColor: RenderStatusColor(content.status)
-                }}
-                bodyStyle={{
-                    backdropFilter: 'blur(20px) saturate(180%)',
-                    // backgroundColor: 'rgba(255, 255, 255, 0.6)'
                 }}
             >
                 <p>目的地：{content.destination}</p>
@@ -85,14 +79,6 @@ const Index: React.FC = () => {
                     justifyContent: 'end',
                     marginTop: 16
                 }}>
-                    <UpdateTravel
-                        state={content}
-                        fileList={fileList}
-                        getNewContent={() => {
-                            setOpen(false)
-                            getDataSource()
-                        }}
-                    />
                     <Button
                         type="primary"
                         style={{
@@ -175,11 +161,6 @@ const Index: React.FC = () => {
             okText: '确认',
             okType: 'danger',
             cancelText: '取消',
-            style: {
-                backdropFilter: 'blur(20px) saturate(180%)',
-                backgroundColor: 'rgba(255,255,255,0.6)'
-            },
-            mask: false,
             onOk() {
                 deleteTravelReimbursementApply(e).then((res: any) => {
                     if (res.code === 200) {

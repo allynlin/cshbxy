@@ -34,6 +34,14 @@ const teacherRecord = [
                     titleCN: '工作报告记录',
                     Auth: 'teacher'
                 }
+            }, {
+                path: 'skeleton',
+                component: () => import('../component/Skeleton/RecordSkeleton'),
+                meta: {
+                    title: 'Record Skeleton',
+                    titleCN: '记录骨架',
+                    Auth: 'teacher'
+                }
             }
         ]
     }

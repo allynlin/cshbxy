@@ -48,13 +48,8 @@ const Index: React.FC = () => {
                 onClose={() => {
                     setOpen(false)
                 }}
-                mask={false}
                 headerStyle={{
                     backgroundColor: content.status === 0 ? yellow : content.status === 1 ? green : content.status === 2 ? red : blue,
-                }}
-                bodyStyle={{
-                    backdropFilter: 'blur(20px) saturate(180%)',
-                    backgroundColor: 'rgba(255, 255, 255, 0.6)'
                 }}
             >
                 <p>请假时间：{content.start_time}</p>
@@ -139,11 +134,6 @@ const Index: React.FC = () => {
             okText: '确认',
             okType: 'danger',
             cancelText: '取消',
-            style: {
-                backdropFilter: 'blur(20px) saturate(180%)',
-                backgroundColor: 'rgba(255,255,255,0.6)'
-            },
-            mask: false,
             onOk() {
                 deleteLeave(e).then((res: any) => {
                     if (res.code === 200) {

@@ -2,7 +2,6 @@ import {Radio} from 'antd';
 import React from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {Chinese, English} from "../../component/redux/userLanguageSlice";
-import intl from "react-intl-universal";
 
 const ThemeSetting = () => {
 

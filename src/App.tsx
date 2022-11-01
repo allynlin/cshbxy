@@ -25,6 +25,7 @@ import {Chinese, English} from "./component/redux/userLanguageSlice";
 import enUS from "antd/es/locale/en_US";
 import zhCN from "antd/es/locale/zh_CN";
 import intl from 'react-intl-universal';
+import RecordSkeleton from "./component/Skeleton/RecordSkeleton";
 
 const locals = {
     'English': require('./component/Language/en-US.json'),

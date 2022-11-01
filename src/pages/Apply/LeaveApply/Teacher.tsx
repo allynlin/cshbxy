@@ -104,13 +104,6 @@ const LeaveForm = () => {
         return (
             <Modal
                 title={intl.get('Confirm')}
-                mask={false}
-                style={
-                    {
-                        backdropFilter: 'blur(20px) saturate(180%)',
-                        backgroundColor: 'rgba(255,255,255,0.6)'
-                    }
-                }
                 open={isModalVisible}
                 onOk={handleOk}
                 confirmLoading={confirmLoading}

@@ -1,38 +1,13 @@
 @use 'sass:meta';
 
-body.light {
-    @include meta.load-css('node_modules/antd/dist/antd.css', $with: null);
-    background-color: #fff;
-}
-
-body.dark {
-    @include meta.load-css('node_modules/antd/dist/antd.dark.css', $with: null);
-    background-color: #323130;
-}
-
-
-.ant-modal-content {
-    background-color: transparent;
-
-    .ant-modal-header {
-        background: transparent;
+body {
+    &[theme="dark"] {
+        @include meta.load-css('node_modules/antd/dist/antd.dark.css', $with: null);
+        background-color: #323130;
     }
 
-    .ant-modal-body {
-        background: transparent;
+    &[theme="light"] {
+        @include meta.load-css('node_modules/antd/dist/antd.css', $with: null);
+        background-color: #fff;
     }
-
-    .ant-modal-footer {
-        background: transparent;
-    }
-}
-
-.ant-drawer-content {
-    background: transparent;
-}
-
-.ant-message-notice-content {
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    background-color: rgba(255, 255, 255, 0.6);
 }

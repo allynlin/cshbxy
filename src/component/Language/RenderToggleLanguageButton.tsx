@@ -1,7 +1,7 @@
 import {Button} from "antd";
 import {yellow} from "../../baseInfo";
 import {Chinese, English} from "../redux/userLanguageSlice";
-import React, {useEffect} from "react";
+import React from "react";
 import {useDispatch, useSelector} from "react-redux";
 
 export const RenderToggleLanguageButton = () => {

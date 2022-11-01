@@ -10,11 +10,11 @@ export const themeSlice = createSlice({
     reducers: {
         light: state => {
             state.value = 'light'
-            document.body.className = 'light'
+            document.body.setAttribute('theme', 'light')
         },
         dark: state => {
             state.value = 'dark'
-            document.body.className = 'dark'
+            document.body.setAttribute('theme', 'dark')
         }
     },
 })

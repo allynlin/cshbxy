@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import {version, yellow} from "../../baseInfo";
 import {useSelector} from "react-redux";
 import RenderRefresh from "./RenderRefresh";

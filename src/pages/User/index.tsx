@@ -1,9 +1,9 @@
 import React, {useEffect} from "react";
-import {Button, Layout} from 'antd';
+import {Layout} from 'antd';
 import './index-light.scss'
 import {Outlet, useNavigate} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
-import {version, yellow} from "../../baseInfo";
+import {useSelector} from "react-redux";
+import {version} from "../../baseInfo";
 import RenderGetServerVersionPublic from "../../component/Version/RenderGetServerVersionPublic";
 import {RenderToggleLanguageButton} from "../../component/Language/RenderToggleLanguageButton";
 import intl from "react-intl-universal";
@@ -34,8 +34,6 @@ export const User = () => {
             navigate('/103')
         }
     }, [serverVersion])
-
-    const dispatch = useDispatch();
 
 
     return (

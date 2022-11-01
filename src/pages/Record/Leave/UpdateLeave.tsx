@@ -39,11 +39,6 @@ export const UpdateLeave = (props: prop) => {
             okText: '确认',
             okType: 'danger',
             cancelText: '取消',
-            style: {
-                backdropFilter: 'blur(20px) saturate(180%)',
-                backgroundColor: 'rgba(255,255,255,0.6)'
-            },
-            mask: false,
             onOk() {
                 setConfirmLoading(true);
                 updateForm();
@@ -60,11 +55,6 @@ export const UpdateLeave = (props: prop) => {
             okText: '放弃',
             okType: 'danger',
             cancelText: '继续修改',
-            style: {
-                backdropFilter: 'blur(20px) saturate(180%)',
-                backgroundColor: 'rgba(255,255,255,0.6)'
-            },
-            mask: false,
             onOk() {
                 setOpen(false);
             }
@@ -97,15 +87,9 @@ export const UpdateLeave = (props: prop) => {
                 title={'修改请假申请'}
                 open={open}
                 onOk={handleOk}
-                mask={false}
                 confirmLoading={confirmLoading}
                 onCancel={handleCancel}
                 width={800}
-                style={{
-                    top: 20,
-                    backdropFilter: 'blur(20px) saturate(180%)',
-                    backgroundColor: 'rgba(255,255,255,0.6)'
-                }}
             >
                 <Form
                     form={form}

@@ -1,4 +1,4 @@
-import {Button, Form, Input, Modal, Result, Select, Typography} from 'antd';
+import {Button, Form, Input, Modal, Result, Select, Skeleton, Typography} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {
@@ -136,11 +136,6 @@ const ChangeForm = () => {
                 onOk={handleOk}
                 confirmLoading={confirmLoading}
                 onCancel={handleCancel}
-                mask={false}
-                style={{
-                    backdropFilter: 'blur(20px) saturate(180%)',
-                    backgroundColor: 'rgba(255,255,255,0.6)'
-                }}
             >
                 <p>{intl.get('DepartmentChange') + ': '}{departmentUid}</p>
                 <p>{intl.get('Reason') + ': '}{changeReason}</p>

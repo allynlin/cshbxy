@@ -1,5 +1,5 @@
 import {Button, Col, Divider, message, PageHeader, Row, Tag} from 'antd';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {blue, red, yellow} from "../../baseInfo";
 import MenuModeSetting from "./MenuModeSetting";
 import ThemeSetting from "./ThemeSetting";
