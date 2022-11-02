@@ -1,5 +1,5 @@
-import {Button, Collapse, Drawer, message, Modal, Result, Steps, Table, Typography} from 'antd';
-import {ExclamationCircleOutlined, LoadingOutlined} from '@ant-design/icons';
+import {Button, Collapse, Drawer, message, Modal, Steps, Table, Typography} from 'antd';
+import {ExclamationCircleOutlined, SearchOutlined} from '@ant-design/icons';
 import type {ColumnsType} from 'antd/es/table';
 import React, {useEffect, useState} from 'react';
 import {
@@ -12,6 +12,7 @@ import {DownLoadURL, red} from "../../../baseInfo";
 import {RenderStatusTag} from "../../../component/Tag/RenderStatusTag";
 import {RenderStatusColor} from "../../../component/Tag/RenderStatusColor";
 import '../index.scss'
+import RecordSkeleton from "../../../component/Skeleton/RecordSkeleton";
 
 const {Title} = Typography;
 const {Step} = Steps;
@@ -31,8 +32,6 @@ const Index: React.FC = () => {
     const [isQuery, setIsQuery] = useState<boolean>(false);
     const [waitTime, setWaitTime] = useState<number>(0);
     const [isRenderResult, setIsRenderResult] = useState<boolean>(true);
-    const [RenderResultTitle, setRenderResultTitle] = useState<String>('正在获取差旅报销记录');
-    const [isRenderInfo, setIsRenderInfo] = useState<boolean>(false);
     const [dataSource, setDataSource] = useState([]);
     const [content, setContent] = useState<any>({});
     const [fileList, setFileList] = useState<any>([]);
@@ -170,8 +169,7 @@ const Index: React.FC = () => {
                         setDataSource(arr);
                         if (arr.length === 0) {
                             setIsRenderResult(true);
-                            setIsRenderInfo(true);
-                            setRenderResultTitle('暂无部门变更记录');
+                            message.warning('暂无差旅报销记录');
                         }
                     } else {
                         message.error('删除失败');
@@ -268,6 +266,7 @@ const Index: React.FC = () => {
         if (isQuery) {
             return
         }
+        setIsRenderResult(true)
         findTravelReimbursementApplyList().then((res: any) => {
             if (res.code === 200) {
                 const arr = res.body.map((item: any, index: number) => {
@@ -290,47 +289,38 @@ const Index: React.FC = () => {
                 setWaitTime(0)
                 setIsRenderResult(false)
             } else {
-                setIsRenderInfo(true)
-                setRenderResultTitle(res.msg)
+                message.warning(res.msg)
             }
         }).catch(err => {
-            setIsRenderInfo(true)
-            setRenderResultTitle(err.message)
+            message.error(err.message)
             setIsRenderResult(true)
         })
     }
 
-    return isRenderResult ? (
-        <Result
-            status="info"
-            icon={
-                isRenderInfo ? '' : <LoadingOutlined
-                    style={{
-                        fontSize: 40,
+    return isRenderResult ?
+        <RecordSkeleton/> : (
+            <div className={'record-body'}>
+                <RenderDrawer/>
+                <Title level={2} className={'tit'}>
+                    差旅报销申请记录&nbsp;&nbsp;
+                    <Button type="primary" icon={<SearchOutlined/>} onClick={getDataSource}>刷新</Button>
+                </Title>
+                <Table
+                    columns={columns}
+                    dataSource={dataSource}
+                    scroll={{x: 1500}}
+                    sticky={true}
+                    pagination={{
+                        showSizeChanger: true,
+                        total: dataSource.length,
+                        showQuickJumper: true,
+                        pageSizeOptions: [5, 10, 20, 50, 100, 200],
+                        defaultPageSize: 5,
+                        hideOnSinglePage: true
                     }}
-                    spin
                 />
-            }
-            title={RenderResultTitle}
-            extra={
-                <Button disabled={isQuery} type="primary" onClick={() => {
-                    getDataSource()
-                }}>
-                    {isQuery ? `刷新(${waitTime})` : `刷新`}
-                </Button>
-            }
-        />) : (
-        <div className={'record-body'}>
-            <RenderDrawer/>
-            <Title level={2} className={'tit'}>差旅报销申请记录</Title>
-            <Table
-                columns={columns}
-                dataSource={dataSource}
-                scroll={{x: 1500}}
-                sticky
-            />
-        </div>
-    );
+            </div>
+        );
 };
 
 export default Index;

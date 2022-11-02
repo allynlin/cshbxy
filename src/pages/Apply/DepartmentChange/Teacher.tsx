@@ -184,7 +184,7 @@ const ChangeForm = () => {
                 </Button>
             }
         />) : (
-        <div className={'body'}>
+        <div className={'apply-body'}>
             <RenderModal/>
             <Title level={2} className={'tit'}>{intl.get('DepartmentChange') + intl.get('apply')}</Title>
             <Form

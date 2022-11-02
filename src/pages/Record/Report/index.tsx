@@ -1,5 +1,5 @@
-import {Button, Collapse, Drawer, message, Modal, Result, Steps, Timeline, Typography} from 'antd';
-import {ExclamationCircleOutlined, LoadingOutlined,} from '@ant-design/icons';
+import {Button, Collapse, Drawer, message, Modal, Steps, Table, Typography} from 'antd';
+import {ExclamationCircleOutlined, SearchOutlined,} from '@ant-design/icons';
 import React, {useEffect, useState} from 'react';
 import {
     deleteWorkReport,
@@ -10,6 +10,10 @@ import {
 import '../index.scss';
 import {DownLoadURL, green, red, yellow} from "../../../baseInfo";
 import {RenderStatusTag} from "../../../component/Tag/RenderStatusTag";
+import RecordSkeleton from "../../../component/Skeleton/RecordSkeleton";
+import {ColumnsType} from "antd/es/table";
+import {DataType} from "tdesign-react";
+import {RenderStatusColor} from "../../../component/Tag/RenderStatusColor";
 
 const {Title} = Typography;
 const {Step} = Steps;
@@ -23,8 +27,6 @@ const Index: React.FC = () => {
     const [waitTime, setWaitTime] = useState<number>(0);
     // 展示表单还是提示信息,两种状态，分别是 info 或者 loading
     const [isRenderResult, setIsRenderResult] = useState<boolean>(true);
-    const [RenderResultTitle, setRenderResultTitle] = useState<String>('正在获取工作报告提交记录');
-    const [isRenderInfo, setIsRenderInfo] = useState<boolean>(false);
     const [dataSource, setDataSource] = useState([]);
     const [content, setContent] = useState<any>({});
     const [fileList, setFileList] = useState<any>([]);
@@ -60,12 +62,6 @@ const Index: React.FC = () => {
                     backgroundColor: content.status === 0 ? yellow : content.status === 1 ? green : red
                 }}
             >
-                <p style={{
-                    textAlign: 'center',
-                    color: red,
-                    fontSize: 16,
-                    fontWeight: 'bold'
-                }}>如需修改请重新提交</p>
                 <p>审批状态：{RenderStatusTag(content.status, '工作报告')}</p>
                 <p>提交时间：{content.create_time}</p>
                 <p>更新时间：{content.update_time}</p>
@@ -164,8 +160,7 @@ const Index: React.FC = () => {
                         setDataSource(arr);
                         if (arr.length === 0) {
                             setIsRenderResult(true);
-                            setIsRenderInfo(true);
-                            setRenderResultTitle('暂无工作报告提交记录');
+                            message.warning('暂无工作报告记录')
                         }
                     } else {
                         message.error(res.msg);
@@ -187,84 +182,109 @@ const Index: React.FC = () => {
         if (isQuery) {
             return
         }
+        setIsRenderResult(true)
         findWorkReportList().then(res => {
             if (res.code === 200) {
-                setDataSource(res.body);
+                const newDataSource = res.body.map((item: any, index: number) => {
+                    return {
+                        ...item,
+                        id: index + 1,
+                        key: item.uid
+                    }
+                })
+                setDataSource(newDataSource);
                 setIsQuery(false)
                 setWaitTime(0)
                 setIsRenderResult(false);
             } else {
-                setRenderResultTitle(res.msg);
-                setIsRenderInfo(true);
+                message.warning(res.msg)
             }
         }).catch(err => {
-            setIsRenderInfo(true)
-            setRenderResultTitle(err.message)
+            message.error(err.message)
             setIsRenderResult(true)
         })
     }
 
-    const RenderTimeLine = () => {
-        return (
-            <Timeline mode="alternate">
-                {
-                    // 循环输出 TimeLine，数据来源 dataSource
-                    dataSource.map((item: any) => {
-                        return (
-                            <Timeline.Item
-                                color={item.status === 0 ? yellow : item.status === 1 ? green : red}>
-                                <p>{item.create_time}</p>
-                                <Button
-                                    type={"primary"}
-                                    onClick={() => {
-                                        setContent(item)
-                                        getInfo(item.uid);
-                                    }}
-                                >查看</Button>
-                                &nbsp;&nbsp;
-                                <Button
-                                    style={{
-                                        backgroundColor: red,
-                                        borderColor: red,
-                                        color: "white"
-                                    }}
-                                    onClick={() => {
-                                        showDeleteConfirm(item.uid)
-                                    }}
-                                >删除</Button>
-                            </Timeline.Item>
-                        )
-                    })
-                }
-            </Timeline>
-        )
-    }
+    const columns: ColumnsType<DataType> = [
+        {
+            title: 'id',
+            width: 100,
+            dataIndex: 'id',
+            key: 'id',
+            fixed: 'left',
+            align: 'center',
+        }, {
+            title: '提交时间',
+            dataIndex: 'create_time',
+            key: 'create_time',
+            width: 150,
+            align: 'center',
+        }, {
+            title: '更新时间',
+            dataIndex: 'update_time',
+            key: 'update_time',
+            width: 150,
+            align: 'center',
+        }, {
+            title: '状态',
+            dataIndex: 'status',
+            key: 'status',
+            width: 150,
+            align: 'center',
+            render: (text: number) => {
+                return (
+                    RenderStatusTag(text, "工作报告")
+                )
+            }
+        }, {
+            title: '操作',
+            key: 'uid',
+            dataIndex: 'uid',
+            fixed: 'right',
+            width: 100,
+            align: 'center',
+            render: (text: any, record: any) => {
+                return (
+                    <Button
+                        type="primary"
+                        onClick={() => {
+                            setOpen(false)
+                            setContent(record)
+                            getInfo(record.uid)
+                        }}
+                        style={{
+                            backgroundColor: RenderStatusColor(record.status),
+                            borderColor: RenderStatusColor(record.status)
+                        }}
+                    >查看</Button>
+                );
+            }
+        },
+    ];
 
-    return isRenderResult ? (
-        <Result
-            status="info"
-            icon={
-                isRenderInfo ? '' : <LoadingOutlined
-                    style={{
-                        fontSize: 40,
+    return isRenderResult ?
+        <RecordSkeleton/> : (<div className={'record-body'}>
+                <RenderDrawer/>
+                <Title level={2} className={'tit'}>
+                    工作报告提交记录&nbsp;&nbsp;
+                    <Button type="primary" icon={<SearchOutlined/>} onClick={getDataSource}>刷新</Button>
+                </Title>
+                <Table
+                    columns={columns}
+                    dataSource={dataSource}
+                    scroll={{x: 1000}}
+                    sticky={true}
+                    pagination={{
+                        showSizeChanger: true,
+                        total: dataSource.length,
+                        showQuickJumper: true,
+                        pageSizeOptions: [5, 10, 20, 50, 100, 200],
+                        defaultPageSize: 5,
+                        hideOnSinglePage: true
                     }}
-                    spin
                 />
-            }
-            title={RenderResultTitle}
-            extra={
-                <Button disabled={isQuery} type="primary" onClick={() => {
-                    getDataSource()
-                }}>
-                    {isQuery ? `刷新(${waitTime})` : `刷新`}
-                </Button>
-            }
-        />) : (<div className={'record-body'}>
-            <RenderDrawer/>
-            <Title level={2} className={'tit'}>工作报告提交记录</Title>
-            <RenderTimeLine/>
-        </div>
-    );
+            </div>
+        );
 };
 
 export default Index;

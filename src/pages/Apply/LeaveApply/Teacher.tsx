@@ -163,7 +163,7 @@ const LeaveForm = () => {
     );
 
     return (
-        <div className={'body'}>
+        <div className={'apply-body'}>
             {isHaveLastLeave ? <RenderAlert/> : null}
             <RenderModal/>
             <Title level={2} className={'tit'}>请假申请</Title>

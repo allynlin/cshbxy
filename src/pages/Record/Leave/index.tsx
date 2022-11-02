@@ -1,11 +1,15 @@
-import {Button, Drawer, message, Modal, Result, Steps, Timeline, Typography} from 'antd';
-import {ExclamationCircleOutlined, LoadingOutlined} from '@ant-design/icons';
+import {Button, Drawer, message, Modal, Steps, Table, Typography} from 'antd';
+import {ExclamationCircleOutlined, SearchOutlined} from '@ant-design/icons';
 import React, {useEffect, useState} from 'react';
 import {deleteLeave, findLeaveList, findLeaveProcess} from '../../../component/axios/api';
 import '../index.scss';
 import {RenderStatusTag} from "../../../component/Tag/RenderStatusTag";
 import {blue, green, red, yellow} from "../../../baseInfo";
 import {UpdateLeave} from "./UpdateLeave";
+import {ColumnsType} from "antd/es/table";
+import {RenderStatusColor} from "../../../component/Tag/RenderStatusColor";
+import {DataType} from "tdesign-react";
+import RecordSkeleton from "../../../component/Skeleton/RecordSkeleton";
 
 const {Title} = Typography;
 const {Step} = Steps;
@@ -16,8 +20,6 @@ const Index: React.FC = () => {
     const [waitTime, setWaitTime] = useState<number>(0);
     // 展示表单还是提示信息,两种状态，分别是 info 或者 loading
     const [isRenderResult, setIsRenderResult] = useState<boolean>(true);
-    const [RenderResultTitle, setRenderResultTitle] = useState<String>('正在获取请假记录');
-    const [isRenderInfo, setIsRenderInfo] = useState<boolean>(false);
     const [dataSource, setDataSource] = useState([]);
     const [content, setContent] = useState<any>({});
     const [processList, setProcessList] = useState<any>([]);
@@ -143,8 +145,7 @@ const Index: React.FC = () => {
                         setDataSource(arr);
                         if (arr.length === 0) {
                             setIsRenderResult(true);
-                            setIsRenderInfo(true);
-                            setRenderResultTitle('暂无请假记录');
+                            message.warning('暂无请假记录');
                         }
                     } else {
                         message.error(res.msg);
@@ -160,6 +161,7 @@ const Index: React.FC = () => {
 
     // 获取所有数据
     const getDataSource = () => {
+        setIsRenderResult(true);
         setIsQuery(true)
         setWaitTime(10)
         // 防止多次点击
@@ -168,85 +170,132 @@ const Index: React.FC = () => {
         }
         findLeaveList().then(res => {
             if (res.code === 200) {
-                setDataSource(res.body);
+                const newDataSource = res.body.map((item: any, index: number) => {
+                    return {
+                        id: index + 1,
+                        key: item.uid,
+                        create_time: item.create_time,
+                        start_time: item.start_time,
+                        end_time: item.end_time,
+                        status: item.status,
+                        count: item.count,
+                        update_time: item.update_time,
+                        reason: item.reason,
+                        uid: item.uid
+                    }
+                });
+                setDataSource(newDataSource);
                 setIsQuery(false)
                 setWaitTime(0)
                 setIsRenderResult(false);
             } else {
-                setRenderResultTitle(res.msg);
-                setIsRenderInfo(true);
+                message.warning(res.msg);
             }
         }).catch(err => {
-            setIsRenderInfo(true)
-            setRenderResultTitle(err.message)
-            setIsRenderResult(true)
+            message.error(err.message);
         })
     }
 
-    const RenderTimeLine = () => {
-        return (
-            <Timeline mode="alternate">
-                {
-                    // 循环输出 TimeLine，数据来源 dataSource
-                    dataSource.map((item: any) => {
-                        return (
-                            <Timeline.Item
-                                key={item.uid}
-                                color={item.status === 0 ? yellow : item.status === 1 ? green : item.status === 2 ? red : blue}>
-                                <p>{item.create_time}</p>
-                                <Button
-                                    type={"primary"}
-                                    onClick={() => {
-                                        setOpen(false)
-                                        setContent(item)
-                                        getInfo(item.uid)
-                                    }}
-                                >查看</Button>
-                                &nbsp;&nbsp;
-                                <Button
-                                    style={{
-                                        backgroundColor: red,
-                                        borderColor: red,
-                                        color: "white"
-                                    }}
-                                    onClick={() => {
-                                        showDeleteConfirm(item.uid)
-                                    }}
-                                >删除</Button>
-                            </Timeline.Item>
-                        )
-                    })
-                }
-            </Timeline>
-        )
-    }
+    const columns: ColumnsType<DataType> = [
+        {
+            title: 'id',
+            width: 100,
+            dataIndex: 'id',
+            key: 'id',
+            fixed: 'left',
+            align: 'center',
+        },
+        {
+            title: '请假时间',
+            dataIndex: 'start_time',
+            key: 'start_time',
+            width: 150,
+            align: 'center',
+        },
+        {
+            title: '销假时间',
+            dataIndex: 'end_time',
+            key: 'end_time',
+            width: 150,
+            align: 'center',
+        },
+        {
+            title: '状态',
+            dataIndex: 'status',
+            key: 'status',
+            width: 150,
+            align: 'center',
+            render: (text: number, record: any) => {
+                return (
+                    RenderStatusTag(text, "请假申请")
+                )
+            }
+        },
+        {
+            title: '提交时间',
+            dataIndex: 'create_time',
+            key: 'create_time',
+            width: 150,
+            align: 'center',
+        },
+        {
+            title: '更新时间',
+            dataIndex: 'update_time',
+            key: 'update_time',
+            width: 150,
+            align: 'center',
+        },
+        {
+            title: '操作',
+            key: 'uid',
+            dataIndex: 'uid',
+            fixed: 'right',
+            width: 100,
+            align: 'center',
+            render: (text: any, record: any) => {
+                return (
+                    <Button
+                        type="primary"
+                        onClick={() => {
+                            setOpen(false)
+                            setContent(record)
+                            getInfo(record.uid)
+                        }}
+                        style={{
+                            backgroundColor: RenderStatusColor(record.status),
+                            borderColor: RenderStatusColor(record.status)
+                        }}
+                    >查看</Button>
+                );
+            }
+        },
+    ];
 
-    return isRenderResult ? (
-        <Result
-            status="info"
-            icon={
-                isRenderInfo ? '' : <LoadingOutlined
-                    style={{
-                        fontSize: 40,
+    return isRenderResult ?
+        <RecordSkeleton/> : (
+            <div className={'record-body'}>
+                <RenderDrawer/>
+                <Title level={2} className={'tit'}>
+                    请假记录&nbsp;&nbsp;
+                    <Button type="primary" icon={<SearchOutlined/>} onClick={getDataSource}>刷新</Button>
+                </Title>
+                <Table
+                    columns={columns}
+                    dataSource={dataSource}
+                    scroll={{x: 1500}}
+                    sticky={true}
+                    pagination={{
+                        showSizeChanger: true,
+                        total: dataSource.length,
+                        showQuickJumper: true,
+                        pageSizeOptions: [5, 10, 20, 50, 100, 200],
+                        defaultPageSize: 5,
+                        hideOnSinglePage: true
                     }}
-                    spin
-                />
-            }
-            title={RenderResultTitle}
-            extra={
-                <Button disabled={isQuery} type="primary" onClick={() => {
-                    getDataSource()
-                }}>
-                    {isQuery ? `刷新(${waitTime})` : `刷新`}
-                </Button>
-            }
-        />) : (
-        <div className={'record-body'}>
-            <RenderDrawer/>
-            <Title level={2} className={'tit'}>请假记录</Title>
-            <RenderTimeLine/>
-        </div>
-    );
+                >
+                </Table>
+            </div>
+        );
 };
 
 export default Index;

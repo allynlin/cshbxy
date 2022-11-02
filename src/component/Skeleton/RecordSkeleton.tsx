@@ -22,8 +22,12 @@ const RecordSkeleton: React.FC = () => {
         <div className={'record-body'}>
             <div className={renderThemeColor()}>
                 <h2 className={'tit'}>&nbsp;</h2>
-                <div className={'table'}> &nbsp;
-                </div>
+                <div className={'table'}> &nbsp;</div>
+                <div className={'table'}> &nbsp;</div>
+                <div className={'table'}> &nbsp;</div>
+                <div className={'table'}> &nbsp;</div>
+                <div className={'table'}> &nbsp;</div>
+                <div className={'table'}> &nbsp;</div>
             </div>
         </div>
     )

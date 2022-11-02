@@ -126,7 +126,7 @@ const LeaveForm = () => {
 
     return (
         isRenderResult ? <Spin/> :
-            <div className={'body'}>
+            <div className={'apply-body'}>
                 <RenderModal/>
                 <Title level={2} className={'tit'}>{isEnglish ? 'Travel Reimbursement' : '差旅报销申请'}</Title>
                 <Form

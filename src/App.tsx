@@ -26,6 +26,7 @@ import enUS from "antd/es/locale/en_US";
 import zhCN from "antd/es/locale/zh_CN";
 import intl from 'react-intl-universal';
 import RecordSkeleton from "./component/Skeleton/RecordSkeleton";
+import {setUser} from "./component/redux/userInfoSlice";
 
 const locals = {
     'English': require('./component/Language/en-US.json'),
@@ -157,6 +158,7 @@ export default function App() {
     const checkTeacher = () => {
         checkTeacherToken().then(res => {
             if (res.code === 200) {
+                dispatch(setUser(res.body))
                 dispatch(login())
                 dispatch(teacher())
                 setIsRender(true)
@@ -168,6 +170,7 @@ export default function App() {
     const checkDepartment = () => {
         checkDepartmentToken().then(res => {
             if (res.code === 200) {
+                dispatch(setUser(res.body))
                 message.success(res.msg)
                 dispatch(login())
                 dispatch(department())
@@ -180,6 +183,7 @@ export default function App() {
     const checkLeader = () => {
         checkLeaderToken().then(res => {
             if (res.code === 200) {
+                dispatch(setUser(res.body))
                 message.success(res.msg)
                 dispatch(login())
                 dispatch(leader())

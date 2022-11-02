@@ -144,7 +144,7 @@ const ChangeForm = () => {
                 </Button>
             }
         />) : (
-        <div className={'body'}>
+        <div className={'apply-body'}>
             <Title level={2} className={'tit'}>工作报告</Title>
             <Form
                 form={form}

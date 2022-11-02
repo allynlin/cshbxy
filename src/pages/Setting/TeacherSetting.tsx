@@ -74,10 +74,9 @@ const TeacherSetting = () => {
                 </Button>,
             ]}
         >
-            <UserInfo/>
             <Divider style={{
                 color: blue
-            }}>{intl.get('Setting-item')}</Divider>
+            }}>{'基础设置项'}</Divider>
             <Row gutter={16} style={{
                 borderRadius: '6px',
                 backgroundColor: backColor,

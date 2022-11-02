@@ -1,9 +1,9 @@
 import {Radio} from 'antd';
-import React from 'react';
+import React, {memo} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {Chinese, English} from "../../component/redux/userLanguageSlice";
 
-const ThemeSetting = () => {
+const ThemeSetting = memo(() => {
 
     const dispatch = useDispatch();
 
@@ -21,6 +21,6 @@ const ThemeSetting = () => {
             <Radio value={"English"}>English</Radio>
         </Radio.Group>
     );
-};
+});
 
 export default ThemeSetting;

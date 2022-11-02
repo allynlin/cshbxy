@@ -6,8 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import Cookie from "js-cookie";
 import React from "react";
 import intl from "react-intl-universal";
-import {ExclamationCircleOutlined} from "@ant-design/icons";
-import {deleteTravelReimbursementApply} from "../../component/axios/api";
+import {ExclamationCircleOutlined, PoweroffOutlined} from "@ant-design/icons";
 
 const RenderLogOut = () => {
 
@@ -45,7 +44,7 @@ const RenderLogOut = () => {
 
     return (
         isLogin ?
-            <Button type="primary" onClick={showConfirm} style={{
+            <Button type="primary" icon={<PoweroffOutlined/>} onClick={showConfirm} style={{
                 backgroundColor: '#f32401',
                 borderColor: '#f32401'
             }}>

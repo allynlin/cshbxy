@@ -74,7 +74,7 @@ const ProcurementForm = () => {
     };
 
     return (
-        <div className={'body'}>
+        <div className={'apply-body'}>
             <RenderModal/>
             <Title level={2} className={'tit'}>采购申请</Title>
             <Form

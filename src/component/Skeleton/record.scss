@@ -51,7 +51,8 @@ $white: rgba(255, 255, 255, 0);
         .table {
             width: 90%;
             @include load;
-            height: 100px;
+            height: 50px;
+            margin-top: 10px;
         }
 
     }
@@ -70,7 +71,8 @@ $white: rgba(255, 255, 255, 0);
         .table {
             width: 90%;
             @include load-dark;
-            height: 100px;
+            height: 50px;
+            margin-top: 10px;
         }
 
     }
