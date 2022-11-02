@@ -1,40 +1,31 @@
-import {Button, Collapse, Drawer, message, Modal, Steps, Table, Typography} from 'antd';
+import {Button, Drawer, message, Modal, Steps, Table, Typography} from 'antd';
 import {ExclamationCircleOutlined, SearchOutlined} from '@ant-design/icons';
-import type {ColumnsType} from 'antd/es/table';
 import React, {useEffect, useState} from 'react';
 import {
-    deleteTravelReimbursementApply,
-    findTravelProcess,
-    findTravelReimbursementApplyList,
-    findUploadFilesByUid
+    deleteProcurement,
+    findProcurementList,
+    findProcurementProcess
 } from '../../../component/axios/api';
-import {DownLoadURL, red} from "../../../baseInfo";
+import '../index.scss';
 import {RenderStatusTag} from "../../../component/Tag/RenderStatusTag";
+import {blue, green, red, yellow} from "../../../baseInfo";
+import {UpdateProcurement} from "./UpdateProcurement";
+import {ColumnsType} from "antd/es/table";
 import {RenderStatusColor} from "../../../component/Tag/RenderStatusColor";
-import '../index.scss'
+import {DataType} from "tdesign-react";
 import RecordSkeleton from "../../../component/Skeleton/RecordSkeleton";
 
 const {Title} = Typography;
 const {Step} = Steps;
-const {Panel} = Collapse;
-
-const tableName = `travelreimbursement`;
-
-interface DataType {
-    key: React.Key;
-    name: string;
-    age: number;
-    address: string;
-}
 
 const Index: React.FC = () => {
     // 防止反复查询变更记录
     const [isQuery, setIsQuery] = useState<boolean>(false);
     const [waitTime, setWaitTime] = useState<number>(0);
+    // 展示表单还是提示信息,两种状态，分别是 info 或者 loading
     const [isRenderResult, setIsRenderResult] = useState<boolean>(true);
     const [dataSource, setDataSource] = useState([]);
     const [content, setContent] = useState<any>({});
-    const [fileList, setFileList] = useState<any>([]);
     const [processList, setProcessList] = useState<any>([]);
     const [open, setOpen] = useState(false);
 
@@ -57,57 +48,54 @@ const Index: React.FC = () => {
     const RenderDrawer = () => {
         return (
             <Drawer
-                title={<span>{RenderStatusTag(content.status)}</span>}
+                title={<span style={{color: '#ffffff'}}>{content.create_time}</span>}
                 placement="right"
                 open={open}
                 onClose={() => {
                     setOpen(false)
                 }}
                 headerStyle={{
-                    backgroundColor: RenderStatusColor(content.status)
+                    backgroundColor: content.status === 0 ? yellow : content.status === 1 ? green : content.status === 2 ? red : blue,
                 }}
             >
-                <p>目的地：{content.destination}</p>
-                <p>出差费用：{content.expenses}</p>
-                <p>出差原因：{content.reason}</p>
-                <p>申请状态：{RenderStatusTag(content.status, '差旅报销申请')}</p>
+                <p>物品：{content.items}</p>
+                <p>价格：{content.price}</p>
+                <p>原因：{content.reason}</p>
+                {content.reject_reason ?
+                    <p style={{
+                        backgroundColor: red,
+                        color: '#ffffff'
+                    }}>驳回原因：{content.reject_reason}</p> : null}
+                <p>审批状态：{RenderStatusTag(content.status, '请假申请')}</p>
                 <p>提交时间：{content.create_time}</p>
                 <p>更新时间：{content.update_time}</p>
                 <div style={{
                     display: 'flex',
                     justifyContent: 'end',
-                    marginTop: 16
+                    marginTop: 16,
                 }}>
+                    <UpdateProcurement state={content} getNewContent={(newContent: object) => {
+                        // 对比旧 content 查看是否有变化，有变化则重新查询
+                        if (JSON.stringify(newContent) !== JSON.stringify(content)) {
+                            getDataSource()
+                            // 将新的内容更新到content中
+                            setContent({...content, ...newContent})
+                        }
+                    }}/>
                     <Button
                         type="primary"
                         style={{
                             backgroundColor: red,
-                            borderColor: red
+                            borderColor: red,
+                            marginLeft: 16
                         }}
                         onClick={() => {
                             showDeleteConfirm(content.uid);
                         }}
                     >删除</Button>
                 </div>
-                {
-                    // 如果 fileList 不为空则渲染
-                    fileList.length > 0 ? (
-                        <Collapse ghost>
-                            {/*循环输出 Card，数据来源 fileList*/}
-                            {fileList.map((item: any, index: number) => {
-                                return (
-                                    <Panel header={`附件${index + 1}`} key={index}>
-                                        <p>{item.oldFileName}</p>
-                                        <a href={`${DownLoadURL}/downloadFile?filename=${item.fileName}`}
-                                           target="_self">下载</a>
-                                    </Panel>
-                                )
-                            })}
-                        </Collapse>
-                    ) : null
-                }
                 <div style={{marginTop: 16}}>
-                    审批流程：
+                    采购流程：
                     <Steps
                         style={{
                             marginTop: 16
@@ -133,23 +121,17 @@ const Index: React.FC = () => {
     }
 
     // 获取当前记录上传的文件和当前审批流程
-    const getInfo = async (uid: string) => {
-        const hide = message.loading('正在获取文件列表和审批流程', 0);
-        // 超时自动关闭
-        setTimeout(hide, 10000);
-        const list: boolean = await findTravelProcess(uid).then((res: any) => {
+    const getInfo = (uid: string) => {
+        const hide = message.loading('正在获取采购流程', 0);
+        findProcurementProcess(uid).then((res: any) => {
             setProcessList(res.body);
-            return true;
-        })
-        const file: boolean = await findUploadFilesByUid(uid, tableName).then((res: any) => {
-            setFileList(res.body);
-            return true;
-        })
-        if (list && file) {
             hide();
-            setOpen(true)
-        }
+            setOpen(true);
+        }).catch(() => {
+            hide();
+        })
     }
+
 
     // 删除确认框
     const showDeleteConfirm = (e: string) => {
@@ -161,7 +143,7 @@ const Index: React.FC = () => {
             okType: 'danger',
             cancelText: '取消',
             onOk() {
-                deleteTravelReimbursementApply(e).then((res: any) => {
+                deleteProcurement(e).then((res: any) => {
                     if (res.code === 200) {
                         message.success(res.msg);
                         setOpen(false);
@@ -169,17 +151,57 @@ const Index: React.FC = () => {
                         setDataSource(arr);
                         if (arr.length === 0) {
                             setIsRenderResult(true);
-                            message.warning('暂无差旅报销记录');
+                            message.warning('暂无采购记录');
                         }
                     } else {
-                        message.error('删除失败');
+                        message.error(res.msg);
                     }
                 })
             }
         });
     };
 
-    // 表格列
+    useEffect(() => {
+        getDataSource();
+    }, [])
+
+    // 获取所有数据
+    const getDataSource = () => {
+        setIsRenderResult(true);
+        setIsQuery(true)
+        setWaitTime(10)
+        // 防止多次点击
+        if (isQuery) {
+            return
+        }
+        findProcurementList().then(res => {
+            if (res.code === 200) {
+                const newDataSource = res.body.map((item: any, index: number) => {
+                    return {
+                        id: index + 1,
+                        key: item.uid,
+                        create_time: item.create_time,
+                        items: item.items,
+                        price: item.price,
+                        status: item.status,
+                        count: item.count,
+                        update_time: item.update_time,
+                        reason: item.reason,
+                        uid: item.uid
+                    }
+                });
+                setDataSource(newDataSource);
+                setIsQuery(false)
+                setWaitTime(0)
+                setIsRenderResult(false);
+            } else {
+                message.warning(res.msg);
+            }
+        }).catch(err => {
+            message.error(err.message);
+        })
+    }
+
     const columns: ColumnsType<DataType> = [
         {
             title: 'id',
@@ -189,15 +211,15 @@ const Index: React.FC = () => {
             fixed: 'left',
             align: 'center',
         }, {
-            title: '目的地',
-            dataIndex: 'destination',
-            key: 'destination',
+            title: '物品',
+            dataIndex: 'items',
+            key: 'items',
             width: 150,
             align: 'center',
         }, {
-            title: '费用',
-            dataIndex: 'expenses',
-            key: 'expenses',
+            title: '价格',
+            dataIndex: 'price',
+            key: 'price',
             width: 150,
             align: 'center',
         }, {
@@ -206,9 +228,9 @@ const Index: React.FC = () => {
             key: 'status',
             width: 150,
             align: 'center',
-            render: (text: number) => {
+            render: (text: number, record: any) => {
                 return (
-                    RenderStatusTag(text, "差旅报销申请")
+                    RenderStatusTag(text, "请假申请")
                 )
             }
         }, {
@@ -223,8 +245,9 @@ const Index: React.FC = () => {
                     <Button
                         type="primary"
                         onClick={() => {
+                            setOpen(false)
                             setContent(record)
-                            getInfo(text)
+                            getInfo(record.uid)
                         }}
                         style={{
                             backgroundColor: RenderStatusColor(record.status),
@@ -236,55 +259,12 @@ const Index: React.FC = () => {
         },
     ];
 
-    useEffect(() => {
-        getDataSource();
-    }, [])
-
-    // 获取所有数据
-    const getDataSource = () => {
-        setIsQuery(true)
-        setWaitTime(10)
-        // 防止多次点击
-        if (isQuery) {
-            return
-        }
-        setIsRenderResult(true)
-        findTravelReimbursementApplyList().then((res: any) => {
-            if (res.code === 200) {
-                const arr = res.body.map((item: any, index: number) => {
-                    return {
-                        key: item.uid,
-                        id: index + 1,
-                        destination: item.destination,
-                        expenses: item.expenses,
-                        reason: item.reason,
-                        status: parseInt(item.status),
-                        nextUid: item.nextUid,
-                        count: parseInt(item.count),
-                        create_time: item.create_time,
-                        update_time: item.update_time,
-                        uid: item.uid,
-                    }
-                })
-                setDataSource(arr)
-                setIsQuery(false)
-                setWaitTime(0)
-                setIsRenderResult(false)
-            } else {
-                message.warning(res.msg)
-            }
-        }).catch(err => {
-            message.error(err.message)
-            setIsRenderResult(true)
-        })
-    }
-
     return isRenderResult ?
         <RecordSkeleton/> : (
             <div className={'record-body'}>
                 <RenderDrawer/>
                 <Title level={2} className={'tit'}>
-                    差旅报销申请记录&nbsp;&nbsp;
+                    采购记录&nbsp;&nbsp;
                     <Button type="primary" icon={<SearchOutlined/>} onClick={getDataSource}>刷新</Button>
                 </Title>
                 <Table
@@ -300,7 +280,8 @@ const Index: React.FC = () => {
                         defaultPageSize: 5,
                         hideOnSinglePage: true
                     }}
-                />
+                >
+                </Table>
             </div>
         );
 };

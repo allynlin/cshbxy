@@ -193,22 +193,19 @@ const Index: React.FC = () => {
             key: 'id',
             fixed: 'left',
             align: 'center',
-        },
-        {
+        }, {
             title: '变更部门',
             dataIndex: 'departmentUid',
             key: 'departmentUid',
             width: 150,
             align: 'center',
-        },
-        {
+        }, {
             title: '变更原因',
             dataIndex: 'changeReason',
             key: 'changeReason',
             width: 150,
             align: 'center',
-        },
-        {
+        }, {
             title: '状态',
             dataIndex: 'status',
             key: 'status',
@@ -219,22 +216,7 @@ const Index: React.FC = () => {
                     RenderStatusTag(text, "部门变更申请")
                 )
             }
-        },
-        {
-            title: '提交时间',
-            dataIndex: 'create_time',
-            key: 'create_time',
-            width: 150,
-            align: 'center',
-        },
-        {
-            title: '更新时间',
-            dataIndex: 'update_time',
-            key: 'update_time',
-            width: 150,
-            align: 'center',
-        },
-        {
+        }, {
             title: '操作',
             key: 'uid',
             dataIndex: 'uid',
@@ -311,7 +293,7 @@ const Index: React.FC = () => {
                 <Table
                     columns={columns}
                     dataSource={dataSource}
-                    scroll={{x: 1500}}
+                    scroll={{x: 1000}}
                     sticky={true}
                     pagination={{
                         showSizeChanger: true,

@@ -1,11 +1,27 @@
 import {Descriptions} from 'antd';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import './index.scss'
 import {useSelector} from "react-redux";
+import {getRealeName} from "../../component/axios/api";
 
 const Teacher: React.FC = () => {
 
+    const [departmentName, setDepartmentName] = useState<string>('');
+
     const userInfo = useSelector((state: { userInfo: { value: any } }) => state.userInfo.value)
+
+    const getName = () => {
+        if (userInfo.departmentUid) {
+            const depa = userInfo.departmentUid;
+            getRealeName(depa).then(res => {
+                setDepartmentName(res.body);
+            })
+        }
+    }
+
+    useEffect(() => {
+        getName()
+    }, [userInfo])
 
     return (
         <div className={'index-body'}>
@@ -42,7 +58,7 @@ const Teacher: React.FC = () => {
                     {userInfo.status === 0 ? '正常' : '异常'}
                 </Descriptions.Item>
                 <Descriptions.Item label={'上级部门'}>
-                    {userInfo.departmentUid}
+                    {departmentName}
                 </Descriptions.Item>
             </Descriptions>
         </div>

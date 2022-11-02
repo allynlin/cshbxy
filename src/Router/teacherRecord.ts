@@ -35,6 +35,14 @@ const teacherRecord = [
                     Auth: 'teacher'
                 }
             }, {
+                path: 'procurement',
+                component: () => import('../pages/Record/Procurement'),
+                meta: {
+                    title: 'Procurement',
+                    titleCN: '采购记录',
+                    Auth: 'teacher'
+                }
+            }, {
                 path: 'skeleton',
                 component: () => import('../component/Skeleton/RecordSkeleton'),
                 meta: {

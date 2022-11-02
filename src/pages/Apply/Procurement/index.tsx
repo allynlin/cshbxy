@@ -1,11 +1,10 @@
 import {Button, Form, Input, InputNumber, message, Modal, Typography} from 'antd';
 import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {teacherChangeDepartment,} from "../../../component/axios/api";
+import {addProcurement} from "../../../component/axios/api";
 import '../apply.scss';
 
 const {Title} = Typography;
-const tableName = `purchasingapplicationteacher`;
 
 const ProcurementForm = () => {
     const navigate = useNavigate();
@@ -21,21 +20,21 @@ const ProcurementForm = () => {
 
     // 表单提交
     const submitForm = () => {
-        teacherChangeDepartment(items, price).then(res => {
+        addProcurement(items, price, reason).then(res => {
             setConfirmLoading(false);
-            message.success(res.msg);
-            navigate('/home/teacher/record/departmentChange');
             navigate('/home/success', {
                 state: {
                     object: {
-                        title: '部门变更申请提交成功',
+                        title: '采购申请提交成功',
                         describe: '请等待管理员审批',
                         toPage: '查看审批记录',
-                        toURL: '/home/record/departmentChange',
+                        toURL: '/home/record/procurement',
+                        againTitle: '继续提交新的申请'
                     }
                 }
             })
         }).catch(err => {
+            message.error(err.message);
             setConfirmLoading(false);
         })
     }
@@ -65,7 +64,7 @@ const ProcurementForm = () => {
         submitForm();
     };
 
-    const onFinish = (values: any) => {
+    const onFinish = () => {
         setIsModalVisible(true)
     };
 

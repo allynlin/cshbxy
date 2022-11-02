@@ -111,6 +111,13 @@ export const queryLeaderMessage = async () => {
     return promise.Request('/query/leaderMessage', MethodType.GET);
 }
 
+// 转换 uid 为真实姓名
+export const getRealeName = async (uid: String) => {
+    return promise.Request('/query/getRealeName', MethodType.POST, {
+        uid
+    });
+}
+
 // 删除文件
 export const deleteFile = async (fileName: String) => {
     return promise.Request('/api/deleteUploadFile', MethodType.POST, {
@@ -274,4 +281,42 @@ export const updateTravelReimbursementApply = async (uid: String, destination: S
         expenses,
         reason
     }, {headers: {tableUid: tableUid}});
+}
+
+// 采购申请
+export const addProcurement = async (items: string, price: string, reason: string) => {
+    return promise.Request('/procurement/addProcurement', MethodType.POST, {
+        items,
+        price,
+        reason
+    });
+}
+
+// 查询采购记录
+export const findProcurementList = async () => {
+    return promise.Request('/procurement/findProcurementList', MethodType.POST);
+}
+
+// 查询采购流程
+export const findProcurementProcess = async (uid: String) => {
+    return promise.Request('/procurement/findProcurementProcess', MethodType.POST, {
+        uid
+    });
+}
+
+// 删除采购申请
+export const deleteProcurement = async (uid: String) => {
+    return promise.Request('/procurement/deleteProcurement', MethodType.POST, {
+        uid
+    });
+}
+
+// 修改采购申请
+export const updateProcurement = async (uid: String, items: string, price: string, reason: string) => {
+    return promise.Request('/procurement/updateProcurement', MethodType.POST, {
+        uid,
+        items,
+        price,
+        reason
+    });
 }

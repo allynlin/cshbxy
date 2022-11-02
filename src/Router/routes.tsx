@@ -2,7 +2,7 @@ import PlayOut from "../pages/Home/PlayOut";
 import teacherApply from './teacherApply'
 import teacherRecord from "./teacherRecord";
 import {RoutesItemType} from "react-router-waiter";
-import {Error101, Error103, Error403, Error404, Error500} from "../pages/Result/Result";
+import {Error101, Error103, Error403, Error404, Error500, Success} from "../pages/Result/Result";
 import {User} from "../pages/User";
 
 const routes: RoutesItemType[] = [
@@ -58,6 +58,14 @@ const routes: RoutesItemType[] = [
                     title: 'Setting',
                     titleCN: '设置',
                     Auth: 'teacher'
+                }
+            }, {
+                path: 'success',
+                element: <Success/>,
+                meta: {
+                    title: 'Success',
+                    titleCN: '成功',
+                    Auth: 'public'
                 }
             },
             ...teacherApply,

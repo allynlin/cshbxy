@@ -201,7 +201,7 @@ export const Success: React.FC = () => {
                     </Link>
 
                     {
-                        object.againTitle ? <Button key="again" onClick={() => {
+                        object.againTitle ? <Button style={{marginLeft: '10px'}} key="again" onClick={() => {
                             navigate(-1)
                         }}>{object.againTitle}</Button> : ''
                     }
