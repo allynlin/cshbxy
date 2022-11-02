@@ -113,11 +113,13 @@ export const Error103: React.FC = () => {
         }
     }) => state.serverVersion.value);
 
+    const serverLowVersion = useSelector((state: { serverLowVersion: { value: string } }) => state.serverLowVersion.value);
+
     useEffect(() => {
         if (version >= serverVersion) {
             navigate(-1)
         }
-    }, [serverVersion])
+    }, [serverLowVersion])
 
     const RenderVersion = () => {
         return (
@@ -126,7 +128,7 @@ export const Error103: React.FC = () => {
                 <Text code>{version}</Text>
                 &nbsp;&nbsp;
                 <Text>{isEnglish ? 'Support Low Version' : '最低受支持版本：'}</Text>
-                <Text code>{serverVersion}</Text>
+                <Text code>{serverLowVersion}</Text>
             </div>
         )
     }
@@ -139,7 +141,7 @@ export const Error103: React.FC = () => {
             extra={
                 <>
                     {
-                        version >= serverVersion ? <Button type="primary" key="console" onClick={() => {
+                        version >= serverLowVersion ? <Button type="primary" key="console" onClick={() => {
                             navigate(-1)
                         }}>{isEnglish ? 'Back' : '返回'}</Button> : null
                     }

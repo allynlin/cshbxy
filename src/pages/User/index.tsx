@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {Layout} from 'antd';
+import {Layout, message} from 'antd';
 import './index-light.scss'
 import {Outlet, useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
@@ -26,14 +26,19 @@ export const User = () => {
         }
     }) => state.themeColor.value)
 
+    const serverLowVersion = useSelector((state: { serverLowVersion: { value: string } }) => state.serverLowVersion.value);
+
     useEffect(() => {
-        if (serverVersion === "0.0.0") {
+        if (serverLowVersion === "0.0.0") {
             return;
         }
-        if (version < serverVersion) {
+        if (version < serverLowVersion) {
             navigate('/103')
         }
-    }, [serverVersion])
+        if (version < serverVersion) {
+            message.warning('您当前使用的版本过低，可能会导致部分功能无法使用，请及时更新')
+        }
+    }, [serverLowVersion, serverVersion])
 
 
     return (

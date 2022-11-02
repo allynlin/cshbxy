@@ -9,7 +9,7 @@ import Cookie from "js-cookie";
 import {
     checkDepartmentToken,
     checkLeaderToken,
-    checkTeacherToken,
+    checkTeacherToken, getLowVersion,
     getVersion
 } from "./component/axios/api";
 import {login} from "./component/redux/isLoginSlice";
@@ -25,8 +25,8 @@ import {Chinese, English} from "./component/redux/userLanguageSlice";
 import enUS from "antd/es/locale/en_US";
 import zhCN from "antd/es/locale/zh_CN";
 import intl from 'react-intl-universal';
-import RecordSkeleton from "./component/Skeleton/RecordSkeleton";
 import {setUser} from "./component/redux/userInfoSlice";
+import {setLowVersion} from "./component/redux/serverLowVersionSlice";
 
 const locals = {
     'English': require('./component/Language/en-US.json'),
@@ -138,6 +138,9 @@ export default function App() {
         getVersion().then(res => {
             dispatch(setVersion(res.body))
         })
+        getLowVersion().then(res => {
+            dispatch(setLowVersion(res.body))
+        })
         switch (Cookie.get('userType')) {
             case 'teacher':
                 checkTeacher()
@@ -193,6 +196,7 @@ export default function App() {
             }
         })
     }
+
     const checkError = () => {
         setIsRender(true)
     }

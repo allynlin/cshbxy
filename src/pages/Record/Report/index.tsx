@@ -58,21 +58,8 @@ const Index: React.FC = () => {
                 onClose={() => {
                     setOpen(false)
                 }}
-            >
-                {content.reject_reason ?
+                extra={content.status === 0 ?
                     <>
-                        驳回原因：
-                        <Tag color={red}
-                             style={{marginBottom: 16}}>{content.reject_reason}</Tag>
-                    </> : null}
-                <p>提交时间：{content.create_time}</p>
-                <p>更新时间：{content.update_time}</p>
-                {content.status === 0 ?
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'end',
-                        marginTop: 16
-                    }}>
                         <Button
                             type="primary"
                             style={{
@@ -83,8 +70,16 @@ const Index: React.FC = () => {
                                 showDeleteConfirm(content.uid);
                             }}
                         >删除</Button>
-                    </div> : null
-                }
+                    </> : null}
+            >
+                {content.reject_reason ?
+                    <>
+                        驳回原因：
+                        <Tag color={red}
+                             style={{marginBottom: 16}}>{content.reject_reason}</Tag>
+                    </> : null}
+                <p>提交时间：{content.create_time}</p>
+                <p>更新时间：{content.update_time}</p>
                 {
                     // 如果 fileList 不为空则渲染
                     fileList.length > 0 ? (

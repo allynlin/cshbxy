@@ -63,6 +63,19 @@ const Index: React.FC = () => {
                 onClose={() => {
                     setOpen(false)
                 }}
+                extra={content.status === 0 ?
+                    <>
+                        <Button
+                            type="primary"
+                            style={{
+                                backgroundColor: red,
+                                borderColor: red
+                            }}
+                            onClick={() => {
+                                showDeleteConfirm(content.uid);
+                            }}
+                        >删除</Button>
+                    </> : null}
             >
                 <p>目的地：{content.destination}</p>
                 <p>出差费用：{content.expenses}</p>
@@ -75,24 +88,6 @@ const Index: React.FC = () => {
                     </> : null}
                 <p>提交时间：{content.create_time}</p>
                 <p>更新时间：{content.update_time}</p>
-                {content.status === 0 ?
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'end',
-                        marginTop: 16
-                    }}>
-                        <Button
-                            type="primary"
-                            style={{
-                                backgroundColor: red,
-                                borderColor: red
-                            }}
-                            onClick={() => {
-                                showDeleteConfirm(content.uid);
-                            }}
-                        >删除</Button>
-                    </div> : null
-                }
                 {
                     // 如果 fileList 不为空则渲染
                     fileList.length > 0 ? (

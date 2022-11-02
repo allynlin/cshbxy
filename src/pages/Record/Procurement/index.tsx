@@ -54,23 +54,9 @@ const Index: React.FC = () => {
                 onClose={() => {
                     setOpen(false)
                 }}
-            >
-                <p>物品：{content.items}</p>
-                <p>价格：{content.price} ￥</p>
-                <p>原因：{content.reason}</p>
-                {content.reject_reason ?
-                    <>
-                        驳回原因：
-                        <Tag color={red}
-                             style={{marginBottom: 16}}>{content.reject_reason}</Tag>
-                    </> : null}
-                <p>提交时间：{content.create_time}</p>
-                <p>更新时间：{content.update_time}</p>
-                {content.status === 0 ?
+                extra={content.status === 0 ?
                     <div style={{
-                        display: 'flex',
-                        justifyContent: 'end',
-                        marginTop: 16,
+                        display: 'flex'
                     }}>
                         <Update state={content} getNewContent={(newContent: object) => {
                             // 对比旧 content 查看是否有变化，有变化则重新查询
@@ -85,14 +71,25 @@ const Index: React.FC = () => {
                             style={{
                                 backgroundColor: red,
                                 borderColor: red,
-                                marginLeft: 16
+                                marginLeft: 10
                             }}
                             onClick={() => {
                                 showDeleteConfirm(content.uid);
                             }}
                         >删除</Button>
-                    </div> : null
-                }
+                    </div> : null}
+            >
+                <p>物品：{content.items}</p>
+                <p>价格：{content.price} ￥</p>
+                <p>原因：{content.reason}</p>
+                {content.reject_reason ?
+                    <>
+                        驳回原因：
+                        <Tag color={red}
+                             style={{marginBottom: 16}}>{content.reject_reason}</Tag>
+                    </> : null}
+                <p>提交时间：{content.create_time}</p>
+                <p>更新时间：{content.update_time}</p>
                 <div style={{marginTop: 16}}>
                     采购流程：
                     <Steps

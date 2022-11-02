@@ -1,5 +1,5 @@
 import React from "react";
-import {version, yellow} from "../../baseInfo";
+import {red, version, yellow} from "../../baseInfo";
 import {useSelector} from "react-redux";
 import RenderRefresh from "./RenderRefresh";
 import intl from "react-intl-universal";
@@ -12,10 +12,12 @@ export default function RenderGetServerVersion() {
         }
     }) => state.serverVersion.value);
 
+    const serverLowVersion = useSelector((state: { serverLowVersion: { value: string } }) => state.serverLowVersion.value);
+
 
     return (
         <div style={{
-            backgroundColor: serverVersion > version ? yellow : "",
+            backgroundColor: serverLowVersion > version ? red : serverVersion > version ? yellow : "",
             width: "100%",
             height: "100%",
         }}>
