@@ -14,3 +14,9 @@
         padding-bottom: 40px;
     }
 }
+
+body[theme="dark"] {
+    .ant-drawer-body {
+        color: #ffffff;
+    }
+}
