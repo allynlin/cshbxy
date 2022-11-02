@@ -1,5 +1,5 @@
-import {Button, Collapse, Drawer, message, Modal, Steps, Table, Typography} from 'antd';
-import {ExclamationCircleOutlined, SearchOutlined} from '@ant-design/icons';
+import {Button, Collapse, Drawer, message, Modal, Steps, Table, Tag, Typography} from 'antd';
+import {CloseCircleOutlined, ExclamationCircleOutlined, SearchOutlined} from '@ant-design/icons';
 import type {ColumnsType} from 'antd/es/table';
 import React, {useEffect, useState} from 'react';
 import {
@@ -63,37 +63,35 @@ const Index: React.FC = () => {
                 onClose={() => {
                     setOpen(false)
                 }}
-                headerStyle={{
-                    backgroundColor: RenderStatusColor(content.status)
-                }}
             >
-                <p style={{
-                    textAlign: 'center',
-                    color: red,
-                    fontSize: 16,
-                    fontWeight: 'bold'
-                }}>如需修改请重新提交</p>
                 <p>变更部门：{content.departmentUid}</p>
                 <p>变更原因：{content.changeReason}</p>
-                <p>变更状态：{RenderStatusTag(content.status, '部门变更申请')}</p>
+                {content.reject_reason ?
+                    <>
+                        驳回原因：
+                        <Tag color={red}
+                             style={{marginBottom: 16}}>{content.reject_reason}</Tag>
+                    </> : null}
                 <p>提交时间：{content.create_time}</p>
                 <p>更新时间：{content.update_time}</p>
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'end',
-                    marginTop: 16
-                }}>
-                    <Button
-                        type="primary"
-                        style={{
-                            backgroundColor: red,
-                            borderColor: red
-                        }}
-                        onClick={() => {
-                            showDeleteConfirm(content.uid);
-                        }}
-                    >删除</Button>
-                </div>
+                {content.status === 0 ?
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'end',
+                        marginTop: 16
+                    }}>
+                        <Button
+                            type="primary"
+                            style={{
+                                backgroundColor: red,
+                                borderColor: red
+                            }}
+                            onClick={() => {
+                                showDeleteConfirm(content.uid);
+                            }}
+                        >删除</Button>
+                    </div> : null
+                }
                 {
                     // 如果 fileList 不为空则渲染
                     fileList.length > 0 ? (
@@ -258,16 +256,9 @@ const Index: React.FC = () => {
             if (res.code === 200) {
                 const arr = res.body.map((item: any, index: number) => {
                     return {
+                        ...item,
                         key: item.uid,
-                        id: index + 1,
-                        departmentUid: item.departmentUid,
-                        changeReason: item.changeReason,
-                        status: parseInt(item.status),
-                        nextUid: item.nextUid,
-                        count: parseInt(item.count),
-                        create_time: item.create_time,
-                        update_time: item.update_time,
-                        uid: item.uid,
+                        id: index + 1
                     }
                 })
                 setDataSource(arr)
@@ -276,9 +267,11 @@ const Index: React.FC = () => {
                 setIsRenderResult(false)
             } else {
                 message.warning(res.msg)
+                setIsRenderResult(false)
             }
         }).catch(err => {
             message.error(err.message)
+            setIsRenderResult(false)
         })
     }
 
@@ -300,8 +293,7 @@ const Index: React.FC = () => {
                         total: dataSource.length,
                         showQuickJumper: true,
                         pageSizeOptions: [5, 10, 20, 50, 100, 200],
-                        defaultPageSize: 5,
-                        hideOnSinglePage: true
+                        defaultPageSize: 5
                     }}
                 />
             </div>

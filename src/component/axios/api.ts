@@ -320,3 +320,23 @@ export const updateProcurement = async (uid: String, items: string, price: strin
         reason
     });
 }
+
+// 查询等待审批的部门变更申请
+export const findDepartmentChangeWaitApprovalList = async () => {
+    return promise.Request('/apply/findWaitList', MethodType.POST);
+}
+
+// 通过部门变更申请
+export const resolveDepartmentChange = async (uid: String) => {
+    return promise.Request('/apply/resolveApply', MethodType.POST, {
+        uid
+    });
+}
+
+// 驳回部门变更申请
+export const rejectDepartmentChange = async (uid: String, reject_reason: string) => {
+    return promise.Request('/apply/rejectApply', MethodType.POST, {
+        uid,
+        reject_reason
+    });
+}

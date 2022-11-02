@@ -1,36 +1,39 @@
-import {Button, Collapse, Drawer, message, Modal, Steps, Table, Tag, Typography} from 'antd';
-import {ExclamationCircleOutlined, SearchOutlined,} from '@ant-design/icons';
+import {Button, Collapse, Drawer, message, Modal, Table, Typography} from 'antd';
+import {ExclamationCircleOutlined, SearchOutlined} from '@ant-design/icons';
+import type {ColumnsType} from 'antd/es/table';
 import React, {useEffect, useState} from 'react';
 import {
-    deleteWorkReport,
-    findUploadFilesByUid,
-    findWorkReportByTeacherProcess,
-    findWorkReportList
+    resolveDepartmentChange,
+    findDepartmentChangeWaitApprovalList,
+    findUploadFilesByUid
 } from '../../../component/axios/api';
-import '../index.scss';
-import {DownLoadURL, green, red, yellow} from "../../../baseInfo";
+import {DownLoadURL, green} from "../../../baseInfo";
 import {RenderStatusTag} from "../../../component/Tag/RenderStatusTag";
-import RecordSkeleton from "../../../component/Skeleton/RecordSkeleton";
-import {ColumnsType} from "antd/es/table";
-import {DataType} from "tdesign-react";
 import {RenderStatusColor} from "../../../component/Tag/RenderStatusColor";
+import '../index.scss'
+import RecordSkeleton from "../../../component/Skeleton/RecordSkeleton";
+import RejectDepartmentChange from "./RejectDepartmentChange";
 
 const {Title} = Typography;
-const {Step} = Steps;
 const {Panel} = Collapse;
 
-const tableName = `workreportteacher`;
+const tableName = `changedepartmentbyteacher`;
+
+interface DataType {
+    key: React.Key;
+    name: string;
+    age: number;
+    address: string;
+}
 
 const Index: React.FC = () => {
     // 防止反复查询变更记录
     const [isQuery, setIsQuery] = useState<boolean>(false);
     const [waitTime, setWaitTime] = useState<number>(0);
-    // 展示表单还是提示信息,两种状态，分别是 info 或者 loading
     const [isRenderResult, setIsRenderResult] = useState<boolean>(true);
     const [dataSource, setDataSource] = useState([]);
     const [content, setContent] = useState<any>({});
     const [fileList, setFileList] = useState<any>([]);
-    const [processList, setProcessList] = useState<any>([]);
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
@@ -58,33 +61,39 @@ const Index: React.FC = () => {
                 onClose={() => {
                     setOpen(false)
                 }}
+                headerStyle={{
+                    backgroundColor: RenderStatusColor(content.status)
+                }}
             >
-                {content.reject_reason ?
-                    <>
-                        驳回原因：
-                        <Tag color={red}
-                             style={{marginBottom: 16}}>{content.reject_reason}</Tag>
-                    </> : null}
+                <p>申请人：{content.releaseUid}</p>
+                <p>变更部门：{content.departmentUid}</p>
+                <p>变更原因：{content.changeReason}</p>
+                <p>变更状态：{RenderStatusTag(content.status, '部门变更申请')}</p>
                 <p>提交时间：{content.create_time}</p>
                 <p>更新时间：{content.update_time}</p>
-                {content.status === 0 ?
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'end',
-                        marginTop: 16
-                    }}>
-                        <Button
-                            type="primary"
-                            style={{
-                                backgroundColor: red,
-                                borderColor: red
-                            }}
-                            onClick={() => {
-                                showDeleteConfirm(content.uid);
-                            }}
-                        >删除</Button>
-                    </div> : null
-                }
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'end',
+                    marginTop: 16
+                }}>
+                    <RejectDepartmentChange state={content} getNewContent={(isReject: boolean) => {
+                        if (isReject) {
+                            setOpen(false)
+                            getDataSource()
+                        }
+                    }}/>
+                    <Button
+                        type="primary"
+                        style={{
+                            backgroundColor: green,
+                            borderColor: green,
+                            marginLeft: 16
+                        }}
+                        onClick={() => {
+                            showResolveConfirm(content.uid);
+                        }}
+                    >通过</Button>
+                </div>
                 {
                     // 如果 fileList 不为空则渲染
                     fileList.length > 0 ? (
@@ -102,28 +111,6 @@ const Index: React.FC = () => {
                         </Collapse>
                     ) : null
                 }
-                <div style={{marginTop: 16}}>
-                    审批流程：
-                    <Steps
-                        style={{
-                            marginTop: 16
-                        }}
-                        direction="vertical"
-                        size="small"
-                        current={content.count}
-                    >
-                        {
-                            processList.map((item: string, index: number) => {
-                                return (
-                                    <Step
-                                        key={index}
-                                        title={item}
-                                    />
-                                )
-                            })
-                        }
-                    </Steps>
-                </div>
             </Drawer>
         )
     }
@@ -131,85 +118,43 @@ const Index: React.FC = () => {
     // 获取当前记录上传的文件和当前审批流程
     const getInfo = async (uid: string) => {
         const hide = message.loading('正在获取文件列表和审批流程', 0);
+        // 超时自动关闭
         setTimeout(hide, 10000);
-        const list: boolean = await findWorkReportByTeacherProcess(uid).then((res: any) => {
-            setProcessList(res.body);
-            return true;
-        })
-        const file: boolean = await findUploadFilesByUid(uid, tableName).then((res: any) => {
+        findUploadFilesByUid(uid, tableName).then((res: any) => {
             setFileList(res.body);
-            return true;
-        })
-        if (list && file) {
             hide();
             setOpen(true)
-        }
+        }).catch(e => {
+            message.error(e.message)
+            hide();
+        })
     }
 
-    // 删除确认框
-    const showDeleteConfirm = (e: string) => {
+    const showResolveConfirm = (e: string) => {
         Modal.confirm({
-            title: '要删除这条记录吗？',
+            title: '确认通过当前申请？',
             icon: <ExclamationCircleOutlined/>,
-            content: '删除后不可恢复，如果您确定删除请点击确认',
+            content: '通过后不可变更，请谨慎操作',
             okText: '确认',
             okType: 'danger',
             cancelText: '取消',
             onOk() {
-                deleteWorkReport(e, tableName).then((res: any) => {
+                resolveDepartmentChange(e).then((res: any) => {
                     if (res.code === 200) {
                         message.success(res.msg);
                         setOpen(false);
                         const arr = dataSource.filter((item: any) => item.uid !== e);
                         setDataSource(arr);
                         if (arr.length === 0) {
-                            setIsRenderResult(true);
-                            message.warning('暂无工作报告记录')
+                            message.warning('暂无待审批记录');
                         }
-                    } else {
-                        message.error(res.msg);
                     }
                 })
             }
         });
-    };
-
-    useEffect(() => {
-        getDataSource();
-    }, [])
-
-    // 获取所有数据
-    const getDataSource = () => {
-        setIsQuery(true)
-        setWaitTime(10)
-        // 防止多次点击
-        if (isQuery) {
-            return
-        }
-        setIsRenderResult(true)
-        findWorkReportList().then(res => {
-            if (res.code === 200) {
-                const newDataSource = res.body.map((item: any, index: number) => {
-                    return {
-                        ...item,
-                        id: index + 1,
-                        key: item.uid
-                    }
-                })
-                setDataSource(newDataSource);
-                setIsQuery(false)
-                setWaitTime(0)
-                setIsRenderResult(false);
-            } else {
-                message.warning(res.msg)
-                setIsRenderResult(false);
-            }
-        }).catch(err => {
-            message.error(err.message)
-            setIsRenderResult(true)
-        })
     }
 
+    // 表格列
     const columns: ColumnsType<DataType> = [
         {
             title: 'id',
@@ -219,15 +164,15 @@ const Index: React.FC = () => {
             fixed: 'left',
             align: 'center',
         }, {
-            title: '提交时间',
-            dataIndex: 'create_time',
-            key: 'create_time',
+            title: '申请人',
+            dataIndex: 'releaseUid',
+            key: 'releaseUid',
             width: 150,
             align: 'center',
         }, {
-            title: '更新时间',
-            dataIndex: 'update_time',
-            key: 'update_time',
+            title: '变更部门',
+            dataIndex: 'departmentUid',
+            key: 'departmentUid',
             width: 150,
             align: 'center',
         }, {
@@ -236,9 +181,9 @@ const Index: React.FC = () => {
             key: 'status',
             width: 150,
             align: 'center',
-            render: (text: number) => {
+            render: (text: number, record: any) => {
                 return (
-                    RenderStatusTag(text, "工作报告")
+                    RenderStatusTag(text, "部门变更申请")
                 )
             }
         }, {
@@ -253,9 +198,8 @@ const Index: React.FC = () => {
                     <Button
                         type="primary"
                         onClick={() => {
-                            setOpen(false)
                             setContent(record)
-                            getInfo(record.uid)
+                            getInfo(text)
                         }}
                         style={{
                             backgroundColor: RenderStatusColor(record.status),
@@ -267,11 +211,56 @@ const Index: React.FC = () => {
         },
     ];
 
+    useEffect(() => {
+        getDataSource();
+    }, [])
+
+    // 获取所有数据
+    const getDataSource = () => {
+        setIsQuery(true)
+        setWaitTime(10)
+        // 防止多次点击
+        if (isQuery) {
+            return
+        }
+        setIsRenderResult(true)
+        findDepartmentChangeWaitApprovalList().then((res: any) => {
+            if (res.code === 200) {
+                const arr = res.body.map((item: any, index: number) => {
+                    return {
+                        key: item.uid,
+                        id: index + 1,
+                        uid: item.uid,
+                        releaseUid: item.releaseUid,
+                        departmentUid: item.departmentUid,
+                        changeReason: item.changeReason,
+                        status: parseInt(item.status),
+                        nextUid: item.nextUid,
+                        count: parseInt(item.count),
+                        create_time: item.create_time,
+                        update_time: item.update_time,
+                    }
+                })
+                setDataSource(arr)
+                setIsQuery(false)
+                setWaitTime(0)
+                setIsRenderResult(false)
+            } else {
+                setIsRenderResult(false)
+                message.warning(res.msg)
+            }
+        }).catch(err => {
+            setIsRenderResult(false)
+            message.error(err.message)
+        })
+    }
+
     return isRenderResult ?
-        <RecordSkeleton/> : (<div className={'record-body'}>
+        <RecordSkeleton/> : (
+            <div className={'record-body'}>
                 <RenderDrawer/>
                 <Title level={2} className={'tit'}>
-                    工作报告提交记录&nbsp;&nbsp;
+                    部门变更申请记录&nbsp;&nbsp;
                     <Button type="primary" icon={<SearchOutlined/>} onClick={getDataSource}>刷新</Button>
                 </Title>
                 <Table
@@ -284,7 +273,8 @@ const Index: React.FC = () => {
                         total: dataSource.length,
                         showQuickJumper: true,
                         pageSizeOptions: [5, 10, 20, 50, 100, 200],
-                        defaultPageSize: 5
+                        defaultPageSize: 5,
+                        hideOnSinglePage: true
                     }}
                 />
             </div>

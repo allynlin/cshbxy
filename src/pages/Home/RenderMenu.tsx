@@ -1,5 +1,12 @@
 import {Button, Menu} from 'antd';
-import {BarChartOutlined, CommentOutlined, EditOutlined, FormOutlined, HomeOutlined,} from '@ant-design/icons';
+import {
+    BarChartOutlined,
+    CommentOutlined,
+    EditOutlined,
+    FormOutlined,
+    HomeOutlined,
+    ProjectOutlined,
+} from '@ant-design/icons';
 import React, {useEffect, useState} from 'react';
 import './playOut-light.scss'
 import {Link} from 'react-router-dom';
@@ -75,6 +82,9 @@ const RenderMenu = () => {
         getItem('申请', 'apply', <FormOutlined/>, [
             getItem((<Link to={'/home/department/Apply/notice'}>发布公告</Link>), 'notice'),
             getItem((<Link to={'/home/department/Apply/departmentChange'}>部门变更申请</Link>), 'departmentChange'),
+        ]),
+        getItem('审批', 'approval', <ProjectOutlined/>, [
+            getItem(<Link to={'/home/approval/departmentChange'}>部门变更</Link>, 'changeDepartment'),
         ]),
         getItem('审批记录', 'sub4', <BarChartOutlined/>, [
             getItem('请假记录', '9'),

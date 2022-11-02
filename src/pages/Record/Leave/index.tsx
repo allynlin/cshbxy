@@ -1,15 +1,16 @@
-import {Button, Drawer, message, Modal, Steps, Table, Typography} from 'antd';
+import {Button, Drawer, message, Modal, Steps, Table, Tag, Typography} from 'antd';
 import {ExclamationCircleOutlined, SearchOutlined} from '@ant-design/icons';
 import React, {useEffect, useState} from 'react';
 import {deleteLeave, findLeaveList, findLeaveProcess} from '../../../component/axios/api';
 import '../index.scss';
 import {RenderStatusTag} from "../../../component/Tag/RenderStatusTag";
-import {blue, green, red, yellow} from "../../../baseInfo";
-import {UpdateLeave} from "./UpdateLeave";
+import {red} from "../../../baseInfo";
 import {ColumnsType} from "antd/es/table";
 import {RenderStatusColor} from "../../../component/Tag/RenderStatusColor";
 import {DataType} from "tdesign-react";
 import RecordSkeleton from "../../../component/Skeleton/RecordSkeleton";
+import UpdateLeaveForm from "./UpdateLeave";
+import {useSelector} from "react-redux";
 
 const {Title} = Typography;
 const {Step} = Steps;
@@ -44,51 +45,50 @@ const Index: React.FC = () => {
     const RenderDrawer = () => {
         return (
             <Drawer
-                title={<span style={{color: '#ffffff'}}>{content.create_time}</span>}
+                title={<span>{RenderStatusTag(content.status)}</span>}
                 placement="right"
                 open={open}
                 onClose={() => {
                     setOpen(false)
-                }}
-                headerStyle={{
-                    backgroundColor: content.status === 0 ? yellow : content.status === 1 ? green : content.status === 2 ? red : blue,
                 }}
             >
                 <p>请假时间：{content.start_time}</p>
                 <p>销假时间：{content.end_time}</p>
                 <p>请假原因：{content.reason}</p>
                 {content.reject_reason ?
-                    <p style={{
-                        backgroundColor: red,
-                        color: '#ffffff'
-                    }}>驳回原因：{content.reject_reason}</p> : null}
-                <p>审批状态：{RenderStatusTag(content.status, '请假申请')}</p>
+                    <>
+                        驳回原因：
+                        <Tag color={red}
+                             style={{marginBottom: 16}}>{content.reject_reason}</Tag>
+                    </> : null}
                 <p>更新时间：{content.update_time}</p>
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'end',
-                    marginTop: 16,
-                }}>
-                    <UpdateLeave state={content} getNewContent={(newContent: object) => {
-                        // 对比旧 content 查看是否有变化，有变化则重新查询
-                        if (JSON.stringify(newContent) !== JSON.stringify(content)) {
-                            getDataSource()
-                            // 将新的内容更新到content中
-                            setContent({...content, ...newContent})
-                        }
-                    }}/>
-                    <Button
-                        type="primary"
-                        style={{
-                            backgroundColor: red,
-                            borderColor: red,
-                            marginLeft: 16
-                        }}
-                        onClick={() => {
-                            showDeleteConfirm(content.uid);
-                        }}
-                    >删除</Button>
-                </div>
+                {content.status === 0 ?
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'end',
+                        marginTop: 16,
+                    }}>
+                        <UpdateLeaveForm state={content} getNewContent={(newContent: object) => {
+                            // 对比旧 content 查看是否有变化，有变化则重新查询
+                            if (JSON.stringify(newContent) !== JSON.stringify(content)) {
+                                getDataSource()
+                                // 将新的内容更新到content中
+                                setContent({...content, ...newContent})
+                            }
+                        }}/>
+                        <Button
+                            type="primary"
+                            style={{
+                                backgroundColor: red,
+                                borderColor: red,
+                                marginLeft: 16
+                            }}
+                            onClick={() => {
+                                showDeleteConfirm(content.uid);
+                            }}
+                        >删除</Button>
+                    </div> : null
+                }
                 <div style={{marginTop: 16}}>
                     审批流程：
                     <Steps
@@ -173,16 +173,9 @@ const Index: React.FC = () => {
             if (res.code === 200) {
                 const newDataSource = res.body.map((item: any, index: number) => {
                     return {
+                        ...item,
                         id: index + 1,
-                        key: item.uid,
-                        create_time: item.create_time,
-                        start_time: item.start_time,
-                        end_time: item.end_time,
-                        status: item.status,
-                        count: item.count,
-                        update_time: item.update_time,
-                        reason: item.reason,
-                        uid: item.uid
+                        key: item.uid
                     }
                 });
                 setDataSource(newDataSource);
@@ -191,9 +184,11 @@ const Index: React.FC = () => {
                 setIsRenderResult(false);
             } else {
                 message.warning(res.msg);
+                setIsRenderResult(false)
             }
         }).catch(err => {
             message.error(err.message);
+            setIsRenderResult(false)
         })
     }
 
@@ -272,8 +267,7 @@ const Index: React.FC = () => {
                         total: dataSource.length,
                         showQuickJumper: true,
                         pageSizeOptions: [5, 10, 20, 50, 100, 200],
-                        defaultPageSize: 5,
-                        hideOnSinglePage: true
+                        defaultPageSize: 5
                     }}
                 >
                 </Table>

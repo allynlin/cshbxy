@@ -38,6 +38,8 @@ const RenderBreadcrumb = () => {
         '/home/record/procurement': isEnglish ? 'Travel reimbursement' : '采购申请记录',
         '/home/record/report': isEnglish ? 'Travel reimbursement' : '工作报告记录',
         '/home/setting': isEnglish ? 'Travel reimbursement' : '设置',
+        '/home/approval': isEnglish ? 'Approval' : '审批',
+        '/home/approval/departmentChange': isEnglish ? 'Travel reimbursement' : '部门变更审批',
     };
     const pathSnippets = location.pathname.split('/').filter((i) => i);
     const extraBreadcrumbItems = pathSnippets.map((_, index) => {

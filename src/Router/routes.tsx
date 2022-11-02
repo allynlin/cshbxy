@@ -1,6 +1,7 @@
 import PlayOut from "../pages/Home/PlayOut";
 import teacherApply from './teacherApply'
 import teacherRecord from "./teacherRecord";
+import departmentApproval from "./departmentApproval";
 import {RoutesItemType} from "react-router-waiter";
 import {Error101, Error103, Error403, Error404, Error500, Success} from "../pages/Result/Result";
 import {User} from "../pages/User";
@@ -50,8 +51,15 @@ const routes: RoutesItemType[] = [
                     titleCN: '教师首页',
                     Auth: 'teacher'
                 }
-            }
-            , {
+            }, {
+                path: 'department',
+                component: () => import('../pages/Index/Department'),
+                meta: {
+                    title: 'Home',
+                    titleCN: '部门首页',
+                    Auth: 'department'
+                }
+            }, {
                 path: 'setting',
                 component: () => import('../pages/Setting/TeacherSetting'),
                 meta: {
@@ -69,7 +77,8 @@ const routes: RoutesItemType[] = [
                 }
             },
             ...teacherApply,
-            ...teacherRecord
+            ...teacherRecord,
+            ...departmentApproval
         ]
     }, {
         path: '/Spin',

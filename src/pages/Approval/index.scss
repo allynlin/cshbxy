@@ -1,0 +1,16 @@
+.record-body {
+    padding-top: 10px;
+    width: 100%;
+    height: 100%;
+
+    .tit {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .ant-table-wrapper {
+        margin: 0 40px;
+        padding-bottom: 40px;
+    }
+}
