@@ -1,7 +1,6 @@
 import {Button, Menu} from 'antd';
 import {
     BarChartOutlined,
-    CommentOutlined,
     EditOutlined,
     FormOutlined,
     HomeOutlined,
@@ -79,31 +78,14 @@ const RenderMenu = () => {
     ];
     const department: MenuProps['items'] = [
         getItem((<Link to={'/home/department'}>首页</Link>), 'Home', <HomeOutlined/>),
-        getItem('申请', 'apply', <FormOutlined/>, [
-            getItem((<Link to={'/home/department/Apply/notice'}>发布公告</Link>), 'notice'),
-            getItem((<Link to={'/home/department/Apply/departmentChange'}>部门变更申请</Link>), 'departmentChange'),
-        ]),
         getItem('审批', 'approval', <ProjectOutlined/>, [
             getItem(<Link to={'/home/approval/departmentChange'}>部门变更</Link>, 'changeDepartment'),
-        ]),
-        getItem('审批记录', 'sub4', <BarChartOutlined/>, [
-            getItem('请假记录', '9'),
-            getItem('活动记录', '10')
         ]),
     ];
     const leader: MenuProps['items'] = [
         getItem((<Link to={'/home/department'}>首页</Link>), 'Home', <HomeOutlined/>),
-        getItem('申请', 'apply', <FormOutlined/>, [
-            getItem((<Link to={'/home/department/Apply/notice'}>发布公告</Link>), 'notice'),
-            getItem((<Link to={'/home/department/Apply/departmentChange'}>部门变更申请</Link>), 'departmentChange'),
-        ]),
-        getItem('通知', 'notion', <CommentOutlined/>, [
-            getItem((<Link to={'/notion/add'}>发布通知</Link>), 'add'),
-            getItem((<Link to={'/notion/show'}>正在展示的通知</Link>), 'show'),
-        ]),
-        getItem('审批记录', 'sub4', <BarChartOutlined/>, [
-            getItem('请假记录', '9'),
-            getItem('活动记录', '10')
+        getItem('审批', 'approval', <ProjectOutlined/>, [
+            getItem(<Link to={'/home/approval/departmentChange'}>部门变更</Link>, 'changeDepartment'),
         ]),
     ];
     const defaultMenu: MenuProps['items'] = [];

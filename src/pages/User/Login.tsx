@@ -77,7 +77,7 @@ const StudentForm = memo(() => {
                 message.success(res.msg)
                 loginSuccess("leader")
                 isRemember()
-                navigate('/home/teacher')
+                navigate('/home/leader')
             } else {
                 message.error(res.msg);
                 loginError()

@@ -8,7 +8,8 @@ const teacherRecord = [
                 meta: {
                     title: 'Approval Department Change',
                     titleCN: '部门变更',
-                    Auth: 'department'
+                    Auth: 'department',
+                    Auth2: 'leader'
                 }
             }
         ]

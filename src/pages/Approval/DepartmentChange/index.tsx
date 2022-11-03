@@ -248,6 +248,7 @@ const Index: React.FC = () => {
             } else {
                 setIsRenderResult(false)
                 message.warning(res.msg)
+                setDataSource([])
             }
         }).catch(err => {
             setIsRenderResult(false)

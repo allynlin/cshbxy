@@ -60,6 +60,14 @@ const routes: RoutesItemType[] = [
                     Auth: 'department'
                 }
             }, {
+                path: 'leader',
+                component: () => import('../pages/Index/Leader'),
+                meta: {
+                    title: 'Home',
+                    titleCN: '领导首页',
+                    Auth: 'leader'
+                }
+            }, {
                 path: 'setting',
                 component: () => import('../pages/Setting/TeacherSetting'),
                 meta: {

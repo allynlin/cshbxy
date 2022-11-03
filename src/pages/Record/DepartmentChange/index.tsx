@@ -113,6 +113,7 @@ const Index: React.FC = () => {
                         direction="vertical"
                         size="small"
                         current={content.count}
+                        status={content.status === 0 ? 'process' : content.status === 1 ? 'finish' : 'error'}
                     >
                         {
                             processList.map((item: string, index: number) => {
@@ -263,6 +264,7 @@ const Index: React.FC = () => {
             } else {
                 message.warning(res.msg)
                 setIsRenderResult(false)
+                setDataSource([])
             }
         }).catch(err => {
             message.error(err.message)

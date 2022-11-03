@@ -213,6 +213,8 @@ export default function App() {
         if (meta.Auth) {
             if (userType === meta.Auth)
                 return pathname
+            if (userType === meta.Auth2)
+                return pathname
             if (!isLogin) {
                 message.warning(intl.get('Please-Login'))
                 return '/login'
