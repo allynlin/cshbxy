@@ -13,7 +13,7 @@ import {LStorage} from "../../component/localStrong";
 import {English} from "../../component/redux/userLanguageSlice";
 import intl from "react-intl-universal";
 
-const TeacherSetting = () => {
+const Setting = () => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -99,4 +99,4 @@ const TeacherSetting = () => {
     )
 };
 
-export default TeacherSetting;
+export default Setting;

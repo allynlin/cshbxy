@@ -340,3 +340,23 @@ export const rejectDepartmentChange = async (uid: String, reject_reason: string)
         reject_reason
     });
 }
+
+// 查询等待审批的请假申请
+export const findLeaveWaitApprovalList = async () => {
+    return promise.Request('/leave/findLeaveListByNextUid', MethodType.POST);
+}
+
+// 通过请假申请
+export const resolveLeave = async (uid: String) => {
+    return promise.Request('/leave/resolveLeave', MethodType.POST, {
+        uid
+    });
+}
+
+// 驳回请假申请
+export const rejectLeave = async (uid: String, reject_reason: string) => {
+    return promise.Request('/leave/rejectLeave', MethodType.POST, {
+        uid,
+        reject_reason
+    });
+}

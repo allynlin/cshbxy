@@ -1,7 +1,7 @@
 import PlayOut from "../pages/Home/PlayOut";
 import teacherApply from './teacherApply'
 import teacherRecord from "./teacherRecord";
-import departmentApproval from "./departmentApproval";
+import Approval from "./Approval";
 import {RoutesItemType} from "react-router-waiter";
 import {Error101, Error103, Error403, Error404, Error500, Success} from "../pages/Result/Result";
 import {User} from "../pages/User";
@@ -69,11 +69,10 @@ const routes: RoutesItemType[] = [
                 }
             }, {
                 path: 'setting',
-                component: () => import('../pages/Setting/TeacherSetting'),
+                component: () => import('../pages/Setting/Setting'),
                 meta: {
                     title: 'Setting',
                     titleCN: '设置',
-                    Auth: 'teacher'
                 }
             }, {
                 path: 'success',
@@ -81,12 +80,11 @@ const routes: RoutesItemType[] = [
                 meta: {
                     title: 'Success',
                     titleCN: '成功',
-                    Auth: 'public'
                 }
             },
             ...teacherApply,
             ...teacherRecord,
-            ...departmentApproval
+            ...Approval
         ]
     }, {
         path: '/Spin',

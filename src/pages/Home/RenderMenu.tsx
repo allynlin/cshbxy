@@ -73,20 +73,26 @@ const RenderMenu = () => {
             getItem((<Link
                 to={'/home/record/report'}>{isEnglish ? 'Report Record' : '工作报告记录'}</Link>), 'teacherRecordReport'),
         ]),
-        getItem((<Link to={'/home/setting'}>{isEnglish ? 'Setting' : '设置'}</Link>), 'teacherSetting',
+        getItem((<Link to={'/home/setting'}>{isEnglish ? 'Setting' : '设置'}</Link>), 'Setting',
             <FormOutlined/>)
     ];
     const department: MenuProps['items'] = [
         getItem((<Link to={'/home/department'}>首页</Link>), 'Home', <HomeOutlined/>),
         getItem('审批', 'approval', <ProjectOutlined/>, [
             getItem(<Link to={'/home/approval/departmentChange'}>部门变更</Link>, 'changeDepartment'),
+            getItem(<Link to={'/home/approval/leave'}>请假</Link>, 'leave'),
         ]),
+        getItem((<Link to={'/home/setting'}>{isEnglish ? 'Setting' : '设置'}</Link>), 'Setting',
+            <FormOutlined/>)
     ];
     const leader: MenuProps['items'] = [
-        getItem((<Link to={'/home/department'}>首页</Link>), 'Home', <HomeOutlined/>),
+        getItem((<Link to={'/home/leader'}>首页</Link>), 'Home', <HomeOutlined/>),
         getItem('审批', 'approval', <ProjectOutlined/>, [
             getItem(<Link to={'/home/approval/departmentChange'}>部门变更</Link>, 'changeDepartment'),
+            getItem(<Link to={'/home/approval/leave'}>请假</Link>, 'leave'),
         ]),
+        getItem((<Link to={'/home/setting'}>{isEnglish ? 'Setting' : '设置'}</Link>), 'Setting',
+            <FormOutlined/>)
     ];
     const defaultMenu: MenuProps['items'] = [];
 

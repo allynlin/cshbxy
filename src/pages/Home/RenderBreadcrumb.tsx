@@ -40,6 +40,7 @@ const RenderBreadcrumb = () => {
         '/home/setting': isEnglish ? 'Travel reimbursement' : '设置',
         '/home/approval': isEnglish ? 'Approval' : '审批',
         '/home/approval/departmentChange': isEnglish ? 'Travel reimbursement' : '部门变更审批',
+        '/home/approval/leave': isEnglish ? 'Leave' : '请假',
     };
     const pathSnippets = location.pathname.split('/').filter((i) => i);
     const extraBreadcrumbItems = pathSnippets.map((_, index) => {

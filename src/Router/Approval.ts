@@ -11,6 +11,15 @@ const teacherRecord = [
                     Auth: 'department',
                     Auth2: 'leader'
                 }
+            }, {
+                path: 'leave',
+                component: () => import('../pages/Approval/Leave'),
+                meta: {
+                    title: 'Approval Leave',
+                    titleCN: '请假',
+                    Auth: 'department',
+                    Auth2: 'leader'
+                }
             }
         ]
     }
