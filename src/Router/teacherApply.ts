@@ -39,7 +39,7 @@ const teacherApply = [
                 path: 'report',
                 component: () => import('../pages/Apply/Report/Teacher'),
                 meta: {
-                    title: 'Report',
+                    title: 'WorkReport',
                     titleCN: '工作报告',
                     Auth: 'teacher'
                 }

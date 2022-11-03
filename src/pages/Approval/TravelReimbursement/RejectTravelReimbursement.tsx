@@ -1,7 +1,7 @@
 import {Button, Form, Input, message, Modal, notification} from 'antd';
 import React, {useState} from 'react';
 import {red} from "../../../baseInfo";
-import {rejectLeave} from "../../../component/axios/api";
+import {rejectTravel} from "../../../component/axios/api";
 
 interface Values {
     title: string;
@@ -64,14 +64,14 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
     );
 };
 
-const RejectDepartmentChange = (props: any) => {
+const RejectTravelReimbursement = (props: any) => {
     const [open, setOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const content = props.state;
 
     const onCreate = (values: any) => {
         setIsLoading(true);
-        rejectLeave(content.uid, values.reject_reason).then(res => {
+        rejectTravel(content.uid, values.reject_reason).then(res => {
             message.success(res.msg);
             setOpen(false);
             setIsLoading(false);
@@ -105,4 +105,4 @@ const RejectDepartmentChange = (props: any) => {
     );
 };
 
-export default RejectDepartmentChange;
+export default RejectTravelReimbursement;

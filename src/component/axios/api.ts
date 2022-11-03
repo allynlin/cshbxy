@@ -360,3 +360,63 @@ export const rejectLeave = async (uid: String, reject_reason: string) => {
         reject_reason
     });
 }
+
+// 查询等待审批的差旅报销申请
+export const findTravelWaitApprovalList = async () => {
+    return promise.Request('/apply/findTravelReimbursementListByNextUid', MethodType.POST);
+}
+
+// 通过差旅报销申请
+export const resolveTravel = async (uid: String) => {
+    return promise.Request('/apply/resolveTravelReimbursement', MethodType.POST, {
+        uid
+    });
+}
+
+// 驳回差旅报销申请
+export const rejectTravel = async (uid: String, reject_reason: string) => {
+    return promise.Request('/apply/rejectTravelReimbursement', MethodType.POST, {
+        uid,
+        reject_reason
+    });
+}
+
+// 查询等待审批的采购申请
+export const findProcurementWaitApprovalList = async () => {
+    return promise.Request('/procurement/findProcurementByNextUid', MethodType.POST);
+}
+
+// 通过采购申请
+export const resolveProcurement = async (uid: String) => {
+    return promise.Request('/procurement/resolveProcurement', MethodType.POST, {
+        uid
+    });
+}
+
+// 驳回采购申请
+export const rejectProcurement = async (uid: String, reject_reason: string) => {
+    return promise.Request('/procurement/rejectProcurement', MethodType.POST, {
+        uid,
+        reject_reason
+    });
+}
+
+// 查询等待审批的工作报告
+export const findWorkReportWaitApprovalList = async () => {
+    return promise.Request('/workReport/findWorkReportByNextUid', MethodType.POST);
+}
+
+// 通过工作报告
+export const resolveWorkReport = async (uid: String) => {
+    return promise.Request('/workReport/resolveWorkReport', MethodType.POST, {
+        uid
+    });
+}
+
+// 驳回工作报告
+export const rejectWorkReport = async (uid: String, reject_reason: string) => {
+    return promise.Request('/workReport/rejectWorkReport', MethodType.POST, {
+        uid,
+        reject_reason
+    });
+}

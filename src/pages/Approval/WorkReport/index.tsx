@@ -3,21 +3,21 @@ import {ExclamationCircleOutlined, SearchOutlined} from '@ant-design/icons';
 import type {ColumnsType} from 'antd/es/table';
 import React, {useEffect, useState} from 'react';
 import {
-    resolveDepartmentChange,
-    findDepartmentChangeWaitApprovalList,
-    findUploadFilesByUid
+    findUploadFilesByUid,
+    findWorkReportWaitApprovalList,
+    resolveWorkReport
 } from '../../../component/axios/api';
 import {DownLoadURL, green} from "../../../baseInfo";
 import {RenderStatusTag} from "../../../component/Tag/RenderStatusTag";
 import {RenderStatusColor} from "../../../component/Tag/RenderStatusColor";
 import '../index.scss'
 import RecordSkeleton from "../../../component/Skeleton/RecordSkeleton";
-import RejectDepartmentChange from "./RejectDepartmentChange";
+import RejectProcurement from "./RejectProcurement";
 
 const {Title} = Typography;
 const {Panel} = Collapse;
 
-const tableName = `changedepartmentbyteacher`;
+const tableName = `workreportteacher`;
 
 interface DataType {
     key: React.Key;
@@ -61,14 +61,8 @@ const Index: React.FC = () => {
                 onClose={() => {
                     setOpen(false)
                 }}
-                headerStyle={{
-                    backgroundColor: RenderStatusColor(content.status)
-                }}
             >
                 <p>申请人：{content.releaseUid}</p>
-                <p>变更部门：{content.departmentUid}</p>
-                <p>变更原因：{content.changeReason}</p>
-                <p>变更状态：{RenderStatusTag(content.status, '部门变更申请')}</p>
                 <p>提交时间：{content.create_time}</p>
                 <p>更新时间：{content.update_time}</p>
                 <div style={{
@@ -76,7 +70,7 @@ const Index: React.FC = () => {
                     justifyContent: 'end',
                     marginTop: 16
                 }}>
-                    <RejectDepartmentChange state={content} getNewContent={(isReject: boolean) => {
+                    <RejectProcurement state={content} getNewContent={(isReject: boolean) => {
                         if (isReject) {
                             setOpen(false)
                             getDataSource()
@@ -139,7 +133,7 @@ const Index: React.FC = () => {
             okType: 'danger',
             cancelText: '取消',
             onOk() {
-                resolveDepartmentChange(e).then((res: any) => {
+                resolveWorkReport(e).then((res: any) => {
                     if (res.code === 200) {
                         message.success(res.msg);
                         setOpen(false);
@@ -170,9 +164,9 @@ const Index: React.FC = () => {
             width: 150,
             align: 'center',
         }, {
-            title: '变更部门',
-            dataIndex: 'departmentUid',
-            key: 'departmentUid',
+            title: '提交时间',
+            dataIndex: 'create_time',
+            key: 'create_time',
             width: 150,
             align: 'center',
         }, {
@@ -224,7 +218,7 @@ const Index: React.FC = () => {
             return
         }
         setIsRenderResult(true)
-        findDepartmentChangeWaitApprovalList().then((res: any) => {
+        findWorkReportWaitApprovalList().then((res: any) => {
             if (res.code === 200) {
                 const arr = res.body.map((item: any, index: number) => {
                     return {
@@ -253,7 +247,7 @@ const Index: React.FC = () => {
             <div className={'record-body'}>
                 <RenderDrawer/>
                 <Title level={2} className={'tit'}>
-                    部门变更申请记录&nbsp;&nbsp;
+                    请假申请记录&nbsp;&nbsp;
                     <Button type="primary" icon={<SearchOutlined/>} onClick={getDataSource}>刷新</Button>
                 </Title>
                 <Table

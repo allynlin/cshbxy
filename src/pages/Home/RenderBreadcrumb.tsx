@@ -41,6 +41,9 @@ const RenderBreadcrumb = () => {
         '/home/approval': isEnglish ? 'Approval' : '审批',
         '/home/approval/departmentChange': isEnglish ? 'Travel reimbursement' : '部门变更审批',
         '/home/approval/leave': isEnglish ? 'Leave' : '请假',
+        '/home/approval/travelReimbursement': isEnglish ? 'travelReimbursement' : '差旅报销',
+        '/home/approval/procurement': isEnglish ? 'procurement' : '采购',
+        '/home/approval/workReport': isEnglish ? 'workReport' : '工作报告',
     };
     const pathSnippets = location.pathname.split('/').filter((i) => i);
     const extraBreadcrumbItems = pathSnippets.map((_, index) => {

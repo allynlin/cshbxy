@@ -114,6 +114,7 @@ const Index: React.FC = () => {
                         direction="vertical"
                         size="small"
                         current={content.count}
+                        status={content.status === 0 ? 'process' : content.status === 1 ? 'finish' : 'error'}
                     >
                         {
                             processList.map((item: string, index: number) => {

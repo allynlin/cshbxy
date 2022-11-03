@@ -11,7 +11,7 @@ import {RenderStatusTag} from "../../../component/Tag/RenderStatusTag";
 import {RenderStatusColor} from "../../../component/Tag/RenderStatusColor";
 import '../index.scss'
 import RecordSkeleton from "../../../component/Skeleton/RecordSkeleton";
-import RejectDepartmentChange from "./RejectDepartmentChange";
+import RejectLeave from "./RejectLeave";
 
 const {Title} = Typography;
 
@@ -61,7 +61,7 @@ const Index: React.FC = () => {
                 <p>申请人：{content.releaseUid}</p>
                 <p>请假时间：{content.start_time}</p>
                 <p>销假时间：{content.end_time}</p>
-                <p>请假原因：{content.changeReason}</p>
+                <p>请假原因：{content.reason}</p>
                 <p>提交时间：{content.create_time}</p>
                 <p>更新时间：{content.update_time}</p>
                 <div style={{
@@ -69,7 +69,7 @@ const Index: React.FC = () => {
                     justifyContent: 'end',
                     marginTop: 16
                 }}>
-                    <RejectDepartmentChange state={content} getNewContent={(isReject: boolean) => {
+                    <RejectLeave state={content} getNewContent={(isReject: boolean) => {
                         if (isReject) {
                             setOpen(false)
                             getDataSource()

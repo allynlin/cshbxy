@@ -59,7 +59,7 @@ const RenderMenu = () => {
             getItem((<Link
                 to={'/home/apply/procurement'}>{intl.get('Procurement')}</Link>), 'teacherApplyProcurement'),
             getItem((<Link
-                to={'/home/apply/report'}>{intl.get('Report')}</Link>), 'teacherApplyReport'),
+                to={'/home/apply/report'}>工作报告</Link>), 'teacherApplyReport'),
         ]),
         getItem(intl.get('Record'), 'record', <BarChartOutlined/>, [
             getItem((
@@ -71,7 +71,7 @@ const RenderMenu = () => {
                 to={'/home/record/leave'}>{isEnglish ? 'Leave Record' : '请假记录'}</Link>), 'teacherRecordLeave'),
             getItem((<Link to={'/home/record/procurement'}>采购申请记录</Link>), 'leaveProcurement'),
             getItem((<Link
-                to={'/home/record/report'}>{isEnglish ? 'Report Record' : '工作报告记录'}</Link>), 'teacherRecordReport'),
+                to={'/home/record/report'}>{isEnglish ? 'WorkReport Record' : '工作报告记录'}</Link>), 'teacherRecordReport'),
         ]),
         getItem((<Link to={'/home/setting'}>{isEnglish ? 'Setting' : '设置'}</Link>), 'Setting',
             <FormOutlined/>)
@@ -81,6 +81,9 @@ const RenderMenu = () => {
         getItem('审批', 'approval', <ProjectOutlined/>, [
             getItem(<Link to={'/home/approval/departmentChange'}>部门变更</Link>, 'changeDepartment'),
             getItem(<Link to={'/home/approval/leave'}>请假</Link>, 'leave'),
+            getItem(<Link to={'/home/approval/travelReimbursement'}>差旅报销</Link>, 'travel'),
+            getItem(<Link to={'/home/approval/procurement'}>采购</Link>, 'procurement'),
+            getItem(<Link to={'/home/approval/workReport'}>工作报告</Link>, 'workReport'),
         ]),
         getItem((<Link to={'/home/setting'}>{isEnglish ? 'Setting' : '设置'}</Link>), 'Setting',
             <FormOutlined/>)
@@ -90,6 +93,9 @@ const RenderMenu = () => {
         getItem('审批', 'approval', <ProjectOutlined/>, [
             getItem(<Link to={'/home/approval/departmentChange'}>部门变更</Link>, 'changeDepartment'),
             getItem(<Link to={'/home/approval/leave'}>请假</Link>, 'leave'),
+            getItem(<Link to={'/home/approval/travelReimbursement'}>差旅报销</Link>, 'travel'),
+            getItem(<Link to={'/home/approval/procurement'}>采购</Link>, 'procurement'),
+            getItem(<Link to={'/home/approval/workReport'}>工作报告</Link>, 'workReport'),
         ]),
         getItem((<Link to={'/home/setting'}>{isEnglish ? 'Setting' : '设置'}</Link>), 'Setting',
             <FormOutlined/>)

@@ -30,7 +30,7 @@ const teacherRecord = [
                 path: 'report',
                 component: () => import('../pages/Record/Report'),
                 meta: {
-                    title: 'Report Record',
+                    title: 'WorkReport Record',
                     titleCN: '工作报告记录',
                     Auth: 'teacher'
                 }
