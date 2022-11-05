@@ -4,21 +4,15 @@ import './index-light.scss'
 import Cookie from 'js-cookie';
 import {useNavigate} from "react-router-dom";
 import {
-    queryDepartmentMessage,
-    queryLeaderMessage,
-    queryDepartmentUsername,
-    queryLeaderUsername,
-    queryTeacherUsername,
-    teacherRegister,
-    departmentRegister,
-    leaderRegister,
-    teacherLogin,
-    departmentLogin,
-    leaderLogin
+    findUserType,
+    checkUsername,
+    userRegister,
+    userLogin
 } from "../../component/axios/api";
 import {useDispatch} from "react-redux";
-import {teacher, department, leader} from "../../component/redux/userTypeSlice";
+import {Employee, Department, Leader} from "../../component/redux/userTypeSlice";
 import {login} from "../../component/redux/isLoginSlice";
+import {setUser} from "../../component/redux/userInfoSlice";
 
 const RegisterStudent = memo(() => {
     const dispatch = useDispatch();
@@ -32,12 +26,10 @@ const RegisterStudent = memo(() => {
     const tel = Form.useWatch('tel', form);
     const email = Form.useWatch('email', form);
     const departmentUid = Form.useWatch('departmentUid', form);
-    const leaderUid = Form.useWatch('leaderUid', form);
     const rememberme = Form.useWatch('rememberme', form);
 
     const [departmentOptions, setDepartmentOptions] = useState([]);
-    const [leaderOptions, setLeaderOptions] = useState([]);
-    const [registerType, setRegisterType] = useState('teacher');
+    const [registerType, setRegisterType] = useState('Employee');
     const [usernameUse, setUsernameUse] = useState(true);
     const navigate = useNavigate();
 
@@ -50,154 +42,68 @@ const RegisterStudent = memo(() => {
             message.error("两次密码输入不一致");
             return
         }
-        switch (registerType) {
-            case 'teacher':
-                registerTeacher()
-                break
-            case 'department':
-                registerDepartment()
-                break
-            case 'leader':
-                registerLeader()
-                break
-            default:
-                message.error("系统错误，请选择正确的注册类型");
-                break;
-        }
+        userRegister(username, password, realeName, gender, tel, email, departmentUid, registerType).then(res => {
+            if (res.code === 200) {
+                message.success("注册成功");
+                loginAutomatic();
+            } else {
+                message.error(res.data.msg)
+            }
+        })
     };
 
-    const registerTeacher = () => {
-        teacherRegister(username, password, realeName, gender, tel, email, departmentUid).then(res => {
-            message.success(res.msg)
-            loginAutomatic(registerType)
-        })
-    }
-
-    const registerDepartment = () => {
-        departmentRegister(username, password, realeName, gender, tel, email, leaderUid).then(res => {
-            message.success(res.msg);
-            loginAutomatic(registerType)
-        })
-    }
-
-    const registerLeader = () => {
-        leaderRegister(username, password, realeName, gender, tel, email).then(res => {
-            message.success(res.msg);
-            loginAutomatic(registerType)
-        })
-    }
-
-    const loginAutomatic = (e: string) => {
-        if (rememberme) {
-            switch (e) {
-                case 'teacher':
-                    teacherLogin(username, password).then(res => {
-                        if (res.code === 200) {
-                            dispatch(teacher())
-                            message.success(res.msg);
-                            loginSuccess("teacher")
-                            isRemember()
-                            navigate('/home/teacher')
-                        } else {
-                            message.error(res.msg);
-                            navigate('/login')
-                        }
-                    })
-                    break
-                case 'department':
-                    departmentLogin(username, password).then(res => {
-                        if (res.code === 200) {
-                            dispatch(department())
-                            message.success(res.msg);
-                            loginSuccess("department")
-                            isRemember()
-                            navigate('/home/department')
-                        } else {
-                            message.error(res.msg);
-                            navigate('/login')
-                        }
-                    })
-                    break
-                case 'leader':
-                    leaderLogin(username, password).then(res => {
-                        if (res.code === 200) {
-                            dispatch(leader())
-                            message.success(res.msg);
-                            loginSuccess("leader")
-                            isRemember()
-                            navigate('/home/leader')
-                        } else {
-                            message.error(res.msg);
-                            navigate('/login')
-                        }
-
-                    })
-                    break
-                default:
-                    message.error("系统错误，请选择正确的注册类型");
-                    break
-            }
-        } else {
+    const loginAutomatic = () => {
+        if (!rememberme)
             navigate('/login')
-        }
+        userLogin(username, password, registerType).then(res => {
+            dispatch(setUser(res.body))
+            message.success(res.msg);
+            isRemember()
+            loginSuccess(res.body.userType)
+        })
     }
 
+    // 登录成功或失败所作的操作
     const loginSuccess = (e: string) => {
         dispatch(login())
         Cookie.set('userType', e, {expires: 7, path: '/', sameSite: 'strict'})
+        switch (e) {
+            case 'Employee':
+                dispatch(Employee())
+                navigate('/home/employee')
+                break;
+            case 'Department':
+                dispatch(Department())
+                navigate('/home/department')
+                break;
+            case 'Leader':
+                dispatch(Leader())
+                navigate('/home/leader')
+                break;
+        }
     }
 
     const isRemember = () => {
         Cookie.set('username', username, {expires: 7, path: '/', sameSite: 'strict'});
         Cookie.set('password', password, {expires: 7, path: '/', sameSite: 'strict'});
+        Cookie.set('userType', registerType, {expires: 7, path: '/', sameSite: 'strict'});
     }
 
     const onReset = () => {
         form.resetFields();
     };
 
-    const checkUsername = (e: { target: { value: String } }) => {
-        switch (registerType) {
-            case 'teacher':
-                queryTeacherUsername(e.target.value).then(res => {
-                    console.log(res)
-                    if (res.code !== 200) {
-                        setUsernameUse(false)
-                        message.error(res.msg)
-                    } else {
-                        setUsernameUse(true)
-                    }
-                })
-                break;
-            case 'department':
-                queryDepartmentUsername(e.target.value).then(res => {
-                    if (res.code !== 200) {
-                        setUsernameUse(false)
-                        message.error(res.msg)
-                    } else {
-                        setUsernameUse(true)
-                    }
-                })
-                break;
-            case 'leader':
-                queryLeaderUsername(e.target.value).then(res => {
-                    if (res.code !== 200) {
-                        setUsernameUse(false)
-                        message.error(res.msg)
-                    } else {
-                        setUsernameUse(true)
-                    }
-                })
-                break;
-            default:
-                message.error("系统错误，请选择正确的注册类型");
-                break
-        }
+    const checkUserName = (e: any) => {
+        checkUsername(e.target.value, registerType).then(() => {
+            setUsernameUse(true)
+        }).catch(() => {
+            setUsernameUse(false)
+        })
     }
 
 
     const getDepartmentOptions = () => {
-        queryDepartmentMessage().then(res => {
+        findUserType().then(res => {
             const options = res.body.map((item: { uid: string, realeName: string }) => {
                 return {
                     value: item.uid,
@@ -208,21 +114,9 @@ const RegisterStudent = memo(() => {
         })
     }
 
-    const getLeaderOptions = () => {
-        queryLeaderMessage().then(res => {
-            const options: [] = res.body.map((item: { uid: string; realeName: string; }) => {
-                return {
-                    value: item.uid,
-                    label: item.realeName
-                }
-            })
-            setLeaderOptions(options)
-        })
-    }
-
     // 动态渲染不同注册所需要填写的表单
     const RenderField = () => {
-        return registerType === 'teacher' ? (<Form.Item
+        return registerType === 'Employee' ? (<Form.Item
             label="部门"
             name="departmentUid"
             rules={[
@@ -240,25 +134,6 @@ const RegisterStudent = memo(() => {
                 onFocus={getDepartmentOptions}
                 placeholder="请选择你的上级部门"
                 options={departmentOptions}
-            />
-        </Form.Item>) : registerType === 'department' ? (<Form.Item
-            label="领导"
-            name="leaderUid"
-            rules={[
-                {
-                    required: true,
-                    message: '请选择您的上级领导',
-                },
-            ]}
-        >
-            <Select
-                showSearch
-                style={{
-                    width: '100%',
-                }}
-                placeholder="请选择您的上级领导"
-                onFocus={getLeaderOptions}
-                options={leaderOptions}
             />
         </Form.Item>) : null
     }
@@ -282,12 +157,12 @@ const RegisterStudent = memo(() => {
             <Form.Item
                 wrapperCol={{}}
             >
-                <Radio.Group defaultValue="teacher" buttonStyle="solid" onChange={e => {
+                <Radio.Group defaultValue="Index" buttonStyle="solid" onChange={e => {
                     setRegisterType(e.target.value)
                 }}>
-                    <Radio.Button value="leader">领导注册</Radio.Button>
-                    <Radio.Button value="department">部门注册</Radio.Button>
-                    <Radio.Button value="teacher">教师注册</Radio.Button>
+                    <Radio.Button value="Leader">领导注册</Radio.Button>
+                    <Radio.Button value="Department">部门注册</Radio.Button>
+                    <Radio.Button value="Index">员工注册</Radio.Button>
                 </Radio.Group>
             </Form.Item>
 
@@ -303,7 +178,7 @@ const RegisterStudent = memo(() => {
                 ]}
             >
                 <Input showCount maxLength={20} allowClear={true} onChange={e => {
-                    checkUsername(e)
+                    checkUserName(e)
                 }}/>
             </Form.Item>
 

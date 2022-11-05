@@ -18,7 +18,7 @@ export const MethodType = {
 export const Request = (api: String, method = MethodType.GET, params = {}, config = {headers: {}}) => {
     const apiToken = Cookie.get('token');
     // 如果不是登录和注册接口（/login 或 /register 或 /query 开头），POST 请求，没有获取到 token，就跳转到登录页面
-    if (apiToken === undefined && method === MethodType.POST && !api.startsWith('/login') && !api.startsWith('/register') && !api.startsWith('/query')) {
+    if (apiToken === undefined && method === MethodType.POST && !api.startsWith('/api/user') && !api.startsWith('/query')) {
         rootNavigate('/403');
         return
     }

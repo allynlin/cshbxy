@@ -2,10 +2,10 @@ import {Button, Form, Input, Modal, Result, Select, Skeleton, Typography} from '
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {
+    findUserType,
     checkLastTimeUploadFiles,
     checkTeacherChangeDepartment,
-    queryDepartmentMessage,
-    teacherChangeDepartment
+    ChangeDepartment
 } from "../../../component/axios/api";
 import '../apply.scss';
 import {DownLoadURL} from "../../../baseInfo";
@@ -14,7 +14,7 @@ import {LoadingOutlined} from "@ant-design/icons";
 import intl from "react-intl-universal";
 
 const {Title} = Typography;
-const tableName = `changedepartmentbyteacher`;
+const tableName = `ChangeDepartment`;
 
 const ChangeForm = () => {
     const navigate = useNavigate();
@@ -98,7 +98,7 @@ const ChangeForm = () => {
 
     // 表单提交
     const submitForm = () => {
-        teacherChangeDepartment(departmentUid, changeReason).then(() => {
+        ChangeDepartment(departmentUid, changeReason).then(() => {
             setConfirmLoading(false);
             navigate('/home/success', {
                 state: {
@@ -117,7 +117,7 @@ const ChangeForm = () => {
 
     // 获取部门列表
     const getDepartmentOptions = () => {
-        queryDepartmentMessage().then(res => {
+        findUserType().then(res => {
             const departmentOptions = res.body.map((item: { uid: String; realeName: String; }) => {
                 return {
                     value: item.uid,
@@ -126,25 +126,6 @@ const ChangeForm = () => {
             })
             setDepartmentOptions(departmentOptions);
         })
-    }
-
-    const RenderModal: React.FC = () => {
-        return (
-            <Modal
-                title={intl.get('Confirm')}
-                open={isModalVisible}
-                onOk={handleOk}
-                confirmLoading={confirmLoading}
-                onCancel={handleCancel}
-            >
-                <p>{intl.get('DepartmentChange') + ': '}{departmentUid}</p>
-                <p>{intl.get('Reason') + ': '}{changeReason}</p>
-                {/*将变更材料 changeFile 中的 fileList 数组中的状态为 done 的每一项 name 输出出来*/}
-                <p>{intl.get('File') + ': '}{
-                    fileList.filter((item: any) => item.status === 'done').map((item: any) => item.name).join('、')
-                }</p>
-            </Modal>
-        )
     }
 
     const handleCancel = () => {
@@ -185,7 +166,20 @@ const ChangeForm = () => {
             }
         />) : (
         <div className={'apply-body'}>
-            <RenderModal/>
+            <Modal
+                title={intl.get('Confirm')}
+                open={isModalVisible}
+                onOk={handleOk}
+                confirmLoading={confirmLoading}
+                onCancel={handleCancel}
+            >
+                <p>{intl.get('DepartmentChange') + ': '}{departmentUid}</p>
+                <p>{intl.get('Reason') + ': '}{changeReason}</p>
+                {/*将变更材料 changeFile 中的 fileList 数组中的状态为 done 的每一项 name 输出出来*/}
+                <p>{intl.get('File') + ': '}{
+                    fileList.filter((item: any) => item.status === 'done').map((item: any) => item.name).join('、')
+                }</p>
+            </Modal>
             <Title level={2} className={'tit'}>{intl.get('DepartmentChange') + intl.get('apply')}</Title>
             <Form
                 form={form}
@@ -267,9 +261,9 @@ const ChangeForm = () => {
     );
 };
 
-const Teacher = () => (
+const Index = () => (
     <ChangeForm/>
 )
 
 
-export default Teacher;
+export default Index;

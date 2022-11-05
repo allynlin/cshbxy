@@ -24,7 +24,7 @@ export const Error404 = () => {
             subTitle="您访问的页面不存在"
             extra={
                 <Link
-                    to={userType === 'teacher' ? '/home/teacher' : userType === 'department' ? '/home/department' : '/home/leader'}>
+                    to={userType === 'Employee' ? '/home/employee' : userType === 'Department' ? '/home/department' : '/home/leader'}>
                     <Button type="primary">返回首页</Button>
                 </Link>
             }

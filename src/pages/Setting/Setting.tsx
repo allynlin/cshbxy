@@ -3,7 +3,6 @@ import React, {useEffect} from 'react';
 import {blue, red, yellow} from "../../baseInfo";
 import MenuModeSetting from "./MenuModeSetting";
 import ThemeSetting from "./ThemeSetting";
-import UserInfo from "./UserInfo";
 import LanguageSetting from "./LanguageSetting";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";

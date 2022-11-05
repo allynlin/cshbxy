@@ -1,11 +1,11 @@
 import {Button, Collapse, Drawer, message, Modal, Skeleton, Space, Steps, Table, Tag, Typography} from 'antd';
-import {CloseCircleOutlined, ExclamationCircleOutlined, SearchOutlined} from '@ant-design/icons';
+import {ExclamationCircleOutlined, SearchOutlined} from '@ant-design/icons';
 import type {ColumnsType} from 'antd/es/table';
 import React, {useEffect, useState} from 'react';
 import {
-    checkTeacherChangeDepartmentRecord,
-    deleteChangeDepartmentByTeacher,
-    findChangeDepartmentByTeacherProcess,
+    deleteTravelReimbursementApply,
+    findTravelProcess,
+    findTravelReimbursementApplyList,
     findUploadFilesByUid
 } from '../../../component/axios/api';
 import {DownLoadURL, purple, red} from "../../../baseInfo";
@@ -18,7 +18,7 @@ const {Title} = Typography;
 const {Step} = Steps;
 const {Panel} = Collapse;
 
-const tableName = `ChangeDepartment`;
+const tableName = `Travel`;
 
 interface DataType {
     key: React.Key;
@@ -58,20 +58,20 @@ const Index: React.FC = () => {
     }, [waitTime])
 
     // 获取当前记录上传的文件和当前审批流程
-    const getInfo = (uid: string) => {
+    const getInfo = async (uid: string) => {
         setOpen(true)
-        getProcess(uid)
-        getFiles(uid)
+        getProcess(uid);
+        getFiles(uid);
     }
 
     const getProcess = (uid: string) => {
         setProcessLoading(true)
         const hide = message.loading('正在获取审批流程', 0);
-        findChangeDepartmentByTeacherProcess(uid).then((res: any) => {
+        findTravelProcess(uid).then((res: any) => {
             setProcessList(res.body);
         }).finally(() => {
+            hide()
             setProcessLoading(false)
-            hide();
         })
     }
 
@@ -81,8 +81,8 @@ const Index: React.FC = () => {
         findUploadFilesByUid(uid, tableName).then((res: any) => {
             setFileList(res.body);
         }).finally(() => {
+            hide()
             setFileLoading(false)
-            hide();
         })
     }
 
@@ -96,7 +96,7 @@ const Index: React.FC = () => {
             okType: 'danger',
             cancelText: '取消',
             onOk() {
-                deleteChangeDepartmentByTeacher(e, tableName).then((res: any) => {
+                deleteTravelReimbursementApply(e).then((res: any) => {
                     if (res.code === 200) {
                         message.success(res.msg);
                         setOpen(false);
@@ -104,7 +104,7 @@ const Index: React.FC = () => {
                         setDataSource(arr);
                         if (arr.length === 0) {
                             setIsRenderResult(true);
-                            message.warning('暂无部门变更记录');
+                            message.warning('暂无差旅报销记录');
                         }
                     } else {
                         message.error('删除失败');
@@ -124,15 +124,15 @@ const Index: React.FC = () => {
             fixed: 'left',
             align: 'center',
         }, {
-            title: '变更部门',
-            dataIndex: 'departmentUid',
-            key: 'departmentUid',
+            title: '目的地',
+            dataIndex: 'destination',
+            key: 'destination',
             width: 150,
             align: 'center',
         }, {
-            title: '变更原因',
-            dataIndex: 'changeReason',
-            key: 'changeReason',
+            title: '费用',
+            dataIndex: 'expenses',
+            key: 'expenses',
             width: 150,
             align: 'center',
         }, {
@@ -141,9 +141,9 @@ const Index: React.FC = () => {
             key: 'status',
             width: 150,
             align: 'center',
-            render: (text: number, record: any) => {
+            render: (text: number) => {
                 return (
-                    RenderStatusTag(text, "部门变更申请")
+                    RenderStatusTag(text, "差旅报销申请")
                 )
             }
         }, {
@@ -185,7 +185,7 @@ const Index: React.FC = () => {
             return
         }
         setIsRenderResult(true)
-        checkTeacherChangeDepartmentRecord().then((res: any) => {
+        findTravelReimbursementApplyList().then((res: any) => {
             if (res.code === 200) {
                 const arr = res.body.map((item: any, index: number) => {
                     return {
@@ -205,7 +205,7 @@ const Index: React.FC = () => {
             }
         }).catch(err => {
             message.error(err.message)
-            setIsRenderResult(false)
+            setIsRenderResult(true)
         })
     }
 
@@ -233,8 +233,9 @@ const Index: React.FC = () => {
                             >删除</Button>
                         </> : null}
                 >
-                    <p>变更部门：{content.departmentUid}</p>
-                    <p>变更原因：{content.changeReason}</p>
+                    <p>目的地：{content.destination}</p>
+                    <p>出差费用：{content.expenses}</p>
+                    <p>出差原因：{content.reason}</p>
                     {content.reject_reason ?
                         <>
                             驳回原因：
@@ -317,7 +318,7 @@ const Index: React.FC = () => {
                     }
                 </Drawer>
                 <Title level={2} className={'tit'}>
-                    部门变更申请记录&nbsp;&nbsp;
+                    差旅报销申请记录&nbsp;&nbsp;
                     <Button type="primary" icon={<SearchOutlined/>} onClick={getDataSource}>刷新</Button>
                 </Title>
                 <Table

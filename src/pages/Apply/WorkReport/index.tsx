@@ -8,7 +8,7 @@ import FileUpLoad from "../../../component/axios/FileUpLoad";
 import {ExclamationCircleOutlined, LoadingOutlined} from "@ant-design/icons";
 
 const {Title} = Typography;
-const tableName = `workreportteacher`;
+const tableName = `WorkReport`;
 
 const ChangeForm = () => {
     const navigate = useNavigate();
@@ -94,7 +94,7 @@ const ChangeForm = () => {
                         title: '工作报告提交成功',
                         describe: '',
                         toPage: '查看历史工作报告',
-                        toURL: '/home/record/report',
+                        toURL: '/home/record/workReport',
                     }
                 }
             })
@@ -193,10 +193,10 @@ const ChangeForm = () => {
     );
 };
 
-const Teacher = () => {
+const Index = () => {
     return (
         <ChangeForm/>
     )
 }
 
-export default Teacher;
+export default Index;

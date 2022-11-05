@@ -1,16 +1,15 @@
-import {Button, Drawer, message, Modal, Steps, Table, Tag, Typography} from 'antd';
+import {Button, Drawer, message, Modal, Skeleton, Space, Steps, Table, Tag, Typography} from 'antd';
 import {ExclamationCircleOutlined, SearchOutlined} from '@ant-design/icons';
 import React, {useEffect, useState} from 'react';
 import {deleteLeave, findLeaveList, findLeaveProcess} from '../../../component/axios/api';
 import '../index.scss';
 import {RenderStatusTag} from "../../../component/Tag/RenderStatusTag";
-import {red} from "../../../baseInfo";
+import {purple, red} from "../../../baseInfo";
 import {ColumnsType} from "antd/es/table";
 import {RenderStatusColor} from "../../../component/Tag/RenderStatusColor";
 import {DataType} from "tdesign-react";
 import RecordSkeleton from "../../../component/Skeleton/RecordSkeleton";
-import UpdateLeaveForm from "./UpdateLeave";
-import {useSelector} from "react-redux";
+import UpdateLeaveForm from "./Update";
 
 const {Title} = Typography;
 const {Step} = Steps;
@@ -25,6 +24,9 @@ const Index: React.FC = () => {
     const [content, setContent] = useState<any>({});
     const [processList, setProcessList] = useState<any>([]);
     const [open, setOpen] = useState(false);
+    const [openUid, setOpenUid] = useState<string>('');
+
+    const [processLoading, setProcessLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -41,87 +43,19 @@ const Index: React.FC = () => {
         }
     }, [waitTime])
 
-    // 渲染抽屉
-    const RenderDrawer = () => {
-        return (
-            <Drawer
-                title={<span>{RenderStatusTag(content.status)}</span>}
-                placement="right"
-                open={open}
-                onClose={() => {
-                    setOpen(false)
-                }}
-                extra={content.status === 0 ?
-                    <div style={{
-                        display: 'flex'
-                    }}>
-                        <UpdateLeaveForm state={content} getNewContent={(newContent: object) => {
-                            // 对比旧 content 查看是否有变化，有变化则重新查询
-                            if (JSON.stringify(newContent) !== JSON.stringify(content)) {
-                                getDataSource()
-                                // 将新的内容更新到content中
-                                setContent({...content, ...newContent})
-                            }
-                        }}/>
-                        <Button
-                            type="primary"
-                            style={{
-                                backgroundColor: red,
-                                borderColor: red,
-                                marginLeft: 10
-                            }}
-                            onClick={() => {
-                                showDeleteConfirm(content.uid);
-                            }}
-                        >删除</Button>
-                    </div> : null}
-            >
-                <p>请假时间：{content.start_time}</p>
-                <p>销假时间：{content.end_time}</p>
-                <p>请假原因：{content.reason}</p>
-                {content.reject_reason ?
-                    <>
-                        驳回原因：
-                        <Tag color={red}
-                             style={{marginBottom: 16}}>{content.reject_reason}</Tag>
-                    </> : null}
-                <p>提交时间：{content.create_time}</p>
-                <p>更新时间：{content.update_time}</p>
-                <div style={{marginTop: 16}}>
-                    审批流程：
-                    <Steps
-                        style={{
-                            marginTop: 16
-                        }}
-                        direction="vertical"
-                        size="small"
-                        current={content.count}
-                        status={content.status === 0 ? 'process' : content.status === 1 ? 'finish' : 'error'}
-                    >
-                        {
-                            processList.map((item: string, index: number) => {
-                                return (
-                                    <Step
-                                        key={index}
-                                        title={item}
-                                    />
-                                )
-                            })
-                        }
-                    </Steps>
-                </div>
-            </Drawer>
-        )
-    }
-
     // 获取当前记录上传的文件和当前审批流程
     const getInfo = (uid: string) => {
+        setOpen(true);
+        getProcess(uid);
+    }
+
+    const getProcess = (uid: string) => {
+        setProcessLoading(true)
         const hide = message.loading('正在获取审批流程', 0);
         findLeaveProcess(uid).then((res: any) => {
             setProcessList(res.body);
-            hide();
-            setOpen(true);
-        }).catch(() => {
+        }).finally(() => {
+            setProcessLoading(false)
             hide();
         })
     }
@@ -237,7 +171,8 @@ const Index: React.FC = () => {
                         onClick={() => {
                             setOpen(false)
                             setContent(record)
-                            getInfo(record.uid)
+                            getInfo(text)
+                            setOpenUid(text)
                         }}
                         style={{
                             backgroundColor: RenderStatusColor(record.status),
@@ -252,7 +187,92 @@ const Index: React.FC = () => {
     return isRenderResult ?
         <RecordSkeleton/> : (
             <div className={'record-body'}>
-                <RenderDrawer/>
+                <Drawer
+                    title={<span>{RenderStatusTag(content.status)}</span>}
+                    placement="right"
+                    open={open}
+                    onClose={() => {
+                        setOpen(false)
+                    }}
+                    extra={content.status === 0 ?
+                        <div style={{
+                            display: 'flex'
+                        }}>
+                            <UpdateLeaveForm state={content} getNewContent={(newContent: object) => {
+                                // 对比旧 content 查看是否有变化，有变化则重新查询
+                                if (JSON.stringify(newContent) !== JSON.stringify(content)) {
+                                    getDataSource()
+                                    // 将新的内容更新到content中
+                                    setContent({...content, ...newContent})
+                                }
+                            }}/>
+                            <Button
+                                type="primary"
+                                style={{
+                                    backgroundColor: red,
+                                    borderColor: red,
+                                    marginLeft: 10
+                                }}
+                                onClick={() => {
+                                    showDeleteConfirm(content.uid);
+                                }}
+                            >删除</Button>
+                        </div> : null}
+                >
+                    <p>请假时间：{content.start_time}</p>
+                    <p>销假时间：{content.end_time}</p>
+                    <p>请假原因：{content.reason}</p>
+                    {content.reject_reason ?
+                        <>
+                            驳回原因：
+                            <Tag color={red}
+                                 style={{marginBottom: 16}}>{content.reject_reason}</Tag>
+                        </> : null}
+                    <p>提交时间：{content.create_time}</p>
+                    <p>更新时间：{content.update_time}</p>
+                    {
+                        processLoading ? (
+                                <Space style={{flexDirection: 'column'}}>
+                                    <Skeleton.Input active={true} block={false}/>
+                                    <Skeleton.Input active={true} block={false}/>
+                                    <Skeleton.Input active={true} block={false}/>
+                                    <Skeleton.Input active={true} block={false}/>
+                                </Space>) :
+                            <div style={{marginTop: 16}}>
+                                <Button
+                                    type="primary"
+                                    loading={processLoading}
+                                    onClick={() => getProcess(openUid)}
+                                    style={{
+                                        backgroundColor: purple,
+                                        borderColor: purple
+                                    }}>
+                                    刷新流程
+                                </Button>
+                                <div style={{marginTop: 16}}>审批流程：</div>
+                                <Steps
+                                    style={{
+                                        marginTop: 16
+                                    }}
+                                    direction="vertical"
+                                    size="small"
+                                    current={content.count}
+                                    status={content.status === 0 ? 'process' : content.status === 1 ? 'finish' : 'error'}
+                                >
+                                    {
+                                        processList.map((item: string, index: number) => {
+                                            return (
+                                                <Step
+                                                    key={index}
+                                                    title={item}
+                                                />
+                                            )
+                                        })
+                                    }
+                                </Steps>
+                            </div>
+                    }
+                </Drawer>
                 <Title level={2} className={'tit'}>
                     请假记录&nbsp;&nbsp;
                     <Button type="primary" icon={<SearchOutlined/>} onClick={getDataSource}>刷新</Button>

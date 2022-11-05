@@ -1,23 +1,23 @@
-const teacherApply = [
+const apply = [
     {
         path: 'apply',
         children: [
             {
                 path: 'departmentChange',
-                component: () => import('../pages/Apply/DepartmentChange/Teacher'),
+                component: () => import('../pages/Apply/DepartmentChange'),
                 meta: {
                     title: 'Department Change',
                     titleCN: '部门变更',
-                    Auth: 'teacher'
+                    Auth: 'Employee'
                 }
             },
             {
-                path: 'TravelReimbursement',
-                component: () => import('../pages/Apply/TravelReimbursement'),
+                path: 'travel',
+                component: () => import('../pages/Apply/Travel'),
                 meta: {
                     title: 'Travel Reimbursement',
                     titleCN: '差旅报销',
-                    Auth: 'teacher'
+                    Auth: 'Employee'
                 }
             }, {
                 path: 'procurement',
@@ -25,27 +25,27 @@ const teacherApply = [
                 meta: {
                     title: 'Procurement',
                     titleCN: '采购',
-                    Auth: 'teacher'
+                    Auth: 'Employee'
                 }
             }, {
                 path: 'leave',
-                component: () => import('../pages/Apply/LeaveApply/Teacher'),
+                component: () => import('../pages/Apply/Leave'),
                 meta: {
                     title: 'Leave',
                     titleCN: '请假',
-                    Auth: 'teacher'
+                    Auth: 'Employee'
                 }
             }, {
-                path: 'report',
-                component: () => import('../pages/Apply/Report/Teacher'),
+                path: 'workReport',
+                component: () => import('../pages/Apply/WorkReport'),
                 meta: {
                     title: 'WorkReport',
                     titleCN: '工作报告',
-                    Auth: 'teacher'
+                    Auth: 'Employee'
                 }
             }
         ]
     }
 ]
 
-export default teacherApply;
+export default apply;

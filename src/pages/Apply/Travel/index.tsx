@@ -11,7 +11,7 @@ import {useSelector} from "react-redux";
 const {Title} = Typography;
 const {Option} = Select;
 
-const tableName = `travelreimbursement`;
+const tableName = `Travel`;
 
 const URL = `${BaseInfo}/api`;
 
@@ -80,31 +80,11 @@ const LeaveForm = () => {
                         title: isEnglish ? 'Your application has been submitted successfully' : '差旅报销申请提交成功',
                         describe: isEnglish ? 'please wait for the approval result' : '请等待管理员审批',
                         toPage: isEnglish ? 'See the application record' : '查看审批记录',
-                        toURL: '/home/record/travelReimbursement',
+                        toURL: '/home/record/travel',
                     }
                 }
             })
         })
-    }
-
-    const RenderModal: React.FC = () => {
-        return (
-            <Modal
-                title={isEnglish ? 'Confirm' : "确认提交"}
-                open={isModalVisible}
-                onOk={handleOk}
-                confirmLoading={confirmLoading}
-                onCancel={handleCancel}
-            >
-                <p>{isEnglish ? 'Destination: ' : '出差目的地：'}{destination}</p>
-                <p>{isEnglish ? 'Money: ' : '出差费用：'}{expenses} {moneyType}</p>
-                <p>{isEnglish ? 'Money: ' : '出差原因：'}{reason}</p>
-                {/*将变更材料 changeFile 中的 fileList 数组中的状态为 done 的每一项 name 输出出来*/}
-                <p>{isEnglish ? 'Files: ' : '变更材料：'}{
-                    fileList.filter((item: any) => item.status === 'done').map((item: any) => item.name).join('、')
-                }</p>
-            </Modal>
-        )
     }
 
     const handleCancel = () => {
@@ -127,7 +107,21 @@ const LeaveForm = () => {
     return (
         isRenderResult ? <Spin/> :
             <div className={'apply-body'}>
-                <RenderModal/>
+                <Modal
+                    title={isEnglish ? 'Confirm' : "确认提交"}
+                    open={isModalVisible}
+                    onOk={handleOk}
+                    confirmLoading={confirmLoading}
+                    onCancel={handleCancel}
+                >
+                    <p>{isEnglish ? 'Destination: ' : '出差目的地：'}{destination}</p>
+                    <p>{isEnglish ? 'Money: ' : '出差费用：'}{expenses} {moneyType}</p>
+                    <p>{isEnglish ? 'Money: ' : '出差原因：'}{reason}</p>
+                    {/*将变更材料 changeFile 中的 fileList 数组中的状态为 done 的每一项 name 输出出来*/}
+                    <p>{isEnglish ? 'Files: ' : '变更材料：'}{
+                        fileList.filter((item: any) => item.status === 'done').map((item: any) => item.name).join('、')
+                    }</p>
+                </Modal>
                 <Title level={2} className={'tit'}>{isEnglish ? 'Travel Reimbursement' : '差旅报销申请'}</Title>
                 <Form
                     form={form}

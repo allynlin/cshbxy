@@ -11,7 +11,7 @@ import {RenderStatusTag} from "../../../component/Tag/RenderStatusTag";
 import {RenderStatusColor} from "../../../component/Tag/RenderStatusColor";
 import '../index.scss'
 import RecordSkeleton from "../../../component/Skeleton/RecordSkeleton";
-import RejectProcurement from "./RejectProcurement";
+import Reject from "./Reject";
 
 const {Title} = Typography;
 
@@ -69,7 +69,7 @@ const Index: React.FC = () => {
                     justifyContent: 'end',
                     marginTop: 16
                 }}>
-                    <RejectProcurement state={content} getNewContent={(isReject: boolean) => {
+                    <Reject state={content} getNewContent={(isReject: boolean) => {
                         if (isReject) {
                             setOpen(false)
                             getDataSource()

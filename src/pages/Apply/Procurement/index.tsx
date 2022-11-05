@@ -39,22 +39,6 @@ const ProcurementForm = () => {
         })
     }
 
-    const RenderModal: React.FC = () => {
-        return (
-            <Modal
-                title="确认提交"
-                open={isModalVisible}
-                onOk={handleOk}
-                confirmLoading={confirmLoading}
-                onCancel={handleCancel}
-            >
-                <p>采购物品：{items}</p>
-                <p>采购费用：{price}</p>
-                <p>采购原因：{reason}</p>
-            </Modal>
-        )
-    }
-
     const handleCancel = () => {
         setIsModalVisible(false);
     };
@@ -74,7 +58,17 @@ const ProcurementForm = () => {
 
     return (
         <div className={'apply-body'}>
-            <RenderModal/>
+            <Modal
+                title="确认提交"
+                open={isModalVisible}
+                onOk={handleOk}
+                confirmLoading={confirmLoading}
+                onCancel={handleCancel}
+            >
+                <p>采购物品：{items}</p>
+                <p>采购费用：{price}</p>
+                <p>采购原因：{reason}</p>
+            </Modal>
             <Title level={2} className={'tit'}>采购申请</Title>
             <Form
                 form={form}

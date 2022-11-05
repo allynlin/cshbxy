@@ -45,33 +45,33 @@ const RenderMenu = () => {
         setIsEnglish(userLanguage === 'English')
     }, [userLanguage])
 
-    const teacher: MenuProps['items'] = [
-        getItem((<Link to={'/home/teacher'}>{isEnglish ? 'Home' : '首页'}</Link>), 'Home',
+    const employee: MenuProps['items'] = [
+        getItem((<Link to={'/home/employee'}>{isEnglish ? 'Home' : '首页'}</Link>), 'Home',
             <HomeOutlined/>),
         getItem(intl.get('apply'), 'apply', <EditOutlined/>, [
             getItem((
                 <Link
-                    to={'/home/apply/departmentChange'}>{intl.get('DepartmentChange')}</Link>), 'teacherApplyDepartmentChange'),
+                    to={'/home/apply/departmentChange'}>{intl.get('DepartmentChange')}</Link>), 'apply_departmentChange'),
             getItem((<Link
-                to={'/home/apply/travelReimbursement'}>{intl.get('TravelReimbursement')}</Link>), 'teacherApplyTravelReimbursement'),
+                to={'/home/apply/travel'}>{intl.get('Travel')}</Link>), 'apply_travel'),
             getItem((
-                <Link to={'/home/apply/leave'}>{intl.get('Leave')}</Link>), 'teacherApplyLeave'),
+                <Link to={'/home/apply/leave'}>{intl.get('Leave')}</Link>), 'apply_leave'),
             getItem((<Link
-                to={'/home/apply/procurement'}>{intl.get('Procurement')}</Link>), 'teacherApplyProcurement'),
+                to={'/home/apply/procurement'}>{intl.get('Procurement')}</Link>), 'apply_procurement'),
             getItem((<Link
-                to={'/home/apply/report'}>工作报告</Link>), 'teacherApplyReport'),
+                to={'/home/apply/workReport'}>工作报告</Link>), 'apply_workReport'),
         ]),
         getItem(intl.get('Record'), 'record', <BarChartOutlined/>, [
             getItem((
                 <Link
-                    to={'/home/record/departmentChange'}>{isEnglish ? 'Travel Reimbursement Record' : '部门变更记录'}</Link>), 'teacherRecordLeaveList'),
+                    to={'/home/record/departmentChange'}>{isEnglish ? 'Travel Reimbursement Record' : '部门变更记录'}</Link>), 'record_departmentChange'),
             getItem((<Link
-                to={'/home/record/travelReimbursement'}>{isEnglish ? 'Travel Reimbursement Record' : '差旅报销记录'}</Link>), 'teacherTravelReimbursement'),
+                to={'/home/record/travel'}>{isEnglish ? 'Travel Reimbursement Record' : '差旅报销记录'}</Link>), 'record_travel'),
             getItem((<Link
-                to={'/home/record/leave'}>{isEnglish ? 'Leave Record' : '请假记录'}</Link>), 'teacherRecordLeave'),
-            getItem((<Link to={'/home/record/procurement'}>采购申请记录</Link>), 'leaveProcurement'),
+                to={'/home/record/leave'}>{isEnglish ? 'Leave Record' : '请假记录'}</Link>), 'record_leave'),
+            getItem((<Link to={'/home/record/procurement'}>采购申请记录</Link>), 'record_procurement'),
             getItem((<Link
-                to={'/home/record/report'}>{isEnglish ? 'WorkReport Record' : '工作报告记录'}</Link>), 'teacherRecordReport'),
+                to={'/home/record/workReport'}>{isEnglish ? 'WorkReport Record' : '工作报告记录'}</Link>), 'record_workReport'),
         ]),
         getItem((<Link to={'/home/setting'}>{isEnglish ? 'Setting' : '设置'}</Link>), 'Setting',
             <FormOutlined/>)
@@ -79,9 +79,9 @@ const RenderMenu = () => {
     const department: MenuProps['items'] = [
         getItem((<Link to={'/home/department'}>首页</Link>), 'Home', <HomeOutlined/>),
         getItem('审批', 'approval', <ProjectOutlined/>, [
-            getItem(<Link to={'/home/approval/departmentChange'}>部门变更</Link>, 'changeDepartment'),
+            getItem(<Link to={'/home/approval/departmentChange'}>部门变更</Link>, 'departmentChange'),
             getItem(<Link to={'/home/approval/leave'}>请假</Link>, 'leave'),
-            getItem(<Link to={'/home/approval/travelReimbursement'}>差旅报销</Link>, 'travel'),
+            getItem(<Link to={'/home/approval/travel'}>差旅报销</Link>, 'travel'),
             getItem(<Link to={'/home/approval/procurement'}>采购</Link>, 'procurement'),
             getItem(<Link to={'/home/approval/workReport'}>工作报告</Link>, 'workReport'),
         ]),
@@ -93,7 +93,7 @@ const RenderMenu = () => {
         getItem('审批', 'approval', <ProjectOutlined/>, [
             getItem(<Link to={'/home/approval/departmentChange'}>部门变更</Link>, 'changeDepartment'),
             getItem(<Link to={'/home/approval/leave'}>请假</Link>, 'leave'),
-            getItem(<Link to={'/home/approval/travelReimbursement'}>差旅报销</Link>, 'travel'),
+            getItem(<Link to={'/home/approval/travel'}>差旅报销</Link>, 'travel'),
             getItem(<Link to={'/home/approval/procurement'}>采购</Link>, 'procurement'),
             getItem(<Link to={'/home/approval/workReport'}>工作报告</Link>, 'workReport'),
         ]),
@@ -129,11 +129,11 @@ const RenderMenu = () => {
     // const [theme, setTheme] = useState('light');
     const RenderMenu = (): MenuProps['items'] => {
         switch (userType) {
-            case 'teacher':
-                return teacher
-            case 'department':
+            case 'Employee':
+                return employee
+            case 'Department':
                 return department
-            case 'leader':
+            case 'Leader':
                 return leader
             default:
                 return defaultMenu

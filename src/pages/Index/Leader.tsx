@@ -1,27 +1,11 @@
 import {Descriptions} from 'antd';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import './index.scss'
 import {useSelector} from "react-redux";
-import {getRealeName} from "../../component/axios/api";
 
-const Teacher: React.FC = () => {
-
-    const [leaderName, setLeaderName] = useState<string>('');
+const Leader: React.FC = () => {
 
     const userInfo = useSelector((state: { userInfo: { value: any } }) => state.userInfo.value)
-
-    const getName = () => {
-        if (userInfo.leaderUid) {
-            const depa = userInfo.leaderUid;
-            getRealeName(depa).then(res => {
-                setLeaderName(res.body);
-            })
-        }
-    }
-
-    useEffect(() => {
-        getName()
-    }, [userInfo])
 
     return (
         <div className={'index-body'}>
@@ -59,4 +43,4 @@ const Teacher: React.FC = () => {
     )
 };
 
-export default Teacher;
+export default Leader;

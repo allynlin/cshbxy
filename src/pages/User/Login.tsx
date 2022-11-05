@@ -2,15 +2,11 @@ import React, {memo} from "react";
 import {Button, Form, Input, message, Switch, Radio} from 'antd';
 import './index-light.scss'
 import Cookie from 'js-cookie';
-import {
-    teacherLogin,
-    departmentLogin,
-    leaderLogin
-} from "../../component/axios/api";
+import {userLogin} from "../../component/axios/api";
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {login} from "../../component/redux/isLoginSlice";
-import {teacher, department, leader} from "../../component/redux/userTypeSlice";
+import {Employee, Department, Leader} from "../../component/redux/userTypeSlice";
 import {setUser} from "../../component/redux/userInfoSlice";
 
 const StudentForm = memo(() => {
@@ -18,93 +14,56 @@ const StudentForm = memo(() => {
     const [form] = Form.useForm();
     const username = Form.useWatch('username', form);
     const password = Form.useWatch('password', form);
-    const channel = Form.useWatch('channel', form);
+    const userType = Form.useWatch('userType', form);
     const rememberme = Form.useWatch('rememberme', form);
     const navigate = useNavigate();
 
     const onFinish = () => {
-        switch (channel) {
-            case 'teacher':
-                onTeacherLogin()
-                break;
-            case 'department':
-                onDepartmentLogin()
-                break;
-            case 'leader':
-                onLeaderLogin()
-                break;
-            default:
-                break;
-        }
+        userLogin(username, password, userType).then(res => {
+            dispatch(setUser(res.body))
+            message.success(res.msg);
+            isRemember()
+            loginSuccess(res.body.userType)
+        }).catch(() => {
+            loginError()
+        })
     };
-
-    // 登录函数
-    const onTeacherLogin = () => {
-        teacherLogin(username, password).then(res => {
-            if (res.code === 200) {
-                dispatch(setUser(res.body))
-                dispatch(teacher())
-                message.success(res.msg);
-                loginSuccess("teacher")
-                isRemember()
-                navigate('/home/teacher')
-            } else {
-                message.error(res.msg);
-                loginError()
-            }
-        })
-    }
-    const onDepartmentLogin = () => {
-        departmentLogin(username, password).then(res => {
-            if (res.code === 200) {
-                dispatch(setUser(res.body))
-                dispatch(department())
-                message.success(res.msg);
-                loginSuccess("department")
-                isRemember()
-                navigate('/home/department')
-            } else {
-                message.error(res.msg);
-                loginError()
-            }
-        })
-    }
-    const onLeaderLogin = () => {
-        leaderLogin(username, password).then(res => {
-            if (res.code === 200) {
-                dispatch(setUser(res.body))
-                dispatch(leader())
-                message.success(res.msg)
-                loginSuccess("leader")
-                isRemember()
-                navigate('/home/leader')
-            } else {
-                message.error(res.msg);
-                loginError()
-            }
-        })
-    }
 
     // 登录成功或失败所作的操作
     const loginSuccess = (e: string) => {
         dispatch(login())
         Cookie.set('userType', e, {expires: 7, path: '/', sameSite: 'strict'})
+        switch (e) {
+            case 'Employee':
+                dispatch(Employee())
+                navigate('/home/employee')
+                break;
+            case 'Department':
+                dispatch(Department())
+                navigate('/home/department')
+                break;
+            case 'Leader':
+                dispatch(Leader())
+                navigate('/home/leader')
+                break;
+        }
     }
+
     const isRemember = () => {
         if (rememberme) {
             Cookie.set('username', username, {expires: 7, path: '/', sameSite: 'strict'});
             Cookie.set('password', password, {expires: 7, path: '/', sameSite: 'strict'});
-            Cookie.set('channel', channel, {expires: 7, path: '/', sameSite: 'strict'});
+            Cookie.set('userType', userType, {expires: 7, path: '/', sameSite: 'strict'});
         } else {
             Cookie.remove('username');
             Cookie.remove('password');
-            Cookie.remove('channel');
+            Cookie.remove('userType');
         }
     }
+
     const loginError = () => {
         Cookie.remove('username');
         Cookie.remove('password');
-        Cookie.remove('channel');
         Cookie.remove('userType');
     }
 
@@ -127,7 +86,7 @@ const StudentForm = memo(() => {
                 username: Cookie.get("username") || "",
                 password: Cookie.get("password") || "",
                 rememberme: true,
-                channel: Cookie.get("channel") || 'teacher',
+                userType: Cookie.get("userType") || 'Employee',
             }}
         >
             <Form.Item
@@ -160,7 +119,7 @@ const StudentForm = memo(() => {
 
             <Form.Item
                 label="登录渠道"
-                name="channel"
+                name="userType"
                 rules={[
                     {
                         required: true,
@@ -169,9 +128,9 @@ const StudentForm = memo(() => {
                 ]}
             >
                 <Radio.Group style={{display: "flex"}} buttonStyle="solid">
-                    <Radio.Button value="teacher">教师</Radio.Button>
-                    <Radio.Button value="department">部门</Radio.Button>
-                    <Radio.Button value="leader">领导</Radio.Button>
+                    <Radio.Button value="Employee">员工</Radio.Button>
+                    <Radio.Button value="Department">部门</Radio.Button>
+                    <Radio.Button value="Leader">领导</Radio.Button>
                 </Radio.Group>
             </Form.Item>
 

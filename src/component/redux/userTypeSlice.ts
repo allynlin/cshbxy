@@ -8,14 +8,14 @@ export const userTypeSlice = createSlice({
     name: 'userType',
     initialState,
     reducers: {
-        teacher: state => {
-            state.value = "teacher"
+        Employee: state => {
+            state.value = "Employee"
         },
-        department: state => {
-            state.value = "department"
+        Department: state => {
+            state.value = "Department"
         },
-        leader: state => {
-            state.value = "leader"
+        Leader: state => {
+            state.value = "Leader"
         },
         all: state => {
             state.value = "all"
@@ -24,6 +24,6 @@ export const userTypeSlice = createSlice({
 })
 
 // 为每个 reducer 函数生成动作创建器（Action creators）
-export const {teacher, department, leader, all} = userTypeSlice.actions
+export const {Employee, Department, Leader, all} = userTypeSlice.actions
 
 export default userTypeSlice.reducer

@@ -1,4 +1,4 @@
-import {Button, Collapse, Drawer, message, Modal, Steps, Table, Tag, Typography} from 'antd';
+import {Button, Collapse, Drawer, message, Modal, Steps, Table, Tag, Typography, Space, Skeleton} from 'antd';
 import {ExclamationCircleOutlined, SearchOutlined,} from '@ant-design/icons';
 import React, {useEffect, useState} from 'react';
 import {
@@ -8,7 +8,7 @@ import {
     findWorkReportList
 } from '../../../component/axios/api';
 import '../index.scss';
-import {DownLoadURL, green, red, yellow} from "../../../baseInfo";
+import {DownLoadURL, red, purple} from "../../../baseInfo";
 import {RenderStatusTag} from "../../../component/Tag/RenderStatusTag";
 import RecordSkeleton from "../../../component/Skeleton/RecordSkeleton";
 import {ColumnsType} from "antd/es/table";
@@ -19,7 +19,7 @@ const {Title} = Typography;
 const {Step} = Steps;
 const {Panel} = Collapse;
 
-const tableName = `workreportteacher`;
+const tableName = `WorkReport`;
 
 const Index: React.FC = () => {
     // 防止反复查询变更记录
@@ -32,6 +32,10 @@ const Index: React.FC = () => {
     const [fileList, setFileList] = useState<any>([]);
     const [processList, setProcessList] = useState<any>([]);
     const [open, setOpen] = useState(false);
+    const [openUid, setOpenUid] = useState<string>('');
+
+    const [fileLoading, setFileLoading] = useState<boolean>(true);
+    const [processLoading, setProcessLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -48,98 +52,33 @@ const Index: React.FC = () => {
         }
     }, [waitTime])
 
-    // 渲染抽屉
-    const RenderDrawer = () => {
-        return (
-            <Drawer
-                title={<span>{RenderStatusTag(content.status)}</span>}
-                placement="right"
-                open={open}
-                onClose={() => {
-                    setOpen(false)
-                }}
-                extra={content.status === 0 ?
-                    <>
-                        <Button
-                            type="primary"
-                            style={{
-                                backgroundColor: red,
-                                borderColor: red
-                            }}
-                            onClick={() => {
-                                showDeleteConfirm(content.uid);
-                            }}
-                        >删除</Button>
-                    </> : null}
-            >
-                {content.reject_reason ?
-                    <>
-                        驳回原因：
-                        <Tag color={red}
-                             style={{marginBottom: 16}}>{content.reject_reason}</Tag>
-                    </> : null}
-                <p>提交时间：{content.create_time}</p>
-                <p>更新时间：{content.update_time}</p>
-                {
-                    // 如果 fileList 不为空则渲染
-                    fileList.length > 0 ? (
-                        <Collapse ghost>
-                            {/*循环输出 Card，数据来源 fileList*/}
-                            {fileList.map((item: any, index: number) => {
-                                return (
-                                    <Panel header={`附件${index + 1}`} key={index}>
-                                        <p>{item.oldFileName}</p>
-                                        <a href={`${DownLoadURL}/downloadFile?filename=${item.fileName}`}
-                                           target="_self">下载</a>
-                                    </Panel>
-                                )
-                            })}
-                        </Collapse>
-                    ) : null
-                }
-                <div style={{marginTop: 16}}>
-                    审批流程：
-                    <Steps
-                        style={{
-                            marginTop: 16
-                        }}
-                        direction="vertical"
-                        size="small"
-                        current={content.count}
-                        status={content.status === 0 ? 'process' : content.status === 1 ? 'finish' : 'error'}
-                    >
-                        {
-                            processList.map((item: string, index: number) => {
-                                return (
-                                    <Step
-                                        key={index}
-                                        title={item}
-                                    />
-                                )
-                            })
-                        }
-                    </Steps>
-                </div>
-            </Drawer>
-        )
+    // 获取当前记录上传的文件和当前审批流程
+    const getInfo = (uid: string) => {
+        setOpen(true)
+        getProcess(uid);
+        getFiles(uid);
     }
 
-    // 获取当前记录上传的文件和当前审批流程
-    const getInfo = async (uid: string) => {
-        const hide = message.loading('正在获取文件列表和审批流程', 0);
-        setTimeout(hide, 10000);
-        const list: boolean = await findWorkReportByTeacherProcess(uid).then((res: any) => {
+    const getProcess = (uid: string) => {
+        setProcessLoading(true)
+        const hide = message.loading('正在获取审批流程', 0);
+        findWorkReportByTeacherProcess(uid).then((res: any) => {
             setProcessList(res.body);
-            return true;
+        }).finally(() => {
+            hide()
+            setProcessLoading(false)
         })
-        const file: boolean = await findUploadFilesByUid(uid, tableName).then((res: any) => {
+    }
+
+    const getFiles = (uid: string) => {
+        setFileLoading(true)
+        const hide = message.loading('正在获取文件列表', 0);
+        findUploadFilesByUid(uid, tableName).then((res: any) => {
             setFileList(res.body);
-            return true;
+        }).finally(() => {
+            hide()
+            setFileLoading(false)
         })
-        if (list && file) {
-            hide();
-            setOpen(true)
-        }
     }
 
     // 删除确认框
@@ -251,8 +190,9 @@ const Index: React.FC = () => {
                         type="primary"
                         onClick={() => {
                             setOpen(false)
+                            setOpenUid(text)
                             setContent(record)
-                            getInfo(record.uid)
+                            getInfo(text)
                         }}
                         style={{
                             backgroundColor: RenderStatusColor(record.status),
@@ -266,7 +206,108 @@ const Index: React.FC = () => {
 
     return isRenderResult ?
         <RecordSkeleton/> : (<div className={'record-body'}>
-                <RenderDrawer/>
+                <Drawer
+                    title={<span>{RenderStatusTag(content.status)}</span>}
+                    placement="right"
+                    open={open}
+                    onClose={() => {
+                        setOpen(false)
+                    }}
+                    extra={content.status === 0 ?
+                        <>
+                            <Button
+                                type="primary"
+                                style={{
+                                    backgroundColor: red,
+                                    borderColor: red
+                                }}
+                                onClick={() => {
+                                    showDeleteConfirm(content.uid);
+                                }}
+                            >删除</Button>
+                        </> : null}
+                >
+                    {content.reject_reason ?
+                        <>
+                            驳回原因：
+                            <Tag color={red}
+                                 style={{marginBottom: 16}}>{content.reject_reason}</Tag>
+                        </> : null}
+                    <p>提交时间：{content.create_time}</p>
+                    <p>更新时间：{content.update_time}</p>
+                    {
+                        fileLoading ? <Skeleton.Button block={true} active={true} size={'large'}/> :
+                            // 如果 fileList 不为空则渲染
+                            fileList.length > 0 ? (
+                                <>
+                                    <Button
+                                        type="primary"
+                                        loading={fileLoading}
+                                        onClick={() => getFiles(openUid)}
+                                        style={{
+                                            backgroundColor: purple,
+                                            borderColor: purple
+                                        }}>
+                                        刷新文件列表
+                                    </Button>
+                                    <Collapse ghost>
+                                        {/*循环输出 Card，数据来源 fileList*/}
+                                        {fileList.map((item: any, index: number) => {
+                                            return (
+                                                <Panel header={`附件${index + 1}`} key={index}>
+                                                    <p>{item.oldFileName}</p>
+                                                    <a href={`${DownLoadURL}/downloadFile?filename=${item.fileName}`}
+                                                       target="_self">下载</a>
+                                                </Panel>
+                                            )
+                                        })}
+                                    </Collapse>
+                                </>
+                            ) : null
+                    }
+                    {
+                        processLoading ? (
+                                <Space style={{flexDirection: 'column'}}>
+                                    <Skeleton.Input active={true} block={false}/>
+                                    <Skeleton.Input active={true} block={false}/>
+                                    <Skeleton.Input active={true} block={false}/>
+                                    <Skeleton.Input active={true} block={false}/>
+                                </Space>) :
+                            <div style={{marginTop: 16}}>
+                                <Button
+                                    type="primary"
+                                    loading={processLoading}
+                                    onClick={() => getProcess(openUid)}
+                                    style={{
+                                        backgroundColor: purple,
+                                        borderColor: purple
+                                    }}>
+                                    刷新流程
+                                </Button>
+                                <div style={{marginTop: 16}}>审批流程：</div>
+                                <Steps
+                                    style={{
+                                        marginTop: 16
+                                    }}
+                                    direction="vertical"
+                                    size="small"
+                                    current={content.count}
+                                    status={content.status === 0 ? 'process' : content.status === 1 ? 'finish' : 'error'}
+                                >
+                                    {
+                                        processList.map((item: string, index: number) => {
+                                            return (
+                                                <Step
+                                                    key={index}
+                                                    title={item}
+                                                />
+                                            )
+                                        })
+                                    }
+                                </Steps>
+                            </div>
+                    }
+                </Drawer>
                 <Title level={2} className={'tit'}>
                     工作报告提交记录&nbsp;&nbsp;
                     <Button type="primary" icon={<SearchOutlined/>} onClick={getDataSource}>刷新</Button>
@@ -285,7 +326,8 @@ const Index: React.FC = () => {
                     }}
                 />
             </div>
-        );
+        )
+        ;
 };
 
 export default Index;

@@ -1,19 +1,18 @@
 import React, {useEffect, useState} from "react";
 import './App.scss';
 import routes from "./Router/routes";
+import Cookie from 'js-cookie';
 import RouterWaiter from "react-router-waiter"
 import Spin from "./component/loading/Spin";
 import {useDispatch, useSelector} from "react-redux";
 import {ConfigProvider, message} from "antd";
-import Cookie from "js-cookie";
 import {
-    checkDepartmentToken,
-    checkLeaderToken,
-    checkTeacherToken, getLowVersion,
+    checkUser,
+    getLowVersion,
     getVersion
 } from "./component/axios/api";
 import {login} from "./component/redux/isLoginSlice";
-import {department, leader, teacher} from "./component/redux/userTypeSlice";
+import {Employee, Department, Leader} from "./component/redux/userTypeSlice";
 import {setVersion} from "./component/redux/serverVersionSlice";
 import {unstable_HistoryRouter as HistoryRouter} from 'react-router-dom'
 import {createBrowserHistory} from 'history'
@@ -141,64 +140,41 @@ export default function App() {
         getLowVersion().then(res => {
             dispatch(setLowVersion(res.body))
         })
-        switch (Cookie.get('userType')) {
-            case 'teacher':
-                checkTeacher()
-                break
-            case 'department':
-                checkDepartment()
-                break
-            case 'leader':
-                checkLeader()
-                break
-            default:
-                checkError()
-                break
+        const token = Cookie.get('token');
+        if (token) {
+            checkUserInfo();
+        } else {
+            rootNavigate('/login');
         }
     }, [])
 
-    // 检查登录状态
-    const checkTeacher = () => {
-        checkTeacherToken().then(res => {
+    // 校验用户
+    const checkUserInfo = () => {
+        checkUser().then(res => {
             if (res.code === 200) {
                 dispatch(setUser(res.body))
                 dispatch(login())
-                dispatch(teacher())
                 setIsRender(true)
+                switch (res.body.userType) {
+                    case 'Employee':
+                        dispatch(Employee())
+                        break
+                    case 'Department':
+                        dispatch(Department())
+                        break
+                    case 'Leader':
+                        dispatch(Leader())
+                        break
+                    default:
+                        setIsRender(true)
+                        break
+                }
             } else {
                 message.error(res.msg)
             }
+        }).finally(() => {
+            setIsRender(true)
         })
-    }
-    const checkDepartment = () => {
-        checkDepartmentToken().then(res => {
-            if (res.code === 200) {
-                dispatch(setUser(res.body))
-                message.success(res.msg)
-                dispatch(login())
-                dispatch(department())
-                setIsRender(true)
-            } else {
-                message.error(res.msg)
-            }
-        })
-    }
-    const checkLeader = () => {
-        checkLeaderToken().then(res => {
-            if (res.code === 200) {
-                dispatch(setUser(res.body))
-                message.success(res.msg)
-                dispatch(login())
-                dispatch(leader())
-                setIsRender(true)
-            } else {
-                message.error(res.msg)
-            }
-        })
-    }
-
-    const checkError = () => {
-        setIsRender(true)
     }
 
     // 路由跳转鉴权

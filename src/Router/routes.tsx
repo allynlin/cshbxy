@@ -1,7 +1,7 @@
 import PlayOut from "../pages/Home/PlayOut";
-import teacherApply from './teacherApply'
-import teacherRecord from "./teacherRecord";
-import Approval from "./Approval";
+import apply from './apply'
+import record from "./record";
+import Approval from "./approval";
 import {RoutesItemType} from "react-router-waiter";
 import {Error101, Error103, Error403, Error404, Error500, Success} from "../pages/Result/Result";
 import {User} from "../pages/User";
@@ -44,12 +44,12 @@ const routes: RoutesItemType[] = [
         // 根元素使用 element 的方式导入，避免路由导航的时候刷新根元素
         children: [
             {
-                path: 'teacher',
-                component: () => import('../pages/Index/Teacher'),
+                path: 'Employee',
+                component: () => import('../pages/Index/Employee'),
                 meta: {
                     title: 'Home',
-                    titleCN: '教师首页',
-                    Auth: 'teacher'
+                    titleCN: '员工首页',
+                    Auth: 'Employee'
                 }
             }, {
                 path: 'department',
@@ -57,7 +57,7 @@ const routes: RoutesItemType[] = [
                 meta: {
                     title: 'Home',
                     titleCN: '部门首页',
-                    Auth: 'department'
+                    Auth: 'Department'
                 }
             }, {
                 path: 'leader',
@@ -65,7 +65,7 @@ const routes: RoutesItemType[] = [
                 meta: {
                     title: 'Home',
                     titleCN: '领导首页',
-                    Auth: 'leader'
+                    Auth: 'Leader'
                 }
             }, {
                 path: 'setting',
@@ -82,8 +82,8 @@ const routes: RoutesItemType[] = [
                     titleCN: '成功',
                 }
             },
-            ...teacherApply,
-            ...teacherRecord,
+            ...apply,
+            ...record,
             ...Approval
         ]
     }, {

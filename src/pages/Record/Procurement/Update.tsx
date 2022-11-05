@@ -90,7 +90,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
     );
 };
 
-const UpdateProcurement = (props: any) => {
+const Update = (props: any) => {
     const [open, setOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const content = props.state;
@@ -145,4 +145,4 @@ const UpdateProcurement = (props: any) => {
     );
 };
 
-export default UpdateProcurement;
+export default Update;

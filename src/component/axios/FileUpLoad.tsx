@@ -27,7 +27,6 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
     }, [props.setList])
 
     const Setting: UploadProps = {
-        listType: "picture",
         name: 'file',
         headers: {
             'Authorization': `${apiToken}`,

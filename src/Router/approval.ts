@@ -8,8 +8,8 @@ const teacherRecord = [
                 meta: {
                     title: 'Approval Department Change',
                     titleCN: '部门变更',
-                    Auth: 'department',
-                    Auth2: 'leader'
+                    Auth: 'Department',
+                    Auth2: 'Leader'
                 }
             }, {
                 path: 'leave',
@@ -17,17 +17,17 @@ const teacherRecord = [
                 meta: {
                     title: 'Approval Leave',
                     titleCN: '请假',
-                    Auth: 'department',
-                    Auth2: 'leader'
+                    Auth: 'Department',
+                    Auth2: 'Leader'
                 }
             }, {
-                path: 'travelReimbursement',
-                component: () => import('../pages/Approval/TravelReimbursement'),
+                path: 'travel',
+                component: () => import('../pages/Approval/Travel'),
                 meta: {
                     title: 'Approval Travel Reimbursement',
                     titleCN: '差旅报销',
-                    Auth: 'department',
-                    Auth2: 'leader'
+                    Auth: 'Department',
+                    Auth2: 'Leader'
                 }
             }, {
                 path: 'procurement',
@@ -35,8 +35,8 @@ const teacherRecord = [
                 meta: {
                     title: 'Approval Procurement',
                     titleCN: '采购',
-                    Auth: 'department',
-                    Auth2: 'leader'
+                    Auth: 'Department',
+                    Auth2: 'Leader'
                 }
             }, {
                 path: 'workReport',
@@ -44,8 +44,8 @@ const teacherRecord = [
                 meta: {
                     title: 'Approval Work WorkReport',
                     titleCN: '工作汇报',
-                    Auth: 'department',
-                    Auth2: 'leader'
+                    Auth: 'Department',
+                    Auth2: 'Leader'
                 }
             }
         ]

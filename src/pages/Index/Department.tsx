@@ -1,27 +1,11 @@
 import {Descriptions} from 'antd';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import './index.scss'
 import {useSelector} from "react-redux";
-import {getRealeName} from "../../component/axios/api";
 
-const Teacher: React.FC = () => {
-
-    const [leaderName, setLeaderName] = useState<string>('');
+const Department: React.FC = () => {
 
     const userInfo = useSelector((state: { userInfo: { value: any } }) => state.userInfo.value)
-
-    const getName = () => {
-        if (userInfo.leaderUid) {
-            const depa = userInfo.leaderUid;
-            getRealeName(depa).then(res => {
-                setLeaderName(res.body);
-            })
-        }
-    }
-
-    useEffect(() => {
-        getName()
-    }, [userInfo])
 
     return (
         <div className={'index-body'}>
@@ -54,12 +38,9 @@ const Teacher: React.FC = () => {
                 <Descriptions.Item label={'状态'}>
                     {userInfo.status === 0 ? '正常' : '异常'}
                 </Descriptions.Item>
-                <Descriptions.Item label={'上级领导'}>
-                    {leaderName}
-                </Descriptions.Item>
             </Descriptions>
         </div>
     )
 };
 
-export default Teacher;
+export default Department;

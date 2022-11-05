@@ -92,7 +92,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
     );
 };
 
-const UpdateLeave = (props: any) => {
+const Update = (props: any) => {
     const [open, setOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const content = props.state;
@@ -147,4 +147,4 @@ const UpdateLeave = (props: any) => {
     );
 };
 
-export default UpdateLeave;
+export default Update;

@@ -64,7 +64,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
     );
 };
 
-const RejectDepartmentChange = (props: any) => {
+const Reject = (props: any) => {
     const [open, setOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const content = props.state;
@@ -105,4 +105,4 @@ const RejectDepartmentChange = (props: any) => {
     );
 };
 
-export default RejectDepartmentChange;
+export default Reject;

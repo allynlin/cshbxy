@@ -1,4 +1,4 @@
-const teacherRecord = [
+const record = [
     {
         path: 'record',
         children: [
@@ -8,15 +8,15 @@ const teacherRecord = [
                 meta: {
                     title: 'Department Change Record',
                     titleCN: '变更部门记录',
-                    Auth: 'teacher'
+                    Auth: 'Employee'
                 }
             }, {
-                path: 'travelReimbursement',
-                component: () => import('../pages/Record/TravelReimbursement'),
+                path: 'travel',
+                component: () => import('../pages/Record/Travel'),
                 meta: {
                     title: 'Travel Reimbursement Record',
                     titleCN: '差旅报销记录',
-                    Auth: 'teacher'
+                    Auth: 'Employee'
                 }
             }, {
                 path: 'leave',
@@ -24,15 +24,15 @@ const teacherRecord = [
                 meta: {
                     title: 'Leave Record',
                     titleCN: '请假记录',
-                    Auth: 'teacher'
+                    Auth: 'Employee'
                 }
             }, {
-                path: 'report',
+                path: 'workReport',
                 component: () => import('../pages/Record/Report'),
                 meta: {
                     title: 'WorkReport Record',
                     titleCN: '工作报告记录',
-                    Auth: 'teacher'
+                    Auth: 'Employee'
                 }
             }, {
                 path: 'procurement',
@@ -40,19 +40,11 @@ const teacherRecord = [
                 meta: {
                     title: 'Procurement',
                     titleCN: '采购记录',
-                    Auth: 'teacher'
-                }
-            }, {
-                path: 'skeleton',
-                component: () => import('../component/Skeleton/RecordSkeleton'),
-                meta: {
-                    title: 'Record Skeleton',
-                    titleCN: '记录骨架',
-                    Auth: 'teacher'
+                    Auth: 'Employee'
                 }
             }
         ]
     }
 ]
 
-export default teacherRecord;
+export default record;

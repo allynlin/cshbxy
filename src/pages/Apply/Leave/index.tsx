@@ -99,23 +99,6 @@ const LeaveForm = () => {
         })
     }
 
-
-    const RenderModal: React.FC = () => {
-        return (
-            <Modal
-                title={intl.get('Confirm')}
-                open={isModalVisible}
-                onOk={handleOk}
-                confirmLoading={confirmLoading}
-                onCancel={handleCancel}
-            >
-                <p>请假时间：{leaveTime ? leaveTime[0].format('YYYY-MM-DD HH:mm:ss') : '未选择请假时间'}</p>
-                <p>销假时间：{leaveTime ? leaveTime[1].format('YYYY-MM-DD HH:mm:ss') : '未选择销假时间'}</p>
-                <p>请假原因：{reason}</p>
-            </Modal>
-        )
-    }
-
     const handleCancel = () => {
         setIsModalVisible(false);
     };
@@ -165,7 +148,17 @@ const LeaveForm = () => {
     return (
         <div className={'apply-body'}>
             {isHaveLastLeave ? <RenderAlert/> : null}
-            <RenderModal/>
+            <Modal
+                title={intl.get('Confirm')}
+                open={isModalVisible}
+                onOk={handleOk}
+                confirmLoading={confirmLoading}
+                onCancel={handleCancel}
+            >
+                <p>请假时间：{leaveTime ? leaveTime[0].format('YYYY-MM-DD HH:mm:ss') : '未选择请假时间'}</p>
+                <p>销假时间：{leaveTime ? leaveTime[1].format('YYYY-MM-DD HH:mm:ss') : '未选择销假时间'}</p>
+                <p>请假原因：{reason}</p>
+            </Modal>
             <Title level={2} className={'tit'}>请假申请</Title>
             <Form
                 form={form}
@@ -224,10 +217,10 @@ const LeaveForm = () => {
     );
 };
 
-const Teacher = () => {
+const Index = () => {
     return (
         <LeaveForm/>
     )
 }
 
-export default Teacher;
+export default Index;
