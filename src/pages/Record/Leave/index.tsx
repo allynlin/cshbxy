@@ -1,7 +1,13 @@
 import {Button, Drawer, message, Modal, Skeleton, Space, Steps, Table, Tag, Typography} from 'antd';
 import {ExclamationCircleOutlined, SearchOutlined} from '@ant-design/icons';
 import React, {useEffect, useState} from 'react';
-import {deleteLeave, findLeaveList, findLeaveProcess} from '../../../component/axios/api';
+import {
+    deleteLeave,
+    findLeaveList,
+    findLeaveProcess,
+    refreshLeave,
+    refreshWorkReport
+} from '../../../component/axios/api';
 import '../index.scss';
 import {RenderStatusTag} from "../../../component/Tag/RenderStatusTag";
 import {purple, red} from "../../../baseInfo";
@@ -42,6 +48,29 @@ const Index: React.FC = () => {
             clearTimeout(timer)
         }
     }, [waitTime])
+
+    useEffect(() => {
+        // 当 content 变化时，在 dataSource 中找到对应的 uid，将 content 赋值给 dataSource 中的对应 uid
+        let newDataSource: any = dataSource.map((item: any) => {
+            if (item.uid === content.uid) {
+                return content
+            } else {
+                return item
+            }
+        })
+        setDataSource(newDataSource)
+    }, [content])
+
+    const refresh = (uid: string) => {
+        refreshLeave(uid).then(res => {
+            let newContent = {
+                key: content.key,
+                id: content.id,
+                ...res.body
+            }
+            setContent(newContent)
+        })
+    }
 
     // 获取当前记录上传的文件和当前审批流程
     const getInfo = (uid: string) => {
@@ -112,16 +141,11 @@ const Index: React.FC = () => {
                     }
                 });
                 setDataSource(newDataSource);
-                setIsQuery(false)
-                setWaitTime(0)
-                setIsRenderResult(false);
             } else {
                 message.warning(res.msg);
-                setIsRenderResult(false)
                 setDataSource([])
             }
-        }).catch(err => {
-            message.error(err.message);
+        }).finally(() => {
             setIsRenderResult(false)
         })
     }
@@ -169,7 +193,6 @@ const Index: React.FC = () => {
                     <Button
                         type="primary"
                         onClick={() => {
-                            setOpen(false)
                             setContent(record)
                             getInfo(text)
                             setOpenUid(text)
@@ -201,9 +224,7 @@ const Index: React.FC = () => {
                             <UpdateLeaveForm state={content} getNewContent={(newContent: object) => {
                                 // 对比旧 content 查看是否有变化，有变化则重新查询
                                 if (JSON.stringify(newContent) !== JSON.stringify(content)) {
-                                    getDataSource()
-                                    // 将新的内容更新到content中
-                                    setContent({...content, ...newContent})
+                                    refresh(content.uid)
                                 }
                             }}/>
                             <Button
@@ -217,7 +238,16 @@ const Index: React.FC = () => {
                                     showDeleteConfirm(content.uid);
                                 }}
                             >删除</Button>
-                        </div> : null}
+                        </div> : <Button
+                            type="primary"
+                            loading={processLoading}
+                            onClick={() => refresh(openUid)}
+                            style={{
+                                backgroundColor: purple,
+                                borderColor: purple
+                            }}>
+                            刷新
+                        </Button>}
                 >
                     <p>请假时间：{content.start_time}</p>
                     <p>销假时间：{content.end_time}</p>
@@ -239,16 +269,19 @@ const Index: React.FC = () => {
                                     <Skeleton.Input active={true} block={false}/>
                                 </Space>) :
                             <div style={{marginTop: 16}}>
-                                <Button
+                                {content.status === 0 ? <Button
                                     type="primary"
                                     loading={processLoading}
-                                    onClick={() => getProcess(openUid)}
+                                    onClick={() => {
+                                        getProcess(openUid)
+                                        refresh(openUid)
+                                    }}
                                     style={{
                                         backgroundColor: purple,
                                         borderColor: purple
                                     }}>
                                     刷新流程
-                                </Button>
+                                </Button> : null}
                                 <div style={{marginTop: 16}}>审批流程：</div>
                                 <Steps
                                     style={{
@@ -275,7 +308,8 @@ const Index: React.FC = () => {
                 </Drawer>
                 <Title level={2} className={'tit'}>
                     请假记录&nbsp;&nbsp;
-                    <Button type="primary" icon={<SearchOutlined/>} onClick={getDataSource}>刷新</Button>
+                    <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
+                            onClick={getDataSource}>{isQuery ? `刷新(${waitTime})` : '刷新'}</Button>
                 </Title>
                 <Table
                     columns={columns}

@@ -104,6 +104,11 @@ export const deleteChangeDepartmentByTeacher = async (uid: String, tableUid: Str
     }, {headers: {tableUid: tableUid}});
 }
 
+// 刷新当前部门变更申请
+export const refreshDepartmentChange = async (uid: string) => {
+    return promise.Request('/apply/departmentChange/refresh', MethodType.POST, {uid});
+}
+
 // 提交工作报告
 export const submitWorkReport = async (tableUid: String) => {
     return promise.Request('/apply/workReport/add', MethodType.POST, {}, {headers: {tableUid: tableUid}});
@@ -131,6 +136,11 @@ export const findWorkReportByTeacherProcess = async (uid: String) => {
     return promise.Request('/apply/workReport/findProcess', MethodType.POST, {
         uid
     });
+}
+
+// 刷新当前工作报告
+export const refreshWorkReport = async (uid: string) => {
+    return promise.Request('/apply/workReport/refresh', MethodType.POST, {uid});
 }
 
 // 提交请假申请
@@ -176,6 +186,11 @@ export const updateLeave = async (uid: String, reason: String, start_time: Strin
     });
 }
 
+// 刷新当前请假申请
+export const refreshLeave = async (uid: string) => {
+    return promise.Request('/apply/leave/refresh', MethodType.POST, {uid});
+}
+
 // 提交差旅报销申请
 export const addTravelReimbursement = async (destination: String, expenses: String, reason: String, tableUid: String) => {
     return promise.Request('/apply/travel/add', MethodType.POST, {
@@ -204,6 +219,13 @@ export const findTravelProcess = async (uid: String) => {
 // 删除差旅报销申请
 export const deleteTravelReimbursementApply = async (uid: String) => {
     return promise.Request('/apply/travel/delete', MethodType.POST, {
+        uid
+    });
+}
+
+// 刷新差旅报销申请
+export const refreshTravel = async (uid: String) => {
+    return promise.Request('/apply/travel/refresh', MethodType.POST, {
         uid
     });
 }
@@ -244,6 +266,11 @@ export const updateProcurement = async (uid: String, items: string, price: strin
         price,
         reason
     });
+}
+
+// 刷新当前采购申请
+export const refreshProcurement = async (uid: string) => {
+    return promise.Request('/apply/procurement/refresh', MethodType.POST, {uid});
 }
 
 // 查询等待审批的部门变更申请

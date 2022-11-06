@@ -1,8 +1,9 @@
 import {Button, Collapse, Drawer, message, Modal, Skeleton, Space, Steps, Table, Tag, Typography} from 'antd';
-import {CloseCircleOutlined, ExclamationCircleOutlined, SearchOutlined} from '@ant-design/icons';
+import {ExclamationCircleOutlined, SearchOutlined} from '@ant-design/icons';
 import type {ColumnsType} from 'antd/es/table';
 import React, {useEffect, useState} from 'react';
 import {
+    refreshDepartmentChange,
     checkTeacherChangeDepartmentRecord,
     deleteChangeDepartmentByTeacher,
     findChangeDepartmentByTeacherProcess,
@@ -57,6 +58,18 @@ const Index: React.FC = () => {
         }
     }, [waitTime])
 
+    useEffect(() => {
+        // 当 content 变化时，在 dataSource 中找到对应的 uid，将 content 赋值给 dataSource 中的对应 uid
+        let newDataSource: any = dataSource.map((item: any) => {
+            if (item.uid === content.uid) {
+                return content
+            } else {
+                return item
+            }
+        })
+        setDataSource(newDataSource)
+    }, [content])
+
     // 获取当前记录上传的文件和当前审批流程
     const getInfo = (uid: string) => {
         setOpen(true)
@@ -72,6 +85,17 @@ const Index: React.FC = () => {
         }).finally(() => {
             setProcessLoading(false)
             hide();
+        })
+    }
+
+    const refresh = (uid: string) => {
+        refreshDepartmentChange(uid).then(res => {
+            let newContent = {
+                key: content.key,
+                id: content.id,
+                ...res.body
+            }
+            setContent(newContent)
         })
     }
 
@@ -195,16 +219,11 @@ const Index: React.FC = () => {
                     }
                 })
                 setDataSource(arr)
-                setIsQuery(false)
-                setWaitTime(0)
-                setIsRenderResult(false)
             } else {
                 message.warning(res.msg)
-                setIsRenderResult(false)
                 setDataSource([])
             }
-        }).catch(err => {
-            message.error(err.message)
+        }).finally(() => {
             setIsRenderResult(false)
         })
     }
@@ -231,7 +250,16 @@ const Index: React.FC = () => {
                                     showDeleteConfirm(content.uid);
                                 }}
                             >删除</Button>
-                        </> : null}
+                        </> : <Button
+                            type="primary"
+                            loading={processLoading}
+                            onClick={() => refresh(openUid)}
+                            style={{
+                                backgroundColor: purple,
+                                borderColor: purple
+                            }}>
+                            刷新
+                        </Button>}
                 >
                     <p>变更部门：{content.departmentUid}</p>
                     <p>变更原因：{content.changeReason}</p>
@@ -248,7 +276,7 @@ const Index: React.FC = () => {
                             // 如果 fileList 不为空则渲染
                             fileList.length > 0 ? (
                                 <>
-                                    <Button
+                                    {content.status === 0 ? <Button
                                         type="primary"
                                         loading={fileLoading}
                                         onClick={() => getFiles(openUid)}
@@ -257,7 +285,7 @@ const Index: React.FC = () => {
                                             borderColor: purple
                                         }}>
                                         刷新文件列表
-                                    </Button>
+                                    </Button> : null}
                                     <Collapse ghost>
                                         {/*循环输出 Card，数据来源 fileList*/}
                                         {fileList.map((item: any, index: number) => {
@@ -282,16 +310,19 @@ const Index: React.FC = () => {
                                     <Skeleton.Input active={true} block={false}/>
                                 </Space>) :
                             <div style={{marginTop: 16}}>
-                                <Button
+                                {content.status === 0 ? <Button
                                     type="primary"
                                     loading={processLoading}
-                                    onClick={() => getProcess(openUid)}
+                                    onClick={() => {
+                                        getProcess(openUid)
+                                        refresh(openUid)
+                                    }}
                                     style={{
                                         backgroundColor: purple,
                                         borderColor: purple
                                     }}>
                                     刷新流程
-                                </Button>
+                                </Button> : null}
                                 <div style={{marginTop: 16}}>审批流程：</div>
                                 <Steps
                                     style={{
@@ -318,7 +349,8 @@ const Index: React.FC = () => {
                 </Drawer>
                 <Title level={2} className={'tit'}>
                     部门变更申请记录&nbsp;&nbsp;
-                    <Button type="primary" icon={<SearchOutlined/>} onClick={getDataSource}>刷新</Button>
+                    <Button type="primary" icon={<SearchOutlined/>} disabled={isQuery}
+                            onClick={getDataSource}>{isQuery ? `刷新(${waitTime})` : '刷新'}</Button>
                 </Title>
                 <Table
                     columns={columns}
