@@ -19,6 +19,7 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
     const [fileList, setFileList] = useState<any>([]);
 
     const apiToken = Cookie.get('token');
+    const language = Cookie.get('language') || 'en';
     const tableName = props.setTableName;
 
     // 接收父组件传递的 fileList
@@ -31,7 +32,8 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
         headers: {
             'Authorization': `${apiToken}`,
             'tableUid': tableName,
-            'version': version
+            'version': version,
+            'lang': language
         },
         multiple: true,
         maxCount: props.max ? props.max : undefined,
