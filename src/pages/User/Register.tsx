@@ -8,6 +8,7 @@ import {useDispatch} from "react-redux";
 import {Department, Employee, Leader} from "../../component/redux/userTypeSlice";
 import {login} from "../../component/redux/isLoginSlice";
 import {setUser} from "../../component/redux/userInfoSlice";
+import intl from "react-intl-universal";
 
 const RegisterStudent = memo(() => {
     const dispatch = useDispatch();
@@ -30,19 +31,19 @@ const RegisterStudent = memo(() => {
 
     const onFinish = () => {
         if (!usernameUse) {
-            message.error("用户名已存在，请重新输入")
+            message.error(intl.get('usernameIsExist'))
             return
         }
         if (password !== enterPassword) {
-            message.error("两次密码输入不一致");
+            message.error(intl.get('twoPasswordIsNotSame'));
             return
         }
         userRegister(username, password, realeName, gender, tel, email, departmentUid, registerType).then(res => {
             if (res.code === 200) {
-                message.success("注册成功");
+                message.success(res.msg);
                 loginAutomatic();
             } else {
-                message.error(res.data.msg)
+                message.error(res.msg)
             }
         })
     };
@@ -114,12 +115,12 @@ const RegisterStudent = memo(() => {
     // 动态渲染不同注册所需要填写的表单
     const RenderField = () => {
         return registerType === 'Employee' ? (<Form.Item
-            label="部门"
+            label={intl.get('department')}
             name="departmentUid"
             rules={[
                 {
                     required: true,
-                    message: '请选择您的上级部门',
+                    message: intl.get('pleaseChooseDepartment'),
                 },
             ]}
         >
@@ -129,7 +130,7 @@ const RegisterStudent = memo(() => {
                     width: '100%',
                 }}
                 onFocus={getDepartmentOptions}
-                placeholder="请选择你的上级部门"
+                placeholder={intl.get('pleaseChooseDepartment')}
                 options={departmentOptions}
             />
         </Form.Item>) : null
@@ -157,19 +158,19 @@ const RegisterStudent = memo(() => {
                 <Radio.Group defaultValue="Index" buttonStyle="solid" onChange={e => {
                     setRegisterType(e.target.value)
                 }}>
-                    <Radio.Button value="Leader">领导注册</Radio.Button>
-                    <Radio.Button value="Department">部门注册</Radio.Button>
-                    <Radio.Button value="Index">员工注册</Radio.Button>
+                    <Radio.Button value="Leader">{intl.get('leaderRegister')}</Radio.Button>
+                    <Radio.Button value="Department">{intl.get('departmentRegister')}</Radio.Button>
+                    <Radio.Button value="Index">{intl.get('employeeRegister')}</Radio.Button>
                 </Radio.Group>
             </Form.Item>
 
             <Form.Item
-                label="用户名"
+                label={intl.get('username')}
                 name="username"
                 rules={[
                     {
                         required: true,
-                        message: '请填写用户名（不超过20字符）',
+                        message: intl.get('pleaseInputUsername'),
                         pattern: /^[a-zA-Z0-9]{1,20}$/
                     },
                 ]}
@@ -180,12 +181,12 @@ const RegisterStudent = memo(() => {
             </Form.Item>
 
             <Form.Item
-                label="密码"
+                label={intl.get('password')}
                 name="password"
                 rules={[
                     {
                         required: true,
-                        message: '密码必须为8-20位字母或数字',
+                        message: intl.get('pleaseInputPassword'),
                         pattern: /^[a-zA-Z0-9]{8,20}$/
                     },
                 ]}
@@ -194,12 +195,12 @@ const RegisterStudent = memo(() => {
             </Form.Item>
 
             <Form.Item
-                label="确认密码"
+                label={intl.get('repeatPassword')}
                 name="enterPassword"
                 rules={[
                     {
                         required: true,
-                        message: '密码必须为8-20位字母或数字',
+                        message: intl.get('pleaseRepeatPassword'),
                         pattern: /^[a-zA-Z0-9]{8,20}$/
                     },
                 ]}
@@ -208,12 +209,12 @@ const RegisterStudent = memo(() => {
             </Form.Item>
 
             <Form.Item
-                label="真实姓名"
+                label={intl.get('realName')}
                 name="realeName"
                 rules={[
                     {
                         required: true,
-                        message: '请输入您的真实姓名',
+                        message: intl.get('pleaseInputRealName'),
                         pattern: /^[\u4e00-\u9fa5]{2,4}$/
                     },
                 ]}
@@ -222,28 +223,28 @@ const RegisterStudent = memo(() => {
             </Form.Item>
 
             <Form.Item
-                label="性别"
+                label={intl.get('gender')}
                 name="gender"
                 rules={[
                     {
                         required: true,
-                        message: '请选择您的性别',
+                        message: intl.get('pleaseChooseGender'),
                     },
                 ]}
             >
                 <Radio.Group buttonStyle="solid" style={{display: "flex"}}>
-                    <Radio.Button value="男">男</Radio.Button>
-                    <Radio.Button value="女">女</Radio.Button>
+                    <Radio.Button value="男">{intl.get('male')}</Radio.Button>
+                    <Radio.Button value="女">{intl.get('female')}</Radio.Button>
                 </Radio.Group>
             </Form.Item>
 
             <Form.Item
-                label="联系电话"
+                label={intl.get('tel')}
                 name="tel"
                 rules={[
                     {
                         required: true,
-                        message: '请输入您的联系电话',
+                        message: intl.get('pleaseInputTel'),
                         pattern: /^1[3456789]\d{9}$/
                     },
                 ]}
@@ -252,12 +253,12 @@ const RegisterStudent = memo(() => {
             </Form.Item>
 
             <Form.Item
-                label="电子邮件"
+                label={intl.get('email')}
                 name="email"
                 rules={[
                     {
                         required: true,
-                        message: '请输入您的电子邮件地址',
+                        message: intl.get('pleaseInputEmail'),
                         pattern: /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/,
                     },
                 ]}
@@ -268,34 +269,34 @@ const RegisterStudent = memo(() => {
             {RenderField()}
 
             <Form.Item
-                label={"是否自动登录"}
+                label={intl.get('autoLogin')}
                 name='rememberme'
                 valuePropName='checked'
                 rules={[
                     {
                         required: true,
-                        message: '请选择是否自动登录',
+                        message: intl.get('pleaseChooseAutoLogin'),
                     },
                 ]}
             >
-                <Switch style={{display: "flex"}} checkedChildren="是" unCheckedChildren="否"/>
+                <Switch style={{display: "flex"}} checkedChildren={intl.get('yes')} unCheckedChildren={intl.get('no')}/>
             </Form.Item>
 
             <Form.Item
                 wrapperCol={{}}
             >
                 <Button type="primary" htmlType="submit">
-                    注册
+                    {intl.get('register')}
                 </Button>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <Button htmlType="button" onClick={onReset}>
-                    重置
+                    {intl.get('reset')}
                 </Button>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <Button htmlType="button" onClick={() => {
                     navigate('/login')
                 }}>
-                    登录
+                    {intl.get('login')}
                 </Button>
             </Form.Item>
         </Form>
