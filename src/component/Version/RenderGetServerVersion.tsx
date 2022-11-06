@@ -6,13 +6,9 @@ import intl from "react-intl-universal";
 
 export default function RenderGetServerVersion() {
 
-    const serverVersion = useSelector((state: {
-        serverVersion: {
-            value: string
-        }
-    }) => state.serverVersion.value);
+    const serverVersion = useSelector((state:any) => state.serverVersion.value);
 
-    const serverLowVersion = useSelector((state: { serverLowVersion: { value: string } }) => state.serverLowVersion.value);
+    const serverLowVersion = useSelector((state: any) => state.serverLowVersion.value);
 
 
     return (
@@ -21,7 +17,7 @@ export default function RenderGetServerVersion() {
             width: "100%",
             height: "100%",
         }}>
-            <span>{intl.get('SysName')} &copy; 2022 Created by allynlin Version：{version} Server：{serverVersion}&nbsp;
+            <span>{intl.get('sysName')} &copy; 2022 Created by allynlin Version：{version} Server：{serverVersion}&nbsp;
                 <RenderRefresh/></span>
         </div>
     )

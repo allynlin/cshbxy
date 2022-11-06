@@ -35,9 +35,9 @@ const ThemeSetting = () => {
 
     return (
         <Radio.Group onChange={onChange} value={sysColor}>
-            <Radio value={"light"}>{intl.get('Light-Mode')}</Radio>
-            <Radio value={"dark"}>{intl.get('Dark-Mode')}</Radio>
-            <Radio value={"sys"}>{intl.get('System-Mode')}</Radio>
+            <Radio value={"light"}>{intl.get('lightMode')}</Radio>
+            <Radio value={"dark"}>{intl.get('darkMode')}</Radio>
+            <Radio value={"sys"}>{intl.get('autoMode')}</Radio>
         </Radio.Group>
     );
 };

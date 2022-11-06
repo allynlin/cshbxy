@@ -58,7 +58,6 @@ export const Request = (api: String, method = MethodType.GET, params = {}, confi
                     break;
                 case 403:
                     Cookie.remove('token');
-                    Cookie.remove('userType');
                     reject(res.data)
                     rootNavigate('/403');
                     break;

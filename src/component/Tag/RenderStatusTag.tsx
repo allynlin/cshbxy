@@ -17,29 +17,29 @@ export const RenderStatusTag = (status: number, msg = intl.get('apply')) => {
         case 0:
             return (
                 <Tag icon={<SyncOutlined spin/>} color={yellow}
-                     onClick={() => message.warning(intl.get('WaitExaminationMessage', {name: msg}))}>
-                    {intl.get('Examination-approval-ing')}
+                     onClick={() => message.warning(intl.get('underApproveMessage', {name: msg}))}>
+                    {intl.get('underApprove')}
                 </Tag>
             )
         case 1:
             return (
                 <Tag icon={<CheckCircleOutlined/>} color={green}
-                     onClick={() => message.success(intl.get('PassExaminationMessage', {name: msg}))}>
-                    {intl.get('Examination-approval-Pass')}
+                     onClick={() => message.success(intl.get('passApproveMessage', {name: msg}))}>
+                    {intl.get('passApprove')}
                 </Tag>
             )
         case 2:
             return (
                 <Tag icon={<CloseCircleOutlined/>} color={red}
-                     onClick={() => message.error(intl.get('NotPassExaminationMessage', {name: msg}))}>
-                    {intl.get('Examination-approval-NotPass')}
+                     onClick={() => message.error(intl.get('rejectApproveMessage', {name: msg}))}>
+                    {intl.get('rejectApprove')}
                 </Tag>
             )
         default:
             return (
                 <Tag icon={<ExclamationCircleOutlined/>} color={blue}
-                     onClick={() => message.info(intl.get('ErrorExaminationMessage', {name: msg}))}>
-                    {intl.get('Examination-approval-Error')}
+                     onClick={() => message.info(intl.get('errorApproveMessage', {name: msg}))}>
+                    {intl.get('errorApprove')}
                 </Tag>
             )
     }

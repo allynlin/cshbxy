@@ -40,7 +40,7 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
         // 如果上传的文件大于 20M，就提示错误
         beforeUpload: (file: any) => {
             if (file.size / 1024 / 1024 > 20) {
-                message.warning(intl.get('maxFileSize'));
+                message.warning(intl.get('maxFileSize', {size: 20}));
                 // 将对应文件的状态设置为 error
                 file.status = 'error';
                 return false;
@@ -66,7 +66,6 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
                         case 401:
                         case 403:
                             Cookie.remove('token');
-                            Cookie.remove('userType');
                             info.file.status = 'error';
                             rootNavigate('/403');
                             break;
@@ -130,7 +129,7 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
             </p>
             <p className="ant-upload-text">{intl.get('uploadTitle')}</p>
             <p className="ant-upload-hint">
-                {intl.get('uploadDescription')}
+                {intl.get('uploadDescription', {size: 20})}
             </p>
         </Upload.Dragger>
     )

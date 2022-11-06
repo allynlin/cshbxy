@@ -29,7 +29,7 @@ const Setting = () => {
     const handleKeyDown = (e: any) => {
         if (e.ctrlKey && e.keyCode === 83) {
             e.preventDefault();
-            message.success(intl.get('SaveMessage'));
+            message.success(intl.get('autoSaveNotice'));
         }
     }
 
@@ -42,7 +42,7 @@ const Setting = () => {
     }, [])
 
     const resertSetting = () => {
-        message.success(intl.get('ResetMessage'));
+        message.success(intl.get('resetSuccess'));
         dispatch(inline());
         dispatch(sysTheme());
         dispatch(English());
@@ -54,9 +54,9 @@ const Setting = () => {
     return (
         <PageHeader
             onBack={() => navigate(-1)}
-            title={intl.get('Setting')}
-            tags={<Tag color={yellow}>{intl.get('Attention')}</Tag>}
-            subTitle={intl.get('Setting-Scope')}
+            title={intl.get('setting')}
+            tags={<Tag color={yellow}>{intl.get('attention')}</Tag>}
+            subTitle={intl.get('settingScopesNotice')}
             extra={[
                 <Button
                     key="2"
@@ -66,16 +66,16 @@ const Setting = () => {
                         borderColor: red
                     }}
                     onClick={resertSetting}
-                >{intl.get('Reset')}</Button>,
+                >{intl.get('reset')}</Button>,
                 <Button key="1" type="primary"
-                        onClick={() => message.success(intl.get('SaveMessage'))}>
-                    {intl.get('Save')}
+                        onClick={() => message.success(intl.get('autoSaveNotice'))}>
+                    {intl.get('save')}
                 </Button>,
             ]}
         >
             <Divider style={{
                 color: blue
-            }}>{'基础设置项'}</Divider>
+            }}>{intl.get('baseSetting')}</Divider>
             <Row gutter={16} style={{
                 borderRadius: '6px',
                 backgroundColor: backColor,

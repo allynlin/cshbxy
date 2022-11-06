@@ -8,24 +8,21 @@ import {CloseCircleOutlined} from "@ant-design/icons";
 import {Chinese, English} from "../../component/redux/userLanguageSlice";
 import './103.scss'
 import {RenderToggleLanguageButton} from "../../component/Language/RenderToggleLanguageButton";
+import intl from "react-intl-universal";
 
 const {Paragraph, Text} = Typography;
 
 export const Error404 = () => {
-    const userType = useSelector((state: {
-        userType: {
-            value: string
-        }
-    }) => state.userType.value)
+    const userType = useSelector((state: any) => state.userType.value)
     return (
         <Result
             status="404"
             title="404"
-            subTitle="您访问的页面不存在"
+            subTitle={intl.get('404Title')}
             extra={
                 <Link
                     to={userType === 'Employee' ? '/home/employee' : userType === 'Department' ? '/home/department' : '/home/leader'}>
-                    <Button type="primary">返回首页</Button>
+                    <Button type="primary">{intl.get('backToHome')}</Button>
                 </Link>
             }
         />
@@ -36,33 +33,36 @@ export const Error403 = () => (
     <Result
         status="403"
         title="403"
-        subTitle="很抱歉，您没有权限访问该页面"
+        subTitle={intl.get('403Title')}
         extra={
             <Link to={'/login'}>
-                <Button type="primary">登录</Button>
+                <Button type="primary">{intl.get('login')}</Button>
             </Link>
         }
     />
 );
 
-export const Error500 = () => (
-    <Result
-        status="500"
-        title="500"
-        subTitle="很抱歉，我们遇到了一个错误"
-        extra={
-            <Link to={'/home'}>
-                <Button type="primary">返回首页</Button>
-            </Link>
-        }
-    />
-);
+export const Error500 = () => {
+    const userType = useSelector((state: any) => state.userType.value)
+    return (<Result
+            status="500"
+            title="500"
+            subTitle={intl.get('500Title')}
+            extra={
+                <Link
+                    to={userType === 'Employee' ? '/home/employee' : userType === 'Department' ? '/home/department' : '/home/leader'}>
+                    <Button type="primary">{intl.get('backToHome')}</Button>
+                </Link>
+            }
+        />
+    )
+};
 
 export const Error101: React.FC = () => {
     return (
         <Result
             status="error"
-            title={`版本获取失败`}
+            title={intl.get('101Title')}
         >
             <div className="desc">
                 <Paragraph>
@@ -72,20 +72,20 @@ export const Error101: React.FC = () => {
                             fontSize: 16,
                         }}
                     >
-                        可能造成版本获取失败的原因有：
+                        {intl.get('101Desc-1')}
                     </Text>
                 </Paragraph>
                 <Paragraph>
                     <CloseCircleOutlined className="site-result-demo-error-icon"/>
-                    &nbsp;您的系统存在异常
+                    &nbsp;{intl.get('101Desc-2')}
                 </Paragraph>
                 <Paragraph>
                     <CloseCircleOutlined className="site-result-demo-error-icon"/>
-                    &nbsp;您使用的非正式发行版
+                    &nbsp;{intl.get('101Desc-3')}
                 </Paragraph>
                 <Paragraph>
                     <CloseCircleOutlined className="site-result-demo-error-icon"/>
-                    &nbsp;当前版本存在异常，请联系发行方更新版本
+                    &nbsp;{intl.get('101Desc-4')}
                 </Paragraph>
             </div>
         </Result>
@@ -95,25 +95,10 @@ export const Error101: React.FC = () => {
 export const Error103: React.FC = () => {
 
     const navigate = useNavigate();
-    const [isEnglish, setIsEnglish] = useState(true);
 
-    const userLanguage: String = useSelector((state: {
-        userLanguage: {
-            value: 'Chinese' | 'English'
-        }
-    }) => state.userLanguage.value)
+    const serverVersion = useSelector((state: any) => state.serverVersion.value);
 
-    useEffect(() => {
-        setIsEnglish(userLanguage === 'English')
-    }, [userLanguage])
-
-    const serverVersion = useSelector((state: {
-        serverVersion: {
-            value: string
-        }
-    }) => state.serverVersion.value);
-
-    const serverLowVersion = useSelector((state: { serverLowVersion: { value: string } }) => state.serverLowVersion.value);
+    const serverLowVersion = useSelector((state: any) => state.serverLowVersion.value);
 
     useEffect(() => {
         if (version >= serverVersion) {
@@ -124,10 +109,10 @@ export const Error103: React.FC = () => {
     const RenderVersion = () => {
         return (
             <div>
-                <Text>{isEnglish ? 'System Version' : '系统版本：'}</Text>
+                <Text>{intl.get('sysVersion')}</Text>
                 <Text code>{version}</Text>
                 &nbsp;&nbsp;
-                <Text>{isEnglish ? 'Support Low Version' : '最低受支持版本：'}</Text>
+                <Text>{intl.get('supportLowVersion')}</Text>
                 <Text code>{serverLowVersion}</Text>
             </div>
         )
@@ -136,14 +121,14 @@ export const Error103: React.FC = () => {
     return (
         <Result
             status="error"
-            title={isEnglish ? 'Low Version' : '版本过低'}
+            title={intl.get('lowVersion')}
             subTitle={<RenderVersion/>}
             extra={
                 <>
                     {
                         version >= serverLowVersion ? <Button type="primary" key="console" onClick={() => {
                             navigate(-1)
-                        }}>{isEnglish ? 'Back' : '返回'}</Button> : null
+                        }}>{intl.get('backToHome')}</Button> : null
                     }
                     <RenderRefreshButton/>
                     <RenderToggleLanguageButton/>
@@ -158,27 +143,27 @@ export const Error103: React.FC = () => {
                             fontSize: 16,
                         }}
                     >
-                        {isEnglish ? 'Reasons that may cause your version to be too low' : '可能造成您版本过低的原因有：'}
+                        {intl.get('103Desc-1')}
                     </Text>
                 </Paragraph>
                 <Paragraph>
                     <CloseCircleOutlined className="site-result-demo-error-icon"/>
-                    &nbsp;{isEnglish ? 'You are using an unofficial version of the system, please contact the release party to update the version ' : '您经常使用本系统，浏览器已经缓存了旧版本，您可以尝试清除浏览器缓存或 '}
+                    &nbsp;{intl.get('103Desc-2')}&nbsp;
                     <a onClick={e => {
                         e.preventDefault();
                         // @ts-ignore
                         window.location.reload(true);
-                    }}>{isEnglish ? 'Refresh' : '刷新'}</a>
+                    }}>{intl.get('refresh')}</a>
                 </Paragraph>
                 <Paragraph>
                     <CloseCircleOutlined className="site-result-demo-error-icon"/>
-                    &nbsp;{isEnglish ? 'The server version is too low, please contact the release party to update the version ' : '服务器版本过低，请联系发行方更新版本 '}
+                    &nbsp;{intl.get('103Desc-3')}
                     <a
                         href={'https://github.com/allynlin/cshbxy'}>GitHub</a>
                 </Paragraph>
                 <Paragraph>
                     <CloseCircleOutlined className="site-result-demo-error-icon"/>
-                    &nbsp;{isEnglish ? 'The current version is abnormal, please contact the release party to update the version' : '您的服务提供商已经很久没有更新版本，请联系服务提供商更新版本'}
+                    &nbsp;{intl.get('103Desc-4')}
                 </Paragraph>
             </div>
         </Result>

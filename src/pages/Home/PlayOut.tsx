@@ -34,7 +34,7 @@ const Home = () => {
             navigate('/103')
         }
         if (version < serverVersion) {
-            message.warning('您当前使用的版本过低，可能会导致部分功能无法使用，请及时更新')
+            message.warning(intl.get('lowVersionNotice'))
         }
     }, [serverLowVersion, serverVersion])
 

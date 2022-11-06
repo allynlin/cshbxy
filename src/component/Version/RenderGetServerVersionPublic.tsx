@@ -17,7 +17,7 @@ export default function RenderGetServerVersion() {
         <Layout.Footer style={{
             backgroundColor: serverVersion > version ? yellow : "",
         }}>
-            {intl.get('SysName')} &copy; 2022 Created by allynlin
+            {intl.get('sysName')} &copy; 2022 Created by allynlin
             Version：{version} Server：{serverVersion}&nbsp;
             <RenderRefresh/>
         </Layout.Footer>
