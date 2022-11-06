@@ -28,7 +28,7 @@ const ChangeForm = () => {
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
     // 展示表单还是提示信息,两种状态，分别是 info 或者 loading
     const [isRenderResult, setIsRenderResult] = useState<boolean>(true);
-    const [RenderResultTitle, setRenderResultTitle] = useState<String>(intl.get('Application-lastTime-submit', {name: intl.get('DepartmentChange')}));
+    const [RenderResultTitle, setRenderResultTitle] = useState<String>(intl.get('obtainLastTimeApplyRecord'));
     const [isRenderInfo, setIsRenderInfo] = useState<boolean>(false);
     // 部门列表
     const [departmentOptions, setDepartmentOptions] = useState([]);
@@ -66,13 +66,11 @@ const ChangeForm = () => {
         }
         checkTeacherChangeDepartment().then(res => {
             if (res.code === 200) {
-                setRenderResultTitle(intl.get('Get-lastTime-file'))
+                setRenderResultTitle(intl.get('obtainLastTimeUploadFiles'))
                 checkUploadFilesList();
-                setIsQuery(false)
-                setWaitTime(0)
             } else {
                 setIsRenderInfo(true)
-                setRenderResultTitle(intl.get('Application-lastTime-submit', {name: intl.get('DepartmentChange')}))
+                setRenderResultTitle(intl.get('pleaseWaitApprove'))
             }
         })
     }
@@ -103,9 +101,9 @@ const ChangeForm = () => {
             navigate('/home/success', {
                 state: {
                     object: {
-                        title: intl.get('Apply-submit-success', {name: intl.get('DepartmentChange')}),
-                        describe: intl.get('Wait-desc'),
-                        toPage: intl.get('Show-application-record'),
+                        title: intl.get('departmentChangeApply') + ' ' + intl.get('submitSuccess'),
+                        describe: intl.get('waitApprove'),
+                        toPage: intl.get('showApplyList'),
                         toURL: '/home/record/departmentChange',
                     }
                 }
@@ -161,7 +159,7 @@ const ChangeForm = () => {
                 <Button disabled={isQuery} type="primary" onClick={() => {
                     checkDepartmentChange()
                 }}>
-                    {isQuery ? intl.get('Refresh') + '(' + waitTime + ')' : intl.get('Refresh')}
+                    {isQuery ? intl.get('refresh') + '(' + waitTime + ')' : intl.get('refresh')}
                 </Button>
             }
         />) : (
@@ -180,7 +178,7 @@ const ChangeForm = () => {
                     fileList.filter((item: any) => item.status === 'done').map((item: any) => item.name).join('、')
                 }</p>
             </Modal>
-            <Title level={2} className={'tit'}>{intl.get('DepartmentChange') + intl.get('apply')}</Title>
+            <Title level={2} className={'tit'}>{intl.get('departmentChangeApply')}</Title>
             <Form
                 form={form}
                 name="basic"
@@ -192,16 +190,16 @@ const ChangeForm = () => {
                 }}
             >
                 <Form.Item
-                    label={intl.get('DepartmentChange')}
+                    label={intl.get('department')}
                     name="departmentUid"
                     rules={[{
                         required: true,
-                        message: intl.get('select-required-message', {name: intl.get('DepartmentChange')})
+                        message: intl.get('pleaseChooseDepartment')
                     }]}
                 >
                     <Select
                         showSearch
-                        placeholder={intl.get('select-enter-placeholder', {name: intl.get('DepartmentChange')})}
+                        placeholder={intl.get('pleaseChooseDepartment')}
                         optionFilterProp="children"
                         onFocus={getDepartmentOptions}
                         options={departmentOptions}
@@ -209,11 +207,11 @@ const ChangeForm = () => {
                 </Form.Item>
 
                 <Form.Item
-                    label={intl.get('Reason')}
+                    label={intl.get('reason')}
                     name="changeReason"
                     rules={[{
                         required: true,
-                        message: intl.get('input-required-message', {name: intl.get('Reason')})
+                        message: intl.get('pleaseInputReason')
                     }]}
                 >
                     <Input.TextArea rows={4}
@@ -226,9 +224,9 @@ const ChangeForm = () => {
                 </Form.Item>
 
                 <Form.Item
-                    label={intl.get('File')}
+                    label={intl.get('file')}
                     name="file"
-                    rules={[{required: true, message: intl.get('file-required-message', {name: intl.get('File')})}]}
+                    rules={[{required: true, message: intl.get('pleaseChooseFiles')}]}
                 >
                     <FileUpLoad
                         setTableName={tableName}
@@ -250,10 +248,10 @@ const ChangeForm = () => {
 
                 <Form.Item wrapperCol={{offset: 8, span: 16}} style={{textAlign: "center"}}>
                     <Button type="primary" htmlType="submit">
-                        {intl.get('Submit')}
+                        {intl.get('submit')}
                     </Button>
                     <Button htmlType="button" onClick={onReset} style={{marginLeft: 8}}>
-                        {intl.get('Reset')}
+                        {intl.get('reset')}
                     </Button>
                 </Form.Item>
             </Form>

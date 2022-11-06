@@ -38,11 +38,7 @@ export const rootNavigate = (to: string) => {
 export default function App() {
     const [isRender, setIsRender] = useState(false);
 
-    const themeColor = useSelector((state: {
-        themeColor: {
-            value: 'light' | 'dark'
-        }
-    }) => state.themeColor.value)
+    const themeColor = useSelector((state: any) => state.themeColor.value)
 
     useEffect(() => {
         switch (themeColor) {
@@ -56,14 +52,10 @@ export default function App() {
 
     const dispatch = useDispatch();
 
-    const userLanguage = useSelector((state: {
-        userLanguage: {
-            value: 'Chinese' | 'English'
-        }
-    }) => state.userLanguage.value)
+    const userLanguage = useSelector((state: any) => state.userLanguage.value)
 
     useEffect(() => {
-        document.title = intl.get('SysName');
+        document.title = intl.get('sysName');
         intl.init({
             currentLocale: userLanguage,
             locales: locals
@@ -90,11 +82,7 @@ export default function App() {
         }
     }, [])
 
-    const sysColor = useSelector((state: {
-        sysColor: {
-            value: 'light' | 'dark' | 'sys'
-        }
-    }) => state.sysColor.value)
+    const sysColor = useSelector((state: any) => state.sysColor.value)
 
     // 当 themeColor 为 sys 时，根据系统颜色设置主题颜色
     useEffect(() => {
@@ -116,17 +104,9 @@ export default function App() {
         }
     }, [sysColor])
 
-    const isLogin = useSelector((state: {
-        isLogin: {
-            value: boolean
-        }
-    }) => state.isLogin.value)
+    const isLogin = useSelector((state: any) => state.isLogin.value)
 
-    const userType: String = useSelector((state: {
-        userType: {
-            value: String
-        }
-    }) => state.userType.value)
+    const userType: String = useSelector((state: any) => state.userType.value)
 
     // 页面渲染的时候，检查 cookie 中是否有 token，如果有 token，就校验 token 是否有效，如果有效可以继续执行，如果无效，就跳转到登录页面
     useEffect(() => {
@@ -188,7 +168,7 @@ export default function App() {
             if (userType === meta.Auth2)
                 return pathname
             if (!isLogin) {
-                message.warning(intl.get('Please-Login'))
+                message.warning(intl.get('pleaseLogin'))
                 return '/login'
             }
             return '/403'

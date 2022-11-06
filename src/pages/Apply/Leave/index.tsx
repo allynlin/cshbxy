@@ -8,7 +8,6 @@ import moment from "moment";
 import intl from "react-intl-universal";
 
 const {Title} = Typography;
-const tableName = `changedepartmentbyteacher`;
 
 const LeaveForm = () => {
     const navigate = useNavigate();
