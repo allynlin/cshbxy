@@ -68,6 +68,8 @@ const StudentForm = memo(() => {
     }
 
     const onReset = () => {
+        Cookie.remove('username');
+        Cookie.remove('password');
         form.resetFields();
     };
 

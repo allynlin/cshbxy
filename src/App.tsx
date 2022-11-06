@@ -55,7 +55,6 @@ export default function App() {
     const userLanguage = useSelector((state: any) => state.userLanguage.value)
 
     useEffect(() => {
-        document.title = intl.get('sysName');
         intl.init({
             currentLocale: userLanguage,
             locales: locals
@@ -159,8 +158,9 @@ export default function App() {
         if (meta.title) {
             if (meta.titleCN === undefined) {
                 document.title = meta.title
+            } else {
+                userLanguage === 'English' ? document.title = meta.title : document.title = meta.titleCN
             }
-            userLanguage === 'English' ? document.title = meta.title : document.title = meta.titleCN
         }
         if (meta.Auth) {
             if (userType === meta.Auth)

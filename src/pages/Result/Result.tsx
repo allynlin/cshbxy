@@ -1,11 +1,10 @@
 import {Button, Result, Typography} from 'antd';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {version} from "../../baseInfo";
 import RenderRefreshButton from "../../component/Version/RenderRefreshButton";
 import {CloseCircleOutlined} from "@ant-design/icons";
-import {Chinese, English} from "../../component/redux/userLanguageSlice";
 import './103.scss'
 import {RenderToggleLanguageButton} from "../../component/Language/RenderToggleLanguageButton";
 import intl from "react-intl-universal";

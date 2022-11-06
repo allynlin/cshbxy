@@ -6,7 +6,6 @@ import '../apply.scss';
 import {BaseInfo} from "../../../baseInfo";
 import Spin from "../../../component/loading/Spin";
 import FileUpLoad from "../../../component/axios/FileUpLoad";
-import {useSelector} from "react-redux";
 import intl from "react-intl-universal";
 
 const {Title} = Typography;
