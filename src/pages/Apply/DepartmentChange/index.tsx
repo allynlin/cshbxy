@@ -159,7 +159,7 @@ const ChangeForm = () => {
                 <Button disabled={isQuery} type="primary" onClick={() => {
                     checkDepartmentChange()
                 }}>
-                    {isQuery ? intl.get('refresh') + '(' + waitTime + ')' : intl.get('refresh')}
+                    {isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}
                 </Button>
             }
         />) : (

@@ -1,49 +1,36 @@
 import {Breadcrumb} from "antd";
-import React, {useEffect, useState} from "react";
+import React from "react";
 import {Link, useLocation} from "react-router-dom";
-import {useSelector} from "react-redux";
+import intl from "react-intl-universal";
 
 const RenderBreadcrumb = () => {
     const location = useLocation();
 
-    const [isEnglish, setIsEnglish] = useState(true);
-
-    const userLanguage: String = useSelector((state: {
-        userLanguage: {
-            value: 'Chinese' | 'English'
-        }
-    }) => state.userLanguage.value)
-
-    useEffect(() => {
-        setIsEnglish(userLanguage === 'English')
-    }, [userLanguage])
-
     const breadcrumbNameMap: Record<string, string> = {
-        '/home': isEnglish ? 'OA' : 'OA 系统',
-        '/home/teacher': isEnglish ? 'Teacher' : '教师',
-        '/home/departments': isEnglish ? 'Department' : '部门',
-        '/home/leader': isEnglish ? 'Leader' : '领导',
-        '/home/teacher/index': isEnglish ? 'Home' : '首页',
-        '/home/department/index': isEnglish ? 'Home' : '首页',
-        '/home/leader/index': isEnglish ? 'Home' : '首页',
-        '/home/teacher/apply': isEnglish ? 'Apply' : '申请',
-        '/home/apply/departmentChange': isEnglish ? 'Departmental change' : '部门变更申请',
-        '/home/apply/travelReimbursement': isEnglish ? 'Travel reimbursement' : '差旅报销申请',
-        '/home/apply/leave': isEnglish ? 'Travel reimbursement' : '请假申请',
-        '/home/apply/procurement': isEnglish ? 'Leave' : '采购申请',
-        '/home/apply/report': isEnglish ? 'Work report' : '工作报告',
-        '/home/record/departmentChange': isEnglish ? 'Travel reimbursement' : '部门变更申请记录',
-        '/home/record/travelReimbursement': isEnglish ? 'Travel reimbursement' : '差旅报销申请记录',
-        '/home/record/leave': isEnglish ? 'Travel reimbursement' : '请假申请记录',
-        '/home/record/procurement': isEnglish ? 'Travel reimbursement' : '采购申请记录',
-        '/home/record/report': isEnglish ? 'Travel reimbursement' : '工作报告记录',
-        '/home/setting': isEnglish ? 'Travel reimbursement' : '设置',
-        '/home/approval': isEnglish ? 'Approval' : '审批',
-        '/home/approval/departmentChange': isEnglish ? 'Travel reimbursement' : '部门变更审批',
-        '/home/approval/leave': isEnglish ? 'Leave' : '请假',
-        '/home/approval/travelReimbursement': isEnglish ? 'travelReimbursement' : '差旅报销',
-        '/home/approval/procurement': isEnglish ? 'procurement' : '采购',
-        '/home/approval/workReport': isEnglish ? 'workReport' : '工作报告',
+        '/home': intl.get('sysName'),
+        '/home/employee': intl.get('employee'),
+        '/home/department': intl.get('department'),
+        '/home/leader': intl.get('leader'),
+        '/home/setting': intl.get('setting'),
+        '/home/success': intl.get('success'),
+        '/home/apply': intl.get('apply'),
+        '/home/apply/departmentChange': intl.get('departmentChange'),
+        '/home/apply/travel': intl.get('travelReimburse'),
+        '/home/apply/leave': intl.get('leave'),
+        '/home/apply/procurement': intl.get('procurement'),
+        '/home/apply/workReport': intl.get('workReport'),
+        '/home/record': intl.get('record'),
+        '/home/record/departmentChange': intl.get('departmentChange'),
+        '/home/record/travel': intl.get('travelReimburse'),
+        '/home/record/leave': intl.get('leave'),
+        '/home/record/procurement': intl.get('procurement'),
+        '/home/record/workReport': intl.get('workReport'),
+        '/home/approval': intl.get('approve'),
+        '/home/approval/departmentChange': intl.get('departmentChange'),
+        '/home/approval/leave': intl.get('leave'),
+        '/home/approval/travel': intl.get('travelReimburse'),
+        '/home/approval/procurement': intl.get('procurement'),
+        '/home/approval/workReport': intl.get('workReport'),
     };
     const pathSnippets = location.pathname.split('/').filter((i) => i);
     const extraBreadcrumbItems = pathSnippets.map((_, index) => {

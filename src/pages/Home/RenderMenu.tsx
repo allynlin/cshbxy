@@ -1,6 +1,6 @@
 import {Button, Menu} from 'antd';
 import {BarChartOutlined, EditOutlined, FormOutlined, HomeOutlined, ProjectOutlined,} from '@ant-design/icons';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import './playOut-light.scss'
 import {Link} from 'react-router-dom';
 import {useSelector} from "react-redux";
@@ -26,99 +26,72 @@ function getItem(
 }
 
 const RenderMenu = () => {
-
-    const [isEnglish, setIsEnglish] = useState(true);
-
-    const userLanguage: String = useSelector((state: {
-        userLanguage: {
-            value: 'Chinese' | 'English'
-        }
-    }) => state.userLanguage.value)
-
-    useEffect(() => {
-        setIsEnglish(userLanguage === 'English')
-    }, [userLanguage])
-
     const employee: MenuProps['items'] = [
-        getItem((<Link to={'/home/employee'}>{isEnglish ? 'Home' : '首页'}</Link>), 'Home',
+        getItem((<Link to={'/home/employee'}>{intl.get('home')}</Link>), 'Home',
             <HomeOutlined/>),
         getItem(intl.get('apply'), 'apply', <EditOutlined/>, [
             getItem((
                 <Link
-                    to={'/home/apply/departmentChange'}>{intl.get('DepartmentChange')}</Link>), 'apply_departmentChange'),
+                    to={'/home/apply/departmentChange'}>{intl.get('departmentChange')}</Link>), 'apply_departmentChange'),
             getItem((<Link
-                to={'/home/apply/travel'}>{intl.get('Travel')}</Link>), 'apply_travel'),
+                to={'/home/apply/travel'}>{intl.get('travelReimburse')}</Link>), 'apply_travel'),
             getItem((
-                <Link to={'/home/apply/leave'}>{intl.get('Leave')}</Link>), 'apply_leave'),
+                <Link to={'/home/apply/leave'}>{intl.get('leave')}</Link>), 'apply_leave'),
             getItem((<Link
-                to={'/home/apply/procurement'}>{intl.get('Procurement')}</Link>), 'apply_procurement'),
+                to={'/home/apply/procurement'}>{intl.get('procurement')}</Link>), 'apply_procurement'),
             getItem((<Link
-                to={'/home/apply/workReport'}>工作报告</Link>), 'apply_workReport'),
+                to={'/home/apply/workReport'}>{intl.get('workReport')}</Link>), 'apply_workReport'),
         ]),
-        getItem(intl.get('Record'), 'record', <BarChartOutlined/>, [
+        getItem(intl.get('record'), 'record', <BarChartOutlined/>, [
             getItem((
                 <Link
-                    to={'/home/record/departmentChange'}>{isEnglish ? 'Travel Reimbursement Record' : '部门变更记录'}</Link>), 'record_departmentChange'),
+                    to={'/home/record/departmentChange'}>{intl.get('departmentChange')}</Link>), 'record_departmentChange'),
             getItem((<Link
-                to={'/home/record/travel'}>{isEnglish ? 'Travel Reimbursement Record' : '差旅报销记录'}</Link>), 'record_travel'),
+                to={'/home/record/travel'}>{intl.get('travelReimburse')}</Link>), 'record_travel'),
             getItem((<Link
-                to={'/home/record/leave'}>{isEnglish ? 'Leave Record' : '请假记录'}</Link>), 'record_leave'),
-            getItem((<Link to={'/home/record/procurement'}>采购申请记录</Link>), 'record_procurement'),
+                to={'/home/record/leave'}>{intl.get('leave')}</Link>), 'record_leave'),
+            getItem((<Link to={'/home/record/procurement'}>{intl.get('procurement')}</Link>), 'record_procurement'),
             getItem((<Link
-                to={'/home/record/workReport'}>{isEnglish ? 'WorkReport Record' : '工作报告记录'}</Link>), 'record_workReport'),
+                to={'/home/record/workReport'}>{intl.get('workReport')}</Link>), 'record_workReport'),
         ]),
-        getItem((<Link to={'/home/setting'}>{isEnglish ? 'Setting' : '设置'}</Link>), 'Setting',
+        getItem((<Link to={'/home/setting'}>{intl.get('setting')}</Link>), 'Setting',
             <FormOutlined/>)
     ];
     const department: MenuProps['items'] = [
-        getItem((<Link to={'/home/department'}>首页</Link>), 'Home', <HomeOutlined/>),
-        getItem('审批', 'approval', <ProjectOutlined/>, [
-            getItem(<Link to={'/home/approval/departmentChange'}>部门变更</Link>, 'departmentChange'),
-            getItem(<Link to={'/home/approval/leave'}>请假</Link>, 'leave'),
-            getItem(<Link to={'/home/approval/travel'}>差旅报销</Link>, 'travel'),
-            getItem(<Link to={'/home/approval/procurement'}>采购</Link>, 'procurement'),
-            getItem(<Link to={'/home/approval/workReport'}>工作报告</Link>, 'workReport'),
+        getItem((<Link to={'/home/department'}>{intl.get('home')}</Link>), 'Home', <HomeOutlined/>),
+        getItem(intl.get('approve'), 'approve', <ProjectOutlined/>, [
+            getItem(<Link
+                to={'/home/approval/departmentChange'}>{intl.get('departmentChange')}</Link>, 'departmentChange'),
+            getItem(<Link to={'/home/approval/leave'}>{intl.get('leave')}</Link>, 'leave'),
+            getItem(<Link to={'/home/approval/travel'}>{intl.get('travelReimburse')}</Link>, 'travel'),
+            getItem(<Link to={'/home/approval/procurement'}>{intl.get('procurement')}</Link>, 'procurement'),
+            getItem(<Link to={'/home/approval/workReport'}>{intl.get('workReport')}</Link>, 'workReport'),
         ]),
-        getItem((<Link to={'/home/setting'}>{isEnglish ? 'Setting' : '设置'}</Link>), 'Setting',
+        getItem((<Link to={'/home/setting'}>{intl.get('setting')}</Link>), 'Setting',
             <FormOutlined/>)
     ];
     const leader: MenuProps['items'] = [
-        getItem((<Link to={'/home/leader'}>首页</Link>), 'Home', <HomeOutlined/>),
-        getItem('审批', 'approval', <ProjectOutlined/>, [
-            getItem(<Link to={'/home/approval/departmentChange'}>部门变更</Link>, 'changeDepartment'),
-            getItem(<Link to={'/home/approval/leave'}>请假</Link>, 'leave'),
-            getItem(<Link to={'/home/approval/travel'}>差旅报销</Link>, 'travel'),
-            getItem(<Link to={'/home/approval/procurement'}>采购</Link>, 'procurement'),
-            getItem(<Link to={'/home/approval/workReport'}>工作报告</Link>, 'workReport'),
+        getItem((<Link to={'/home/leader'}>{intl.get('home')}</Link>), 'Home', <HomeOutlined/>),
+        getItem(intl.get('approve'), 'approval', <ProjectOutlined/>, [
+            getItem(<Link
+                to={'/home/approval/departmentChange'}>{intl.get('departmentChange')}</Link>, 'changeDepartment'),
+            getItem(<Link to={'/home/approval/leave'}>{intl.get('leave')}</Link>, 'leave'),
+            getItem(<Link to={'/home/approval/travel'}>{intl.get('travelReimburse')}</Link>, 'travel'),
+            getItem(<Link to={'/home/approval/procurement'}>{intl.get('procurement')}</Link>, 'procurement'),
+            getItem(<Link to={'/home/approval/workReport'}>{intl.get('workReport')}</Link>, 'workReport'),
         ]),
-        getItem((<Link to={'/home/setting'}>{isEnglish ? 'Setting' : '设置'}</Link>), 'Setting',
+        getItem((<Link to={'/home/setting'}>{intl.get('setting')}</Link>), 'Setting',
             <FormOutlined/>)
     ];
     const defaultMenu: MenuProps['items'] = [];
 
-    const themeColor: String = useSelector((state: {
-        themeColor: {
-            value: 'light' | 'dark'
-        }
-    }) => state.themeColor.value)
+    const themeColor: String = useSelector((state: any) => state.themeColor.value)
 
-    const userType = useSelector((state: {
-        userType: {
-            value: string
-        }
-    }) => state.userType.value)
+    const userType = useSelector((state: any) => state.userType.value)
 
-    const menuModeSlice = useSelector((state: {
-        menuMode: {
-            value: string
-        }
-    }) => state.menuMode.value)
+    const menuModeSlice = useSelector((state: any) => state.menuMode.value)
 
-    const isLogin = useSelector((state: {
-        isLogin: {
-            value: boolean
-        }
-    }) => state.isLogin.value)
+    const isLogin = useSelector((state: any) => state.isLogin.value)
 
     // const [theme, setTheme] = useState('light');
     const RenderMenu = (): MenuProps['items'] => {

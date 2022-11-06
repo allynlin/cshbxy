@@ -44,7 +44,7 @@ const routes: RoutesItemType[] = [
         // 根元素使用 element 的方式导入，避免路由导航的时候刷新根元素
         children: [
             {
-                path: 'Employee',
+                path: 'employee',
                 component: () => import('../pages/Index/Employee'),
                 meta: {
                     title: 'Home',
@@ -86,13 +86,6 @@ const routes: RoutesItemType[] = [
             ...record,
             ...Approval
         ]
-    }, {
-        path: '/Spin',
-        component: () => import('../component/loading/Spin'),
-        meta: {
-            title: 'Spin',
-            titleCN: '正在加载中'
-        }
     }, {
         path: '/403',
         element: <Error403/>,

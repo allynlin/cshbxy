@@ -6,6 +6,7 @@ import '../apply.scss';
 import {DownLoadURL} from "../../../baseInfo";
 import FileUpLoad from "../../../component/axios/FileUpLoad";
 import {ExclamationCircleOutlined, LoadingOutlined} from "@ant-design/icons";
+import intl from "react-intl-universal";
 
 const {Title} = Typography;
 const tableName = `WorkReport`;
@@ -18,7 +19,7 @@ const ChangeForm = () => {
     // 文件上传列表
     const [fileList, setFileList] = useState<[]>([]);
     const [isRenderResult, setIsRenderResult] = useState<boolean>(true);
-    const [RenderResultTitle, setRenderResultTitle] = useState<String>('正在获取工作报告提交记录');
+    const [RenderResultTitle, setRenderResultTitle] = useState<String>(intl.get('obtainLastTimeUploadWorkReport'));
     const [isRenderInfo, setIsRenderInfo] = useState<boolean>(false);
     // 监听表单数据
     const [form] = Form.useForm();
@@ -52,7 +53,7 @@ const ChangeForm = () => {
         }
         checkLastWeekWorkReport().then(res => {
             if (res.code === 200) {
-                setRenderResultTitle("正在获取上次上传的文件")
+                setRenderResultTitle(intl.get('obtainLastTimeUploadFiles'))
                 checkUploadFilesList();
             } else {
                 setRenderResultTitle(res.msg)
@@ -77,8 +78,6 @@ const ChangeForm = () => {
                 })
                 setFileList(fileList)
             }
-            setIsQuery(false)
-            setWaitTime(0)
             setIsRenderResult(false)
         }).catch(err => {
             setRenderResultTitle(err.message)
@@ -91,9 +90,9 @@ const ChangeForm = () => {
             navigate('/home/success', {
                 state: {
                     object: {
-                        title: '工作报告提交成功',
-                        describe: '',
-                        toPage: '查看历史工作报告',
+                        title: intl.get('workReport') + ' ' + intl.get('submitSuccess'),
+                        describe: intl.get('waitApprove'),
+                        toPage: intl.get('showApplyList'),
                         toURL: '/home/record/workReport',
                     }
                 }
@@ -103,7 +102,7 @@ const ChangeForm = () => {
 
     const showConfirm = () => {
         Modal.confirm({
-            title: '确认提交本周工作报告吗？',
+            title: intl.get('confirm'),
             icon: <ExclamationCircleOutlined/>,
             onOk() {
                 submitForm();
@@ -135,12 +134,12 @@ const ChangeForm = () => {
                 <Button disabled={isQuery} type="primary" onClick={() => {
                     checkUploadFilesList()
                 }}>
-                    {isQuery ? `刷新(${waitTime})` : `刷新`}
+                    {isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}
                 </Button>
             }
         />) : (
         <div className={'apply-body'}>
-            <Title level={2} className={'tit'}>工作报告</Title>
+            <Title level={2} className={'tit'}>{intl.get('workReport')}</Title>
             <Form
                 form={form}
                 name="basic"
@@ -153,9 +152,9 @@ const ChangeForm = () => {
             >
 
                 <Form.Item
-                    label="工作报告"
+                    label={intl.get('workReport')}
                     name="file"
-                    rules={[{required: true, message: '请上传工作报告'}]}
+                    rules={[{required: true, message: intl.get('pleaseUploadWorkReport')}]}
                 >
                     <FileUpLoad
                         setTableName={tableName}
@@ -177,10 +176,10 @@ const ChangeForm = () => {
 
                 <Form.Item wrapperCol={{offset: 8, span: 16}} style={{textAlign: "center"}}>
                     <Button type="primary" htmlType="submit">
-                        提交
+                        {intl.get('submit')}
                     </Button>
                     <Button htmlType="button" onClick={onReset} style={{marginLeft: 8}}>
-                        重置
+                        {intl.get('reset')}
                     </Button>
                 </Form.Item>
             </Form>
