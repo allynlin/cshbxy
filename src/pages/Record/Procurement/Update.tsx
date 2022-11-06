@@ -1,8 +1,7 @@
-import {Button, DatePicker, Form, Input, InputNumber, message, Modal, notification} from 'antd';
+import {Button, Form, Input, InputNumber, message, Modal, notification} from 'antd';
 import React, {useState} from 'react';
 import {blue} from "../../../baseInfo";
-import {updateLeave, updateProcurement} from "../../../component/axios/api";
-import moment from "moment";
+import {updateProcurement} from "../../../component/axios/api";
 
 interface Values {
     title: string;

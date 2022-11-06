@@ -9,7 +9,7 @@ import {
 } from '../../../component/axios/api';
 import '../index.scss';
 import {RenderStatusTag} from "../../../component/Tag/RenderStatusTag";
-import {blue, green, purple, red, yellow} from "../../../baseInfo";
+import {red} from "../../../baseInfo";
 import {ColumnsType} from "antd/es/table";
 import {RenderStatusColor} from "../../../component/Tag/RenderStatusColor";
 import {DataType} from "tdesign-react";

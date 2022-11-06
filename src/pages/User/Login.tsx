@@ -1,13 +1,14 @@
 import React, {memo} from "react";
-import {Button, Form, Input, message, Switch, Radio} from 'antd';
+import {Button, Form, Input, message, Radio, Switch} from 'antd';
 import './index-light.scss'
 import Cookie from 'js-cookie';
 import {userLogin} from "../../component/axios/api";
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {login} from "../../component/redux/isLoginSlice";
-import {Employee, Department, Leader} from "../../component/redux/userTypeSlice";
+import {Department, Employee, Leader} from "../../component/redux/userTypeSlice";
 import {setUser} from "../../component/redux/userInfoSlice";
+import intl from "react-intl-universal";
 
 const StudentForm = memo(() => {
     const dispatch = useDispatch();
@@ -57,7 +58,6 @@ const StudentForm = memo(() => {
         } else {
             Cookie.remove('username');
             Cookie.remove('password');
-            Cookie.remove('userType');
         }
     }
 
@@ -90,12 +90,12 @@ const StudentForm = memo(() => {
             }}
         >
             <Form.Item
-                label="用户名"
+                label={intl.get('username')}
                 name="username"
                 rules={[
                     {
                         required: true,
-                        message: '请输入用户名',
+                        message: intl.get('pleaseInputUsername'),
                         pattern: /^[a-zA-Z0-9]{1,20}$/
                     },
                 ]}
@@ -104,12 +104,12 @@ const StudentForm = memo(() => {
             </Form.Item>
 
             <Form.Item
-                label="密码"
+                label={intl.get('password')}
                 name="password"
                 rules={[
                     {
                         required: true,
-                        message: '请输入密码',
+                        message: intl.get('pleaseInputPassword'),
                         pattern: /^[a-zA-Z0-9]{8,20}$/
                     },
                 ]}
@@ -118,51 +118,52 @@ const StudentForm = memo(() => {
             </Form.Item>
 
             <Form.Item
-                label="登录渠道"
+                label={intl.get('userType')}
                 name="userType"
                 rules={[
                     {
                         required: true,
-                        message: '必须选择登陆渠道',
+                        message: intl.get('pleaseChooseUserType'),
                     },
                 ]}
             >
                 <Radio.Group style={{display: "flex"}} buttonStyle="solid">
-                    <Radio.Button value="Employee">员工</Radio.Button>
-                    <Radio.Button value="Department">部门</Radio.Button>
-                    <Radio.Button value="Leader">领导</Radio.Button>
+                    <Radio.Button value="Employee">{intl.get('employee')}</Radio.Button>
+                    <Radio.Button value="Department">{intl.get
+                    ('department')}</Radio.Button>
+                    <Radio.Button value="Leader">{intl.get('leader')}</Radio.Button>
                 </Radio.Group>
             </Form.Item>
 
             <Form.Item
-                label="记住密码"
+                label={intl.get('rememberPassword')}
                 name='rememberme'
                 valuePropName='checked'
                 rules={[
                     {
                         required: true,
-                        message: '必须选择是否记住密码',
+                        message: intl.get('pleaseChooseRememberPassword'),
                     },
                 ]}
             >
-                <Switch style={{display: "flex"}} checkedChildren="是" unCheckedChildren="否"/>
+                <Switch style={{display: "flex"}} checkedChildren={intl.get('yes')} unCheckedChildren={intl.get('no')}/>
             </Form.Item>
 
             <Form.Item
                 wrapperCol={{}}
             >
                 <Button type="primary" htmlType="submit">
-                    登录
+                    {intl.get('login')}
                 </Button>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <Button htmlType="button" onClick={onReset}>
-                    重置
+                    {intl.get('reset')}
                 </Button>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <Button htmlType="button" onClick={() => {
                     navigate('/register')
                 }}>
-                    注册
+                    {intl.get('register')}
                 </Button>
             </Form.Item>
         </Form>

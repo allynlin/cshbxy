@@ -3,13 +3,13 @@ import {ExclamationCircleOutlined, SearchOutlined} from '@ant-design/icons';
 import type {ColumnsType} from 'antd/es/table';
 import React, {useEffect, useState} from 'react';
 import {
-    refreshDepartmentChange,
     checkTeacherChangeDepartmentRecord,
     deleteChangeDepartmentByTeacher,
     findChangeDepartmentByTeacherProcess,
-    findUploadFilesByUid
+    findUploadFilesByUid,
+    refreshDepartmentChange
 } from '../../../component/axios/api';
-import {DownLoadURL, purple, red} from "../../../baseInfo";
+import {DownLoadURL, red} from "../../../baseInfo";
 import {RenderStatusTag} from "../../../component/Tag/RenderStatusTag";
 import {RenderStatusColor} from "../../../component/Tag/RenderStatusColor";
 import '../index.scss'

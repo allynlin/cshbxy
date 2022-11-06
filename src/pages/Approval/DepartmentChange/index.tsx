@@ -3,9 +3,10 @@ import {ExclamationCircleOutlined, SearchOutlined} from '@ant-design/icons';
 import type {ColumnsType} from 'antd/es/table';
 import React, {useEffect, useState} from 'react';
 import {
-    resolveDepartmentChange,
     findDepartmentChangeWaitApprovalList,
-    findUploadFilesByUid, refreshDepartmentChange
+    findUploadFilesByUid,
+    refreshDepartmentChange,
+    resolveDepartmentChange
 } from '../../../component/axios/api';
 import {DownLoadURL, green} from "../../../baseInfo";
 import {RenderStatusColor} from "../../../component/Tag/RenderStatusColor";

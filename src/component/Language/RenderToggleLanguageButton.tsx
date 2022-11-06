@@ -15,6 +15,6 @@ export const RenderToggleLanguageButton = () => {
     return (
         <Button style={{backgroundColor: yellow, borderColor: yellow, color: '#ffffff'}} onClick={() => {
             userLanguage === 'English' ? dispatch(Chinese()) : dispatch(English())
-        }}>{userLanguage === 'English' ? '简体中文（Simple Chinses）' : 'English'}</Button>
+        }}>{userLanguage === 'English' ? 'English' : '简体中文（Simple Chinses）'}</Button>
     )
 }

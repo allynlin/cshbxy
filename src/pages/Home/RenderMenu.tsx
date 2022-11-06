@@ -1,11 +1,5 @@
 import {Button, Menu} from 'antd';
-import {
-    BarChartOutlined,
-    EditOutlined,
-    FormOutlined,
-    HomeOutlined,
-    ProjectOutlined,
-} from '@ant-design/icons';
+import {BarChartOutlined, EditOutlined, FormOutlined, HomeOutlined, ProjectOutlined,} from '@ant-design/icons';
 import React, {useEffect, useState} from 'react';
 import './playOut-light.scss'
 import {Link} from 'react-router-dom';

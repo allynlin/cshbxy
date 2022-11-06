@@ -6,13 +6,9 @@ import RouterWaiter from "react-router-waiter"
 import Spin from "./component/loading/Spin";
 import {useDispatch, useSelector} from "react-redux";
 import {ConfigProvider, message} from "antd";
-import {
-    checkUser,
-    getLowVersion,
-    getVersion
-} from "./component/axios/api";
+import {checkUser, getLowVersion, getVersion} from "./component/axios/api";
 import {login} from "./component/redux/isLoginSlice";
-import {Employee, Department, Leader} from "./component/redux/userTypeSlice";
+import {Department, Employee, Leader} from "./component/redux/userTypeSlice";
 import {setVersion} from "./component/redux/serverVersionSlice";
 import {unstable_HistoryRouter as HistoryRouter} from 'react-router-dom'
 import {createBrowserHistory} from 'history'

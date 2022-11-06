@@ -1,14 +1,15 @@
-import {Button, Collapse, Drawer, message, Modal, Steps, Table, Tag, Typography, Space, Skeleton} from 'antd';
+import {Button, Collapse, Drawer, message, Modal, Skeleton, Space, Steps, Table, Tag, Typography} from 'antd';
 import {ExclamationCircleOutlined, SearchOutlined,} from '@ant-design/icons';
 import React, {useEffect, useState} from 'react';
 import {
     deleteWorkReport,
     findUploadFilesByUid,
     findWorkReportByTeacherProcess,
-    findWorkReportList, refreshTravel, refreshWorkReport
+    findWorkReportList,
+    refreshWorkReport
 } from '../../../component/axios/api';
 import '../index.scss';
-import {DownLoadURL, red, purple} from "../../../baseInfo";
+import {DownLoadURL, red} from "../../../baseInfo";
 import {RenderStatusTag} from "../../../component/Tag/RenderStatusTag";
 import RecordSkeleton from "../../../component/Skeleton/RecordSkeleton";
 import {ColumnsType} from "antd/es/table";

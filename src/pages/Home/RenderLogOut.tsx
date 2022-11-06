@@ -23,7 +23,6 @@ const RenderLogOut = () => {
         dispatch(logout())
         dispatch(all())
         Cookie.remove('token');
-        Cookie.remove('userType');
         message.success('退出成功')
         navigate('/login', {replace: true})
     }

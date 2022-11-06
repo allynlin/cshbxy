@@ -1,16 +1,11 @@
 import React, {memo, useState} from "react";
-import {Button, Form, Input, message, Switch, Select, Radio} from 'antd';
+import {Button, Form, Input, message, Radio, Select, Switch} from 'antd';
 import './index-light.scss'
 import Cookie from 'js-cookie';
 import {useNavigate} from "react-router-dom";
-import {
-    findUserType,
-    checkUsername,
-    userRegister,
-    userLogin
-} from "../../component/axios/api";
+import {checkUsername, findUserType, userLogin, userRegister} from "../../component/axios/api";
 import {useDispatch} from "react-redux";
-import {Employee, Department, Leader} from "../../component/redux/userTypeSlice";
+import {Department, Employee, Leader} from "../../component/redux/userTypeSlice";
 import {login} from "../../component/redux/isLoginSlice";
 import {setUser} from "../../component/redux/userInfoSlice";
 
@@ -53,8 +48,10 @@ const RegisterStudent = memo(() => {
     };
 
     const loginAutomatic = () => {
-        if (!rememberme)
+        if (!rememberme) {
             navigate('/login')
+            return
+        }
         userLogin(username, password, registerType).then(res => {
             dispatch(setUser(res.body))
             message.success(res.msg);

@@ -1,11 +1,11 @@
-import {Button, Form, Input, Modal, Result, Select, Skeleton, Typography} from 'antd';
+import {Button, Form, Input, Modal, Result, Select, Typography} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {
-    findUserType,
+    ChangeDepartment,
     checkLastTimeUploadFiles,
     checkTeacherChangeDepartment,
-    ChangeDepartment
+    findUserType
 } from "../../../component/axios/api";
 import '../apply.scss';
 import {DownLoadURL} from "../../../baseInfo";

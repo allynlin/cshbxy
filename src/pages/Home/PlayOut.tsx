@@ -64,7 +64,7 @@ const Home = () => {
                         <div className={'logo'}>
                             <img src={logo} width={'20px'} height={'20px'} alt={'logo'}/>
                         </div>
-                        <Title level={4}>{intl.get('SysName')}</Title>
+                        <Title level={4}>{intl.get('sysName')}</Title>
                     </div>
                     <div className={'silder_content'}>
                         <RenderMenu/>

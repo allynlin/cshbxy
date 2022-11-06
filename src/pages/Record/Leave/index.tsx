@@ -1,16 +1,10 @@
 import {Button, Drawer, message, Modal, Skeleton, Space, Steps, Table, Tag, Typography} from 'antd';
 import {ExclamationCircleOutlined, SearchOutlined} from '@ant-design/icons';
 import React, {useEffect, useState} from 'react';
-import {
-    deleteLeave,
-    findLeaveList,
-    findLeaveProcess,
-    refreshLeave,
-    refreshWorkReport
-} from '../../../component/axios/api';
+import {deleteLeave, findLeaveList, findLeaveProcess, refreshLeave} from '../../../component/axios/api';
 import '../index.scss';
 import {RenderStatusTag} from "../../../component/Tag/RenderStatusTag";
-import {purple, red} from "../../../baseInfo";
+import {red} from "../../../baseInfo";
 import {ColumnsType} from "antd/es/table";
 import {RenderStatusColor} from "../../../component/Tag/RenderStatusColor";
 import {DataType} from "tdesign-react";

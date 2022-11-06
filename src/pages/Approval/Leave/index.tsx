@@ -2,12 +2,8 @@ import {Button, Drawer, message, Modal, Table, Typography} from 'antd';
 import {ExclamationCircleOutlined, SearchOutlined} from '@ant-design/icons';
 import type {ColumnsType} from 'antd/es/table';
 import React, {useEffect, useState} from 'react';
-import {
-    findLeaveWaitApprovalList, refreshDepartmentChange, refreshLeave,
-    resolveLeave
-} from '../../../component/axios/api';
+import {findLeaveWaitApprovalList, refreshLeave, resolveLeave} from '../../../component/axios/api';
 import {green} from "../../../baseInfo";
-import {RenderStatusTag} from "../../../component/Tag/RenderStatusTag";
 import {RenderStatusColor} from "../../../component/Tag/RenderStatusColor";
 import '../index.scss'
 import RecordSkeleton from "../../../component/Skeleton/RecordSkeleton";

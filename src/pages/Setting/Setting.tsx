@@ -7,7 +7,7 @@ import LanguageSetting from "./LanguageSetting";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {inline} from "../../component/redux/menuModeSlice";
-import {lightTheme, sysTheme} from "../../component/redux/sysColorSlice";
+import {sysTheme} from "../../component/redux/sysColorSlice";
 import {LStorage} from "../../component/localStrong";
 import {English} from "../../component/redux/userLanguageSlice";
 import intl from "react-intl-universal";

@@ -1,6 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit'
 import {LStorage} from "../localStrong";
-import intl from "react-intl-universal";
 
 const initialState: { value: 'Chinese' | 'English' } = {
     value: 'English',
