@@ -175,5 +175,14 @@
   "loginAgain": "Login again",
   "logOut": "Log Out",
   "logOutSuccess": "Log out success",
-  "afterLogOutNeedLoginAgain": "After log out, need login again"
+  "afterLogOutNeedLoginAgain": "After log out, need login again",
+  "afterPassCannotChange": "It cannot be changed after passing, please operate with caution",
+  "confirmPassApprove": "Confirm approval",
+  "noRecord": "No Record",
+  "submitPerson": "Submit Person",
+  "pass": "Pass",
+  "reject": "Reject",
+  "pleaseInputRejectReason": "Please input reject reason",
+  "rejectFailed": "Reject failed",
+  "rejectReasonCannotBeEmpty": "Reject reason cannot be empty"
 }

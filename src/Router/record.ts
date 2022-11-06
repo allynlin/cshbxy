@@ -28,7 +28,7 @@ const record = [
                 }
             }, {
                 path: 'workReport',
-                component: () => import('../pages/Record/Report'),
+                component: () => import('../pages/Record/WorkReport'),
                 meta: {
                     title: 'WorkReport Record',
                     titleCN: '工作报告记录',

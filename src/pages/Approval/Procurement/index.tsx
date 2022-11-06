@@ -8,6 +8,7 @@ import {RenderStatusColor} from "../../../component/Tag/RenderStatusColor";
 import '../index.scss'
 import RecordSkeleton from "../../../component/Skeleton/RecordSkeleton";
 import Reject from "./Reject";
+import intl from "react-intl-universal";
 
 const {Title} = Typography;
 
@@ -72,12 +73,18 @@ const Index: React.FC = () => {
 
     const showResolveConfirm = (e: string) => {
         Modal.confirm({
-            title: '确认通过当前申请？',
+            title: intl.get('confirmPassApprove'),
             icon: <ExclamationCircleOutlined/>,
-            content: '通过后不可变更，请谨慎操作',
-            okText: '确认',
-            okType: 'danger',
-            cancelText: '取消',
+            content: intl.get('afterPassCannotChange'),
+            okText: intl.get('ok'),
+            okButtonProps: {
+                style: {
+                    backgroundColor: green,
+                    borderColor: green
+                }
+            },
+            okType: 'primary',
+            cancelText: intl.get('cancel'),
             onOk() {
                 resolveProcurement(e).then((res: any) => {
                     if (res.code === 200) {
@@ -86,7 +93,7 @@ const Index: React.FC = () => {
                         const arr = dataSource.filter((item: any) => item.uid !== e);
                         setDataSource(arr);
                         if (arr.length === 0) {
-                            message.warning('暂无待审批记录');
+                            message.warning(intl.get('noRecord'));
                         }
                     }
                 })
@@ -104,25 +111,25 @@ const Index: React.FC = () => {
             fixed: 'left',
             align: 'center',
         }, {
-            title: '申请人',
+            title: intl.get('submitPerson'),
             dataIndex: 'releaseUid',
             key: 'releaseUid',
             width: 150,
             align: 'center',
         }, {
-            title: '物品',
+            title: intl.get('procurementItem'),
             dataIndex: 'items',
             key: 'items',
             width: 150,
             align: 'center',
         }, {
-            title: '价格',
+            title: intl.get('procurementPrice'),
             dataIndex: 'price',
             key: 'price',
             width: 150,
             align: 'center',
         }, {
-            title: '操作',
+            title: intl.get('operate'),
             key: 'uid',
             dataIndex: 'uid',
             fixed: 'right',
@@ -144,7 +151,7 @@ const Index: React.FC = () => {
                                 backgroundColor: RenderStatusColor(record.status),
                                 borderColor: RenderStatusColor(record.status)
                             }}
-                        >查看</Button>
+                        >{intl.get('check')}</Button>
                         <Button
                             type="primary"
                             style={{
@@ -156,7 +163,7 @@ const Index: React.FC = () => {
                             onClick={() => {
                                 showResolveConfirm(content.uid);
                             }}
-                        >通过</Button>
+                        >{intl.get('pass')}</Button>
                         <Reject state={content} getNewContent={(isReject: boolean) => {
                             if (isReject) {
                                 setOpen(false)
@@ -217,13 +224,13 @@ const Index: React.FC = () => {
                         onClick={() => {
                             refresh(content.uid);
                         }}
-                    >{isQuery ? `刷新(${waitTime})` : '刷新'}</Button>}
+                    >{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>}
                 >
-                    <p>物品：{content.items}</p>
-                    <p>价格：{content.price}</p>
-                    <p>原因：{content.reason}</p>
-                    <p>提交时间：{content.create_time}</p>
-                    <p>更新时间：{content.update_time}</p>
+                    <p>{intl.get('procurementItem')}：{content.items}</p>
+                    <p>{intl.get('procurementPrice')}：{content.price}</p>
+                    <p>{intl.get('reason')}：{content.reason}</p>
+                    <p>{intl.get('createTime')}：{content.create_time}</p>
+                    <p>{intl.get('updateTime')}：{content.update_time}</p>
                     <div style={{
                         display: 'flex',
                         justifyContent: 'end',
@@ -245,13 +252,13 @@ const Index: React.FC = () => {
                             onClick={() => {
                                 showResolveConfirm(content.uid);
                             }}
-                        >通过</Button>
+                        >{intl.get('pass')}</Button>
                     </div>
                 </Drawer>
                 <Title level={2} className={'tit'}>
-                    采购审批&nbsp;&nbsp;
+                    {intl.get('procurement') + ' ' + intl.get('approve')}&nbsp;&nbsp;
                     <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
-                            onClick={getDataSource}>{isQuery ? `刷新(${waitTime})` : '刷新'}</Button>
+                            onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
                 </Title>
                 <Table
                     columns={columns}

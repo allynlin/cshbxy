@@ -1,4 +1,4 @@
-import {Button, Collapse, Drawer, message, Modal, Table, Typography} from 'antd';
+import {Button, Collapse, Drawer, message, Modal, Skeleton, Table, Typography} from 'antd';
 import {ExclamationCircleOutlined, SearchOutlined} from '@ant-design/icons';
 import type {ColumnsType} from 'antd/es/table';
 import React, {useEffect, useState} from 'react';
@@ -13,6 +13,7 @@ import {RenderStatusColor} from "../../../component/Tag/RenderStatusColor";
 import '../index.scss'
 import RecordSkeleton from "../../../component/Skeleton/RecordSkeleton";
 import Reject from "./Reject";
+import intl from "react-intl-universal";
 
 const {Title} = Typography;
 const {Panel} = Collapse;
@@ -35,6 +36,7 @@ const Index: React.FC = () => {
     const [content, setContent] = useState<any>({});
     const [fileList, setFileList] = useState<any>([]);
     const [open, setOpen] = useState(false);
+    const [fileLoading, setFileLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -82,22 +84,30 @@ const Index: React.FC = () => {
     // 获取当前记录上传的文件和当前审批流程
     const getInfo = async (uid: string) => {
         setOpen(true)
-        const hide = message.loading('正在获取文件列表', 0);
+        setFileLoading(true)
+        const hide = message.loading(intl.get('gettingFileList'), 0);
         findUploadFilesByUid(uid, tableName).then((res: any) => {
             setFileList(res.body);
         }).finally(() => {
             hide();
+            setFileLoading(false)
         })
     }
 
     const showResolveConfirm = (e: string) => {
         Modal.confirm({
-            title: '确认通过当前申请？',
+            title: intl.get('confirmPassApprove'),
             icon: <ExclamationCircleOutlined/>,
-            content: '通过后不可变更，请谨慎操作',
-            okText: '确认',
-            okType: 'danger',
-            cancelText: '取消',
+            content: intl.get('afterPassCannotChange'),
+            okText: intl.get('ok'),
+            okButtonProps: {
+                style: {
+                    backgroundColor: green,
+                    borderColor: green
+                }
+            },
+            okType: 'primary',
+            cancelText: intl.get('cancel'),
             onOk() {
                 resolveDepartmentChange(e).then((res: any) => {
                     if (res.code === 200) {
@@ -106,7 +116,7 @@ const Index: React.FC = () => {
                         const arr = dataSource.filter((item: any) => item.uid !== e);
                         setDataSource(arr);
                         if (arr.length === 0) {
-                            message.warning('暂无待审批记录');
+                            message.warning(intl.get('noRecord'));
                         }
                     }
                 })
@@ -124,19 +134,19 @@ const Index: React.FC = () => {
             fixed: 'left',
             align: 'center',
         }, {
-            title: '申请人',
+            title: intl.get('submitPerson'),
             dataIndex: 'releaseUid',
             key: 'releaseUid',
             width: 150,
             align: 'center',
         }, {
-            title: '变更部门',
+            title: intl.get('departmentChange'),
             dataIndex: 'departmentUid',
             key: 'departmentUid',
             width: 150,
             align: 'center',
         }, {
-            title: '操作',
+            title: intl.get('operate'),
             key: 'uid',
             dataIndex: 'uid',
             fixed: 'right',
@@ -158,7 +168,7 @@ const Index: React.FC = () => {
                                 backgroundColor: RenderStatusColor(record.status),
                                 borderColor: RenderStatusColor(record.status)
                             }}
-                        >查看</Button>
+                        >{intl.get('check')}</Button>
                         <Button
                             type="primary"
                             style={{
@@ -170,7 +180,7 @@ const Index: React.FC = () => {
                             onClick={() => {
                                 showResolveConfirm(content.uid);
                             }}
-                        >通过</Button>
+                        >{intl.get('pass')}</Button>
                         <Reject state={content} getNewContent={(isReject: boolean) => {
                             if (isReject) {
                                 setOpen(false)
@@ -222,25 +232,23 @@ const Index: React.FC = () => {
                     title={content.releaseUid}
                     placement="right"
                     open={open}
-                    onClose={() => {
-                        setOpen(false)
-                    }}
+                    onClose={() => setOpen(false)}
                     extra={<Button
                         type="primary"
                         disabled={isQuery}
-                        onClick={() => {
-                            refresh(content.uid);
-                        }}
-                    >{isQuery ? `刷新(${waitTime})` : '刷新'}</Button>}
+                        icon={<SearchOutlined/>}
+                        onClick={() => refresh(content.uid)}
+                    >{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>}
                 >
-                    <p>变更部门：{content.departmentUid}</p>
-                    <p>变更原因：{content.changeReason}</p>
-                    <p>提交时间：{content.create_time}</p>
-                    <p>更新时间：{content.update_time}</p>
+                    <p>{intl.get('departmentChange')}：{content.departmentUid}</p>
+                    <p>{intl.get('reason')}：{content.changeReason}</p>
+                    <p>{intl.get('createTime')}：{content.create_time}</p>
+                    <p>{intl.get('updateTime')}：{content.update_time}</p>
                     <div style={{
                         display: 'flex',
                         justifyContent: 'end',
-                        marginTop: 16
+                        marginTop: 16,
+                        marginBottom: 16
                     }}>
                         <Reject state={content} getNewContent={(isReject: boolean) => {
                             if (isReject) {
@@ -258,30 +266,40 @@ const Index: React.FC = () => {
                             onClick={() => {
                                 showResolveConfirm(content.uid);
                             }}
-                        >通过</Button>
+                        >{intl.get('pass')}</Button>
                     </div>
                     {
-                        // 如果 fileList 不为空则渲染
-                        fileList.length > 0 ? (
-                            <Collapse ghost>
-                                {/*循环输出 Card，数据来源 fileList*/}
-                                {fileList.map((item: any, index: number) => {
-                                    return (
-                                        <Panel header={`附件${index + 1}`} key={index}>
-                                            <p>{item.oldFileName}</p>
-                                            <a href={`${DownLoadURL}/downloadFile?filename=${item.fileName}`}
-                                               target="_self">下载</a>
-                                        </Panel>
-                                    )
-                                })}
-                            </Collapse>
-                        ) : null
+                        fileLoading ? <Skeleton.Button block={true} active={true} size={'large'}/> :
+                            // 如果 fileList 不为空则渲染
+                            fileList.length > 0 ? (
+                                <>
+                                    {content.status === 0 ? <Button
+                                        type="primary"
+                                        loading={fileLoading}
+                                        onClick={() => getInfo(content.uid)}
+                                        disabled={isQuery}>
+                                        {isQuery ? `${intl.get('refreshFileList')}(${waitTime})` : intl.get('refreshFileList')}
+                                    </Button> : null}
+                                    <Collapse ghost>
+                                        {/*循环输出 Card，数据来源 fileList*/}
+                                        {fileList.map((item: any, index: number) => {
+                                            return (
+                                                <Panel header={intl.get('file') + (index + 1)} key={index}>
+                                                    <p>{item.oldFileName}</p>
+                                                    <a href={`${DownLoadURL}/downloadFile?filename=${item.fileName}`}
+                                                       target="_self">{intl.get('download')}</a>
+                                                </Panel>
+                                            )
+                                        })}
+                                    </Collapse>
+                                </>
+                            ) : null
                     }
                 </Drawer>
                 <Title level={2} className={'tit'}>
-                    部门变更审批&nbsp;&nbsp;
+                    {intl.get('departmentChange') + ' ' + intl.get('approve')}&nbsp;&nbsp;
                     <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
-                            onClick={getDataSource}>{isQuery ? `刷新(${waitTime})` : '刷新'}</Button>
+                            onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
                 </Title>
                 <Table
                     columns={columns}

@@ -8,6 +8,7 @@ import {RenderStatusColor} from "../../../component/Tag/RenderStatusColor";
 import '../index.scss'
 import RecordSkeleton from "../../../component/Skeleton/RecordSkeleton";
 import Reject from "./Reject";
+import intl from "react-intl-universal";
 
 const {Title} = Typography;
 
@@ -72,12 +73,18 @@ const Index: React.FC = () => {
 
     const showResolveConfirm = (e: string) => {
         Modal.confirm({
-            title: '确认通过当前申请？',
+            title: intl.get('confirmPassApprove'),
             icon: <ExclamationCircleOutlined/>,
-            content: '通过后不可变更，请谨慎操作',
-            okText: '确认',
-            okType: 'danger',
-            cancelText: '取消',
+            content: intl.get('afterPassCannotChange'),
+            okText: intl.get('ok'),
+            okButtonProps: {
+                style: {
+                    backgroundColor: green,
+                    borderColor: green
+                }
+            },
+            okType: 'primary',
+            cancelText: intl.get('cancel'),
             onOk() {
                 resolveLeave(e).then((res: any) => {
                     if (res.code === 200) {
@@ -86,7 +93,7 @@ const Index: React.FC = () => {
                         const arr = dataSource.filter((item: any) => item.uid !== e);
                         setDataSource(arr);
                         if (arr.length === 0) {
-                            message.warning('暂无待审批记录');
+                            message.warning(intl.get('noRecord'));
                         }
                     }
                 })
@@ -104,25 +111,25 @@ const Index: React.FC = () => {
             fixed: 'left',
             align: 'center',
         }, {
-            title: '申请人',
+            title: intl.get('submitPerson'),
             dataIndex: 'releaseUid',
             key: 'releaseUid',
             width: 150,
             align: 'center',
         }, {
-            title: '请假时间',
+            title: intl.get('startTime'),
             dataIndex: 'start_time',
             key: 'start_time',
             width: 150,
             align: 'center',
         }, {
-            title: '销假时间',
+            title: intl.get('endTime'),
             dataIndex: 'end_time',
             key: 'end_time',
             width: 150,
             align: 'center',
         }, {
-            title: '操作',
+            title: intl.get('operate'),
             key: 'uid',
             dataIndex: 'uid',
             fixed: 'right',
@@ -144,7 +151,7 @@ const Index: React.FC = () => {
                                 backgroundColor: RenderStatusColor(record.status),
                                 borderColor: RenderStatusColor(record.status)
                             }}
-                        >查看</Button>
+                        >{intl.get('check')}</Button>
                         <Button
                             type="primary"
                             style={{
@@ -156,7 +163,7 @@ const Index: React.FC = () => {
                             onClick={() => {
                                 showResolveConfirm(content.uid);
                             }}
-                        >通过</Button>
+                        >{intl.get('pass')}</Button>
                         <Reject state={content} getNewContent={(isReject: boolean) => {
                             if (isReject) {
                                 setOpen(false)
@@ -208,22 +215,19 @@ const Index: React.FC = () => {
                     title={content.releaseUid}
                     placement="right"
                     open={open}
-                    onClose={() => {
-                        setOpen(false)
-                    }}
+                    onClose={() => setOpen(false)}
                     extra={<Button
                         type="primary"
                         disabled={isQuery}
-                        onClick={() => {
-                            refresh(content.uid);
-                        }}
-                    >{isQuery ? `刷新(${waitTime})` : '刷新'}</Button>}
+                        onClick={() => refresh(content.uid)}
+                        icon={<SearchOutlined/>}
+                    >{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>}
                 >
-                    <p>请假时间：{content.start_time}</p>
-                    <p>销假时间：{content.end_time}</p>
-                    <p>请假原因：{content.reason}</p>
-                    <p>提交时间：{content.create_time}</p>
-                    <p>更新时间：{content.update_time}</p>
+                    <p>{intl.get('startTime')}：{content.start_time}</p>
+                    <p>{intl.get('endTime')}：{content.end_time}</p>
+                    <p>{intl.get('reason')}：{content.reason}</p>
+                    <p>{intl.get('createTime')}：{content.create_time}</p>
+                    <p>{intl.get('updateTime')}：{content.update_time}</p>
                     <div style={{
                         display: 'flex',
                         justifyContent: 'end',
@@ -245,13 +249,13 @@ const Index: React.FC = () => {
                             onClick={() => {
                                 showResolveConfirm(content.uid);
                             }}
-                        >通过</Button>
+                        >{intl.get('pass')}</Button>
                     </div>
                 </Drawer>
                 <Title level={2} className={'tit'}>
-                    请假审批&nbsp;&nbsp;
+                    {intl.get('leave') + ' ' + intl.get('approve')}&nbsp;&nbsp;
                     <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
-                            onClick={getDataSource}>{isQuery ? `刷新(${waitTime})` : '刷新'}</Button>
+                            onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
                 </Title>
                 <Table
                     columns={columns}

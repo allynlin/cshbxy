@@ -176,5 +176,14 @@
   "logOut": "退出登录",
   "logOutSuccess": "退出成功",
   "confirmLogOut": "确认退出登录",
-  "afterLogOutNeedLoginAgain": "退出后需要重新登录"
+  "afterLogOutNeedLoginAgain": "退出后需要重新登录",
+  "afterPassCannotChange": "通过后不可变更，请谨慎操作",
+  "confirmPassApprove": "确认通过审批",
+  "noRecord": "暂无记录",
+  "submitPerson": "提交人",
+  "pass": "通过",
+  "reject": "驳回",
+  "pleaseInputRejectReason": "请输入驳回原因",
+  "rejectFailed": "驳回失败",
+  "rejectReasonCannotBeEmpty": "驳回原因不能为空"
 }

@@ -2,6 +2,7 @@ import {Button, Form, Input, message, Modal, notification} from 'antd';
 import React, {useState} from 'react';
 import {red} from "../../../baseInfo";
 import {rejectLeave} from "../../../component/axios/api";
+import intl from "react-intl-universal";
 
 interface Values {
     title: string;
@@ -26,10 +27,10 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
     return (
         <Modal
             open={open}
-            title={'驳回申请'}
-            okText="驳回"
+            title={intl.get('confirm')}
+            okText={intl.get('reject')}
             okButtonProps={{style: {backgroundColor: red, borderColor: red}}}
-            cancelText="取消"
+            cancelText={intl.get('cancel')}
             onCancel={onCancel}
             confirmLoading={onLoading}
             onOk={() => {
@@ -41,8 +42,8 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
                     })
                     .catch(() => {
                         notification["error"]({
-                            message: '提交失败',
-                            description: '驳回原因不能为空',
+                            message: intl.get('rejectFailed'),
+                            description: intl.get('rejectReasonCannotBeEmpty'),
                         });
                     });
             }}
@@ -54,8 +55,8 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
             >
                 <Form.Item
                     name="reject_reason"
-                    label="驳回理由"
-                    rules={[{required: true, message: '请输入驳回理由'}]}
+                    label={intl.get('rejectReason')}
+                    rules={[{required: true, message: intl.get('pleaseInputRejectReason')}]}
                 >
                     <Input.TextArea rows={4} maxLength={100} showCount={true}/>
                 </Form.Item>
@@ -91,7 +92,7 @@ const Reject = (props: any) => {
                 }}
                 style={{backgroundColor: red, borderColor: red}}
             >
-                驳回
+                {intl.get('reject')}
             </Button>
             <CollectionCreateForm
                 open={open}
