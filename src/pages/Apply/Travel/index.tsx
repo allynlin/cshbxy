@@ -126,7 +126,7 @@ const LeaveForm = () => {
                         name="destination"
                         rules={[{
                             required: true,
-                            message:intl.get('pleaseInputDestination')
+                            message: intl.get('pleaseInputDestination')
                         }]}
                     >
                         <Input showCount={true} maxLength={50}

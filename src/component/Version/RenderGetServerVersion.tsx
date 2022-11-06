@@ -6,7 +6,7 @@ import intl from "react-intl-universal";
 
 export default function RenderGetServerVersion() {
 
-    const serverVersion = useSelector((state:any) => state.serverVersion.value);
+    const serverVersion = useSelector((state: any) => state.serverVersion.value);
 
     const serverLowVersion = useSelector((state: any) => state.serverLowVersion.value);
 
