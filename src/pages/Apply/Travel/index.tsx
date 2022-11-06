@@ -7,6 +7,7 @@ import {BaseInfo} from "../../../baseInfo";
 import Spin from "../../../component/loading/Spin";
 import FileUpLoad from "../../../component/axios/FileUpLoad";
 import {useSelector} from "react-redux";
+import intl from "react-intl-universal";
 
 const {Title} = Typography;
 const {Option} = Select;
@@ -34,18 +35,6 @@ const LeaveForm = () => {
     const destination = Form.useWatch('destination', form);
     const expenses = Form.useWatch('expenses', form);
     const reason = Form.useWatch('reason', form);
-
-    const [isEnglish, setIsEnglish] = useState(true);
-
-    const userLanguage: String = useSelector((state: {
-        userLanguage: {
-            value: 'Chinese' | 'English'
-        }
-    }) => state.userLanguage.value)
-
-    useEffect(() => {
-        setIsEnglish(userLanguage === 'English')
-    }, [userLanguage])
 
     useEffect(() => {
         checkUploadFilesList();
@@ -77,9 +66,9 @@ const LeaveForm = () => {
             navigate('/home/success', {
                 state: {
                     object: {
-                        title: isEnglish ? 'Your application has been submitted successfully' : '差旅报销申请提交成功',
-                        describe: isEnglish ? 'please wait for the approval result' : '请等待管理员审批',
-                        toPage: isEnglish ? 'See the application record' : '查看审批记录',
+                        title: intl.get('travelReimburseApply') + ' ' + intl.get('submitSuccess'),
+                        describe: intl.get('waitApprove'),
+                        toPage: intl.get('showApplyList'),
                         toURL: '/home/record/travel',
                     }
                 }
@@ -96,7 +85,7 @@ const LeaveForm = () => {
         submitForm();
     };
 
-    const onFinish = (values: any) => {
+    const onFinish = () => {
         setIsModalVisible(true)
     };
 
@@ -108,21 +97,21 @@ const LeaveForm = () => {
         isRenderResult ? <Spin/> :
             <div className={'apply-body'}>
                 <Modal
-                    title={isEnglish ? 'Confirm' : "确认提交"}
+                    title={intl.get('confirm')}
                     open={isModalVisible}
                     onOk={handleOk}
                     confirmLoading={confirmLoading}
                     onCancel={handleCancel}
                 >
-                    <p>{isEnglish ? 'Destination: ' : '出差目的地：'}{destination}</p>
-                    <p>{isEnglish ? 'Money: ' : '出差费用：'}{expenses} {moneyType}</p>
-                    <p>{isEnglish ? 'Money: ' : '出差原因：'}{reason}</p>
+                    <p>{intl.get('destination')}{destination}</p>
+                    <p>{intl.get('cost')}{expenses} {moneyType}</p>
+                    <p>{intl.get('reason')}{reason}</p>
                     {/*将变更材料 changeFile 中的 fileList 数组中的状态为 done 的每一项 name 输出出来*/}
-                    <p>{isEnglish ? 'Files: ' : '变更材料：'}{
+                    <p>{intl.get('file')}{
                         fileList.filter((item: any) => item.status === 'done').map((item: any) => item.name).join('、')
                     }</p>
                 </Modal>
-                <Title level={2} className={'tit'}>{isEnglish ? 'Travel Reimbursement' : '差旅报销申请'}</Title>
+                <Title level={2} className={'tit'}>{intl.get('travelReimburseApply')}</Title>
                 <Form
                     form={form}
                     name="basic"
@@ -134,24 +123,24 @@ const LeaveForm = () => {
                     }}
                 >
                     <Form.Item
-                        label={isEnglish ? 'Destination' : "出差目的地"}
+                        label={intl.get('destination')}
                         name="destination"
                         rules={[{
                             required: true,
-                            message: isEnglish ? 'Please enter your destination' : '请输入你的出差目的地'
+                            message:intl.get('pleaseInputDestination')
                         }]}
                     >
                         <Input showCount={true} maxLength={50}
-                               placeholder={isEnglish ? 'Please enter your destination' : '请输入你的出差目的地'}/>
+                               placeholder={intl.get('pleaseInputDestination')}/>
                     </Form.Item>
 
                     <Form.Item
-                        label={isEnglish ? 'Money' : "出差费用"}
+                        label={intl.get('cost')}
                         name="expenses"
-                        rules={[{required: true, message: isEnglish ? 'Please enter your money' : '请输入出差费用'}]}
+                        rules={[{required: true, message: intl.get('pleaseInputCost')}]}
                     >
                         <InputNumber
-                            placeholder={isEnglish ? 'Please choose your destination money type' : '请选择你的出差货币'}
+                            placeholder={intl.get('pleaseInputCost')}
                             addonAfter={
                                 <Select defaultValue={moneyType} style={{width: 60}} onChange={e => {
                                     setMoneyType(e)
@@ -165,20 +154,20 @@ const LeaveForm = () => {
                     </Form.Item>
 
                     <Form.Item
-                        label={isEnglish ? 'Reason' : "出差原因"}
+                        label={intl.get('reason')}
                         name="reason"
-                        rules={[{required: true, message: isEnglish ? 'Please enter your reason' : '请输入出差原因'}]}
+                        rules={[{required: true, message: intl.get('pleaseInputReason')}]}
                     >
                         <Input.TextArea rows={4}
-                                        placeholder={isEnglish ? 'Please enter your reason, If it exceeds 1000 words, please submit the attachment.' : "请输入出差原因，如超出1000字请提交附件"}
+                                        placeholder={intl.get('pleaseInputReason')}
                                         showCount={true}
                                         maxLength={1000}/>
                     </Form.Item>
 
                     <Form.Item
-                        label={isEnglish ? 'Files' : "附件材料"}
+                        label={intl.get('file')}
                         name="file"
-                        rules={[{required: true, message: isEnglish ? 'Please upload your files' : '请上传附件材料'}]}
+                        rules={[{required: true, message: intl.get('pleaseChooseFiles')}]}
                     >
                         <FileUpLoad
                             setTableName={tableName}
@@ -196,10 +185,10 @@ const LeaveForm = () => {
                         <Button type="primary" htmlType="submit" onClick={() => {
                             setIsUpFile(true)
                         }}>
-                            {isEnglish ? 'Submit' : '提交'}
+                            {intl.get('submit')}
                         </Button>
                         <Button htmlType="button" onClick={onReset} style={{marginLeft: 8}}>
-                            {isEnglish ? 'Reset' : '重置'}
+                            {intl.get('reset')}
                         </Button>
                     </Form.Item>
                 </Form>

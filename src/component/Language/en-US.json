@@ -125,6 +125,16 @@
   "leaveDesc-5": "You are currently on vacation, and it is not recommended to submit a leave application again. If you need to modify the leave request time or leave cancellation time, you can modify it on the leave request record page. Please note: the revised leave request will be re-approved. If you are on leave, please ignore this message",
   "leaveDesc-6": "If you submit the same application as the last time, please contact the superior department first to avoid being rejected again",
   "leaveDesc-7": "No prompt information yet",
+  "procurementApply": "Procurement Apply",
+  "procurementItem": "Procurement Item",
+  "procurementPrice": "Procurement Price",
+  "pleaseInputProcurementItem": "Please input procurement item",
+  "pleaseInputProcurementPrice": "Please input procurement price",
+  "travelReimburseApply": "Travel Reimburse Apply",
+  "destination": "Destination",
+  "cost": "Cost",
+  "pleaseInputDestination": "Please input destination",
+  "pleaseInputCost": "Please input cost",
 
 
 

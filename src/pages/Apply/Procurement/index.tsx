@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {addProcurement} from "../../../component/axios/api";
 import '../apply.scss';
+import intl from "react-intl-universal";
 
 const {Title} = Typography;
 
@@ -25,11 +26,11 @@ const ProcurementForm = () => {
             navigate('/home/success', {
                 state: {
                     object: {
-                        title: '采购申请提交成功',
-                        describe: '请等待管理员审批',
-                        toPage: '查看审批记录',
+                        title: intl.get('procurementApply') + ' ' + intl.get('submitSuccess'),
+                        describe: intl.get('waitApprove'),
+                        toPage: intl.get('showApplyList'),
                         toURL: '/home/record/procurement',
-                        againTitle: '继续提交新的申请'
+                        againTitle: intl.get('continueSubmit')
                     }
                 }
             })
@@ -59,17 +60,17 @@ const ProcurementForm = () => {
     return (
         <div className={'apply-body'}>
             <Modal
-                title="确认提交"
+                title={intl.get('confirm')}
                 open={isModalVisible}
                 onOk={handleOk}
                 confirmLoading={confirmLoading}
                 onCancel={handleCancel}
             >
-                <p>采购物品：{items}</p>
-                <p>采购费用：{price}</p>
-                <p>采购原因：{reason}</p>
+                <p>{intl.get('procurementItem')}：{items}</p>
+                <p>{intl.get('procurementPrice')}：{price}</p>
+                <p>{intl.get('reason')}：{reason}</p>
             </Modal>
-            <Title level={2} className={'tit'}>采购申请</Title>
+            <Title level={2} className={'tit'}>{intl.get('procurementApply')}</Title>
             <Form
                 form={form}
                 name="basic"
@@ -78,37 +79,37 @@ const ProcurementForm = () => {
                 onFinish={onFinish}
             >
                 <Form.Item
-                    label="采购物品"
+                    label={intl.get('procurementItem')}
                     name="items"
-                    rules={[{required: true, message: '请输入采购物品'}]}
+                    rules={[{required: true, message: intl.get('pleaseInputProcurementItem')}]}
                 >
-                    <Input.TextArea rows={4} placeholder={"请输入采购物品，不超过1000字"} showCount={true}
+                    <Input.TextArea rows={4} placeholder={intl.get('pleaseInputProcurementItem')} showCount={true}
                                     maxLength={1000}/>
                 </Form.Item>
 
                 <Form.Item
-                    label="采购费用"
+                    label={intl.get('procurementPrice')}
                     name="price"
-                    rules={[{required: true, message: '请输入采购费用'}]}
+                    rules={[{required: true, message: intl.get('pleaseInputProcurementPrice')}]}
                 >
                     <InputNumber addonAfter={'¥'}/>
                 </Form.Item>
 
                 <Form.Item
-                    label="采购原因"
+                    label={intl.get('reason')}
                     name="reason"
-                    rules={[{required: true, message: '请输入采购原因'}]}
+                    rules={[{required: true, message: intl.get('pleaseInputReason')}]}
                 >
-                    <Input.TextArea rows={4} placeholder={"请输入采购原因，不超过1000字"} showCount={true}
+                    <Input.TextArea rows={4} placeholder={intl.get('pleaseInputReason')} showCount={true}
                                     maxLength={1000}/>
                 </Form.Item>
 
                 <Form.Item wrapperCol={{offset: 8, span: 16}} style={{textAlign: "center"}}>
                     <Button type="primary" htmlType="submit">
-                        提交
+                        {intl.get('submit')}
                     </Button>
                     <Button htmlType="button" onClick={onReset} style={{marginLeft: 8}}>
-                        重置
+                        {intl.get('reset')}
                     </Button>
                 </Form.Item>
             </Form>
