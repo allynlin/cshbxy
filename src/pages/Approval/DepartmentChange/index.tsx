@@ -5,10 +5,9 @@ import React, {useEffect, useState} from 'react';
 import {
     resolveDepartmentChange,
     findDepartmentChangeWaitApprovalList,
-    findUploadFilesByUid
+    findUploadFilesByUid, refreshDepartmentChange
 } from '../../../component/axios/api';
 import {DownLoadURL, green} from "../../../baseInfo";
-import {RenderStatusTag} from "../../../component/Tag/RenderStatusTag";
 import {RenderStatusColor} from "../../../component/Tag/RenderStatusColor";
 import '../index.scss'
 import RecordSkeleton from "../../../component/Skeleton/RecordSkeleton";
@@ -51,81 +50,41 @@ const Index: React.FC = () => {
         }
     }, [waitTime])
 
-    // 渲染抽屉
-    const RenderDrawer = () => {
-        return (
-            <Drawer
-                title={<span>{RenderStatusTag(content.status)}</span>}
-                placement="right"
-                open={open}
-                onClose={() => {
-                    setOpen(false)
-                }}
-                headerStyle={{
-                    backgroundColor: RenderStatusColor(content.status)
-                }}
-            >
-                <p>申请人：{content.releaseUid}</p>
-                <p>变更部门：{content.departmentUid}</p>
-                <p>变更原因：{content.changeReason}</p>
-                <p>变更状态：{RenderStatusTag(content.status, '部门变更申请')}</p>
-                <p>提交时间：{content.create_time}</p>
-                <p>更新时间：{content.update_time}</p>
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'end',
-                    marginTop: 16
-                }}>
-                    <Reject state={content} getNewContent={(isReject: boolean) => {
-                        if (isReject) {
-                            setOpen(false)
-                            getDataSource()
-                        }
-                    }}/>
-                    <Button
-                        type="primary"
-                        style={{
-                            backgroundColor: green,
-                            borderColor: green,
-                            marginLeft: 16
-                        }}
-                        onClick={() => {
-                            showResolveConfirm(content.uid);
-                        }}
-                    >通过</Button>
-                </div>
-                {
-                    // 如果 fileList 不为空则渲染
-                    fileList.length > 0 ? (
-                        <Collapse ghost>
-                            {/*循环输出 Card，数据来源 fileList*/}
-                            {fileList.map((item: any, index: number) => {
-                                return (
-                                    <Panel header={`附件${index + 1}`} key={index}>
-                                        <p>{item.oldFileName}</p>
-                                        <a href={`${DownLoadURL}/downloadFile?filename=${item.fileName}`}
-                                           target="_self">下载</a>
-                                    </Panel>
-                                )
-                            })}
-                        </Collapse>
-                    ) : null
-                }
-            </Drawer>
-        )
+    useEffect(() => {
+        // 当 content 变化时，在 dataSource 中找到对应的 uid，将 content 赋值给 dataSource 中的对应 uid
+        let newDataSource: any = dataSource.map((item: any) => {
+            if (item.uid === content.uid) {
+                return content
+            } else {
+                return item
+            }
+        })
+        setDataSource(newDataSource)
+    }, [content])
+
+    const refresh = (uid: string) => {
+        setIsQuery(true)
+        setWaitTime(10)
+        if (isQuery) {
+            return
+        }
+        refreshDepartmentChange(uid).then(res => {
+            let newContent = {
+                key: content.key,
+                id: content.id,
+                ...res.body
+            }
+            setContent(newContent)
+        })
     }
 
     // 获取当前记录上传的文件和当前审批流程
     const getInfo = async (uid: string) => {
+        setOpen(true)
         const hide = message.loading('正在获取文件列表', 0);
-        // 超时自动关闭
-        setTimeout(hide, 10000);
         findUploadFilesByUid(uid, tableName).then((res: any) => {
             setFileList(res.body);
-            hide();
-            setOpen(true)
-        }).catch(e => {
-            message.error(e.message)
+        }).finally(() => {
             hide();
         })
     }
@@ -176,36 +135,48 @@ const Index: React.FC = () => {
             width: 150,
             align: 'center',
         }, {
-            title: '状态',
-            dataIndex: 'status',
-            key: 'status',
-            width: 150,
-            align: 'center',
-            render: (text: number, record: any) => {
-                return (
-                    RenderStatusTag(text, "部门变更申请")
-                )
-            }
-        }, {
             title: '操作',
             key: 'uid',
             dataIndex: 'uid',
             fixed: 'right',
-            width: 100,
+            width: 200,
             align: 'center',
             render: (text: any, record: any) => {
                 return (
-                    <Button
-                        type="primary"
-                        onClick={() => {
-                            setContent(record)
-                            getInfo(text)
-                        }}
-                        style={{
-                            backgroundColor: RenderStatusColor(record.status),
-                            borderColor: RenderStatusColor(record.status)
-                        }}
-                    >查看</Button>
+                    <div style={{
+                        display: "flex",
+                        justifyContent: "center",
+                    }}>
+                        <Button
+                            type="primary"
+                            onClick={() => {
+                                setContent(record)
+                                getInfo(text)
+                            }}
+                            style={{
+                                backgroundColor: RenderStatusColor(record.status),
+                                borderColor: RenderStatusColor(record.status)
+                            }}
+                        >查看</Button>
+                        <Button
+                            type="primary"
+                            style={{
+                                backgroundColor: green,
+                                borderColor: green,
+                                marginLeft: 16,
+                                marginRight: 16
+                            }}
+                            onClick={() => {
+                                showResolveConfirm(content.uid);
+                            }}
+                        >通过</Button>
+                        <Reject state={content} getNewContent={(isReject: boolean) => {
+                            if (isReject) {
+                                setOpen(false)
+                                getDataSource()
+                            }
+                        }}/>
+                    </div>
                 );
             }
         },
@@ -234,27 +205,82 @@ const Index: React.FC = () => {
                     }
                 })
                 setDataSource(arr)
-                setIsQuery(false)
-                setWaitTime(0)
-                setIsRenderResult(false)
             } else {
-                setIsRenderResult(false)
                 message.warning(res.msg)
                 setDataSource([])
             }
-        }).catch(err => {
+        }).finally(() => {
             setIsRenderResult(false)
-            message.error(err.message)
         })
     }
 
     return isRenderResult ?
         <RecordSkeleton/> : (
             <div className={'record-body'}>
-                <RenderDrawer/>
+                <Drawer
+                    title={content.releaseUid}
+                    placement="right"
+                    open={open}
+                    onClose={() => {
+                        setOpen(false)
+                    }}
+                    extra={<Button
+                        type="primary"
+                        disabled={isQuery}
+                        onClick={() => {
+                            refresh(content.uid);
+                        }}
+                    >{isQuery ? `刷新(${waitTime})` : '刷新'}</Button>}
+                >
+                    <p>变更部门：{content.departmentUid}</p>
+                    <p>变更原因：{content.changeReason}</p>
+                    <p>提交时间：{content.create_time}</p>
+                    <p>更新时间：{content.update_time}</p>
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'end',
+                        marginTop: 16
+                    }}>
+                        <Reject state={content} getNewContent={(isReject: boolean) => {
+                            if (isReject) {
+                                setOpen(false)
+                                getDataSource()
+                            }
+                        }}/>
+                        <Button
+                            type="primary"
+                            style={{
+                                backgroundColor: green,
+                                borderColor: green,
+                                marginLeft: 16
+                            }}
+                            onClick={() => {
+                                showResolveConfirm(content.uid);
+                            }}
+                        >通过</Button>
+                    </div>
+                    {
+                        // 如果 fileList 不为空则渲染
+                        fileList.length > 0 ? (
+                            <Collapse ghost>
+                                {/*循环输出 Card，数据来源 fileList*/}
+                                {fileList.map((item: any, index: number) => {
+                                    return (
+                                        <Panel header={`附件${index + 1}`} key={index}>
+                                            <p>{item.oldFileName}</p>
+                                            <a href={`${DownLoadURL}/downloadFile?filename=${item.fileName}`}
+                                               target="_self">下载</a>
+                                        </Panel>
+                                    )
+                                })}
+                            </Collapse>
+                        ) : null
+                    }
+                </Drawer>
                 <Title level={2} className={'tit'}>
-                    部门变更申请记录&nbsp;&nbsp;
-                    <Button type="primary" icon={<SearchOutlined/>} onClick={getDataSource}>刷新</Button>
+                    部门变更审批&nbsp;&nbsp;
+                    <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
+                            onClick={getDataSource}>{isQuery ? `刷新(${waitTime})` : '刷新'}</Button>
                 </Title>
                 <Table
                     columns={columns}

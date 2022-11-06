@@ -62,6 +62,11 @@ const Index: React.FC = () => {
     }, [content])
 
     const refresh = (uid: string) => {
+        setIsQuery(true)
+        setWaitTime(10)
+        if (isQuery) {
+            return
+        }
         refreshLeave(uid).then(res => {
             let newContent = {
                 key: content.key,
@@ -242,11 +247,9 @@ const Index: React.FC = () => {
                             type="primary"
                             loading={processLoading}
                             onClick={() => refresh(openUid)}
-                            style={{
-                                backgroundColor: purple,
-                                borderColor: purple
-                            }}>
-                            刷新
+                            disabled={isQuery}
+                        >
+                            {isQuery ? `刷新(${waitTime})` : '刷新'}
                         </Button>}
                 >
                     <p>请假时间：{content.start_time}</p>
@@ -276,11 +279,8 @@ const Index: React.FC = () => {
                                         getProcess(openUid)
                                         refresh(openUid)
                                     }}
-                                    style={{
-                                        backgroundColor: purple,
-                                        borderColor: purple
-                                    }}>
-                                    刷新流程
+                                    disabled={isQuery}>
+                                    {isQuery ? `刷新流程(${waitTime})` : '刷新流程'}
                                 </Button> : null}
                                 <div style={{marginTop: 16}}>审批流程：</div>
                                 <Steps

@@ -28,7 +28,7 @@ const ThemeSetting = () => {
                 dispatch(sysTheme());
                 break;
             default:
-                dispatch(lightTheme())
+                dispatch(sysTheme())
         }
         LStorage.set('themeColor', e.target.value)
     };

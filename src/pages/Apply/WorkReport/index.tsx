@@ -105,11 +105,6 @@ const ChangeForm = () => {
         Modal.confirm({
             title: '确认提交本周工作报告吗？',
             icon: <ExclamationCircleOutlined/>,
-            mask: false,
-            style: {
-                backdropFilter: 'blur(20px) saturate(180%)',
-                backgroundColor: 'rgba(255, 255, 255, 0.6)'
-            },
             onOk() {
                 submitForm();
             }

@@ -3,7 +3,7 @@ import {ExclamationCircleOutlined, SearchOutlined} from '@ant-design/icons';
 import type {ColumnsType} from 'antd/es/table';
 import React, {useEffect, useState} from 'react';
 import {
-    findLeaveWaitApprovalList,
+    findLeaveWaitApprovalList, refreshDepartmentChange, refreshLeave,
     resolveLeave
 } from '../../../component/axios/api';
 import {green} from "../../../baseInfo";
@@ -29,7 +29,6 @@ const Index: React.FC = () => {
     const [isRenderResult, setIsRenderResult] = useState<boolean>(true);
     const [dataSource, setDataSource] = useState([]);
     const [content, setContent] = useState<any>({});
-    const [fileList, setFileList] = useState<any>([]);
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
@@ -47,48 +46,32 @@ const Index: React.FC = () => {
         }
     }, [waitTime])
 
-    // 渲染抽屉
-    const RenderDrawer = () => {
-        return (
-            <Drawer
-                title={<span>{RenderStatusTag(content.status)}</span>}
-                placement="right"
-                open={open}
-                onClose={() => {
-                    setOpen(false)
-                }}
-            >
-                <p>申请人：{content.releaseUid}</p>
-                <p>请假时间：{content.start_time}</p>
-                <p>销假时间：{content.end_time}</p>
-                <p>请假原因：{content.reason}</p>
-                <p>提交时间：{content.create_time}</p>
-                <p>更新时间：{content.update_time}</p>
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'end',
-                    marginTop: 16
-                }}>
-                    <Reject state={content} getNewContent={(isReject: boolean) => {
-                        if (isReject) {
-                            setOpen(false)
-                            getDataSource()
-                        }
-                    }}/>
-                    <Button
-                        type="primary"
-                        style={{
-                            backgroundColor: green,
-                            borderColor: green,
-                            marginLeft: 16
-                        }}
-                        onClick={() => {
-                            showResolveConfirm(content.uid);
-                        }}
-                    >通过</Button>
-                </div>
-            </Drawer>
-        )
+    useEffect(() => {
+        // 当 content 变化时，在 dataSource 中找到对应的 uid，将 content 赋值给 dataSource 中的对应 uid
+        let newDataSource: any = dataSource.map((item: any) => {
+            if (item.uid === content.uid) {
+                return content
+            } else {
+                return item
+            }
+        })
+        setDataSource(newDataSource)
+    }, [content])
+
+    const refresh = (uid: string) => {
+        setIsQuery(true)
+        setWaitTime(10)
+        if (isQuery) {
+            return
+        }
+        refreshLeave(uid).then(res => {
+            let newContent = {
+                key: content.key,
+                id: content.id,
+                ...res.body
+            }
+            setContent(newContent)
+        })
     }
 
     const showResolveConfirm = (e: string) => {
@@ -143,36 +126,48 @@ const Index: React.FC = () => {
             width: 150,
             align: 'center',
         }, {
-            title: '状态',
-            dataIndex: 'status',
-            key: 'status',
-            width: 150,
-            align: 'center',
-            render: (text: number, record: any) => {
-                return (
-                    RenderStatusTag(text, "部门变更申请")
-                )
-            }
-        }, {
             title: '操作',
             key: 'uid',
             dataIndex: 'uid',
             fixed: 'right',
-            width: 100,
+            width: 200,
             align: 'center',
             render: (text: any, record: any) => {
                 return (
-                    <Button
-                        type="primary"
-                        onClick={() => {
-                            setContent(record)
-                            setOpen(true)
-                        }}
-                        style={{
-                            backgroundColor: RenderStatusColor(record.status),
-                            borderColor: RenderStatusColor(record.status)
-                        }}
-                    >查看</Button>
+                    <div style={{
+                        display: "flex",
+                        justifyContent: "center",
+                    }}>
+                        <Button
+                            type="primary"
+                            onClick={() => {
+                                setContent(record)
+                                setOpen(true)
+                            }}
+                            style={{
+                                backgroundColor: RenderStatusColor(record.status),
+                                borderColor: RenderStatusColor(record.status)
+                            }}
+                        >查看</Button>
+                        <Button
+                            type="primary"
+                            style={{
+                                backgroundColor: green,
+                                borderColor: green,
+                                marginLeft: 16,
+                                marginRight: 16
+                            }}
+                            onClick={() => {
+                                showResolveConfirm(content.uid);
+                            }}
+                        >通过</Button>
+                        <Reject state={content} getNewContent={(isReject: boolean) => {
+                            if (isReject) {
+                                setOpen(false)
+                                getDataSource()
+                            }
+                        }}/>
+                    </div>
                 );
             }
         },
@@ -201,27 +196,66 @@ const Index: React.FC = () => {
                     }
                 })
                 setDataSource(arr)
-                setIsQuery(false)
-                setWaitTime(0)
-                setIsRenderResult(false)
             } else {
-                setIsRenderResult(false)
                 message.warning(res.msg)
                 setDataSource([])
             }
-        }).catch(err => {
+        }).finally(() => {
             setIsRenderResult(false)
-            message.error(err.message)
         })
     }
 
     return isRenderResult ?
         <RecordSkeleton/> : (
             <div className={'record-body'}>
-                <RenderDrawer/>
+                <Drawer
+                    title={content.releaseUid}
+                    placement="right"
+                    open={open}
+                    onClose={() => {
+                        setOpen(false)
+                    }}
+                    extra={<Button
+                        type="primary"
+                        disabled={isQuery}
+                        onClick={() => {
+                            refresh(content.uid);
+                        }}
+                    >{isQuery ? `刷新(${waitTime})` : '刷新'}</Button>}
+                >
+                    <p>请假时间：{content.start_time}</p>
+                    <p>销假时间：{content.end_time}</p>
+                    <p>请假原因：{content.reason}</p>
+                    <p>提交时间：{content.create_time}</p>
+                    <p>更新时间：{content.update_time}</p>
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'end',
+                        marginTop: 16
+                    }}>
+                        <Reject state={content} getNewContent={(isReject: boolean) => {
+                            if (isReject) {
+                                setOpen(false)
+                                getDataSource()
+                            }
+                        }}/>
+                        <Button
+                            type="primary"
+                            style={{
+                                backgroundColor: green,
+                                borderColor: green,
+                                marginLeft: 16
+                            }}
+                            onClick={() => {
+                                showResolveConfirm(content.uid);
+                            }}
+                        >通过</Button>
+                    </div>
+                </Drawer>
                 <Title level={2} className={'tit'}>
-                    请假申请记录&nbsp;&nbsp;
-                    <Button type="primary" icon={<SearchOutlined/>} onClick={getDataSource}>刷新</Button>
+                    请假审批&nbsp;&nbsp;
+                    <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
+                            onClick={getDataSource}>{isQuery ? `刷新(${waitTime})` : '刷新'}</Button>
                 </Title>
                 <Table
                     columns={columns}

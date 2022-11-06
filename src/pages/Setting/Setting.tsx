@@ -7,7 +7,7 @@ import LanguageSetting from "./LanguageSetting";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {inline} from "../../component/redux/menuModeSlice";
-import {lightTheme} from "../../component/redux/sysColorSlice";
+import {lightTheme, sysTheme} from "../../component/redux/sysColorSlice";
 import {LStorage} from "../../component/localStrong";
 import {English} from "../../component/redux/userLanguageSlice";
 import intl from "react-intl-universal";
@@ -44,10 +44,10 @@ const Setting = () => {
     const resertSetting = () => {
         message.success(intl.get('ResetMessage'));
         dispatch(inline());
-        dispatch(lightTheme());
+        dispatch(sysTheme());
         dispatch(English());
         LStorage.set('menuMode', 'inline');
-        LStorage.set('themeColor', 'light');
+        LStorage.set('themeColor', 'sys');
         LStorage.set('userLanguage', 'English');
     }
 

@@ -1,7 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit'
 
 const initialState: { value: 'light' | 'dark' | 'sys' } = {
-    value: 'light',
+    value: 'sys',
 }
 
 export const sysColorSlice = createSlice({
