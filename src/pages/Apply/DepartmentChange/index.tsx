@@ -171,10 +171,10 @@ const ChangeForm = () => {
                 confirmLoading={confirmLoading}
                 onCancel={handleCancel}
             >
-                <p>{intl.get('DepartmentChange') + ': '}{departmentUid}</p>
-                <p>{intl.get('Reason') + ': '}{changeReason}</p>
+                <p>{intl.get('departmentChange') + ': '}{departmentUid}</p>
+                <p>{intl.get('reason') + ': '}{changeReason}</p>
                 {/*将变更材料 changeFile 中的 fileList 数组中的状态为 done 的每一项 name 输出出来*/}
-                <p>{intl.get('File') + ': '}{
+                <p>{intl.get('file') + ': '}{
                     fileList.filter((item: any) => item.status === 'done').map((item: any) => item.name).join('、')
                 }</p>
             </Modal>

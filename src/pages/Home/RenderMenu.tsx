@@ -120,7 +120,7 @@ const RenderMenu = () => {
                     justifyContent: 'center',
                 }}
             >
-                <Link to={'/login'}>重新登录</Link>
+                <Link to={'/login'}>{intl.get('loginAgain')}</Link>
             </Button>
         )
     }

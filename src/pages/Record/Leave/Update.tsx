@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import {blue} from "../../../baseInfo";
 import {updateLeave} from "../../../component/axios/api";
 import moment from "moment";
+import intl from "react-intl-universal";
 
 interface Values {
     title: string;
@@ -29,10 +30,10 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
     return (
         <Modal
             open={open}
-            title={'修改请假申请'}
-            okText="修改"
+            title={intl.get('updateLeaveApprove')}
+            okText={intl.get('update')}
             okButtonProps={{style: {backgroundColor: blue, borderColor: blue}}}
-            cancelText="取消"
+            cancelText={intl.get('cancel')}
             onCancel={onCancel}
             confirmLoading={onLoading}
             onOk={() => {
@@ -44,8 +45,8 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
                     })
                     .catch(() => {
                         notification["error"]({
-                            message: '提交失败',
-                            description: '请填写完整信息',
+                            message: intl.get('submitFailed'),
+                            description: intl.get('pleaseInputFullInfo'),
                         });
                     });
             }}
@@ -62,29 +63,29 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
                 }}
             >
                 <Form.Item
-                    label="请假时间"
+                    label={intl.get('leaveTime')}
                     name="leaveTime"
-                    rules={[{required: true, message: '请选择请假时间'}]}
+                    rules={[{required: true, message: intl.get('pleaseChooseLeaveTime')}]}
                 >
                     <DatePicker.RangePicker
                         showTime={true}
                         format={"YYYY-MM-DD HH:mm:ss"}
                         ranges={{
-                            '快捷选择': [moment(), moment().add(1, 'days')],
-                            '今天': [moment(), moment().endOf('day')],
-                            '一天': [moment(), moment().add(1, 'days')],
-                            '一周': [moment(), moment().add(1, 'weeks')],
-                            '一月': [moment(), moment().add(1, 'months')],
+                            [intl.get('fastChoose')]: [moment(), moment().add(1, 'days')],
+                            [intl.get('today')]: [moment(), moment().endOf('day')],
+                            [intl.get('oneDay')]: [moment(), moment().add(1, 'days')],
+                            [intl.get('oneWeek')]: [moment(), moment().add(1, 'weeks')],
+                            [intl.get('oneMonth')]: [moment(), moment().add(1, 'months')],
                         }}
                     />
                 </Form.Item>
 
                 <Form.Item
-                    label="请假原因"
+                    label={intl.get('reason')}
                     name="reason"
-                    rules={[{required: true, message: '请输入请假原因'}]}
+                    rules={[{required: true, message: intl.get('pleaseInputReason')}]}
                 >
-                    <Input.TextArea rows={4} showCount={true}
+                    <Input.TextArea placeholder={intl.get('pleaseInputReason')} rows={4} showCount={true}
                                     maxLength={500}/>
                 </Form.Item>
             </Form>
@@ -117,9 +118,8 @@ const Update = (props: any) => {
 
     const openNotification = () => {
         notification["warning"]({
-            message: '请注意',
-            description:
-                '修改请假申请后，需要重新审核',
+            message: intl.get('attention'),
+            description: intl.get('afterChangeApproveAgain'),
         });
     };
 
@@ -132,7 +132,7 @@ const Update = (props: any) => {
                     openNotification();
                 }}
             >
-                修改
+                {intl.get('update')}
             </Button>
             <CollectionCreateForm
                 open={open}

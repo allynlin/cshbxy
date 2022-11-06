@@ -15,6 +15,7 @@ import {RenderStatusColor} from "../../../component/Tag/RenderStatusColor";
 import {DataType} from "tdesign-react";
 import RecordSkeleton from "../../../component/Skeleton/RecordSkeleton";
 import Update from "./Update";
+import intl from "react-intl-universal";
 
 const {Title} = Typography;
 const {Step} = Steps;
@@ -84,7 +85,7 @@ const Index: React.FC = () => {
 
     const getProcess = (uid: string) => {
         setProcessLoading(true)
-        const hide = message.loading('正在获取采购流程', 0);
+        const hide = message.loading(intl.get('gettingProcessList'), 0);
         findProcurementProcess(uid).then((res: any) => {
             setProcessList(res.body);
         }).finally(() => {
@@ -97,12 +98,12 @@ const Index: React.FC = () => {
     // 删除确认框
     const showDeleteConfirm = (e: string) => {
         Modal.confirm({
-            title: '要删除这条记录吗？',
+            title: intl.get('deleteConfirm'),
             icon: <ExclamationCircleOutlined/>,
-            content: '删除后不可恢复，如果您确定删除请点击确认',
-            okText: '确认',
+            content: intl.get('deleteCannotBeUndone'),
+            okText: intl.get('ok'),
             okType: 'danger',
-            cancelText: '取消',
+            cancelText: intl.get('cancel'),
             onOk() {
                 deleteProcurement(e).then((res: any) => {
                     if (res.code === 200) {
@@ -112,7 +113,7 @@ const Index: React.FC = () => {
                         setDataSource(arr);
                         if (arr.length === 0) {
                             setIsRenderResult(true);
-                            message.warning('暂无采购记录');
+                            message.warning(intl.get('noProcurementList'));
                         }
                     } else {
                         message.error(res.msg);
@@ -163,13 +164,13 @@ const Index: React.FC = () => {
             fixed: 'left',
             align: 'center',
         }, {
-            title: '物品',
+            title: intl.get('procurementItem'),
             dataIndex: 'items',
             key: 'items',
             width: 150,
             align: 'center',
         }, {
-            title: '价格',
+            title: intl.get('procurementPrice'),
             dataIndex: 'price',
             key: 'price',
             width: 150,
@@ -178,18 +179,18 @@ const Index: React.FC = () => {
                 return text + '￥'
             }
         }, {
-            title: '状态',
+            title: intl.get('status'),
             dataIndex: 'status',
             key: 'status',
             width: 150,
             align: 'center',
             render: (text: number) => {
                 return (
-                    RenderStatusTag(text, "请假申请")
+                    RenderStatusTag(text, intl.get('procurementApply'))
                 )
             }
         }, {
-            title: '操作',
+            title: intl.get('operate'),
             key: 'uid',
             dataIndex: 'uid',
             fixed: 'right',
@@ -208,7 +209,7 @@ const Index: React.FC = () => {
                             backgroundColor: RenderStatusColor(record.status),
                             borderColor: RenderStatusColor(record.status)
                         }}
-                    >查看</Button>
+                    >{intl.get('check')}</Button>
                 );
             }
         },
@@ -244,26 +245,27 @@ const Index: React.FC = () => {
                                 onClick={() => {
                                     showDeleteConfirm(content.uid);
                                 }}
-                            >删除</Button>
+                            >{intl.get('delete')}</Button>
                         </div> : <Button
                             type="primary"
                             loading={processLoading}
                             onClick={() => refresh(openUid)}
+                            icon={<SearchOutlined/>}
                             disabled={isQuery}>
-                            {isQuery ? `刷新(${waitTime})` : '刷新'}
+                            {isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}
                         </Button>}
                 >
-                    <p>物品：{content.items}</p>
-                    <p>价格：{content.price} ￥</p>
-                    <p>原因：{content.reason}</p>
+                    <p>{intl.get('procurementItem')}：{content.items}</p>
+                    <p>{intl.get('procurementPrice')}：{content.price} ￥</p>
+                    <p>{intl.get('reason')}：{content.reason}</p>
                     {content.reject_reason ?
                         <>
-                            驳回原因：
+                            {intl.get('rejectReason')}：
                             <Tag color={red}
                                  style={{marginBottom: 16}}>{content.reject_reason}</Tag>
                         </> : null}
-                    <p>提交时间：{content.create_time}</p>
-                    <p>更新时间：{content.update_time}</p>
+                    <p>{intl.get('createTime')}：{content.create_time}</p>
+                    <p>{intl.get('updateTime')}：{content.update_time}</p>
                     {
                         processLoading ? (
                                 <Space style={{flexDirection: 'column'}}>
@@ -281,9 +283,9 @@ const Index: React.FC = () => {
                                         refresh(openUid)
                                     }}
                                     disabled={isQuery}>
-                                    {isQuery ? `刷新流程(${waitTime})` : '刷新流程'}
+                                    {isQuery ? `${intl.get('refreshProcessList')}(${waitTime})` : intl.get('refreshProcessList')}
                                 </Button> : null}
-                                <div style={{marginTop: 16}}>审批流程：</div>
+                                <div style={{marginTop: 16}}>{intl.get('approveProcess')}：</div>
                                 <Steps
                                     style={{
                                         marginTop: 16
@@ -308,9 +310,9 @@ const Index: React.FC = () => {
                     }
                 </Drawer>
                 <Title level={2} className={'tit'}>
-                    采购记录&nbsp;&nbsp;
+                    {intl.get('procurement') + ' ' + intl.get('record')}&nbsp;&nbsp;
                     <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
-                            onClick={getDataSource}>{isQuery ? `刷新(${waitTime})` : '刷新'}</Button>
+                            onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
                 </Title>
                 <Table
                     columns={columns}

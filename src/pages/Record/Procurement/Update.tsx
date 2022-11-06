@@ -2,6 +2,7 @@ import {Button, Form, Input, InputNumber, message, Modal, notification} from 'an
 import React, {useState} from 'react';
 import {blue} from "../../../baseInfo";
 import {updateProcurement} from "../../../component/axios/api";
+import intl from "react-intl-universal";
 
 interface Values {
     title: string;
@@ -28,10 +29,10 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
     return (
         <Modal
             open={open}
-            title={'修改请假申请'}
-            okText="修改"
+            title={intl.get('updateProcurementApprove')}
+            okText={intl.get('update')}
             okButtonProps={{style: {backgroundColor: blue, borderColor: blue}}}
-            cancelText="取消"
+            cancelText={intl.get('cancel')}
             onCancel={onCancel}
             confirmLoading={onLoading}
             onOk={() => {
@@ -43,8 +44,8 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
                     })
                     .catch(() => {
                         notification["error"]({
-                            message: '提交失败',
-                            description: '请填写完整信息',
+                            message: intl.get('submitFailed'),
+                            description: intl.get('pleaseInputFullInfo'),
                         });
                     });
             }}
@@ -60,28 +61,28 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
                 }}
             >
                 <Form.Item
-                    label="采购物品"
+                    label={intl.get('procurementItem')}
                     name="items"
-                    rules={[{required: true, message: '请输入采购物品'}]}
+                    rules={[{required: true, message: intl.get('pleaseInputProcurementItem')}]}
                 >
-                    <Input.TextArea rows={4} placeholder={"请输入采购物品，不超过1000字"} showCount={true}
+                    <Input.TextArea rows={4} placeholder={intl.get('pleaseInputProcurementItem')} showCount={true}
                                     maxLength={1000}/>
                 </Form.Item>
 
                 <Form.Item
-                    label="采购费用"
+                    label={intl.get('procurementPrice')}
                     name="price"
-                    rules={[{required: true, message: '请输入采购费用'}]}
+                    rules={[{required: true, message: intl.get('pleaseInputProcurementPrice')}]}
                 >
                     <InputNumber addonAfter={'¥'}/>
                 </Form.Item>
 
                 <Form.Item
-                    label="采购原因"
+                    label={intl.get('reason')}
                     name="reason"
-                    rules={[{required: true, message: '请输入采购原因'}]}
+                    rules={[{required: true, message: intl.get('pleaseInputReason')}]}
                 >
-                    <Input.TextArea rows={4} placeholder={"请输入采购原因，不超过1000字"} showCount={true}
+                    <Input.TextArea rows={4} placeholder={intl.get('pleaseInputReason')} showCount={true}
                                     maxLength={1000}/>
                 </Form.Item>
             </Form>
@@ -114,9 +115,8 @@ const Update = (props: any) => {
 
     const openNotification = () => {
         notification["warning"]({
-            message: '请注意',
-            description:
-                '修改采购申请后，需要重新审核',
+            message: intl.get('attention'),
+            description: intl.get('afterChangeApproveAgain'),
         });
     };
 
@@ -129,7 +129,7 @@ const Update = (props: any) => {
                     openNotification();
                 }}
             >
-                修改
+                {intl.get('update')}
             </Button>
             <CollectionCreateForm
                 open={open}

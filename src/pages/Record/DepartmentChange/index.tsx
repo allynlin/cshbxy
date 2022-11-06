@@ -14,6 +14,7 @@ import {RenderStatusTag} from "../../../component/Tag/RenderStatusTag";
 import {RenderStatusColor} from "../../../component/Tag/RenderStatusColor";
 import '../index.scss'
 import RecordSkeleton from "../../../component/Skeleton/RecordSkeleton";
+import intl from "react-intl-universal";
 
 const {Title} = Typography;
 const {Step} = Steps;
@@ -78,7 +79,7 @@ const Index: React.FC = () => {
 
     const getProcess = (uid: string) => {
         setProcessLoading(true)
-        const hide = message.loading('正在获取审批流程', 0);
+        const hide = message.loading(intl.get('gettingProcessList'), 0);
         findChangeDepartmentByTeacherProcess(uid).then((res: any) => {
             setProcessList(res.body);
         }).finally(() => {
@@ -105,7 +106,7 @@ const Index: React.FC = () => {
 
     const getFiles = (uid: string) => {
         setFileLoading(true)
-        const hide = message.loading('正在获取文件列表', 0);
+        const hide = message.loading(intl.get('gettingFileList'), 0);
         findUploadFilesByUid(uid, tableName).then((res: any) => {
             setFileList(res.body);
         }).finally(() => {
@@ -117,12 +118,12 @@ const Index: React.FC = () => {
     // 删除确认框
     const showDeleteConfirm = (e: string) => {
         Modal.confirm({
-            title: '要删除这条记录吗？',
+            title: intl.get('deleteConfirm'),
             icon: <ExclamationCircleOutlined/>,
-            content: '删除后不可恢复，如果您确定删除请点击确认',
-            okText: '确认',
+            content: intl.get('deleteCannotBeUndone'),
+            okText: intl.get('ok'),
             okType: 'danger',
-            cancelText: '取消',
+            cancelText: intl.get('cancel'),
             onOk() {
                 deleteChangeDepartmentByTeacher(e, tableName).then((res: any) => {
                     if (res.code === 200) {
@@ -132,10 +133,10 @@ const Index: React.FC = () => {
                         setDataSource(arr);
                         if (arr.length === 0) {
                             setIsRenderResult(true);
-                            message.warning('暂无部门变更记录');
+                            message.warning(intl.get('noDepartmentChangeList'));
                         }
                     } else {
-                        message.error('删除失败');
+                        message.error(intl.get('deleteError'));
                     }
                 })
             }
@@ -152,30 +153,30 @@ const Index: React.FC = () => {
             fixed: 'left',
             align: 'center',
         }, {
-            title: '变更部门',
+            title: intl.get('departmentChange'),
             dataIndex: 'departmentUid',
             key: 'departmentUid',
             width: 150,
             align: 'center',
         }, {
-            title: '变更原因',
+            title: intl.get('reason'),
             dataIndex: 'changeReason',
             key: 'changeReason',
             width: 150,
             align: 'center',
         }, {
-            title: '状态',
+            title: intl.get('status'),
             dataIndex: 'status',
             key: 'status',
             width: 150,
             align: 'center',
             render: (text: number, record: any) => {
                 return (
-                    RenderStatusTag(text, "部门变更申请")
+                    RenderStatusTag(text, intl.get('departmentChange'))
                 )
             }
         }, {
-            title: '操作',
+            title: intl.get('operate'),
             key: 'uid',
             dataIndex: 'uid',
             fixed: 'right',
@@ -193,7 +194,7 @@ const Index: React.FC = () => {
                             backgroundColor: RenderStatusColor(record.status),
                             borderColor: RenderStatusColor(record.status)
                         }}
-                    >查看</Button>
+                    >{intl.get('check')}</Button>
                 );
             }
         },
@@ -252,25 +253,26 @@ const Index: React.FC = () => {
                                 onClick={() => {
                                     showDeleteConfirm(content.uid);
                                 }}
-                            >删除</Button>
+                            >{intl.get('delete')}</Button>
                         </> : <Button
                             type="primary"
                             loading={processLoading}
                             onClick={() => refresh(content.uid)}
+                            icon={<SearchOutlined/>}
                             disabled={isQuery}>
-                            {isQuery ? `刷新(${waitTime})` : '刷新'}
+                            {isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}
                         </Button>}
                 >
-                    <p>变更部门：{content.departmentUid}</p>
-                    <p>变更原因：{content.changeReason}</p>
+                    <p>{intl.get('departmentChange')}：{content.departmentUid}</p>
+                    <p>{intl.get('reason')}：{content.changeReason}</p>
                     {content.reject_reason ?
                         <>
-                            驳回原因：
+                            {intl.get('rejectReason')}：
                             <Tag color={red}
                                  style={{marginBottom: 16}}>{content.reject_reason}</Tag>
                         </> : null}
-                    <p>提交时间：{content.create_time}</p>
-                    <p>更新时间：{content.update_time}</p>
+                    <p>{intl.get('createTime')}：{content.create_time}</p>
+                    <p>{intl.get('updateTime')}：{content.update_time}</p>
                     {
                         fileLoading ? <Skeleton.Button block={true} active={true} size={'large'}/> :
                             // 如果 fileList 不为空则渲染
@@ -281,16 +283,16 @@ const Index: React.FC = () => {
                                         loading={fileLoading}
                                         onClick={() => getFiles(content.uid)}
                                         disabled={isQuery}>
-                                        {isQuery ? `刷新文件列表(${waitTime})` : '刷新文件列表'}
+                                        {isQuery ? `${intl.get('refreshFileList')}(${waitTime})` : intl.get('refreshFileList')}
                                     </Button> : null}
                                     <Collapse ghost>
                                         {/*循环输出 Card，数据来源 fileList*/}
                                         {fileList.map((item: any, index: number) => {
                                             return (
-                                                <Panel header={`附件${index + 1}`} key={index}>
+                                                <Panel header={intl.get('file') + (index + 1)} key={index}>
                                                     <p>{item.oldFileName}</p>
                                                     <a href={`${DownLoadURL}/downloadFile?filename=${item.fileName}`}
-                                                       target="_self">下载</a>
+                                                       target="_self">{intl.get('download')}</a>
                                                 </Panel>
                                             )
                                         })}
@@ -315,9 +317,9 @@ const Index: React.FC = () => {
                                         getProcess(content.uid)
                                         refresh(content.uid)
                                     }}>
-                                    {isQuery ? `刷新流程(${waitTime})` : '刷新流程'}
+                                    {isQuery ? `${intl.get('refreshProcessList')}(${waitTime})` : intl.get('refreshProcessList')}
                                 </Button> : null}
-                                <div style={{marginTop: 16}}>审批流程：</div>
+                                <div style={{marginTop: 16}}>{intl.get('approveProcess')}：</div>
                                 <Steps
                                     style={{
                                         marginTop: 16
@@ -342,9 +344,9 @@ const Index: React.FC = () => {
                     }
                 </Drawer>
                 <Title level={2} className={'tit'}>
-                    部门变更申请记录&nbsp;&nbsp;
+                    {intl.get('departmentChange') + ' ' + intl.get('record')}&nbsp;&nbsp;
                     <Button type="primary" icon={<SearchOutlined/>} disabled={isQuery}
-                            onClick={getDataSource}>{isQuery ? `刷新(${waitTime})` : '刷新'}</Button>
+                            onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
                 </Title>
                 <Table
                     columns={columns}
