@@ -30,7 +30,14 @@ const RenderLogOut = () => {
             icon: <ExclamationCircleOutlined/>,
             content: intl.get('afterLogOutNeedLoginAgain'),
             okText: intl.get('ok'),
-            okType: 'danger',
+            okType: 'primary',
+            okButtonProps: {
+                danger: true,
+                style: {
+                    backgroundColor: red,
+                    borderColor: red
+                }
+            },
             cancelText: intl.get('cancel'),
             onOk() {
                 logOut()
