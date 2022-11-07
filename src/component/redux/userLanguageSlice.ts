@@ -12,13 +12,11 @@ export const userLanguageSlice = createSlice({
     reducers: {
         Chinese: state => {
             state.value = "Chinese"
-            LStorage.set('userLanguage', 'Chinese')
             Cookie.set('language', 'zh')
         },
         English: state => {
             state.value = "English"
-            LStorage.set('userLanguage', 'English')
-            Cookie.set('language', 'en')
+            Cookie.set('language', 'en_US')
         }
     },
 })

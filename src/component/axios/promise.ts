@@ -17,7 +17,7 @@ export const MethodType = {
  */
 export const Request = (api: String, method = MethodType.GET, params = {}, config = {headers: {}}) => {
     const apiToken = Cookie.get('token');
-    const language = Cookie.get('language') || 'en';
+    const language = Cookie.get('language') || 'en_US';
     // 如果不是登录和注册接口（/login 或 /register 或 /query 开头），POST 请求，没有获取到 token，就跳转到登录页面
     if (apiToken === undefined && method === MethodType.POST && !api.startsWith('/api/user') && !api.startsWith('/query')) {
         rootNavigate('/403');
@@ -29,8 +29,8 @@ export const Request = (api: String, method = MethodType.GET, params = {}, confi
         'X-Requested-With': 'XMLHttpRequest',
         'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
         'Authorization': `${apiToken}`,
-        'version': `${version}`,
-        'lang': `${language}`
+        'version': version,
+        'Accept-Language': language
     };
     if (config.headers) {
         headers = {

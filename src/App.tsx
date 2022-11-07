@@ -62,7 +62,7 @@ export default function App() {
     }, [userLanguage])
 
     useEffect(() => {
-        LStorage.get('userLanguage') === 'English' ? dispatch(English()) : dispatch(Chinese());
+        Cookie.get('language') === "zh" ? dispatch(Chinese()) : dispatch(English())
         LStorage.get('menuMode') === 'inline' ? dispatch(inline()) : dispatch(vertical())
         // 如果在 localStrong 中有颜色设置就使用 localStrong 中的颜色设置
         const sysColor = LStorage.get('themeColor');
