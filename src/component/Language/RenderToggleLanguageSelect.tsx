@@ -1,23 +1,22 @@
-import {notification, Radio} from 'antd';
-import React, {memo} from 'react';
+import {Select, notification} from "antd";
+import {Chinese, English} from "../redux/userLanguageSlice";
+import React from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {Chinese, English} from "../../component/redux/userLanguageSlice";
 
-const ThemeSetting = memo(() => {
-
-    const dispatch = useDispatch();
+export const RenderToggleLanguageSelect = () => {
+    const dispatch = useDispatch()
 
     const userLanguage = useSelector((state: any) => state.userLanguage.value)
 
-    const showNotice = (value: string) => {
-        notification.success({
-            message: value,
-            placement: 'topRight',
-            className: 'back-drop',
-        })
-    }
-
     const handleChange = (value: string) => {
+        const showNotice = (value: string) => {
+            notification.success({
+                message: value,
+                placement: 'topRight',
+                className: 'back-drop',
+            })
+        }
+
         switch (value) {
             case "English":
                 dispatch(English())
@@ -31,14 +30,21 @@ const ThemeSetting = memo(() => {
                 dispatch(English())
                 showNotice('Selection exception, reset to default language (English)')
         }
-    }
+    };
+
+    const options = [
+        {value: 'English', label: "English"},
+        {value: 'Chinese', label: "简体中文"},
+    ]
+
 
     return (
-        <Radio.Group onChange={(e: any) => handleChange(e.target.value)} value={userLanguage}>
-            <Radio value={"Chinese"}>简体中文（Simple Chinses）</Radio>
-            <Radio value={"English"}>English</Radio>
-        </Radio.Group>
-    );
-});
-
-export default ThemeSetting;
+        <Select
+            defaultValue="English"
+            style={{width: 120}}
+            onChange={handleChange}
+            options={options}
+            value={userLanguage}
+        />
+    )
+}

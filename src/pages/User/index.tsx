@@ -6,7 +6,7 @@ import {useSelector} from "react-redux";
 import {version} from "../../baseInfo";
 import RenderGetServerVersionPublic from "../../component/Version/RenderGetServerVersionPublic";
 import intl from "react-intl-universal";
-import {RenderToggleLanguageButton} from "../../component/Language/RenderToggleLanguageButton";
+import {RenderToggleLanguageSelect} from "../../component/Language/RenderToggleLanguageSelect";
 
 const {Header, Content} = Layout;
 
@@ -36,7 +36,7 @@ export const User = () => {
     return (
         <Layout className={themeColor === 'dark' ? 'user-dark' : 'user-light'}>
             <Header>
-                <span>{intl.get('sysName')} &nbsp;<RenderToggleLanguageButton/></span>
+                <span>{intl.get('sysName')} &nbsp;<RenderToggleLanguageSelect/></span>
             </Header>
             <Content>
                 <Outlet/>

@@ -1,13 +1,14 @@
-import {Button, Result, Typography} from 'antd';
+import {Button, Result, Select, Typography} from 'antd';
 import React, {useEffect} from 'react';
 import {Link, useLocation, useNavigate} from "react-router-dom";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {version} from "../../baseInfo";
 import RenderRefreshButton from "../../component/Version/RenderRefreshButton";
 import {CloseCircleOutlined} from "@ant-design/icons";
 import './103.scss'
-import {RenderToggleLanguageButton} from "../../component/Language/RenderToggleLanguageButton";
+import {RenderToggleLanguageSelect} from "../../component/Language/RenderToggleLanguageSelect";
 import intl from "react-intl-universal";
+import {Chinese, English} from "../../component/redux/userLanguageSlice";
 
 const {Paragraph, Text} = Typography;
 
@@ -91,7 +92,7 @@ export const Error101: React.FC = () => {
     )
 };
 
-export const Error103: React.FC = () => {
+export const Error103 = () => {
 
     const navigate = useNavigate();
 
@@ -126,11 +127,11 @@ export const Error103: React.FC = () => {
                 <>
                     {
                         version >= serverLowVersion ? <Button type="primary" key="console" onClick={() => {
-                            navigate(-1)
+                            navigate('/')
                         }}>{intl.get('backToHome')}</Button> : null
                     }
                     <RenderRefreshButton/>
-                    <RenderToggleLanguageButton/>
+                    <RenderToggleLanguageSelect/>
                 </>
             }
         >
@@ -150,8 +151,7 @@ export const Error103: React.FC = () => {
                     &nbsp;{intl.get('103Desc-2')}&nbsp;
                     <a onClick={e => {
                         e.preventDefault();
-                        // @ts-ignore
-                        window.location.reload(true);
+                        window.location.reload();
                     }}>{intl.get('refresh')}</a>
                 </Paragraph>
                 <Paragraph>

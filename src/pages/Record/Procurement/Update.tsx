@@ -117,6 +117,7 @@ const Update = (props: any) => {
         notification["warning"]({
             message: intl.get('attention'),
             description: intl.get('afterChangeApproveAgain'),
+            className: 'back-drop'
         });
     };
 

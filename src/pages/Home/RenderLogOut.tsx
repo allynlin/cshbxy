@@ -36,7 +36,7 @@ const RenderLogOut = () => {
                 style: {
                     backgroundColor: red,
                     borderColor: red
-                }
+                },
             },
             cancelText: intl.get('cancel'),
             onOk() {

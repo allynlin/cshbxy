@@ -44,6 +44,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
                         notification["error"]({
                             message: intl.get('rejectFailed'),
                             description: intl.get('rejectReasonCannotBeEmpty'),
+                            className: 'back-drop'
                         });
                     });
             }}
