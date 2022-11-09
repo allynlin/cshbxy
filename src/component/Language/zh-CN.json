@@ -194,5 +194,12 @@
   "pleaseInputAllInfo": "请填写完整信息",
   "changeSuccess": "修改成功",
   "changeSuccessNotice": "密码修改成功，请重新登录",
-  "changePasswordNotice": "修改密码后需要重新登录"
+  "changePasswordNotice": "修改密码后需要重新登录",
+  "changeUserInfo": "修改用户信息",
+  "sysError": "服务器错误",
+  "sysErrorNotice": "服务器出现错误，您可以尝试重新操作，如果问题依旧，请联系管理员",
+  "noPermission": "权限不足",
+  "noPermissionNotice": "您暂时没有权限进行此操作，如您确认有权限，您可以尝试重新操作，如果问题依旧，请联系管理员",
+  "changeUsername": "修改用户名",
+  "changeUsernameNotice": "修改用户名后需要重新登录"
 }

@@ -1,5 +1,4 @@
 import {createSlice} from '@reduxjs/toolkit'
-import {LStorage} from "../localStrong";
 import Cookie from "js-cookie";
 
 const initialState: { value: 'Chinese' | 'English' } = {

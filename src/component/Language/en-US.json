@@ -193,5 +193,12 @@
   "pleaseInputAllInfo": "Please input all info",
   "changeSuccess": "Change success",
   "changeSuccessNotice": "Password change success, please login again",
-  "changePasswordNotice": "After changing the password, you need to log in again"
+  "changePasswordNotice": "After changing the password, you need to log in again",
+  "changeUserInfo": "Change User Info",
+  "sysError": "System Error",
+  "sysErrorNotice": "There is an error on the server, you can try the operation again, if the problem persists, please contact the administrator",
+  "noPermission": "No Permission",
+  "noPermissionNotice": "You do not have permission to perform this operation temporarily. If you confirm that you have permission, you can try the operation again. If the problem persists, please contact the administrator",
+  "changeUsername": "Change Username",
+  "changeUsernameNotice": "After changing the username, you need to log in again"
 }

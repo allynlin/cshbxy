@@ -380,3 +380,22 @@ export const updatePassword = async (uid: string, password: string) => {
         password
     });
 }
+
+// 更新用户信息
+export const updateUserInfo = async (uid: string, realeName: string, gender: string, tel: string, email: string) => {
+    return promise.Request('/api/user/update', MethodType.POST, {
+        uid,
+        realeName,
+        gender,
+        tel,
+        email
+    });
+}
+
+// 更新用户名
+export const updateUserName = async (uid: string, username: string) => {
+    return promise.Request('/api/user/updateUsername', MethodType.POST, {
+        uid,
+        username
+    });
+}

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {UploadProps} from "antd/es/upload/interface";
 import {DownLoadURL, version} from "../../baseInfo";
-import {message, Upload} from "antd";
+import {message, notification, Upload} from "antd";
 import {deleteFile} from "./api";
 import Cookie from "js-cookie";
 import {InboxOutlined} from "@ant-design/icons";
@@ -67,9 +67,20 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
                             break;
                         case 401:
                         case 403:
-                            Cookie.remove('token');
                             info.file.status = 'error';
-                            rootNavigate('/403');
+                            notification["error"]({
+                                message: intl.get('noPermission'),
+                                description: intl.get('noPermissionNotice'),
+                                className: 'back-drop'
+                            });
+                            break;
+                        case 500:
+                            info.file.status = 'error';
+                            notification["error"]({
+                                message: intl.get('sysError'),
+                                description: intl.get('sysErrorNotice'),
+                                className: 'back-drop'
+                            });
                             break;
                         default:
                             // 传递参数给父组件, 用于更新父组件的 fileList，如果 info.fileList 为空，就传递一个空数组

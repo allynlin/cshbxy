@@ -1,4 +1,4 @@
-import {Select, notification} from "antd";
+import {notification, Select} from "antd";
 import {Chinese, English} from "../redux/userLanguageSlice";
 import React from "react";
 import {useDispatch, useSelector} from "react-redux";

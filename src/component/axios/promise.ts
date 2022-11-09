@@ -1,11 +1,12 @@
 import axios from 'axios';
-import {message} from 'antd';
+import {notification} from 'antd';
 import qs from 'qs';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css'
 import Cookie from "js-cookie";
 import {BaseInfo, version} from "../../baseInfo";
 import {rootNavigate} from "../../App";
+import intl from "react-intl-universal";
 
 export const MethodType = {
     GET: 'GET',
@@ -58,29 +59,46 @@ export const Request = (api: String, method = MethodType.GET, params = {}, confi
                     reject(res.data)
                     rootNavigate('/103')
                     break;
+                case 401:
                 case 403:
-                    Cookie.remove('token');
                     reject(res.data)
-                    rootNavigate('/403');
+                    notification["error"]({
+                        message: intl.get('noPermission'),
+                        description: intl.get('noPermissionNotice'),
+                        className: 'back-drop'
+                    });
                     break;
                 case 500:
                     reject(res.data)
-                    rootNavigate('/500');
+                    notification["error"]({
+                        message: intl.get('sysError'),
+                        description: intl.get('sysErrorNotice'),
+                        className: 'back-drop'
+                    });
                     break;
-            }
-            // // 如果后端返回 403 则拦截当前页面请求，返回登录页面
-            if (res.data.code >= 200 && res.data.code < 400) {
-                // 如果返回了 token 则更新本地 token
-                if (res.data.token !== null && res.data.token !== undefined)
-                    Cookie.set('token', res.data.token, {expires: 7, path: '/', sameSite: 'strict'})
-                resolve(res.data)
-            } else {
-                message.error(res.data.msg)
-                reject(res.data)
+                default:
+                    // // 如果后端返回 403 则拦截当前页面请求，返回登录页面
+                    if (res.data.code >= 200 && res.data.code < 400) {
+                        // 如果返回了 token 则更新本地 token
+                        if (res.data.token !== null && res.data.token !== undefined)
+                            Cookie.set('token', res.data.token, {expires: 7, path: '/', sameSite: 'strict'})
+                        resolve(res.data)
+                    } else {
+                        notification["error"]({
+                            message: intl.get('sysError'),
+                            description: res.data.msg,
+                            className: 'back-drop'
+                        });
+                        reject(res.data)
+                    }
             }
         }).catch(error => {
             NProgress.done(true);
-            message.error(error.message)
+            notification["error"]({
+                message: intl.get('sysError'),
+                description: error.message,
+                className: 'back-drop'
+            });
             reject(error);
         });
     });

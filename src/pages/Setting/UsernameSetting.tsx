@@ -1,13 +1,13 @@
 import {Button, Form, Input, Modal, notification} from 'antd';
 import React, {useState} from 'react';
-import {useNavigate} from "react-router-dom";
 import intl from "react-intl-universal";
-import {updatePassword} from "../../component/axios/api";
+import {checkUsername, updateUserName} from "../../component/axios/api";
 import {useDispatch, useSelector} from "react-redux";
+import {orange5} from "../../baseInfo";
 import {logout} from "../../component/redux/isLoginSlice";
 import {all} from "../../component/redux/userTypeSlice";
 import Cookie from "js-cookie";
-import {purple} from "../../baseInfo";
+import {useNavigate} from "react-router-dom";
 
 interface Values {
     title: string;
@@ -27,14 +27,39 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
                                                                        onCancel,
                                                                    }) => {
     const [form] = Form.useForm();
+    const [usernameUse, setUsernameUse] = useState<boolean>(false);
+    const userInfo = useSelector((state: { userInfo: { value: any } }) => state.userInfo.value);
+    const userType = useSelector((state: { userType: { value: any } }) => state.userType.value);
+
+    let timeOut: any;
+
+    const checkUserName = (e: any) => {
+        // 防抖
+        clearTimeout(timeOut);
+        timeOut = setTimeout(() => {
+            checkUsername(e.target.value, userType).then(() => {
+                setUsernameUse(true)
+            }).catch(() => {
+                setUsernameUse(false)
+            })
+        }, 500)
+    }
+
     return (
         <Modal
             open={open}
-            title={intl.get("changePassword")}
+            title={intl.get("changeUsername")}
             okText={intl.get('ok')}
             cancelText={intl.get('cancel')}
             onCancel={onCancel}
             onOk={() => {
+                if (!usernameUse) {
+                    notification["error"]({
+                        message: intl.get('usernameIsExist'),
+                        className: 'back-drop'
+                    });
+                    return
+                }
                 form
                     .validateFields()
                     .then(values => {
@@ -54,44 +79,40 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
                 form={form}
                 layout="vertical"
                 name="form_in_modal"
+                initialValues={{
+                    username: userInfo.username,
+                }}
             >
                 <Form.Item
-                    name={'password'}
-                    label={intl.get("password")}
-                    rules={[{required: true, message: intl.get('pleaseInputPassword')}]}
+                    label={intl.get('username')}
+                    name="username"
+                    rules={[
+                        {
+                            required: true,
+                            message: intl.get('pleaseInputUsername'),
+                            pattern: /^[a-zA-Z0-9]{1,20}$/
+                        },
+                    ]}
                 >
-                    <Input.Password maxLength={20} showCount placeholder={intl.get('pleaseInputPassword')}/>
-                </Form.Item>
-                <Form.Item
-                    name="repeatPassword"
-                    label={intl.get('repeatPassword')}
-                    rules={[{required: true, message: intl.get('pleaseRepeatPassword')}]}
-                >
-                    <Input.Password maxLength={20} showCount placeholder={intl.get('pleaseRepeatPassword')}/>
+                    <Input showCount maxLength={20} allowClear={true} onChange={e => {
+                        checkUserName(e)
+                    }}/>
                 </Form.Item>
             </Form>
         </Modal>
     );
 };
 
-const UserPasswordSetting: React.FC = () => {
+const UserInfoSetting: React.FC = () => {
     const [open, setOpen] = useState(false);
-
-    const navigate = useNavigate();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const userInfo = useSelector((state: { userInfo: { value: any } }) => state.userInfo.value);
 
     const onCreate = (values: any) => {
-        if (values.password !== values.repeatPassword) {
-            notification["error"]({
-                message: intl.get('submitFailed'),
-                description: intl.get('twoPasswordIsNotSame'),
-                className: 'back-drop'
-            })
-            return
-        }
-        updatePassword(userInfo.uid, values.password).then(res => {
+        console.log('Received values of form: ', values);
+        updateUserName(userInfo.uid, values.username).then(res => {
             if (res.code === 200) {
                 notification["success"]({
                     message: intl.get('changeSuccess'),
@@ -101,7 +122,7 @@ const UserPasswordSetting: React.FC = () => {
                 dispatch(logout())
                 dispatch(all())
                 Cookie.remove('token');
-                Cookie.remove('password');
+                Cookie.remove('username');
                 navigate('/login', {replace: true})
             }
         })
@@ -112,17 +133,17 @@ const UserPasswordSetting: React.FC = () => {
         <div>
             <Button
                 type="primary"
-                style={{backgroundColor: purple, borderColor: purple}}
+                style={{backgroundColor: orange5, borderColor: orange5}}
                 onClick={() => {
                     setOpen(true);
                     notification["warning"]({
                         message: intl.get('attention'),
-                        description: intl.get('changePasswordNotice'),
+                        description: intl.get('changeUsernameNotice'),
                         className: 'back-drop'
                     });
                 }}
             >
-                {intl.get('changePassword')}
+                {intl.get('changeUsername')}
             </Button>
             <CollectionCreateForm
                 open={open}
@@ -135,4 +156,4 @@ const UserPasswordSetting: React.FC = () => {
     );
 };
 
-export default UserPasswordSetting;
+export default UserInfoSetting;
