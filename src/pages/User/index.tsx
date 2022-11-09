@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import {Layout, message} from 'antd';
-import './index-light.scss'
+import './index.scss'
 import {Outlet, useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {version} from "../../baseInfo";

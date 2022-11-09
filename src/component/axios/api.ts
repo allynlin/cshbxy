@@ -372,3 +372,11 @@ export const rejectWorkReport = async (uid: String, reject_reason: string) => {
         reject_reason
     });
 }
+
+// 修改密码
+export const updatePassword = async (uid: string, password: string) => {
+    return promise.Request('/api/user/updatePassword', MethodType.POST, {
+        uid,
+        password
+    });
+}

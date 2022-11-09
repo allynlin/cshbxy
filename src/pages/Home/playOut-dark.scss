@@ -173,17 +173,17 @@ $font-light-85: rgba(255, 255, 255, 0.85);
             color: #8c8c8c;
             z-index: 100;
 
-            span {
+            .bq {
                 width: 100%;
                 height: 100%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                // 不换行
-                white-space: nowrap;
-                // 文字超出宽度时显示省略号
-                overflow: hidden;
-                text-overflow: ellipsis;
+
+                span {
+                    width: 100%;
+                    height: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
             }
         }
     }

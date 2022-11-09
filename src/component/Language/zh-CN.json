@@ -185,5 +185,14 @@
   "reject": "驳回",
   "pleaseInputRejectReason": "请输入驳回原因",
   "rejectFailed": "驳回失败",
-  "rejectReasonCannotBeEmpty": "驳回原因不能为空"
+  "rejectReasonCannotBeEmpty": "驳回原因不能为空",
+  "userSetting": "用户设置",
+  "changePassword": "修改密码",
+  "menuMode": "菜单模式",
+  "themeMode": "主题模式",
+  "language": "语言",
+  "pleaseInputAllInfo": "请填写完整信息",
+  "changeSuccess": "修改成功",
+  "changeSuccessNotice": "密码修改成功，请重新登录",
+  "changePasswordNotice": "修改密码后需要重新登录"
 }

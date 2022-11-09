@@ -1,6 +1,6 @@
 import React, {memo, useState} from "react";
 import {Button, Form, Input, message, Radio, Select, Switch} from 'antd';
-import './index-light.scss'
+import './index.scss'
 import Cookie from 'js-cookie';
 import {useNavigate} from "react-router-dom";
 import {checkUsername, findUserType, userLogin, userRegister} from "../../component/axios/api";

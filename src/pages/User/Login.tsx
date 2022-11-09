@@ -1,6 +1,6 @@
 import React, {memo} from "react";
 import {Button, Form, Input, message, Radio, Switch} from 'antd';
-import './index-light.scss'
+import './index.scss'
 import Cookie from 'js-cookie';
 import {userLogin} from "../../component/axios/api";
 import {useNavigate} from "react-router-dom";

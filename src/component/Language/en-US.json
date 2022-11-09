@@ -184,5 +184,14 @@
   "reject": "Reject",
   "pleaseInputRejectReason": "Please input reject reason",
   "rejectFailed": "Reject failed",
-  "rejectReasonCannotBeEmpty": "Reject reason cannot be empty"
+  "rejectReasonCannotBeEmpty": "Reject reason cannot be empty",
+  "userSetting": "User Setting",
+  "changePassword": "Change Password",
+  "menuMode": "Menu Mode",
+  "themeMode": "Theme Mode",
+  "language": "Language",
+  "pleaseInputAllInfo": "Please input all info",
+  "changeSuccess": "Change success",
+  "changeSuccessNotice": "Password change success, please login again",
+  "changePasswordNotice": "After changing the password, you need to log in again"
 }

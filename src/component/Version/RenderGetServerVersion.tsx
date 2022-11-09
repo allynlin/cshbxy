@@ -12,10 +12,8 @@ export default function RenderGetServerVersion() {
 
 
     return (
-        <div style={{
-            backgroundColor: serverLowVersion > version ? red : serverVersion > version ? yellow : "",
-            width: "100%",
-            height: "100%",
+        <div className={'bq'} style={{
+            backgroundColor: serverLowVersion > version ? red : serverVersion > version ? yellow : ""
         }}>
             <span>{intl.get('sysName')} &copy; 2022 Created by allynlin Version：{version} Server：{serverVersion}&nbsp;
                 <RenderRefresh/></span>
