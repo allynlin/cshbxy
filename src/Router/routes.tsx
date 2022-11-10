@@ -1,7 +1,8 @@
 import PlayOut from "../pages/Home/PlayOut";
 import apply from './apply'
 import record from "./record";
-import Approval from "./approval";
+import approval from "./approval";
+import management from "./management";
 import {RoutesItemType} from "react-router-waiter";
 import {Error101, Error103, Error403, Error404, Error500, Success} from "../pages/Result/Result";
 import {User} from "../pages/User";
@@ -84,7 +85,8 @@ const routes: RoutesItemType[] = [
             },
             ...apply,
             ...record,
-            ...Approval
+            ...approval,
+            ...management
         ]
     }, {
         path: '/403',

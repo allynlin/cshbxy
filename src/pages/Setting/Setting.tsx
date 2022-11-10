@@ -11,7 +11,7 @@ import {sysTheme} from "../../component/redux/sysColorSlice";
 import {LStorage} from "../../component/localStrong";
 import {English} from "../../component/redux/userLanguageSlice";
 import intl from "react-intl-universal";
-import UserSetting from "./UserPasswordSetting";
+import UserPasswordSetting from "./UserPasswordSetting";
 import UserInfoSetting from "./UserInfoSetting";
 import UsernameSetting from "./UsernameSetting";
 
@@ -86,7 +86,7 @@ const Setting = () => {
             }}>
                 <Col className="gutter-row" span={8}>
                     <Divider orientation="left">{intl.get('changePassword')}</Divider>
-                    <UserSetting/>
+                    <UserPasswordSetting/>
                 </Col>
                 <Col className="gutter-row" span={8}>
                     <Divider orientation="left">{intl.get('changeUserInfo')}</Divider>

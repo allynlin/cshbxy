@@ -1,11 +1,11 @@
 import {Button, Form, Input, InputNumber, Modal, Select, Typography} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {addTravelReimbursement, checkLastTimeUploadFiles} from "../../../component/axios/api";
-import '../apply.scss';
-import {BaseInfo} from "../../../baseInfo";
-import Spin from "../../../component/loading/Spin";
-import FileUpLoad from "../../../component/axios/FileUpLoad";
+import {addTravelReimbursement, checkLastTimeUploadFiles} from "../../component/axios/api";
+import './apply.scss';
+import {BaseInfo} from "../../baseInfo";
+import Spin from "../../component/loading/Spin";
+import FileUpLoad from "../../component/axios/FileUpLoad";
 import intl from "react-intl-universal";
 
 const {Title} = Typography;
@@ -195,10 +195,10 @@ const LeaveForm = () => {
     )
 };
 
-const Index = () => {
+const Travel = () => {
     return (
         <LeaveForm/>
     )
 }
 
-export default Index;
+export default Travel;

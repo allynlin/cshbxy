@@ -399,3 +399,16 @@ export const updateUserName = async (uid: string, username: string) => {
         username
     });
 }
+
+// 查询所有用户
+export const findAllUser = async () => {
+    return promise.Request('/api/user/findAllUser', MethodType.POST);
+}
+
+// 更新用户状态
+export const updateUserStatus = async (uid: string, status: number) => {
+    return promise.Request('/api/user/updateStatus', MethodType.POST, {
+        uid,
+        status
+    });
+}

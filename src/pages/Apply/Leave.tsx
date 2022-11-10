@@ -1,8 +1,8 @@
 import {Alert, Button, DatePicker, Form, Input, Modal, Typography} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {addLeave, checkLastTimeLeave,} from "../../../component/axios/api";
-import '../apply.scss';
+import {addLeave, checkLastTimeLeave,} from "../../component/axios/api";
+import './apply.scss';
 import Marquee from 'react-fast-marquee';
 import moment from "moment";
 import intl from "react-intl-universal";
@@ -213,10 +213,10 @@ const LeaveForm = () => {
     );
 };
 
-const Index = () => {
+const Leave = () => {
     return (
         <LeaveForm/>
     )
 }
 
-export default Index;
+export default Leave;

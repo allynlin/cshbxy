@@ -2,9 +2,7 @@ import {Button, Form, Input, Modal, notification, Radio} from 'antd';
 import React, {useState} from 'react';
 import intl from "react-intl-universal";
 import {updateUserInfo} from "../../component/axios/api";
-import {useDispatch, useSelector} from "react-redux";
 import {lime7} from "../../baseInfo";
-import {setUser} from "../../component/redux/userInfoSlice";
 
 interface Values {
     title: string;
@@ -18,11 +16,13 @@ interface CollectionCreateFormProps {
     onCancel: () => void;
 }
 
-const UserInfoSetting: React.FC = () => {
-    const [open, setOpen] = useState(false);
-    const dispatch = useDispatch();
+interface changeUserInfo {
+    content: any;
+    getChange: any;
+}
 
-    const userInfo = useSelector((state: { userInfo: { value: any } }) => state.userInfo.value);
+const ChangeUserInfo: React.FC<changeUserInfo> = (props) => {
+    const [open, setOpen] = useState(false);
 
     const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
                                                                            open,
@@ -30,6 +30,7 @@ const UserInfoSetting: React.FC = () => {
                                                                            onCancel,
                                                                        }) => {
         const [form] = Form.useForm();
+
         return (
             <Modal
                 open={open}
@@ -58,10 +59,10 @@ const UserInfoSetting: React.FC = () => {
                     layout="vertical"
                     name="form_in_modal"
                     initialValues={{
-                        realeName: userInfo.realeName,
-                        email: userInfo.email,
-                        tel: userInfo.tel,
-                        gender: userInfo.gender
+                        realeName: props.content.realeName,
+                        email: props.content.email,
+                        tel: props.content.tel,
+                        gender: props.content.gender
                     }}
                 >
                     <Form.Item
@@ -127,20 +128,20 @@ const UserInfoSetting: React.FC = () => {
     };
 
     const onCreate = (values: any) => {
-        updateUserInfo(userInfo.uid, values.realeName, values.gender, values.tel, values.email).then(res => {
+        updateUserInfo(props.content.uid, values.realeName, values.gender, values.tel, values.email).then(res => {
             if (res.code === 200) {
                 notification["success"]({
                     message: intl.get('changeSuccess'),
                     className: 'back-drop'
                 })
-                const newUserInfo = {
-                    ...userInfo,
+                const newContent = {
+                    ...props.content,
                     realeName: values.realeName,
-                    email: values.email,
+                    gender: values.gender,
                     tel: values.tel,
-                    gender: values.gender
+                    email: values.email
                 }
-                dispatch(setUser(newUserInfo));
+                props.getChange(newContent)
             }
         })
         setOpen(false);
@@ -168,4 +169,4 @@ const UserInfoSetting: React.FC = () => {
     );
 };
 
-export default UserInfoSetting;
+export default ChangeUserInfo;

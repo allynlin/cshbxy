@@ -21,97 +21,94 @@ interface CollectionCreateFormProps {
     onCancel: () => void;
 }
 
-const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
-                                                                       open,
-                                                                       onCreate,
-                                                                       onCancel,
-                                                                   }) => {
-    const [form] = Form.useForm();
-    const [usernameUse, setUsernameUse] = useState<boolean>(false);
-    const userInfo = useSelector((state: { userInfo: { value: any } }) => state.userInfo.value);
-    const userType = useSelector((state: { userType: { value: any } }) => state.userType.value);
-
-    let timeOut: any;
-
-    const checkUserName = (e: any) => {
-        // 防抖
-        clearTimeout(timeOut);
-        timeOut = setTimeout(() => {
-            checkUsername(e.target.value, userType).then(() => {
-                setUsernameUse(true)
-            }).catch(() => {
-                setUsernameUse(false)
-            })
-        }, 500)
-    }
-
-    return (
-        <Modal
-            open={open}
-            title={intl.get("changeUsername")}
-            okText={intl.get('ok')}
-            cancelText={intl.get('cancel')}
-            onCancel={onCancel}
-            onOk={() => {
-                if (!usernameUse) {
-                    notification["error"]({
-                        message: intl.get('usernameIsExist'),
-                        className: 'back-drop'
-                    });
-                    return
-                }
-                form
-                    .validateFields()
-                    .then(values => {
-                        form.resetFields();
-                        onCreate(values);
-                    })
-                    .catch(() => {
-                        notification["error"]({
-                            message: intl.get('submitFailed'),
-                            description: intl.get('pleaseInputAllInfo'),
-                            className: 'back-drop'
-                        });
-                    });
-            }}
-        >
-            <Form
-                form={form}
-                layout="vertical"
-                name="form_in_modal"
-                initialValues={{
-                    username: userInfo.username,
-                }}
-            >
-                <Form.Item
-                    label={intl.get('username')}
-                    name="username"
-                    rules={[
-                        {
-                            required: true,
-                            message: intl.get('pleaseInputUsername'),
-                            pattern: /^[a-zA-Z0-9]{1,20}$/
-                        },
-                    ]}
-                >
-                    <Input showCount maxLength={20} allowClear={true} onChange={e => {
-                        checkUserName(e)
-                    }}/>
-                </Form.Item>
-            </Form>
-        </Modal>
-    );
-};
-
 const UserInfoSetting: React.FC = () => {
     const [open, setOpen] = useState(false);
+    const [usernameUse, setUsernameUse] = useState<boolean>(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const userInfo = useSelector((state: { userInfo: { value: any } }) => state.userInfo.value);
+    const userType = useSelector((state: { userType: { value: any } }) => state.userType.value);
+
+    const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
+                                                                           open,
+                                                                           onCreate,
+                                                                           onCancel,
+                                                                       }) => {
+        const [form] = Form.useForm();
+        let timeOut: any;
+
+        const checkUserName = (e: any) => {
+            // 防抖
+            clearTimeout(timeOut);
+            timeOut = setTimeout(() => {
+                checkUsername(e.target.value, userType).then(() => {
+                    setUsernameUse(true)
+                }).catch(() => {
+                    setUsernameUse(false)
+                })
+            }, 500)
+        }
+
+        return (
+            <Modal
+                open={open}
+                title={intl.get("changeUsername")}
+                okText={intl.get('ok')}
+                cancelText={intl.get('cancel')}
+                onCancel={onCancel}
+                onOk={() => {
+                    if (!usernameUse) {
+                        notification["error"]({
+                            message: intl.get('usernameIsExist'),
+                            className: 'back-drop'
+                        });
+                        return
+                    }
+                    form
+                        .validateFields()
+                        .then(values => {
+                            form.resetFields();
+                            onCreate(values);
+                        })
+                        .catch(() => {
+                            notification["error"]({
+                                message: intl.get('submitFailed'),
+                                description: intl.get('pleaseInputAllInfo'),
+                                className: 'back-drop'
+                            });
+                        });
+                }}
+            >
+                <Form
+                    form={form}
+                    layout="vertical"
+                    name="form_in_modal"
+                    initialValues={{
+                        username: userInfo.username,
+                    }}
+                >
+                    <Form.Item
+                        label={intl.get('username')}
+                        name="username"
+                        rules={[
+                            {
+                                required: true,
+                                message: intl.get('pleaseInputUsername'),
+                                pattern: /^[a-zA-Z0-9]{1,20}$/
+                            },
+                        ]}
+                    >
+                        <Input showCount maxLength={20} allowClear={true} onChange={e => {
+                            checkUserName(e)
+                        }}/>
+                    </Form.Item>
+                </Form>
+            </Modal>
+        );
+    };
 
     const onCreate = (values: any) => {
-        console.log('Received values of form: ', values);
         updateUserName(userInfo.uid, values.username).then(res => {
             if (res.code === 200) {
                 notification["success"]({

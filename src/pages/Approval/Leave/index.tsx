@@ -1,12 +1,11 @@
-import {Button, Drawer, message, Modal, Table, Typography} from 'antd';
-import {ExclamationCircleOutlined, SearchOutlined} from '@ant-design/icons';
+import {Button, Drawer, message, Modal, Spin, Table, Typography} from 'antd';
+import {ExclamationCircleOutlined, LoadingOutlined, SearchOutlined} from '@ant-design/icons';
 import type {ColumnsType} from 'antd/es/table';
 import React, {useEffect, useState} from 'react';
 import {findLeaveWaitApprovalList, refreshLeave, resolveLeave} from '../../../component/axios/api';
 import {green} from "../../../baseInfo";
 import {RenderStatusColor} from "../../../component/Tag/RenderStatusColor";
 import '../index.scss'
-import RecordSkeleton from "../../../component/Skeleton/RecordSkeleton";
 import Reject from "./Reject";
 import intl from "react-intl-universal";
 
@@ -23,7 +22,7 @@ const Index: React.FC = () => {
     // 防止反复查询变更记录
     const [isQuery, setIsQuery] = useState<boolean>(false);
     const [waitTime, setWaitTime] = useState<number>(0);
-    const [isRenderResult, setIsRenderResult] = useState<boolean>(true);
+    const [loading, setLoading] = useState(true);
     const [dataSource, setDataSource] = useState([]);
     const [content, setContent] = useState<any>({});
     const [open, setOpen] = useState(false);
@@ -188,7 +187,7 @@ const Index: React.FC = () => {
         if (isQuery) {
             return
         }
-        setIsRenderResult(true)
+        setLoading(true)
         findLeaveWaitApprovalList().then((res: any) => {
             if (res.code === 200) {
                 const arr = res.body.map((item: any, index: number) => {
@@ -204,59 +203,64 @@ const Index: React.FC = () => {
                 setDataSource([])
             }
         }).finally(() => {
-            setIsRenderResult(false)
+            setLoading(false)
         })
     }
 
-    return isRenderResult ?
-        <RecordSkeleton/> : (
-            <div className={'record-body'}>
-                <Drawer
-                    title={content.releaseUid}
-                    placement="right"
-                    open={open}
-                    onClose={() => setOpen(false)}
-                    extra={<Button
+    return (
+        <div className={'record-body'}>
+            <Drawer
+                title={content.releaseUid}
+                placement="right"
+                open={open}
+                onClose={() => setOpen(false)}
+                extra={<Button
+                    type="primary"
+                    disabled={isQuery}
+                    onClick={() => refresh(content.uid)}
+                    icon={<SearchOutlined/>}
+                >{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>}
+            >
+                <p>{intl.get('startTime')}：{content.start_time}</p>
+                <p>{intl.get('endTime')}：{content.end_time}</p>
+                <p>{intl.get('reason')}：{content.reason}</p>
+                <p>{intl.get('createTime')}：{content.create_time}</p>
+                <p>{intl.get('updateTime')}：{content.update_time}</p>
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'end',
+                    marginTop: 16
+                }}>
+                    <Reject state={content} getNewContent={(isReject: boolean) => {
+                        if (isReject) {
+                            setOpen(false)
+                            getDataSource()
+                        }
+                    }}/>
+                    <Button
                         type="primary"
-                        disabled={isQuery}
-                        onClick={() => refresh(content.uid)}
-                        icon={<SearchOutlined/>}
-                    >{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>}
-                >
-                    <p>{intl.get('startTime')}：{content.start_time}</p>
-                    <p>{intl.get('endTime')}：{content.end_time}</p>
-                    <p>{intl.get('reason')}：{content.reason}</p>
-                    <p>{intl.get('createTime')}：{content.create_time}</p>
-                    <p>{intl.get('updateTime')}：{content.update_time}</p>
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'end',
-                        marginTop: 16
-                    }}>
-                        <Reject state={content} getNewContent={(isReject: boolean) => {
-                            if (isReject) {
-                                setOpen(false)
-                                getDataSource()
-                            }
-                        }}/>
-                        <Button
-                            type="primary"
-                            style={{
-                                backgroundColor: green,
-                                borderColor: green,
-                                marginLeft: 16
-                            }}
-                            onClick={() => {
-                                showResolveConfirm(content.uid);
-                            }}
-                        >{intl.get('pass')}</Button>
-                    </div>
-                </Drawer>
-                <Title level={2} className={'tit'}>
-                    {intl.get('leave') + ' ' + intl.get('approve')}&nbsp;&nbsp;
-                    <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
-                            onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
-                </Title>
+                        style={{
+                            backgroundColor: green,
+                            borderColor: green,
+                            marginLeft: 16
+                        }}
+                        onClick={() => {
+                            showResolveConfirm(content.uid);
+                        }}
+                    >{intl.get('pass')}</Button>
+                </div>
+            </Drawer>
+            <Title level={2} className={'tit'}>
+                {intl.get('leave') + ' ' + intl.get('approve')}&nbsp;&nbsp;
+                <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
+                        onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
+            </Title>
+            <Spin spinning={loading} indicator={<LoadingOutlined
+                style={{
+                    fontSize: 40,
+                }}
+                spin
+            />}>
                 <Table
                     columns={columns}
                     dataSource={dataSource}
@@ -271,8 +275,9 @@ const Index: React.FC = () => {
                         hideOnSinglePage: true
                     }}
                 />
-            </div>
-        );
+            </Spin>
+        </div>
+    );
 };
 
 export default Index;

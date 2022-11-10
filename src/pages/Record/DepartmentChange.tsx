@@ -1,5 +1,5 @@
-import {Button, Collapse, Drawer, message, Modal, Skeleton, Space, Steps, Table, Tag, Typography} from 'antd';
-import {ExclamationCircleOutlined, SearchOutlined} from '@ant-design/icons';
+import {Button, Collapse, Drawer, message, Modal, Skeleton, Space, Spin, Steps, Table, Tag, Typography} from 'antd';
+import {ExclamationCircleOutlined, LoadingOutlined, SearchOutlined} from '@ant-design/icons';
 import type {ColumnsType} from 'antd/es/table';
 import React, {useEffect, useState} from 'react';
 import {
@@ -8,12 +8,11 @@ import {
     findChangeDepartmentByTeacherProcess,
     findUploadFilesByUid,
     refreshDepartmentChange
-} from '../../../component/axios/api';
-import {DownLoadURL, red} from "../../../baseInfo";
-import {RenderStatusTag} from "../../../component/Tag/RenderStatusTag";
-import {RenderStatusColor} from "../../../component/Tag/RenderStatusColor";
-import '../index.scss'
-import RecordSkeleton from "../../../component/Skeleton/RecordSkeleton";
+} from '../../component/axios/api';
+import {DownLoadURL, red} from "../../baseInfo";
+import {RenderStatusTag} from "../../component/Tag/RenderStatusTag";
+import {RenderStatusColor} from "../../component/Tag/RenderStatusColor";
+import './index.scss'
 import intl from "react-intl-universal";
 
 const {Title} = Typography;
@@ -29,11 +28,11 @@ interface DataType {
     address: string;
 }
 
-const Index: React.FC = () => {
+const DepartmentChange: React.FC = () => {
     // 防止反复查询变更记录
     const [isQuery, setIsQuery] = useState<boolean>(false);
     const [waitTime, setWaitTime] = useState<number>(0);
-    const [isRenderResult, setIsRenderResult] = useState<boolean>(true);
+    const [loading, setLoading] = useState<boolean>(true);
     const [dataSource, setDataSource] = useState([]);
     const [content, setContent] = useState<any>({});
     const [fileList, setFileList] = useState<any>([]);
@@ -132,7 +131,6 @@ const Index: React.FC = () => {
                         const arr = dataSource.filter((item: any) => item.uid !== e);
                         setDataSource(arr);
                         if (arr.length === 0) {
-                            setIsRenderResult(true);
                             message.warning(intl.get('noDepartmentChangeList'));
                         }
                     } else {
@@ -212,7 +210,7 @@ const Index: React.FC = () => {
         if (isQuery) {
             return
         }
-        setIsRenderResult(true)
+        setLoading(true)
         checkTeacherChangeDepartmentRecord().then((res: any) => {
             if (res.code === 200) {
                 const arr = res.body.map((item: any, index: number) => {
@@ -228,126 +226,131 @@ const Index: React.FC = () => {
                 setDataSource([])
             }
         }).finally(() => {
-            setIsRenderResult(false)
+            setLoading(false)
         })
     }
 
-    return isRenderResult ?
-        <RecordSkeleton/> : (
-            <div className={'record-body'}>
-                <Drawer
-                    title={<span>{RenderStatusTag(content.status)}</span>}
-                    placement="right"
-                    open={open}
-                    onClose={() => {
-                        setOpen(false)
-                    }}
-                    extra={content.status === 0 ?
-                        <>
-                            <Button
-                                type="primary"
-                                style={{
-                                    backgroundColor: red,
-                                    borderColor: red
-                                }}
-                                onClick={() => {
-                                    showDeleteConfirm(content.uid);
-                                }}
-                            >{intl.get('delete')}</Button>
-                        </> : <Button
+    return (
+        <div className={'record-body'}>
+            <Drawer
+                title={<span>{RenderStatusTag(content.status)}</span>}
+                placement="right"
+                open={open}
+                onClose={() => {
+                    setOpen(false)
+                }}
+                extra={content.status === 0 ?
+                    <>
+                        <Button
                             type="primary"
-                            loading={processLoading}
-                            onClick={() => refresh(content.uid)}
-                            icon={<SearchOutlined/>}
-                            disabled={isQuery}>
-                            {isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}
-                        </Button>}
-                >
-                    <p>{intl.get('departmentChange')}：{content.departmentUid}</p>
-                    <p>{intl.get('reason')}：{content.changeReason}</p>
-                    {content.reject_reason ?
-                        <>
-                            {intl.get('rejectReason')}：
-                            <Tag color={red}
-                                 style={{marginBottom: 16}}>{content.reject_reason}</Tag>
-                        </> : null}
-                    <p>{intl.get('createTime')}：{content.create_time}</p>
-                    <p>{intl.get('updateTime')}：{content.update_time}</p>
-                    {
-                        fileLoading ? <Skeleton.Button block={true} active={true} size={'large'}/> :
-                            // 如果 fileList 不为空则渲染
-                            fileList.length > 0 ? (
-                                <>
-                                    {content.status === 0 ? <Button
-                                        type="primary"
-                                        loading={fileLoading}
-                                        onClick={() => getFiles(content.uid)}
-                                        disabled={isQuery}>
-                                        {isQuery ? `${intl.get('refreshFileList')}(${waitTime})` : intl.get('refreshFileList')}
-                                    </Button> : null}
-                                    <Collapse ghost>
-                                        {/*循环输出 Card，数据来源 fileList*/}
-                                        {fileList.map((item: any, index: number) => {
-                                            return (
-                                                <Panel header={intl.get('file') + (index + 1)} key={index}>
-                                                    <p>{item.oldFileName}</p>
-                                                    <a href={`${DownLoadURL}/downloadFile?filename=${item.fileName}`}
-                                                       target="_self">{intl.get('download')}</a>
-                                                </Panel>
-                                            )
-                                        })}
-                                    </Collapse>
-                                </>
-                            ) : null
-                    }
-                    {
-                        processLoading ? (
-                                <Space style={{flexDirection: 'column'}}>
-                                    <Skeleton.Input active={true} block={false}/>
-                                    <Skeleton.Input active={true} block={false}/>
-                                    <Skeleton.Input active={true} block={false}/>
-                                    <Skeleton.Input active={true} block={false}/>
-                                </Space>) :
-                            <div style={{marginTop: 16}}>
+                            style={{
+                                backgroundColor: red,
+                                borderColor: red
+                            }}
+                            onClick={() => {
+                                showDeleteConfirm(content.uid);
+                            }}
+                        >{intl.get('delete')}</Button>
+                    </> : <Button
+                        type="primary"
+                        loading={processLoading}
+                        onClick={() => refresh(content.uid)}
+                        icon={<SearchOutlined/>}
+                        disabled={isQuery}>
+                        {isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}
+                    </Button>}
+            >
+                <p>{intl.get('departmentChange')}：{content.departmentUid}</p>
+                <p>{intl.get('reason')}：{content.changeReason}</p>
+                {content.reject_reason ?
+                    <>
+                        {intl.get('rejectReason')}：
+                        <Tag color={red}
+                             style={{marginBottom: 16}}>{content.reject_reason}</Tag>
+                    </> : null}
+                <p>{intl.get('createTime')}：{content.create_time}</p>
+                <p>{intl.get('updateTime')}：{content.update_time}</p>
+                {
+                    fileLoading ? <Skeleton.Button block={true} active={true} size={'large'}/> :
+                        // 如果 fileList 不为空则渲染
+                        fileList.length > 0 ? (
+                            <>
                                 {content.status === 0 ? <Button
                                     type="primary"
-                                    loading={processLoading}
-                                    disabled={isQuery}
-                                    onClick={() => {
-                                        getProcess(content.uid)
-                                        refresh(content.uid)
-                                    }}>
-                                    {isQuery ? `${intl.get('refreshProcessList')}(${waitTime})` : intl.get('refreshProcessList')}
+                                    loading={fileLoading}
+                                    onClick={() => getFiles(content.uid)}
+                                    disabled={isQuery}>
+                                    {isQuery ? `${intl.get('refreshFileList')}(${waitTime})` : intl.get('refreshFileList')}
                                 </Button> : null}
-                                <div style={{marginTop: 16}}>{intl.get('approveProcess')}：</div>
-                                <Steps
-                                    style={{
-                                        marginTop: 16
-                                    }}
-                                    direction="vertical"
-                                    size="small"
-                                    current={content.count}
-                                    status={content.status === 0 ? 'process' : content.status === 1 ? 'finish' : 'error'}
-                                >
-                                    {
-                                        processList.map((item: string, index: number) => {
-                                            return (
-                                                <Step
-                                                    key={index}
-                                                    title={item}
-                                                />
-                                            )
-                                        })
-                                    }
-                                </Steps>
-                            </div>
-                    }
-                </Drawer>
-                <Title level={2} className={'tit'}>
-                    {intl.get('departmentChange') + ' ' + intl.get('record')}&nbsp;&nbsp;
-                    <Button type="primary" icon={<SearchOutlined/>} disabled={isQuery}
-                            onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
-                </Title>
+                                <Collapse ghost>
+                                    {/*循环输出 Card，数据来源 fileList*/}
+                                    {fileList.map((item: any, index: number) => {
+                                        return (
+                                            <Panel header={intl.get('file') + (index + 1)} key={index}>
+                                                <p>{item.oldFileName}</p>
+                                                <a href={`${DownLoadURL}/downloadFile?filename=${item.fileName}`}
+                                                   target="_self">{intl.get('download')}</a>
+                                            </Panel>
+                                        )
+                                    })}
+                                </Collapse>
+                            </>
+                        ) : null
+                }
+                {
+                    processLoading ? (
+                            <Space style={{flexDirection: 'column'}}>
+                                <Skeleton.Input active={true} block={false}/>
+                                <Skeleton.Input active={true} block={false}/>
+                                <Skeleton.Input active={true} block={false}/>
+                                <Skeleton.Input active={true} block={false}/>
+                            </Space>) :
+                        <div style={{marginTop: 16}}>
+                            {content.status === 0 ? <Button
+                                type="primary"
+                                loading={processLoading}
+                                disabled={isQuery}
+                                onClick={() => {
+                                    getProcess(content.uid)
+                                    refresh(content.uid)
+                                }}>
+                                {isQuery ? `${intl.get('refreshProcessList')}(${waitTime})` : intl.get('refreshProcessList')}
+                            </Button> : null}
+                            <div style={{marginTop: 16}}>{intl.get('approveProcess')}：</div>
+                            <Steps
+                                style={{
+                                    marginTop: 16
+                                }}
+                                direction="vertical"
+                                size="small"
+                                current={content.count}
+                                status={content.status === 0 ? 'process' : content.status === 1 ? 'finish' : 'error'}
+                            >
+                                {
+                                    processList.map((item: string, index: number) => {
+                                        return (
+                                            <Step
+                                                key={index}
+                                                title={item}
+                                            />
+                                        )
+                                    })
+                                }
+                            </Steps>
+                        </div>
+                }
+            </Drawer>
+            <Title level={2} className={'tit'}>
+                {intl.get('departmentChange') + ' ' + intl.get('record')}&nbsp;&nbsp;
+                <Button type="primary" icon={<SearchOutlined/>} disabled={isQuery}
+                        onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
+            </Title>
+            <Spin spinning={loading} indicator={<LoadingOutlined
+                style={{
+                    fontSize: 40,
+                }}
+                spin
+            />}>
                 <Table
                     columns={columns}
                     dataSource={dataSource}
@@ -361,8 +364,9 @@ const Index: React.FC = () => {
                         defaultPageSize: 5
                     }}
                 />
-            </div>
-        );
+            </Spin>
+        </div>
+    );
 };
 
-export default Index;
+export default DepartmentChange;

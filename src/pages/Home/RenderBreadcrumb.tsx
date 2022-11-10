@@ -31,6 +31,8 @@ const RenderBreadcrumb = () => {
         '/home/approval/travel': intl.get('travelReimburse'),
         '/home/approval/procurement': intl.get('procurement'),
         '/home/approval/workReport': intl.get('workReport'),
+        '/home/management': intl.get('management'),
+        '/home/management/user': intl.get('userManagement'),
     };
     const pathSnippets = location.pathname.split('/').filter((i) => i);
     const extraBreadcrumbItems = pathSnippets.map((_, index) => {

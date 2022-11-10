@@ -200,5 +200,16 @@
   "noPermission": "No Permission",
   "noPermissionNotice": "You do not have permission to perform this operation temporarily. If you confirm that you have permission, you can try the operation again. If the problem persists, please contact the administrator",
   "changeUsername": "Change Username",
-  "changeUsernameNotice": "After changing the username, you need to log in again"
+  "changeUsernameNotice": "After changing the username, you need to log in again",
+  "management": "Management",
+  "userManagement": "User Management",
+  "requestTryAgain": "Request failed, retrying, remaining retries:{count}",
+  "unKnowUserType": "Unknow user type",
+  "search": "Search",
+  "userInfo": "User Info",
+  "baseInfo": "Base Info",
+  "unKnow": "Unknow",
+  "userOperation": "User Operation",
+  "statusError": "Status Error",
+  "confirmChangeUserStatus": "Confirm change user status to {status}?"
 }

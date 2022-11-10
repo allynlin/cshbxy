@@ -15,85 +15,83 @@ interface CollectionCreateFormProps {
     onCreate: (values: Values) => void;
     onLoading: boolean;
     onCancel: () => void;
-    content: any;
 }
-
-const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
-                                                                       open,
-                                                                       onCreate,
-                                                                       onLoading,
-                                                                       onCancel,
-                                                                       content
-                                                                   }) => {
-    const [form] = Form.useForm();
-    return (
-        <Modal
-            open={open}
-            title={intl.get('updateProcurementApprove')}
-            okText={intl.get('update')}
-            okButtonProps={{style: {backgroundColor: blue, borderColor: blue}}}
-            cancelText={intl.get('cancel')}
-            onCancel={onCancel}
-            confirmLoading={onLoading}
-            onOk={() => {
-                form
-                    .validateFields()
-                    .then(values => {
-                        form.resetFields();
-                        onCreate(values);
-                    })
-                    .catch(() => {
-                        notification["error"]({
-                            message: intl.get('submitFailed'),
-                            description: intl.get('pleaseInputFullInfo'),
-                        });
-                    });
-            }}
-        >
-            <Form
-                form={form}
-                layout="vertical"
-                name="form_in_modal"
-                initialValues={{
-                    items: content.items,
-                    price: content.price,
-                    reason: content.reason
-                }}
-            >
-                <Form.Item
-                    label={intl.get('procurementItem')}
-                    name="items"
-                    rules={[{required: true, message: intl.get('pleaseInputProcurementItem')}]}
-                >
-                    <Input.TextArea rows={4} placeholder={intl.get('pleaseInputProcurementItem')} showCount={true}
-                                    maxLength={1000}/>
-                </Form.Item>
-
-                <Form.Item
-                    label={intl.get('procurementPrice')}
-                    name="price"
-                    rules={[{required: true, message: intl.get('pleaseInputProcurementPrice')}]}
-                >
-                    <InputNumber addonAfter={'¥'}/>
-                </Form.Item>
-
-                <Form.Item
-                    label={intl.get('reason')}
-                    name="reason"
-                    rules={[{required: true, message: intl.get('pleaseInputReason')}]}
-                >
-                    <Input.TextArea rows={4} placeholder={intl.get('pleaseInputReason')} showCount={true}
-                                    maxLength={1000}/>
-                </Form.Item>
-            </Form>
-        </Modal>
-    );
-};
 
 const Update = (props: any) => {
     const [open, setOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const content = props.state;
+
+    const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
+                                                                           open,
+                                                                           onCreate,
+                                                                           onLoading,
+                                                                           onCancel,
+                                                                       }) => {
+        const [form] = Form.useForm();
+        return (
+            <Modal
+                open={open}
+                title={intl.get('updateProcurementApprove')}
+                okText={intl.get('update')}
+                okButtonProps={{style: {backgroundColor: blue, borderColor: blue}}}
+                cancelText={intl.get('cancel')}
+                onCancel={onCancel}
+                confirmLoading={onLoading}
+                onOk={() => {
+                    form
+                        .validateFields()
+                        .then(values => {
+                            form.resetFields();
+                            onCreate(values);
+                        })
+                        .catch(() => {
+                            notification["error"]({
+                                message: intl.get('submitFailed'),
+                                description: intl.get('pleaseInputFullInfo'),
+                            });
+                        });
+                }}
+            >
+                <Form
+                    form={form}
+                    layout="vertical"
+                    name="form_in_modal"
+                    initialValues={{
+                        items: content.items,
+                        price: content.price,
+                        reason: content.reason
+                    }}
+                >
+                    <Form.Item
+                        label={intl.get('procurementItem')}
+                        name="items"
+                        rules={[{required: true, message: intl.get('pleaseInputProcurementItem')}]}
+                    >
+                        <Input.TextArea rows={4} placeholder={intl.get('pleaseInputProcurementItem')} showCount={true}
+                                        maxLength={1000}/>
+                    </Form.Item>
+
+                    <Form.Item
+                        label={intl.get('procurementPrice')}
+                        name="price"
+                        rules={[{required: true, message: intl.get('pleaseInputProcurementPrice')}]}
+                    >
+                        <InputNumber addonAfter={'¥'}/>
+                    </Form.Item>
+
+                    <Form.Item
+                        label={intl.get('reason')}
+                        name="reason"
+                        rules={[{required: true, message: intl.get('pleaseInputReason')}]}
+                    >
+                        <Input.TextArea rows={4} placeholder={intl.get('pleaseInputReason')} showCount={true}
+                                        maxLength={1000}/>
+                    </Form.Item>
+                </Form>
+            </Modal>
+        );
+    };
 
     const onCreate = (values: any) => {
         setIsLoading(true);
@@ -139,7 +137,6 @@ const Update = (props: any) => {
                 onCancel={() => {
                     setOpen(false);
                 }}
-                content={content}
             />
         </div>
     );

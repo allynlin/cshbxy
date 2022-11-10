@@ -1,8 +1,8 @@
 import {Button, Form, Input, InputNumber, message, Modal, Typography} from 'antd';
 import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {addProcurement} from "../../../component/axios/api";
-import '../apply.scss';
+import {addProcurement} from "../../component/axios/api";
+import './apply.scss';
 import intl from "react-intl-universal";
 
 const {Title} = Typography;
@@ -117,10 +117,10 @@ const ProcurementForm = () => {
     );
 };
 
-const Index = () => {
+const Procurement = () => {
     return (
         <ProcurementForm/>
     )
 }
 
-export default Index;
+export default Procurement;

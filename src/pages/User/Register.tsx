@@ -91,12 +91,17 @@ const RegisterStudent = memo(() => {
         form.resetFields();
     };
 
+    let timeOut: any;
+
     const checkUserName = (e: any) => {
-        checkUsername(e.target.value, registerType).then(() => {
-            setUsernameUse(true)
-        }).catch(() => {
-            setUsernameUse(false)
-        })
+        clearTimeout(timeOut)
+        timeOut = setTimeout(() => {
+            checkUsername(e.target.value, registerType).then(() => {
+                setUsernameUse(true)
+            }).catch(() => {
+                setUsernameUse(false)
+            })
+        }, 500)
     }
 
 
@@ -155,12 +160,12 @@ const RegisterStudent = memo(() => {
             <Form.Item
                 wrapperCol={{}}
             >
-                <Radio.Group defaultValue="Index" buttonStyle="solid" onChange={e => {
+                <Radio.Group defaultValue="DepartmentChange" buttonStyle="solid" onChange={e => {
                     setRegisterType(e.target.value)
                 }}>
                     <Radio.Button value="Leader">{intl.get('leaderRegister')}</Radio.Button>
                     <Radio.Button value="Department">{intl.get('departmentRegister')}</Radio.Button>
-                    <Radio.Button value="Index">{intl.get('employeeRegister')}</Radio.Button>
+                    <Radio.Button value="DepartmentChange">{intl.get('employeeRegister')}</Radio.Button>
                 </Radio.Group>
             </Form.Item>
 

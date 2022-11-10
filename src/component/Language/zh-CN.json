@@ -201,5 +201,16 @@
   "noPermission": "权限不足",
   "noPermissionNotice": "您暂时没有权限进行此操作，如您确认有权限，您可以尝试重新操作，如果问题依旧，请联系管理员",
   "changeUsername": "修改用户名",
-  "changeUsernameNotice": "修改用户名后需要重新登录"
+  "changeUsernameNotice": "修改用户名后需要重新登录",
+  "management": "管理",
+  "userManagement": "用户管理",
+  "requestTryAgain": "请求失败，正在重试，剩余重试次数：{count}",
+  "unKnowUserType": "未知用户类型",
+  "search": "搜索",
+  "userInfo": "用户信息",
+  "baseInfo": "基本信息",
+  "unKnow": "未知",
+  "userOperation": "用户操作",
+  "statusError": "状态错误",
+  "confirmChangeUserStatus": "确认修改用户状态为{status}吗？"
 }

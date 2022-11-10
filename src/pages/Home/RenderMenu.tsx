@@ -1,5 +1,12 @@
 import {Button, Menu} from 'antd';
-import {BarChartOutlined, EditOutlined, FormOutlined, HomeOutlined, ProjectOutlined,} from '@ant-design/icons';
+import {
+    BarChartOutlined,
+    BarsOutlined,
+    EditOutlined,
+    FormOutlined,
+    HomeOutlined,
+    ProjectOutlined,
+} from '@ant-design/icons';
 import React from 'react';
 import './playOut-light.scss'
 import {Link} from 'react-router-dom';
@@ -26,6 +33,7 @@ function getItem(
 }
 
 const RenderMenu = () => {
+
     const employee: MenuProps['items'] = [
         getItem((<Link to={'/home/employee'}>{intl.get('home')}</Link>), 'Home',
             <HomeOutlined/>),
@@ -83,6 +91,15 @@ const RenderMenu = () => {
         getItem((<Link to={'/home/setting'}>{intl.get('setting')}</Link>), 'Setting',
             <FormOutlined/>)
     ];
+    const adminMenu: MenuProps['items'] = [
+        getItem((<Link to={'/home/leader'}>{intl.get('home')}</Link>), 'Home', <HomeOutlined/>),
+        getItem(intl.get('management'), 'management', <BarsOutlined/>, [
+            getItem(<Link
+                to={'/home/management/user'}>{intl.get('userManagement')}</Link>, 'changeDepartment'),
+        ]),
+        getItem((<Link to={'/home/setting'}>{intl.get('setting')}</Link>), 'Setting',
+            <FormOutlined/>)
+    ];
     const defaultMenu: MenuProps['items'] = [];
 
     const themeColor: String = useSelector((state: any) => state.themeColor.value)
@@ -93,8 +110,13 @@ const RenderMenu = () => {
 
     const isLogin = useSelector((state: any) => state.isLogin.value)
 
+    const userInfo = useSelector((state: any) => state.userInfo.value);
+
     // const [theme, setTheme] = useState('light');
     const RenderMenu = (): MenuProps['items'] => {
+        if (userInfo.username === 'admin') {
+            return adminMenu
+        }
         switch (userType) {
             case 'Employee':
                 return employee
