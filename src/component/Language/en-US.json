@@ -211,5 +211,11 @@
   "unKnow": "Unknow",
   "userOperation": "User Operation",
   "statusError": "Status Error",
-  "confirmChangeUserStatus": "Confirm change user status to {status}?"
+  "confirmChangeUserStatus": "Confirm change user status to {status}?",
+  "deleteUser": "Delete User",
+  "confirmDeleteUser": "Are you sure you want to delete the user?",
+  "confirmDeleteUserNotice": "It cannot be recovered after deleting a user, please operate with caution",
+  "confirmDeleteUserAgain": "Is the last confirmation to delete the user?",
+  "deleteUserSuccess": "Delete user success",
+  "departmentUser": "Department User"
 }

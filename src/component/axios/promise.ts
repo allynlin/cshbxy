@@ -16,7 +16,7 @@ export const MethodType = {
 /**
  * 模块说明:有api_token的请求
  */
-export const Request = (api: String, method = MethodType.GET, params = {}, config = {headers: {}}, count = 5) => {
+export const Request = (api: String, method = MethodType.GET, params = {}, config = {headers: {}}) => {
     const apiToken = Cookie.get('token');
     const language = Cookie.get('language') || 'en_US';
     // 如果不是登录和注册接口（/login 或 /register 或 /query 开头），POST 请求，没有获取到 token，就跳转到登录页面
@@ -95,17 +95,6 @@ export const Request = (api: String, method = MethodType.GET, params = {}, confi
                     }
             }
         }).catch(error => {
-            count--;
-            if (count > 0) {
-                setTimeout(() => {
-                    Request(api, method, params, config, count)
-                    notification["error"]({
-                        message: intl.get('requestTryAgain', {count}),
-                        className: 'back-drop'
-                    })
-                }, 1000)
-                return
-            }
             NProgress.done(true);
             notification["error"]({
                 message: intl.get('sysError'),

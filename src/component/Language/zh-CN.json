@@ -212,5 +212,11 @@
   "unKnow": "未知",
   "userOperation": "用户操作",
   "statusError": "状态错误",
-  "confirmChangeUserStatus": "确认修改用户状态为{status}吗？"
+  "confirmChangeUserStatus": "确认修改用户状态为{status}吗？",
+  "deleteUser": "删除用户",
+  "confirmDeleteUser": "确认删除用户吗？",
+  "confirmDeleteUserNotice": "删除用户后不可恢复，请谨慎操作",
+  "confirmDeleteUserAgain": "最后一次确认删除用户吗？",
+  "deleteUserSuccess": "删除用户成功",
+  "departmentUser": "部门用户"
 }

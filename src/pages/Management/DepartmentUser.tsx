@@ -4,7 +4,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import './management.scss'
 import {RenderUserStatusColor} from "../../component/Tag/RenderUserStatusColor";
 import intl from "react-intl-universal";
-import {findAllUser} from "../../component/axios/api";
+import {findUserByDepartment} from "../../component/axios/api";
 import {RenderUserStatusTag} from "../../component/Tag/RenderUserStatusTag";
 import type {ColumnsType, ColumnType} from 'antd/es/table';
 import type {FilterConfirmProps} from 'antd/es/table/interface';
@@ -15,7 +15,6 @@ import ChangeUsername from "./ChangeUsername";
 import ChangeUserInfo from "./ChangeUserInfo";
 import ChangeUserStatus from "./ChangeUserStatus";
 import {useSelector} from "react-redux";
-import DeleteUser from "./DeleteUser";
 
 const {Title} = Typography;
 
@@ -47,6 +46,8 @@ const Index: React.FC = () => {
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
     const searchInput = useRef<InputRef>(null);
+
+    const userInfo = useSelector((state: { userInfo: { value: any } }) => state.userInfo.value);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -80,7 +81,7 @@ const Index: React.FC = () => {
         if (isQuery) {
             return
         }
-        findAllUser().then(res => {
+        findUserByDepartment(userInfo.uid).then(res => {
             const data = res.body.map((item: any, index: number) => {
                 return {
                     ...item,
@@ -298,13 +299,8 @@ const Index: React.FC = () => {
                 </p>
                 <p className="site-description-item-profile-p">{intl.get('baseInfo')}</p>
                 <Row>
-                    <Col span={24}>
-                        <DescriptionItem title={'UID'} content={content.uid}/>
-                    </Col>
-                </Row>
-                <Row>
                     <Col span={12}>
-                        <DescriptionItem title={'department'} content={content.departmentUid}/>
+                        <DescriptionItem title={'UID'} content={content.uid}/>
                     </Col>
                     <Col span={12}>
                         <DescriptionItem title={intl.get('username')} content={content.username}/>
@@ -390,20 +386,6 @@ const Index: React.FC = () => {
                                 return item
                             })
                             setDataSource(newDateSource)
-                        }}/>}
-                    </Col>
-                </Row>
-                <Divider/>
-                <Row style={{marginTop: 16}}>
-                    <Col span={12}>
-                        {<DeleteUser content={content} getChange={(newContent: string) => {
-                            if (newContent === 'yes') {
-                                setOpen(false)
-                                const newDateSource: any = dataSource.filter((item: any) => {
-                                    return item.uid !== content.uid;
-                                })
-                                setDataSource(newDateSource)
-                            }
                         }}/>}
                     </Col>
                 </Row>

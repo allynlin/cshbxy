@@ -405,10 +405,22 @@ export const findAllUser = async () => {
     return promise.Request('/api/user/findAllUser', MethodType.POST);
 }
 
+// 查询部门下的所有用户
+export const findUserByDepartment = async (departmentUid: string) => {
+    return promise.Request('/api/user/findAllUserByDepartmentUid', MethodType.POST, {departmentUid});
+}
+
 // 更新用户状态
 export const updateUserStatus = async (uid: string, status: number) => {
     return promise.Request('/api/user/updateStatus', MethodType.POST, {
         uid,
         status
+    });
+}
+
+// 删除用户
+export const deleteUser = async (uid: string) => {
+    return promise.Request('/api/user/delete', MethodType.POST, {
+        uid
     });
 }

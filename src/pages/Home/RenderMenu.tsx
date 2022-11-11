@@ -75,6 +75,10 @@ const RenderMenu = () => {
             getItem(<Link to={'/home/approval/procurement'}>{intl.get('procurement')}</Link>, 'procurement'),
             getItem(<Link to={'/home/approval/workReport'}>{intl.get('workReport')}</Link>, 'workReport'),
         ]),
+        getItem(intl.get('management'), 'management', <BarsOutlined/>, [
+            getItem(<Link
+                to={'/home/management/departmentUser'}>{intl.get('departmentUser')}</Link>, 'departmentUser'),
+        ]),
         getItem((<Link to={'/home/setting'}>{intl.get('setting')}</Link>), 'Setting',
             <FormOutlined/>)
     ];
@@ -95,7 +99,7 @@ const RenderMenu = () => {
         getItem((<Link to={'/home/leader'}>{intl.get('home')}</Link>), 'Home', <HomeOutlined/>),
         getItem(intl.get('management'), 'management', <BarsOutlined/>, [
             getItem(<Link
-                to={'/home/management/user'}>{intl.get('userManagement')}</Link>, 'changeDepartment'),
+                to={'/home/management/user'}>{intl.get('userManagement')}</Link>, 'userManagement'),
         ]),
         getItem((<Link to={'/home/setting'}>{intl.get('setting')}</Link>), 'Setting',
             <FormOutlined/>)
