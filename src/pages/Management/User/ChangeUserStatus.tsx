@@ -1,8 +1,8 @@
 import {Button, notification, Popconfirm} from 'antd';
 import React, {useEffect, useState} from 'react';
-import {updateUserStatus} from "../../component/axios/api";
+import {updateUserStatus} from "../../../component/axios/api";
 import intl from "react-intl-universal";
-import {RenderUserStatusColor} from "../../component/Tag/RenderUserStatusColor";
+import {RenderUserStatusColor} from "../../../component/Tag/RenderUserStatusColor";
 
 interface changeUserStatus {
     content: any;

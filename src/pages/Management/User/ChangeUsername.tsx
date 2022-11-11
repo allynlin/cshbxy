@@ -1,8 +1,8 @@
 import {Button, Form, Input, Modal, notification} from 'antd';
 import React, {useState} from 'react';
 import intl from "react-intl-universal";
-import {checkUsername, updateUserName} from "../../component/axios/api";
-import {orange5} from "../../baseInfo";
+import {checkUsername, updateUserName} from "../../../component/axios/api";
+import {orange5} from "../../../baseInfo";
 
 interface Values {
     title: string;

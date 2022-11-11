@@ -424,3 +424,21 @@ export const deleteUser = async (uid: string) => {
         uid
     });
 }
+
+// 获取所有审批人
+export const findProcessUser = async () => {
+    return promise.Request('/api/user/findProcessUser', MethodType.POST);
+}
+
+// 查询所有审批流程
+export const findAllProcess = async () => {
+    return promise.Request('/process/findAllProcess', MethodType.POST);
+}
+
+// 更新审批流程
+export const updateProcess = async (uid: string, process: string) => {
+    return promise.Request('/process/updateProcess', MethodType.POST, {
+        uid,
+        process
+    });
+}

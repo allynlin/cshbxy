@@ -173,7 +173,7 @@ const Index: React.FC = () => {
             key: 'status',
             width: 150,
             align: 'center',
-            render: (text: number, record: any) => {
+            render: (text: number) => {
                 return (
                     RenderStatusTag(text, intl.get('leaveApply'))
                 )

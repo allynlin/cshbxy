@@ -1,8 +1,8 @@
 import {Button, Form, Input, Modal, notification, Radio} from 'antd';
 import React, {useState} from 'react';
 import intl from "react-intl-universal";
-import {updateUserInfo} from "../../component/axios/api";
-import {lime7} from "../../baseInfo";
+import {updateUserInfo} from "../../../component/axios/api";
+import {lime7} from "../../../baseInfo";
 
 interface Values {
     title: string;

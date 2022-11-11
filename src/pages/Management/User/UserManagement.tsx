@@ -1,20 +1,19 @@
 import {Button, Col, Divider, Drawer, Input, InputRef, Row, Space, Spin, Table, Tag, Typography} from 'antd';
 import {LoadingOutlined, SearchOutlined,} from '@ant-design/icons';
 import React, {useEffect, useRef, useState} from 'react';
-import './management.scss'
-import {RenderUserStatusColor} from "../../component/Tag/RenderUserStatusColor";
+import '../management.scss'
+import {RenderUserStatusColor} from "../../../component/Tag/RenderUserStatusColor";
 import intl from "react-intl-universal";
-import {findAllUser} from "../../component/axios/api";
-import {RenderUserStatusTag} from "../../component/Tag/RenderUserStatusTag";
+import {findAllUser} from "../../../component/axios/api";
+import {RenderUserStatusTag} from "../../../component/Tag/RenderUserStatusTag";
 import type {ColumnsType, ColumnType} from 'antd/es/table';
 import type {FilterConfirmProps} from 'antd/es/table/interface';
 import Highlighter from 'react-highlight-words';
-import {RenderUserTypeTag} from "../../component/Tag/RenderUserTypeTag";
+import {RenderUserTypeTag} from "../../../component/Tag/RenderUserTypeTag";
 import ChangePassword from "./ChangePassword";
 import ChangeUsername from "./ChangeUsername";
 import ChangeUserInfo from "./ChangeUserInfo";
 import ChangeUserStatus from "./ChangeUserStatus";
-import {useSelector} from "react-redux";
 import DeleteUser from "./DeleteUser";
 
 const {Title} = Typography;

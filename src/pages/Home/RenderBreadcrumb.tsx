@@ -34,6 +34,7 @@ const RenderBreadcrumb = () => {
         '/home/management': intl.get('management'),
         '/home/management/user': intl.get('userManagement'),
         '/home/management/departmentUser': intl.get('departmentUser'),
+        '/home/management/process': intl.get('processManagement'),
     };
     const pathSnippets = location.pathname.split('/').filter((i) => i);
     const extraBreadcrumbItems = pathSnippets.map((_, index) => {

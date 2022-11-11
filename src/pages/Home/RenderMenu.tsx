@@ -100,6 +100,8 @@ const RenderMenu = () => {
         getItem(intl.get('management'), 'management', <BarsOutlined/>, [
             getItem(<Link
                 to={'/home/management/user'}>{intl.get('userManagement')}</Link>, 'userManagement'),
+            getItem(<Link
+                to={'/home/management/process'}>{intl.get('processManagement')}</Link>, 'processManagement'),
         ]),
         getItem((<Link to={'/home/setting'}>{intl.get('setting')}</Link>), 'Setting',
             <FormOutlined/>)

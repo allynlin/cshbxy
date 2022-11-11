@@ -1,7 +1,7 @@
 import {Button, Modal, notification, Popconfirm} from 'antd';
 import React from 'react';
-import {deleteUser} from "../../component/axios/api";
-import {red} from "../../baseInfo";
+import {deleteUser} from "../../../component/axios/api";
+import {red} from "../../../baseInfo";
 import intl from "react-intl-universal";
 import {ExclamationCircleOutlined} from '@ant-design/icons';
 

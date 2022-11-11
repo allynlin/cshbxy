@@ -217,5 +217,10 @@
   "confirmDeleteUserNotice": "It cannot be recovered after deleting a user, please operate with caution",
   "confirmDeleteUserAgain": "Is the last confirmation to delete the user?",
   "deleteUserSuccess": "Delete user success",
-  "departmentUser": "Department User"
+  "departmentUser": "Department User",
+  "processManagement": "Process Management",
+  "changeProcess": "Change Process",
+  "confirmChangeProcess": "Confirm change process?",
+  "confirmChangeProcessNotice": "After the modification is successful, all new submitted applications will be approved according to the new process",
+  "changeProcessSuccess": "Change process success"
 }

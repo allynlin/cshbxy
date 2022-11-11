@@ -1,8 +1,8 @@
 import {Button, Form, Input, Modal, notification} from 'antd';
 import React, {useState} from 'react';
 import intl from "react-intl-universal";
-import {updatePassword} from "../../component/axios/api";
-import {purple} from "../../baseInfo";
+import {updatePassword} from "../../../component/axios/api";
+import {purple} from "../../../baseInfo";
 
 interface Values {
     title: string;
