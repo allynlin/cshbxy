@@ -1,10 +1,6 @@
-# Getting Started with Create React App
+# 基于 React 构建的 OA 系统
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
+## 您可以使用如下命令启动项目
 
 ### `npm start`
 
