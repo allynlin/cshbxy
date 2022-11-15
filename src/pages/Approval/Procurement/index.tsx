@@ -160,10 +160,10 @@ const Index: React.FC = () => {
                                 marginRight: 16
                             }}
                             onClick={() => {
-                                showResolveConfirm(content.uid);
+                                showResolveConfirm(text);
                             }}
                         >{intl.get('pass')}</Button>
-                        <Reject state={content} getNewContent={(isReject: boolean) => {
+                        <Reject state={record} getNewContent={(isReject: boolean) => {
                             if (isReject) {
                                 setOpen(false)
                                 getDataSource()
