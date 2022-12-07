@@ -22,6 +22,8 @@ import zhCN from "antd/es/locale/zh_CN";
 import intl from 'react-intl-universal';
 import {setUser} from "./component/redux/userInfoSlice";
 import {setLowVersion} from "./component/redux/serverLowVersionSlice";
+import {Dialog} from 'tdesign-react';
+import {ErrorCircleFilledIcon} from 'tdesign-icons-react';
 
 const locals = {
     'English': require('./component/Language/en-US.json'),
@@ -37,6 +39,7 @@ export const rootNavigate = (to: string) => {
 
 export default function App() {
     const [isRender, setIsRender] = useState(false);
+    const [visibleConfirm, setVisibleConfirm] = useState(false);
 
     const themeColor = useSelector((state: any) => state.themeColor.value)
 
@@ -61,7 +64,18 @@ export default function App() {
         })
     }, [userLanguage])
 
+    const checkMobile = () => {
+        const ua = navigator.userAgent;
+        const ipad = ua.match(/(iPad).*OS\s([\d_]+)/),
+            isIphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/),
+            isAndroid = ua.match(/(Android)\s+([\d.]+)/);
+        return isIphone || isAndroid || ipad;
+    }
+
     useEffect(() => {
+        if (checkMobile()) {
+            setVisibleConfirm(true)
+        }
         Cookie.get('language') === "zh" ? dispatch(Chinese()) : dispatch(English())
         LStorage.get('menuMode') === 'inline' ? dispatch(inline()) : dispatch(vertical())
         // 如果在 localStrong 中有颜色设置就使用 localStrong 中的颜色设置
@@ -176,11 +190,30 @@ export default function App() {
         return pathname
     }
 
+    const onCloseConfirm = () => {
+        setVisibleConfirm(false);
+    };
+
     return (
-        <ConfigProvider locale={userLanguage === 'English' ? enUS : zhCN}>
-            <HistoryRouter basename={process.env.PUBLIC_URL} history={history}>
-                <RouterWaiter routes={routes} loading={<Spin/>} onRouteBefore={onRouteBefore}/>
-            </HistoryRouter>
-        </ConfigProvider>
+        <>
+            <Dialog
+                header={
+                    <>
+                        <ErrorCircleFilledIcon style={{color: '#3881E8'}}/>
+                        <span>检测到您正在使用移动端访问，是否跳转到移动端，移动端正在快速迭代中，但却有较好的移动端使用体验</span>
+                    </>
+                }
+                visible={visibleConfirm}
+                onClose={onCloseConfirm}
+                onConfirm={() => {
+                    window.location.replace('https://cshbxy-mobile.netlify.app')
+                }}
+            ></Dialog>
+            <ConfigProvider locale={userLanguage === 'English' ? enUS : zhCN}>
+                <HistoryRouter basename={process.env.PUBLIC_URL} history={history}>
+                    <RouterWaiter routes={routes} loading={<Spin/>} onRouteBefore={onRouteBefore}/>
+                </HistoryRouter>
+            </ConfigProvider>
+        </>
     );
 }
