@@ -200,7 +200,7 @@ export default function App() {
                 header={
                     <>
                         <ErrorCircleFilledIcon style={{color: '#3881E8'}}/>
-                        <span>检测到您正在使用移动端访问，是否跳转到移动端，移动端正在快速迭代中，但却有较好的移动端使用体验</span>
+                        <span>检测到您正在使用移动端访问，是否跳转到移动端，移动端不支持提交申请和驳回申请</span>
                     </>
                 }
                 visible={visibleConfirm}
