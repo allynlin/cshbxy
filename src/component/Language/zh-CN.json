@@ -223,5 +223,7 @@
   "changeProcess": "修改流程",
   "confirmChangeProcess": "确认修改流程吗？",
   "confirmChangeProcessNotice": "修改成功后所有新的提交申请都会按照新的流程进行审批",
-  "changeProcessSuccess": "修改流程成功"
+  "changeProcessSuccess": "修改流程成功",
+  "close": "关闭",
+  "details": "详情"
 }

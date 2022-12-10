@@ -229,7 +229,7 @@ const App: React.FC = () => {
     return (
         <div className={'record-body'}>
             <Modal
-                title="请假详情"
+                title={intl.get('details')}
                 onCancel={() => setShowModal(false)}
                 open={showModal}
                 footer={[
@@ -242,7 +242,7 @@ const App: React.FC = () => {
                         >
                             <Button loading={confirmLoading} type="primary" danger key="delete"
                                     onClick={() => setOpen(true)}>
-                                删除
+                                {intl.get('delete')}
                             </Button>
                         </Popconfirm> : null,
                     <Button
@@ -266,7 +266,7 @@ const App: React.FC = () => {
                             borderColor: green
                         }}
                     >
-                        关闭
+                        {intl.get('close')}
                     </Button>,
                 ]}
             >

@@ -222,5 +222,7 @@
   "changeProcess": "Change Process",
   "confirmChangeProcess": "Confirm change process?",
   "confirmChangeProcessNotice": "After the modification is successful, all new submitted applications will be approved according to the new process",
-  "changeProcessSuccess": "Change process success"
+  "changeProcessSuccess": "Change process success",
+  "close": "Close",
+  "details": "Details"
 }
