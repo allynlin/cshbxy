@@ -7,11 +7,17 @@ import {RenderStatusTag} from "../../component/Tag/RenderStatusTag";
 import {red} from "../../baseInfo";
 import {ColumnsType} from "antd/es/table";
 import {RenderStatusColor} from "../../component/Tag/RenderStatusColor";
-import {DataType} from "tdesign-react";
 import intl from "react-intl-universal";
 
 const {Title} = Typography;
 const {Step} = Steps;
+
+interface DataType {
+    key: React.Key;
+    name: string;
+    age: number;
+    address: string;
+}
 
 const Leave: React.FC = () => {
     // 防止反复查询变更记录

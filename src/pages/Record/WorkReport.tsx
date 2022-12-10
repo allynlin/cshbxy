@@ -12,7 +12,6 @@ import './index.scss';
 import {DownLoadURL, red} from "../../baseInfo";
 import {RenderStatusTag} from "../../component/Tag/RenderStatusTag";
 import {ColumnsType} from "antd/es/table";
-import {DataType} from "tdesign-react";
 import {RenderStatusColor} from "../../component/Tag/RenderStatusColor";
 import intl from "react-intl-universal";
 
@@ -21,6 +20,13 @@ const {Step} = Steps;
 const {Panel} = Collapse;
 
 const tableName = `WorkReport`;
+
+interface DataType {
+    key: React.Key;
+    name: string;
+    age: number;
+    address: string;
+}
 
 const WorkReport: React.FC = () => {
     // 防止反复查询变更记录
