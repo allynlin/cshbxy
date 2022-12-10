@@ -216,6 +216,7 @@ export default function App() {
             locale={
                 userLanguage === 'English' ? enUS : zhCN
             }>
+            {/*// @ts-ignore*/}
             <HistoryRouter basename={process.env.PUBLIC_URL} history={history}>
                 <RouterWaiter routes={routes} loading={<Spin/>} onRouteBefore={onRouteBefore}/>
             </HistoryRouter>
