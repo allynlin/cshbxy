@@ -1,4 +1,4 @@
-import {Button, Popconfirm,message} from 'antd';
+import {Button, message, Popconfirm} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {updateUserStatus} from "../../../component/axios/api";
 import intl from "react-intl-universal";

@@ -7,7 +7,7 @@ import {
     HomeOutlined,
     ProjectOutlined,
 } from '@ant-design/icons';
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import './playOut-light.scss'
 import {Link, useLocation} from 'react-router-dom';
 import {useSelector} from "react-redux";

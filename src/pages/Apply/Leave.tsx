@@ -6,8 +6,8 @@ import './apply.scss';
 import Marquee from 'react-fast-marquee';
 import moment from "moment";
 import intl from "react-intl-universal";
-import dayjs from 'dayjs';
 import type {Dayjs} from 'dayjs';
+import dayjs from 'dayjs';
 
 const {Title} = Typography;
 

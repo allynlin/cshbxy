@@ -1,6 +1,6 @@
-import {Typography, Col, Divider, message, Row, Tag} from 'antd';
+import {Col, Divider, message, Row, Tag, Typography} from 'antd';
 import React, {useEffect} from 'react';
-import {blue, red, yellow} from "../../baseInfo";
+import {blue, yellow} from "../../baseInfo";
 import MenuModeSetting from "./MenuModeSetting";
 import ThemeSetting from "./ThemeSetting";
 import LanguageSetting from "./LanguageSetting";

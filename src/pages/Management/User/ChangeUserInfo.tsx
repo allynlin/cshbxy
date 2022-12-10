@@ -1,4 +1,4 @@
-import {Button, Form, Input, Modal, message, Radio} from 'antd';
+import {Button, Form, Input, message, Modal, Radio} from 'antd';
 import React, {useState} from 'react';
 import intl from "react-intl-universal";
 import {updateUserInfo} from "../../../component/axios/api";

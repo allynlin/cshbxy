@@ -1,4 +1,4 @@
-import {Button, Modal, Popconfirm,message} from 'antd';
+import {Button, message, Modal, Popconfirm} from 'antd';
 import React from 'react';
 import {deleteUser} from "../../../component/axios/api";
 import {red} from "../../../baseInfo";
