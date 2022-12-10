@@ -1,4 +1,4 @@
-import {Button, Form, Input, Modal, notification} from 'antd';
+import {Button, Form, Input, Modal, message} from 'antd';
 import React, {useState} from 'react';
 import intl from "react-intl-universal";
 import {checkUsername, updateUserName} from "../../../component/axios/api";
@@ -55,10 +55,7 @@ const ChangeUsername: React.FC<changeUserName> = (props) => {
                 onCancel={onCancel}
                 onOk={() => {
                     if (!usernameUse) {
-                        notification["error"]({
-                            message: intl.get('usernameIsExist'),
-                            className: 'back-drop'
-                        });
+                        message.error(intl.get("usernameIsExist"))
                         return
                     }
                     form
@@ -67,12 +64,8 @@ const ChangeUsername: React.FC<changeUserName> = (props) => {
                             form.resetFields();
                             onCreate(values);
                         })
-                        .catch(() => {
-                            notification["error"]({
-                                message: intl.get('submitFailed'),
-                                description: intl.get('pleaseInputAllInfo'),
-                                className: 'back-drop'
-                            });
+                        .catch(err => {
+                            message.error(err.message);
                         });
                 }}
             >
@@ -107,10 +100,7 @@ const ChangeUsername: React.FC<changeUserName> = (props) => {
     const onCreate = (values: any) => {
         updateUserName(props.content.uid, values.username).then(res => {
             if (res.code === 200) {
-                notification["success"]({
-                    message: intl.get('changeSuccess'),
-                    className: 'back-drop'
-                })
+                message.success(intl.get("changeSuccess"));
                 props.getChange(values.username)
             }
         })

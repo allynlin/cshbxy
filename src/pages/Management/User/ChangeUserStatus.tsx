@@ -1,4 +1,4 @@
-import {Button, notification, Popconfirm} from 'antd';
+import {Button, Popconfirm,message} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {updateUserStatus} from "../../../component/axios/api";
 import intl from "react-intl-universal";
@@ -51,17 +51,11 @@ const ChangeUserStatus: React.FC<changeUserStatus> = (props) => {
                 status = -1;
                 break;
             default:
-                notification["error"]({
-                    message: intl.get('statusError'),
-                    className: 'back-drop'
-                })
+                message.error(intl.get('statusError'));
                 return;
         }
         updateUserStatus(props.content.uid, status).then(res => {
-            notification["success"]({
-                message: intl.get('changeSuccess'),
-                className: 'back-drop'
-            })
+            message.success(intl.get('changeSuccess'));
         }).finally(() => {
             setConfirmLoading(false);
             setOpen(false);

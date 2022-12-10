@@ -1,4 +1,4 @@
-import {Button, Col, Divider, message, PageHeader, Row, Tag} from 'antd';
+import {Typography, Col, Divider, message, Row, Tag} from 'antd';
 import React, {useEffect} from 'react';
 import {blue, red, yellow} from "../../baseInfo";
 import MenuModeSetting from "./MenuModeSetting";
@@ -14,6 +14,8 @@ import intl from "react-intl-universal";
 import UserPasswordSetting from "./UserPasswordSetting";
 import UserInfoSetting from "./UserInfoSetting";
 import UsernameSetting from "./UsernameSetting";
+
+const {Title} = Typography;
 
 const Setting = () => {
 
@@ -55,27 +57,14 @@ const Setting = () => {
     }
 
     return (
-        <PageHeader
-            onBack={() => navigate(-1)}
-            title={intl.get('setting')}
-            tags={<Tag color={yellow}>{intl.get('attention')}</Tag>}
-            subTitle={intl.get('settingScopesNotice')}
-            extra={[
-                <Button
-                    key="2"
-                    style={{
-                        backgroundColor: red,
-                        color: '#ffffff',
-                        borderColor: red
-                    }}
-                    onClick={resertSetting}
-                >{intl.get('reset')}</Button>,
-                <Button key="1" type="primary"
-                        onClick={() => message.success(intl.get('autoSaveNotice'))}>
-                    {intl.get('save')}
-                </Button>,
-            ]}
+        <div
+            style={{
+                padding: '20px',
+            }}
         >
+            <Title level={3}>{intl.get('setting')}</Title>
+            <Tag color={yellow}>{intl.get('attention')}</Tag>
+            <Tag>{intl.get('settingScopesNotice')}</Tag>
             <Divider style={{
                 color: blue
             }}>{intl.get('userSetting')}</Divider>
@@ -118,7 +107,7 @@ const Setting = () => {
                     <LanguageSetting/>
                 </Col>
             </Row>
-        </PageHeader>
+        </div>
     )
 };
 

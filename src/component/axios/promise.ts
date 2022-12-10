@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {notification} from 'antd';
+import {message} from 'antd';
 import qs from 'qs';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css'
@@ -64,19 +64,11 @@ export const Request = (api: String, method = MethodType.GET, params = {}, confi
                 case 401:
                 case 403:
                     reject(res.data)
-                    notification["error"]({
-                        message: intl.get('noPermission'),
-                        description: intl.get('noPermissionNotice'),
-                        className: 'back-drop'
-                    });
+                    message.error(intl.get('noPermission'));
                     break;
                 case 500:
                     reject(res.data)
-                    notification["error"]({
-                        message: intl.get('sysError'),
-                        description: intl.get('sysErrorNotice'),
-                        className: 'back-drop'
-                    });
+                    message.error(intl.get('sysError'))
                     break;
                 default:
                     // // 如果后端返回 403 则拦截当前页面请求，返回登录页面
@@ -86,21 +78,13 @@ export const Request = (api: String, method = MethodType.GET, params = {}, confi
                             Cookie.set('token', res.data.token, {expires: 7, path: '/', sameSite: 'strict'})
                         resolve(res.data)
                     } else {
-                        notification["error"]({
-                            message: intl.get('sysError'),
-                            description: res.data.msg,
-                            className: 'back-drop'
-                        });
+                        message.error(res.data.msg)
                         reject(res.data)
                     }
             }
         }).catch(error => {
             NProgress.done(true);
-            notification["error"]({
-                message: intl.get('sysError'),
-                description: error.message,
-                className: 'back-drop'
-            });
+            message.error(error.message);
             reject(error);
         });
     });

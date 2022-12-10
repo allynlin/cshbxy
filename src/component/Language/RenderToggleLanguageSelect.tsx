@@ -27,8 +27,8 @@ export const RenderToggleLanguageSelect = () => {
                 showNotice('当前语言已切换为中文，如果页面显示不是中文，请刷新页面')
                 break;
             default:
-                dispatch(English())
-                showNotice('Selection exception, reset to default language (English)')
+                dispatch(Chinese())
+                showNotice('Selection exception, reset to default language (Chinese)')
         }
     };
 
@@ -40,7 +40,7 @@ export const RenderToggleLanguageSelect = () => {
 
     return (
         <Select
-            defaultValue="English"
+            defaultValue="Chinese"
             style={{width: 120}}
             onChange={handleChange}
             options={options}

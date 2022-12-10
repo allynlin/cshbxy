@@ -18,13 +18,9 @@ const Home = () => {
 
     const navigate = useNavigate();
 
-    const serverVersion = useSelector((state: {
-        serverVersion: {
-            value: string
-        }
-    }) => state.serverVersion.value);
+    const serverVersion = useSelector((state: any) => state.serverVersion.value);
 
-    const serverLowVersion = useSelector((state: { serverLowVersion: { value: string } }) => state.serverLowVersion.value);
+    const serverLowVersion = useSelector((state: any) => state.serverLowVersion.value);
 
     useEffect(() => {
         if (serverLowVersion === "0.0.0") {
@@ -38,11 +34,7 @@ const Home = () => {
         }
     }, [serverLowVersion, serverVersion])
 
-    const themeColor: String = useSelector((state: {
-        themeColor: {
-            value: String
-        }
-    }) => state.themeColor.value)
+    const themeColor: String = useSelector((state: any) => state.themeColor.value)
 
     // 根据不同的 themeColor，渲染不同的样式
     const renderThemeColor = () => {

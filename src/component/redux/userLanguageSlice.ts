@@ -2,7 +2,7 @@ import {createSlice} from '@reduxjs/toolkit'
 import Cookie from "js-cookie";
 
 const initialState: { value: 'Chinese' | 'English' } = {
-    value: 'English',
+    value: 'Chinese',
 }
 
 export const userLanguageSlice = createSlice({

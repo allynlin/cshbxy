@@ -5,7 +5,7 @@ import Cookie from 'js-cookie';
 import RouterWaiter from "react-router-waiter"
 import Spin from "./component/loading/Spin";
 import {useDispatch, useSelector} from "react-redux";
-import {ConfigProvider, message} from "antd";
+import {Button, ConfigProvider, message, Modal, theme} from "antd";
 import {checkUser, getLowVersion, getVersion} from "./component/axios/api";
 import {login} from "./component/redux/isLoginSlice";
 import {Department, Employee, Leader} from "./component/redux/userTypeSlice";
@@ -22,8 +22,7 @@ import zhCN from "antd/es/locale/zh_CN";
 import intl from 'react-intl-universal';
 import {setUser} from "./component/redux/userInfoSlice";
 import {setLowVersion} from "./component/redux/serverLowVersionSlice";
-import {Dialog} from 'tdesign-react';
-import {ErrorCircleFilledIcon} from 'tdesign-icons-react';
+import {green} from "./baseInfo";
 
 const locals = {
     'English': require('./component/Language/en-US.json'),
@@ -39,7 +38,6 @@ export const rootNavigate = (to: string) => {
 
 export default function App() {
     const [isRender, setIsRender] = useState(false);
-    const [visibleConfirm, setVisibleConfirm] = useState(false);
 
     const themeColor = useSelector((state: any) => state.themeColor.value)
 
@@ -74,10 +72,30 @@ export default function App() {
 
     useEffect(() => {
         if (checkMobile()) {
-            setVisibleConfirm(true)
+            Modal.info({
+                title: '检测到您正在使用移动端访问，是否跳转到移动端',
+                content: (
+                    <div>
+                        <p>移动端仅支持以下功能</p>
+                        <ul>
+                            <li>用户查询，禁用，删除</li>
+                            <li>申请记录查询，删除</li>
+                            <li>通过审批</li>
+                        </ul>
+                        <Button
+                            style={{
+                                color: '#ffffff',
+                                backgroundColor: green,
+                                borderColor: green
+                            }}
+                            type="primary">点击前往移动端</Button>
+                    </div>
+                ),
+                okText: '继续使用 Web 端',
+            });
         }
-        Cookie.get('language') === "zh" ? dispatch(Chinese()) : dispatch(English())
-        LStorage.get('menuMode') === 'inline' ? dispatch(inline()) : dispatch(vertical())
+        Cookie.get('language') === "en_US" ? dispatch(English()) : dispatch(Chinese())
+        LStorage.get('menuMode') === 'vertical' ? dispatch(vertical()) : dispatch(inline())
         // 如果在 localStrong 中有颜色设置就使用 localStrong 中的颜色设置
         const sysColor = LStorage.get('themeColor');
         switch (sysColor) {
@@ -91,7 +109,20 @@ export default function App() {
                 dispatch(sysTheme());
                 break;
             default:
-                dispatch(lightTheme());
+                dispatch(sysTheme());
+        }
+        // 页面渲染的时候，检查 cookie 中是否有 token，如果有 token，就校验 token 是否有效，如果有效可以继续执行，如果无效，就跳转到登录页面
+        getVersion().then(res => {
+            dispatch(setVersion(res.body))
+        })
+        getLowVersion().then(res => {
+            dispatch(setLowVersion(res.body))
+        })
+        const token = Cookie.get('token');
+        if (token) {
+            checkUserInfo();
+        } else {
+            rootNavigate('/login');
         }
     }, [])
 
@@ -120,22 +151,6 @@ export default function App() {
     const isLogin = useSelector((state: any) => state.isLogin.value)
 
     const userType: String = useSelector((state: any) => state.userType.value)
-
-    // 页面渲染的时候，检查 cookie 中是否有 token，如果有 token，就校验 token 是否有效，如果有效可以继续执行，如果无效，就跳转到登录页面
-    useEffect(() => {
-        getVersion().then(res => {
-            dispatch(setVersion(res.body))
-        })
-        getLowVersion().then(res => {
-            dispatch(setLowVersion(res.body))
-        })
-        const token = Cookie.get('token');
-        if (token) {
-            checkUserInfo();
-        } else {
-            rootNavigate('/login');
-        }
-    }, [])
 
     // 校验用户
     const checkUserInfo = () => {
@@ -190,30 +205,20 @@ export default function App() {
         return pathname
     }
 
-    const onCloseConfirm = () => {
-        setVisibleConfirm(false);
-    };
-
     return (
-        <>
-            <Dialog
-                header={
-                    <>
-                        <ErrorCircleFilledIcon style={{color: '#3881E8'}}/>
-                        <span>检测到您正在使用移动端访问，是否跳转到移动端，移动端不支持提交申请和驳回申请</span>
-                    </>
-                }
-                visible={visibleConfirm}
-                onClose={onCloseConfirm}
-                onConfirm={() => {
-                    window.location.replace('https://cshbxy-mobile.netlify.app')
-                }}
-            ></Dialog>
-            <ConfigProvider locale={userLanguage === 'English' ? enUS : zhCN}>
-                <HistoryRouter basename={process.env.PUBLIC_URL} history={history}>
-                    <RouterWaiter routes={routes} loading={<Spin/>} onRouteBefore={onRouteBefore}/>
-                </HistoryRouter>
-            </ConfigProvider>
-        </>
+        <ConfigProvider
+            theme={{
+                token: {
+                    colorPrimary: '#ED4192'
+                },
+                algorithm: themeColor === "dark" ? theme.darkAlgorithm : theme.defaultAlgorithm,
+            }}
+            locale={
+                userLanguage === 'English' ? enUS : zhCN
+            }>
+            <HistoryRouter basename={process.env.PUBLIC_URL} history={history}>
+                <RouterWaiter routes={routes} loading={<Spin/>} onRouteBefore={onRouteBefore}/>
+            </HistoryRouter>
+        </ConfigProvider>
     );
 }

@@ -67,9 +67,6 @@ const Index: React.FC = () => {
     const refresh = (uid: string) => {
         setIsQuery(true)
         setWaitTime(10)
-        if (isQuery) {
-            return
-        }
         refreshDepartmentChange(uid).then(res => {
             let newContent = {
                 key: content.key,

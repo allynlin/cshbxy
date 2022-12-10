@@ -1,4 +1,4 @@
-import {Button, Form, Input, Modal, notification, Radio} from 'antd';
+import {Button, Form, Input, Modal, message, Radio} from 'antd';
 import React, {useState} from 'react';
 import intl from "react-intl-universal";
 import {updateUserInfo} from "../../../component/axios/api";
@@ -45,12 +45,8 @@ const ChangeUserInfo: React.FC<changeUserInfo> = (props) => {
                             form.resetFields();
                             onCreate(values);
                         })
-                        .catch(() => {
-                            notification["error"]({
-                                message: intl.get('submitFailed'),
-                                description: intl.get('pleaseInputAllInfo'),
-                                className: 'back-drop'
-                            });
+                        .catch(err => {
+                            message.error(err.message);
                         });
                 }}
             >
@@ -130,10 +126,7 @@ const ChangeUserInfo: React.FC<changeUserInfo> = (props) => {
     const onCreate = (values: any) => {
         updateUserInfo(props.content.uid, values.realeName, values.gender, values.tel, values.email).then(res => {
             if (res.code === 200) {
-                notification["success"]({
-                    message: intl.get('changeSuccess'),
-                    className: 'back-drop'
-                })
+                message.success(intl.get('changeSuccess'));
                 const newContent = {
                     ...props.content,
                     realeName: values.realeName,

@@ -4,7 +4,7 @@ import intl from "react-intl-universal";
 import {ExclamationCircleOutlined, LoadingOutlined, SearchOutlined} from "@ant-design/icons";
 import './management.scss'
 import {findAllProcess, findProcessUser, updateProcess} from "../../component/axios/api";
-import {green, yellow} from "../../baseInfo";
+import {yellow} from "../../baseInfo";
 
 const {Title} = Typography;
 
@@ -97,7 +97,7 @@ const ProcessManagement = () => {
         const processArray: string[] = process.split('||');
 
         return (
-            <Segmented options={processArray}/>
+            <Segmented options={processArray} onResize={undefined} onResizeCapture={undefined}/>
         )
     }
 

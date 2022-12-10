@@ -15,176 +15,177 @@ $font-light-45: rgba(255, 255, 255, 0.45);
 $font-light-65: rgba(255, 255, 255, 0.65);
 $font-light-85: rgba(255, 255, 255, 0.85);
 .home-body-dark {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    min-width: 600px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-width: 600px;
+  height: 100%;
+  display: flex;
+  background-color: $white;
+  box-sizing: border-box;
+  color: $white;
+
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+    background-color: $dark-1;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: $dark-6;
+  }
+
+  .home-left {
+    width: $body-left;
+    height: 100%;
+
+    .silder {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: $body-left;
+      outline: 1px solid $outline-dark;
+      height: 100%;
+      z-index: 120;
+      display: flex;
+      flex-flow: column;
+      background-color: $dark-3;
+
+      .top {
+        //min-height: 70px;
+        height: $body-top;
+        width: 100%;
+        outline: 1px solid $dark-1;
+        display: flex;
+        overflow: hidden;
+        background-color: $dark-1;
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        .logo {
+          position: absolute;
+          left: 25px;
+          top: 23px;
+        }
+
+        .ant-typography {
+          position: relative;
+          left: 55px;
+          top: -10px;
+          color: $white;
+        }
+      }
+
+      .silder_content {
+        display: flex;
+        width: 100%;
+        height: calc(100% - $body-top);
+        position: absolute;
+        top: $body-top;
+        left: 0;
+        overflow-y: auto;
+
+        .playout-menu {
+          width: 100%;
+
+          .ant-menu {
+            color: rgba(255, 255, 255, 0.65);
+            background: #001529;
+          }
+        }
+      }
+
+      border-top-left-radius: 10px;
+      border-bottom-left-radius: 10px;
+    }
+  }
+
+  .home-right {
+    width: calc(100% - #{$body-left});
     height: 100%;
     display: flex;
-    background-color: $white;
-    box-sizing: border-box;
-    color: $white;
+    flex-direction: column;
+    justify-content: space-between;
 
-    ::-webkit-scrollbar {
-        width: 4px;
-        background-color: $dark-1;
-    }
+    .header {
+      width: 100%;
+      height: $body-top;
+      min-height: $body-top-min;
+      background-color: $dark-1;
+      outline: 1px solid $outline-dark;
+      z-index: 120;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top-right-radius: 10px;
 
-    ::-webkit-scrollbar-thumb {
-        background-color: $dark-6;
-    }
+      .ant-breadcrumb {
+        padding-left: 20px;
+        color: $white;
 
-    .home-left {
-        width: $body-left;
-        height: 100%;
-
-        .silder {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: $body-left;
-            outline: 1px solid $outline-dark;
-            height: 100%;
-            z-index: 120;
-            display: flex;
-            flex-flow: column;
-            background-color: $dark-3;
-
-            .top {
-                //min-height: 70px;
-                height: $body-top;
-                width: 100%;
-                outline: 1px solid $dark-1;
-                display: flex;
-                overflow: hidden;
-                background-color: $dark-1;
-                position: absolute;
-                top: 0;
-                left: 0;
-
-                .logo {
-                    position: absolute;
-                    left: 25px;
-                    top: 23px;
-                }
-
-                .ant-typography {
-                    position: relative;
-                    left: 55px;
-                    top: 20px;
-                    color: $white;
-                }
+        li {
+          .ant-breadcrumb-link {
+            a {
+              color: #f1f2f6;
             }
+          }
 
-            .silder_content {
-                display: flex;
-                width: 100%;
-                height: calc(100% - $body-top);
-                position: absolute;
-                top: $body-top;
-                left: 0;
-                overflow-y: auto;
-
-                .playout-menu {
-                    width: 100%;
-
-                    .ant-menu {
-                        color: rgba(255, 255, 255, 0.65);
-                        background: #001529;
-                    }
-                }
-            }
-
-            border-top-left-radius: 10px;
-            border-bottom-left-radius: 10px;
-        }
-    }
-
-    .home-right {
-        width: calc(100% - #{$body-left});
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-
-        .header {
-            width: 100%;
-            height: $body-top;
-            min-height: $body-top-min;
-            background-color: $dark-1;
-            outline: 1px solid $outline-dark;
-            z-index: 120;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top-right-radius: 10px;
-
-            .ant-breadcrumb {
-                padding-left: 20px;
-                color: $white;
-
-                li {
-                    .ant-breadcrumb-link {
-                        a {
-                            color: #f1f2f6;
-                        }
-                    }
-
-                    .ant-breadcrumb-separator {
-                        color: $white;
-                    }
-                }
-            }
-
-            .right {
-                right: 20px;
-                height: 100%;
-                width: 20%;
-                display: flex;
-                justify-content: flex-end;
-                align-items: center;
-                padding-right: 10px;
-            }
-        }
-
-        .content {
-            position: absolute;
-            left: $body-left;
-            top: $body-top;
-            width: calc(100% - #{$body-left});
-            height: calc(100% - #{$body-top} - #{$body-bottom});
-            overflow-x: hidden;
-            overflow-y: auto;
-            background-color: $dark-2;
+          .ant-breadcrumb-separator {
             color: $white;
+          }
         }
+      }
 
-        .footer {
-            position: absolute;
-            left: $body-left;
-            bottom: 0;
-            width: calc(100% - #{$body-left});
-            height: $body-bottom;
-            min-height: $body-bottom-min;
-            background-color: $dark-1;
-            outline: 1px solid $outline-dark;
-            border-bottom-right-radius: 10px;
-            color: #8c8c8c;
-            z-index: 100;
-
-            .bq {
-                width: 100%;
-                height: 100%;
-
-                span {
-                    width: 100%;
-                    height: 100%;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                }
-            }
-        }
+      .right {
+        right: 20px;
+        height: 100%;
+        width: 20%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        padding-right: 10px;
+      }
     }
+
+    .content {
+      position: absolute;
+      left: $body-left;
+      top: $body-top;
+      width: calc(100% - #{$body-left});
+      height: calc(100% - #{$body-top} - #{$body-bottom});
+      overflow-x: hidden;
+      overflow-y: auto;
+      background-color: $dark-2;
+      color: $white;
+    }
+
+    .footer {
+      position: absolute;
+      left: $body-left;
+      bottom: 0;
+      width: calc(100% - #{$body-left});
+      height: $body-bottom;
+      min-height: $body-bottom-min;
+      background-color: $dark-1;
+      outline: 1px solid $outline-dark;
+      border-bottom-right-radius: 10px;
+      color: #8c8c8c;
+      z-index: 100;
+
+      .bq {
+        width: 100%;
+        height: 100%;
+
+        span {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+    }
+  }
 }

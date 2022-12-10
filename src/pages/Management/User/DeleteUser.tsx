@@ -1,4 +1,4 @@
-import {Button, Modal, notification, Popconfirm} from 'antd';
+import {Button, Modal, Popconfirm,message} from 'antd';
 import React from 'react';
 import {deleteUser} from "../../../component/axios/api";
 import {red} from "../../../baseInfo";
@@ -19,10 +19,7 @@ const DeleteUser: React.FC<delUser> = (props) => {
             content: intl.get('confirmDeleteUserNotice'),
             onOk() {
                 deleteUser(props.content.uid).then(() => {
-                    notification["success"]({
-                        message: intl.get('deleteUserSuccess'),
-                        className: 'back-drop'
-                    })
+                    message.success(intl.get('deleteUserSuccess'));
                     props.getChange('yes');
                 })
             }

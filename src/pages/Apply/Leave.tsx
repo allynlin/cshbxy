@@ -6,6 +6,8 @@ import './apply.scss';
 import Marquee from 'react-fast-marquee';
 import moment from "moment";
 import intl from "react-intl-universal";
+import dayjs from 'dayjs';
+import type {Dayjs} from 'dayjs';
 
 const {Title} = Typography;
 
@@ -144,6 +146,16 @@ const LeaveForm = () => {
         />
     );
 
+    const rangePresets: {
+        label: string;
+        value: [Dayjs, Dayjs];
+    }[] = [
+        {label: intl.get('today'), value: [dayjs(), dayjs()]},
+        {label: intl.get('oneDay'), value: [dayjs(), dayjs().add(1, 'day')]},
+        {label: intl.get('oneWeek'), value: [dayjs(), dayjs().add(7, 'd')]},
+        {label: intl.get('oneMonth'), value: [dayjs(), dayjs().add(30, 'd')]},
+    ];
+
     return (
         <div className={'apply-body'}>
             {isHaveLastLeave ? <RenderAlert/> : null}
@@ -165,9 +177,6 @@ const LeaveForm = () => {
                 labelCol={{span: 8}}
                 wrapperCol={{span: 16}}
                 onFinish={onFinish}
-                initialValues={{
-                    leaveTime: [moment(), moment().add(1, 'days')]
-                }}
             >
 
                 <Form.Item
@@ -180,14 +189,8 @@ const LeaveForm = () => {
                             <LoopAlert/>
                         }
                         showTime={true}
-                        format={"YYYY-MM-DD HH:mm:ss"}
-                        ranges={{
-                            [intl.get('fastChoose')]: [moment(), moment().add(1, 'days')],
-                            [intl.get('today')]: [moment(), moment().endOf('day')],
-                            [intl.get('oneDay')]: [moment(), moment().add(1, 'days')],
-                            [intl.get('oneWeek')]: [moment(), moment().add(1, 'weeks')],
-                            [intl.get('oneMonth')]: [moment(), moment().add(1, 'months')],
-                        }}
+                        format={"YYYY-MM-DD HH:mm:s"}
+                        presets={rangePresets}
                     />
                 </Form.Item>
 

@@ -1,4 +1,4 @@
-import React, {memo} from "react";
+import React from "react";
 import {Button, Form, Input, message, Radio, Switch} from 'antd';
 import './index.scss'
 import Cookie from 'js-cookie';
@@ -10,7 +10,7 @@ import {Department, Employee, Leader} from "../../component/redux/userTypeSlice"
 import {setUser} from "../../component/redux/userInfoSlice";
 import intl from "react-intl-universal";
 
-const StudentForm = memo(() => {
+const StudentForm = () => {
     const dispatch = useDispatch();
     const [form] = Form.useForm();
     const username = Form.useWatch('username', form);
@@ -170,7 +170,7 @@ const StudentForm = memo(() => {
             </Form.Item>
         </Form>
     )
-})
+}
 
 const Login = () => (
     <StudentForm/>

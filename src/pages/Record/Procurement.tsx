@@ -6,20 +6,26 @@ import {
     findProcurementList,
     findProcurementProcess,
     refreshProcurement
-} from '../../../component/axios/api';
-import '../index.scss';
-import {RenderStatusTag} from "../../../component/Tag/RenderStatusTag";
-import {red} from "../../../baseInfo";
+} from '../../component/axios/api';
+import './index.scss';
+import {RenderStatusTag} from "../../component/Tag/RenderStatusTag";
+import {red} from "../../baseInfo";
 import {ColumnsType} from "antd/es/table";
-import {RenderStatusColor} from "../../../component/Tag/RenderStatusColor";
-import {DataType} from "tdesign-react";
-import Update from "./Update";
+import {RenderStatusColor} from "../../component/Tag/RenderStatusColor";
 import intl from "react-intl-universal";
 
 const {Title} = Typography;
 const {Step} = Steps;
 
-const Index: React.FC = () => {
+interface DataType {
+    key: string;
+    name: string;
+    age: number;
+    address: string;
+    tags: string[];
+}
+
+const Procurement: React.FC = () => {
     // 防止反复查询变更记录
     const [isQuery, setIsQuery] = useState<boolean>(false);
     const [waitTime, setWaitTime] = useState<number>(0);
@@ -128,10 +134,6 @@ const Index: React.FC = () => {
     const getDataSource = () => {
         setIsQuery(true)
         setWaitTime(10)
-        // 防止多次点击
-        if (isQuery) {
-            return
-        }
         setLoading(true);
         findProcurementList().then(res => {
             if (res.code === 200) {
@@ -225,12 +227,6 @@ const Index: React.FC = () => {
                     <div style={{
                         display: 'flex'
                     }}>
-                        <Update state={content} getNewContent={(newContent: object) => {
-                            // 对比旧 content 查看是否有变化，有变化则重新查询
-                            if (JSON.stringify(newContent) !== JSON.stringify(content)) {
-                                refresh(content.uid)
-                            }
-                        }}/>
                         <Button
                             type="primary"
                             style={{
@@ -335,4 +331,4 @@ const Index: React.FC = () => {
     );
 };
 
-export default Index;
+export default Procurement;

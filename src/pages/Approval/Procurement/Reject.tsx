@@ -1,4 +1,4 @@
-import {Button, Form, Input, message, Modal, notification} from 'antd';
+import {Button, Form, Input, message, Modal} from 'antd';
 import React, {useState} from 'react';
 import {red} from "../../../baseInfo";
 import {rejectProcurement} from "../../../component/axios/api";
@@ -40,12 +40,8 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
                         form.resetFields();
                         onCreate(values);
                     })
-                    .catch(() => {
-                        notification["error"]({
-                            message: intl.get('rejectFailed'),
-                            description: intl.get('rejectReasonCannotBeEmpty'),
-                            className: 'back-drop'
-                        });
+                    .catch(err => {
+                        message.error(err.message);
                     });
             }}
         >

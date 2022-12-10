@@ -60,10 +60,6 @@ const ChangeForm = () => {
     const checkDepartmentChange = () => {
         setIsQuery(true)
         setWaitTime(10)
-        // 防止多次点击
-        if (isQuery) {
-            return
-        }
         checkTeacherChangeDepartment().then(res => {
             if (res.code === 200) {
                 setRenderResultTitle(intl.get('obtainLastTimeUploadFiles'))

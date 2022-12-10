@@ -1,4 +1,4 @@
-import {Button, Form, Input, Modal, notification} from 'antd';
+import {Button, Form, Input, Modal, message} from 'antd';
 import React, {useState} from 'react';
 import intl from "react-intl-universal";
 import {updatePassword} from "../../../component/axios/api";
@@ -40,12 +40,8 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
                         form.resetFields();
                         onCreate(values);
                     })
-                    .catch(() => {
-                        notification["error"]({
-                            message: intl.get('submitFailed'),
-                            description: intl.get('pleaseInputAllInfo'),
-                            className: 'back-drop'
-                        });
+                    .catch(err => {
+                        message.error(err.message);
                     });
             }}
         >
@@ -72,10 +68,7 @@ const ChangePassword: React.FC<changePassword> = (props) => {
     const onCreate = (values: any) => {
         updatePassword(props.uid, values.password).then(res => {
             if (res.code === 200) {
-                notification["success"]({
-                    message: intl.get('changeSuccess'),
-                    className: 'back-drop'
-                })
+                message.success(intl.get('changeSuccess'));
             }
         })
         setOpen(false);

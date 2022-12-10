@@ -1,4 +1,4 @@
-import React, {memo, useState} from "react";
+import React, {useState} from "react";
 import {Button, Form, Input, message, Radio, Select, Switch} from 'antd';
 import './index.scss'
 import Cookie from 'js-cookie';
@@ -10,7 +10,7 @@ import {login} from "../../component/redux/isLoginSlice";
 import {setUser} from "../../component/redux/userInfoSlice";
 import intl from "react-intl-universal";
 
-const RegisterStudent = memo(() => {
+const RegisterStudent = () => {
     const dispatch = useDispatch();
 
     const [form] = Form.useForm();
@@ -306,7 +306,7 @@ const RegisterStudent = memo(() => {
             </Form.Item>
         </Form>
     )
-})
+}
 
 const DepartmentLogin = () => (
     <RegisterStudent/>

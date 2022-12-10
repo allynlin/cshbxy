@@ -7,11 +7,7 @@ import intl from "react-intl-universal";
 
 export default function RenderGetServerVersion() {
 
-    const serverVersion = useSelector((state: {
-        serverVersion: {
-            value: string
-        }
-    }) => state.serverVersion.value);
+    const serverVersion = useSelector((state: any) => state.serverVersion.value);
 
     return (
         <Layout.Footer style={{
