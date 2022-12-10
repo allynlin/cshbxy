@@ -152,7 +152,7 @@
   "approveProcess": "Approve Process",
   "operate": "Operate",
   "refreshFileList": "Refresh File List",
-  "refreshProcessList": "Refresh Process List",
+  "refreshProcessList": "Refresh the current application item",
   "download": "Download",
   "noWorkReport": "No Work Report",
   "ok": "OK",

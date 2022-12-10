@@ -98,7 +98,6 @@ const StudentForm = () => {
                     {
                         required: true,
                         message: intl.get('pleaseInputUsername'),
-                        pattern: /^[a-zA-Z0-9]{1,20}$/
                     },
                 ]}
             >
@@ -112,7 +111,6 @@ const StudentForm = () => {
                     {
                         required: true,
                         message: intl.get('pleaseInputPassword'),
-                        pattern: /^[a-zA-Z0-9]{8,20}$/
                     },
                 ]}
             >

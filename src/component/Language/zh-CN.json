@@ -152,7 +152,7 @@
   "approveProcess": "审批流程",
   "operate": "操作",
   "refreshFileList": "刷新文件列表",
-  "refreshProcessList": "刷新流程列表",
+  "refreshProcessList": "刷新当前申请项",
   "download": "下载",
   "noWorkReport": "暂无工作汇报",
   "ok": "确定",

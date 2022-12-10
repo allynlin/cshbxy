@@ -206,14 +206,7 @@ export default function App() {
     }
 
     return (
-        <ConfigProvider
-            theme={{
-                token: {
-                    colorPrimary: '#ED4192'
-                },
-                algorithm: themeColor === "dark" ? theme.darkAlgorithm : theme.defaultAlgorithm,
-            }}
-            locale={
+        <ConfigProvider locale={
                 userLanguage === 'English' ? enUS : zhCN
             }>
             {/*// @ts-ignore*/}

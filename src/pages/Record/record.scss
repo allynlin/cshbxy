@@ -1,0 +1,62 @@
+.record-body {
+  width: calc(100% - 40px);
+  height: calc(100% - 40px);
+  padding: 20px;
+  position: relative;
+
+  .record-head {
+    margin-top: 5px;
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+
+    .tit {
+      margin-top: -5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  .skeleton-loading {
+    width: calc(100% - 40px);
+    height: calc(100% - 40px - 60px);
+    position: absolute;
+    z-index: 1000;
+    top: 80px;
+    left: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+
+    .skeleton-thead {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      width: 100%;
+      height: 55px;
+
+      .skeleton-td {
+        flex: 1;
+        width: 200px;
+        height: 40px;
+        margin-left: 2px;
+      }
+    }
+
+    .skeleton-tbody {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+
+      .skeleton-tr {
+        width: calc(100% - 4px);
+        height: 51px;
+        margin: 2px 2px 2px 2px;
+      }
+    }
+  }
+}
