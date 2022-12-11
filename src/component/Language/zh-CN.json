@@ -226,5 +226,6 @@
   "changeProcessSuccess": "修改流程成功",
   "close": "关闭",
   "details": "详情",
-  "advancedFeatures": "高级功能"
+  "advancedFeatures": "高级功能",
+  "mobileTerminal": "移动端"
 }

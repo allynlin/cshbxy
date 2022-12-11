@@ -10,11 +10,7 @@ const ThemeSetting = () => {
 
     const dispatch = useDispatch();
 
-    const sysColor: String = useSelector((state: {
-        sysColor: {
-            value: 'light' | 'dark' | 'sys'
-        }
-    }) => state.sysColor.value)
+    const sysColor: String = useSelector((state: any) => state.sysColor.value)
 
     const onChange = (e: RadioChangeEvent) => {
         switch (e.target.value) {

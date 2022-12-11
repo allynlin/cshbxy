@@ -5,8 +5,7 @@ import {useSelector} from "react-redux";
 import {version} from "../../baseInfo";
 import RenderRefreshButton from "../../component/Version/RenderRefreshButton";
 import {CloseCircleOutlined} from "@ant-design/icons";
-import './103.scss'
-import {RenderToggleLanguageSelect} from "../../component/Language/RenderToggleLanguageSelect";
+import './result.scss'
 import intl from "react-intl-universal";
 
 const {Paragraph, Text} = Typography;
@@ -130,7 +129,6 @@ export const Error103 = () => {
                         }}>{intl.get('backToHome')}</Button> : null
                     }
                     <RenderRefreshButton/>
-                    <RenderToggleLanguageSelect/>
                 </>
             }
         >

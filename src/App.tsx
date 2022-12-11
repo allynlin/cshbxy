@@ -23,6 +23,7 @@ import intl from 'react-intl-universal';
 import {setUser} from "./component/redux/userInfoSlice";
 import {setLowVersion} from "./component/redux/serverLowVersionSlice";
 import {green} from "./baseInfo";
+import ChangeSystem from "./component/ChangeSystem/ChangeSystem";
 
 const locals = {
     'English': require('./component/Language/en-US.json'),
@@ -206,13 +207,16 @@ export default function App() {
     }
 
     return (
-        <ConfigProvider locale={
+        <>
+            <ChangeSystem/>
+            <ConfigProvider locale={
                 userLanguage === 'English' ? enUS : zhCN
             }>
-            {/*// @ts-ignore*/}
-            <HistoryRouter basename={process.env.PUBLIC_URL} history={history}>
-                <RouterWaiter routes={routes} loading={<Spin/>} onRouteBefore={onRouteBefore}/>
-            </HistoryRouter>
-        </ConfigProvider>
+                {/*// @ts-ignore*/}
+                <HistoryRouter basename={process.env.PUBLIC_URL} history={history}>
+                    <RouterWaiter routes={routes} loading={<Spin/>} onRouteBefore={onRouteBefore}/>
+                </HistoryRouter>
+            </ConfigProvider>
+        </>
     );
 }

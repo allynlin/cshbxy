@@ -14,6 +14,13 @@ body {
   sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #ffffff;
+  color: #000000;
+
+  [data-scheme="dark"] & {
+    background-color: rgba(50, 49, 48, 1);
+    color: #ffffff;
+  }
 
   #root {
     width: 100%;

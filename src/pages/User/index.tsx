@@ -1,4 +1,4 @@
-import React, {useEffect, memo} from "react";
+import React, {useEffect} from "react";
 import {Layout, message} from 'antd';
 import './index.scss'
 import {Outlet, useNavigate} from "react-router-dom";
@@ -6,7 +6,6 @@ import {useSelector} from "react-redux";
 import {version} from "../../baseInfo";
 import RenderGetServerVersionPublic from "../../component/Version/RenderGetServerVersionPublic";
 import intl from "react-intl-universal";
-import {RenderToggleLanguageSelect} from "../../component/Language/RenderToggleLanguageSelect";
 
 const {Header, Content} = Layout;
 
@@ -34,7 +33,7 @@ export const User = () => {
     return (
         <Layout className="user-index">
             <Header>
-                <span>{intl.get('sysName')} &nbsp;<RenderToggleLanguageSelect/></span>
+                <span>{intl.get('sysName')}</span>
             </Header>
             <Content>
                 <Outlet/>
