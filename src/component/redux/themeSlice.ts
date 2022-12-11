@@ -11,10 +11,18 @@ export const themeSlice = createSlice({
         light: state => {
             state.value = 'light'
             document.body.setAttribute('theme', 'light')
+            document.documentElement.setAttribute(
+                'data-scheme',
+                'light'
+            )
         },
         dark: state => {
             state.value = 'dark'
             document.body.setAttribute('theme', 'dark')
+            document.documentElement.setAttribute(
+                'data-scheme',
+                'dark'
+            )
         }
     },
 })
