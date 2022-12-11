@@ -4,8 +4,7 @@ const record = [
         children: [
             {
                 path: 'departmentChange',
-                component: () => import('../pages/Record/DepartmentChangePreview'),
-                // component: () => import('../pages/Record/DepartmentChange'),
+                component: () => import('../pages/Record/DepartmentChange'),
                 meta: {
                     title: 'Department Change Record',
                     titleCN: '变更部门记录',
