@@ -4,7 +4,7 @@ import {Button, message, Skeleton, Typography, Form, Input, Modal} from 'antd';
 import {findUserByDepartment} from "../../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
-import '../management.scss';
+import '../../../App.scss';
 import {SearchOutlined} from "@ant-design/icons";
 import {green} from "../../../baseInfo";
 import {RenderUserStatusTag} from "../../../component/Tag/RenderUserStatusTag";
@@ -209,7 +209,7 @@ export default function DepartmentUser() {
                     </Button>,
                 ]}
             >
-                {showContent ? (<Skeleton paragraph={{rows: 13}} active/>) : (
+                {showContent ? (<Skeleton paragraph={{rows: 18}} active/>) : (
                     <>
                         <Title level={3}>{intl.get('baseInfo')}</Title>
                         <p>UID：{showInfo.uid}</p>

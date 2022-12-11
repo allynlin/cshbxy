@@ -1,8 +1,8 @@
-import {Button, List, Modal, Segmented, Spin, Tag, Transfer, Typography} from 'antd';
+import {Button, List, Modal, Segmented, Skeleton, Tag, Transfer, Typography} from 'antd';
 import React, {useEffect, useState} from 'react';
 import intl from "react-intl-universal";
-import {ExclamationCircleOutlined, LoadingOutlined, SearchOutlined} from "@ant-design/icons";
-import './index.scss'
+import {ExclamationCircleOutlined, SearchOutlined} from "@ant-design/icons";
+import '../../App.scss';
 import {findAllProcess, findProcessUser, updateProcess} from "../../component/axios/api";
 import {yellow} from "../../baseInfo";
 
@@ -22,6 +22,25 @@ const ProcessManagement = () => {
     const [dataSource, setDataSource] = useState<any>([]);
     const [content, setContent] = useState<any>(null);
     const [open, setOpen] = useState(false);
+
+    // 虚拟列表的宽度和高度
+    const [width, setWidth] = useState<number>(0);
+    const [height, setHeight] = useState<number>(0);
+
+    useEffect(() => {
+        // 获取页面宽度
+        const width = document.body.clientWidth;
+        // 获取页面高度
+        const height = document.body.clientHeight;
+        // 虚拟列表的宽度计算：页面宽度 - 左侧导航栏宽度（200）- 右侧边距（20） - 表格左右边距（20）
+        const tableWidth = width - 200 - 40;
+        // 虚拟列表高度计算：液面高度 - 页面顶部（10%，最小50px） - 页面底部（5%，最小20px） - 表格上下边距（20）
+        const bottomHeight = height * 0.05 >= 20 ? height * 0.05 : 20;
+        const topHeight = height * 0.1 >= 50 ? height * 0.1 : 50;
+        const tableHeight = height - bottomHeight - topHeight - 100;
+        setWidth(tableWidth);
+        setHeight(tableHeight);
+    }, [])
 
     useEffect(() => {
         getProcessPerson();
@@ -71,10 +90,6 @@ const ProcessManagement = () => {
         setLoading(true);
         setIsQuery(true)
         setWaitTime(10)
-        // 防止多次点击
-        if (isQuery) {
-            return
-        }
         findAllProcess().then(res => {
             const data = res.body.map((item: any, index: number) => {
                 return {
@@ -97,7 +112,7 @@ const ProcessManagement = () => {
         const processArray: string[] = process.split('||');
 
         return (
-            <Segmented options={processArray} onResize={undefined} onResizeCapture={undefined}/>
+            <Segmented options={processArray}/>
         )
     }
 
@@ -112,12 +127,14 @@ const ProcessManagement = () => {
     };
 
     return (
-        <div className={'management-body'}>
-            <Title level={2} className={'tit'}>
-                {intl.get('userManagement')}&nbsp;&nbsp;
-                <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
-                        onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
-            </Title>
+        <div className={'record-body'}>
+            <div className="record-head">
+                <Title level={2} className={'tit'}>
+                    {intl.get('userManagement')}&nbsp;&nbsp;
+                    <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
+                            onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
+                </Title>
+            </div>
             <Modal
                 open={open}
                 title={intl.get("changeProcess")}
@@ -154,13 +171,8 @@ const ProcessManagement = () => {
                     render={item => item.title}
                 />
             </Modal>
-            <Spin spinning={loading} indicator={<LoadingOutlined
-                style={{
-                    fontSize: 40,
-                }}
-                spin
-            />}>
-                <List
+            <div style={{width: width, height: height}}>
+                {loading ? <Skeleton active paragraph={{rows: 10}}/> : <List
                     itemLayout="horizontal"
                     dataSource={dataSource}
                     renderItem={(item: any) => (
@@ -195,8 +207,8 @@ const ProcessManagement = () => {
                             />
                         </List.Item>
                     )}
-                />
-            </Spin>
+                />}
+            </div>
         </div>
     )
 };

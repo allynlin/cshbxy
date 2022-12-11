@@ -25,7 +25,7 @@ import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
 import {RenderStatusTag} from "../../component/Tag/RenderStatusTag";
 import {RenderStatusColor} from "../../component/Tag/RenderStatusColor";
-import './record.scss';
+import '../../App.scss';
 import {FileTextOutlined, SearchOutlined} from "@ant-design/icons";
 import {red, green, DownLoadURL} from "../../baseInfo";
 
