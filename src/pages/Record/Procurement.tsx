@@ -1,42 +1,72 @@
-import {Button, Drawer, message, Modal, Skeleton, Space, Spin, Steps, Table, Tag, Typography} from 'antd';
-import {ExclamationCircleOutlined, LoadingOutlined, SearchOutlined} from '@ant-design/icons';
 import React, {useEffect, useState} from 'react';
+import VirtualTable from "../../component/virtualTable/VirtualTable";
+import {Button, message, Skeleton, Typography, Form, Input, Modal, Tag, Popconfirm, Steps, Space} from 'antd';
 import {
     deleteProcurement,
     findProcurementList,
     findProcurementProcess,
     refreshProcurement
-} from '../../component/axios/api';
-import './index.scss';
-import {RenderStatusTag} from "../../component/Tag/RenderStatusTag";
-import {red} from "../../baseInfo";
+} from "../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
-import {RenderStatusColor} from "../../component/Tag/RenderStatusColor";
 import intl from "react-intl-universal";
+import {RenderStatusTag} from "../../component/Tag/RenderStatusTag";
+import {RenderStatusColor} from "../../component/Tag/RenderStatusColor";
+import './record.scss';
+import {SearchOutlined} from "@ant-design/icons";
+import {red, green} from "../../baseInfo";
 
 const {Title} = Typography;
 const {Step} = Steps;
 
 interface DataType {
-    key: string;
-    name: string;
-    age: number;
-    address: string;
-    tags: string[];
+    key: React.Key;
+    dataIndex: string;
+    align: 'left' | 'right' | 'center';
 }
 
-const Procurement: React.FC = () => {
-    // 防止反复查询变更记录
+const App: React.FC = () => {
+
+    // 全局数据防抖
     const [isQuery, setIsQuery] = useState<boolean>(false);
     const [waitTime, setWaitTime] = useState<number>(0);
     const [loading, setLoading] = useState<boolean>(true);
-    const [dataSource, setDataSource] = useState([]);
-    const [content, setContent] = useState<any>({});
+    // 全局数据
+    const [dataSource, setDataSource] = useState<any>([]);
+    // 筛选后的数据
+    const [showData, setShowData] = useState<any>([]);
+    // 当前展示数据
+    const [showInfo, setShowInfo] = useState<any>({});
+    // 审批流程
     const [processList, setProcessList] = useState<any>([]);
-    const [open, setOpen] = useState(false);
-    const [openUid, setOpenUid] = useState<string>('');
-
+    // 刷新当前审批项按钮防抖
+    const [isRefresh, setIsRefresh] = useState<boolean>(false);
+    const [isRefreshWaitTime, setIsRefreshWaitTime] = useState<number>(0);
+    const [showContent, setShowContent] = useState<boolean>(true);
+    // 详情弹窗
+    const [showModal, setShowModal] = useState<boolean>(false);
+    // 审批流程
     const [processLoading, setProcessLoading] = useState<boolean>(true);
+    // 删除确认框
+    const [open, setOpen] = useState(false);
+    const [confirmLoading, setConfirmLoading] = useState(false);
+    // 虚拟列表的宽度和高度
+    const [width, setWidth] = useState<number>(0);
+    const [height, setHeight] = useState<number>(0);
+
+    useEffect(() => {
+        // 获取页面宽度
+        const width = document.body.clientWidth;
+        // 获取页面高度
+        const height = document.body.clientHeight;
+        // 虚拟列表的宽度计算：页面宽度 - 左侧导航栏宽度（200）- 右侧边距（20） - 表格左右边距（20）
+        const tableWidth = width - 200 - 40;
+        // 虚拟列表高度计算：液面高度 - 页面顶部（10%，最小50px） - 页面底部（5%，最小20px） - 表格上下边距（20）
+        const bottomHeight = height * 0.05 >= 20 ? height * 0.05 : 20;
+        const topHeight = height * 0.1 >= 50 ? height * 0.1 : 50;
+        const tableHeight = height - bottomHeight - topHeight - 100 - 43;
+        setWidth(tableWidth);
+        setHeight(tableHeight);
+    }, [])
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -54,77 +84,74 @@ const Procurement: React.FC = () => {
     }, [waitTime])
 
     useEffect(() => {
-        // 当 content 变化时，在 dataSource 中找到对应的 uid，将 content 赋值给 dataSource 中的对应 uid
-        let newDataSource: any = dataSource.map((item: any) => {
-            if (item.uid === content.uid) {
-                return content
+        const timer = setTimeout(() => {
+            if (isRefreshWaitTime > 1) {
+                setIsRefresh(true)
+                setIsRefreshWaitTime(e => e - 1)
             } else {
-                return item
+                setIsRefresh(false)
             }
-        })
-        setDataSource(newDataSource)
-    }, [content])
+        }, 1000)
+        return () => {
+            clearTimeout(timer)
+        }
+    }, [isRefreshWaitTime])
 
     const refresh = (uid: string) => {
-        setIsQuery(true)
-        setWaitTime(10)
-        if (isQuery) {
-            return
-        }
+        setIsRefresh(true)
+        setIsRefreshWaitTime(5)
+        setShowContent(true)
         refreshProcurement(uid).then(res => {
+            message.success(res.msg)
             let newContent = {
-                key: content.key,
-                id: content.id,
+                key: res.body.uid,
+                id: showInfo.id,
+                tag: RenderStatusTag(res.body.status, intl.get('leaveApply')),
+                operation: <Button
+                    type="primary"
+                    style={{
+                        backgroundColor: RenderStatusColor(res.body.status),
+                        borderColor: RenderStatusColor(res.body.status)
+                    }}
+                    onClick={() => {
+                        setShowInfo({...res.body, id: showInfo.id})
+                        getProcess(res.body.uid);
+                        setShowModal(true);
+                        setShowContent(false);
+                    }}>
+                    {intl.get('check')}
+                </Button>,
                 ...res.body
             }
-            setContent(newContent)
+            const newDataSource = dataSource.map((item: any) => {
+                if (item.key === newContent.key) {
+                    return newContent
+                }
+                return item
+            })
+            const newShowData = showData.map((item: any) => {
+                if (item.key === newContent.key) {
+                    return newContent
+                }
+                return item
+            })
+            setShowInfo(newContent)
+            setDataSource(newDataSource)
+            setShowData(newShowData)
+            setShowContent(false)
         })
-    }
-
-    // 获取当前记录上传的文件和当前审批流程
-    const getInfo = (uid: string) => {
-        setOpen(true);
-        getProcess(uid);
     }
 
     const getProcess = (uid: string) => {
         setProcessLoading(true)
-        const hide = message.loading(intl.get('gettingProcessList'), 0);
         findProcurementProcess(uid).then((res: any) => {
             setProcessList(res.body);
+        }).catch(err => {
+            message.error(err.message)
         }).finally(() => {
             setProcessLoading(false)
-            hide();
         })
     }
-
-
-    // 删除确认框
-    const showDeleteConfirm = (e: string) => {
-        Modal.confirm({
-            title: intl.get('deleteConfirm'),
-            icon: <ExclamationCircleOutlined/>,
-            content: intl.get('deleteCannotBeUndone'),
-            okText: intl.get('ok'),
-            okType: 'danger',
-            cancelText: intl.get('cancel'),
-            onOk() {
-                deleteProcurement(e).then((res: any) => {
-                    if (res.code === 200) {
-                        message.success(res.msg);
-                        setOpen(false);
-                        const arr = dataSource.filter((item: any) => item.uid !== e);
-                        setDataSource(arr);
-                        if (arr.length === 0) {
-                            message.warning(intl.get('noProcurementList'));
-                        }
-                    } else {
-                        message.error(res.msg);
-                    }
-                })
-            }
-        });
-    };
 
     useEffect(() => {
         getDataSource();
@@ -132,203 +159,220 @@ const Procurement: React.FC = () => {
 
     // 获取所有数据
     const getDataSource = () => {
+        setDataSource([]);
+        setShowData([]);
+        setLoading(true);
         setIsQuery(true)
         setWaitTime(10)
-        setLoading(true);
         findProcurementList().then(res => {
             if (res.code === 200) {
                 const newDataSource = res.body.map((item: any, index: number) => {
                     return {
                         ...item,
                         id: index + 1,
-                        key: item.uid
+                        key: item.uid,
+                        tag: RenderStatusTag(item.status, intl.get('leaveApply')),
+                        operation: <Button
+                            type="primary"
+                            style={{
+                                backgroundColor: RenderStatusColor(item.status),
+                                borderColor: RenderStatusColor(item.status)
+                            }}
+                            onClick={() => {
+                                setShowInfo({...item, id: index + 1});
+                                getProcess(item.uid);
+                                setShowModal(true);
+                                setShowContent(false);
+                            }}>
+                            {intl.get('check')}
+                        </Button>
                     }
                 });
                 setDataSource(newDataSource);
+                setShowData(newDataSource);
             } else {
                 message.warning(res.msg);
                 setDataSource([])
             }
         }).finally(() => {
-            setLoading(false);
+            setLoading(false)
         })
     }
 
-    const columns: ColumnsType<DataType> = [
-        {
-            title: 'id',
-            width: 100,
-            dataIndex: 'id',
-            key: 'id',
-            fixed: 'left',
-            align: 'center',
-        }, {
-            title: intl.get('procurementItem'),
-            dataIndex: 'items',
-            key: 'items',
-            width: 150,
-            align: 'center',
-        }, {
-            title: intl.get('procurementPrice'),
-            dataIndex: 'price',
-            key: 'price',
-            width: 150,
-            align: 'center',
-            render: (text: string) => {
-                return text + '￥'
+    const onFinish = (values: any) => {
+        // 如果什么内容都没有输入，那就把所有数据展示出来
+        if (!values.search) {
+            setShowData(dataSource);
+            return
+        }
+        // 如果有输入内容，那将 dataSource 中的 reason 进行模糊匹配
+        const newShowData = dataSource.filter((item: any) => {
+            return item.items.indexOf(values.search) !== -1
+        })
+        setShowData(newShowData);
+    };
+
+    // 删除当前项
+    const deleteItem = (uid: string) => {
+        setConfirmLoading(true);
+        setOpen(false)
+        deleteProcurement(uid).then((res: any) => {
+            if (res.code === 200) {
+                message.success(res.msg);
+                const newDataSource = dataSource.filter((item: any) => item.uid !== uid);
+                setDataSource(newDataSource);
+                const newShowData = showData.filter((item: any) => item.uid !== uid);
+                setShowData(newShowData);
+            } else {
+                message.error(res.msg);
             }
-        }, {
-            title: intl.get('status'),
-            dataIndex: 'status',
-            key: 'status',
-            width: 150,
-            align: 'center',
-            render: (text: number) => {
-                return (
-                    RenderStatusTag(text, intl.get('procurementApply'))
-                )
-            }
-        }, {
-            title: intl.get('operate'),
-            key: 'uid',
-            dataIndex: 'uid',
-            fixed: 'right',
-            width: 100,
-            align: 'center',
-            render: (text: any, record: any) => {
-                return (
-                    <Button
-                        type="primary"
-                        onClick={() => {
-                            setContent(record)
-                            getInfo(text)
-                            setOpenUid(text)
-                        }}
-                        style={{
-                            backgroundColor: RenderStatusColor(record.status),
-                            borderColor: RenderStatusColor(record.status)
-                        }}
-                    >{intl.get('check')}</Button>
-                );
-            }
-        },
-    ];
+        }).finally(() => {
+            setConfirmLoading(false);
+            setShowModal(false);
+        })
+    }
+    const columns: ColumnsType<DataType> = [{
+        title: 'id',
+        dataIndex: 'id',
+        align: 'center',
+    }, {
+        title: intl.get('procurementItem'),
+        dataIndex: 'items',
+        align: 'center',
+    }, {
+        title: intl.get('procurementPrice'),
+        dataIndex: 'price',
+        align: 'center',
+    }, {
+        title: intl.get('status'),
+        dataIndex: 'tag',
+        align: 'center',
+    }, {
+        title: intl.get('operate'),
+        dataIndex: 'operation',
+        align: 'center',
+    }];
 
     return (
         <div className={'record-body'}>
-            <Drawer
-                title={<span>{RenderStatusTag(content.status)}</span>}
-                placement="right"
-                open={open}
-                onClose={() => {
-                    setOpen(false)
-                }}
-                extra={content.status === 0 ?
-                    <div style={{
-                        display: 'flex'
-                    }}>
-                        <Button
-                            type="primary"
-                            style={{
-                                backgroundColor: red,
-                                borderColor: red,
-                                marginLeft: 10
-                            }}
-                            onClick={() => {
-                                showDeleteConfirm(content.uid);
-                            }}
-                        >{intl.get('delete')}</Button>
-                    </div> : <Button
+            <Modal
+                title={intl.get('details')}
+                onCancel={() => setShowModal(false)}
+                open={showModal}
+                footer={[
+                    showInfo.status === 0 ?
+                        <Popconfirm
+                            title={intl.get('deleteConfirm')}
+                            open={open}
+                            onConfirm={() => deleteItem(showInfo.uid)}
+                            onCancel={() => setOpen(false)}
+                        >
+                            <Button loading={confirmLoading} type="primary" danger key="delete"
+                                    onClick={() => setOpen(true)}>
+                                {intl.get('delete')}
+                            </Button>
+                        </Popconfirm> : null,
+                    <Button
+                        key="refresh"
                         type="primary"
-                        loading={processLoading}
-                        onClick={() => refresh(openUid)}
-                        icon={<SearchOutlined/>}
-                        disabled={isQuery}>
-                        {isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}
-                    </Button>}
+                        loading={isRefresh}
+                        onClick={() => {
+                            getProcess(showInfo.uid)
+                            refresh(showInfo.uid)
+                        }}
+                        disabled={isRefresh}>
+                        {isRefresh ? `${intl.get('refreshProcessList')}(${isRefreshWaitTime})` : intl.get('refreshProcessList')}
+                    </Button>,
+                    <Button
+                        key="link"
+                        type="primary"
+                        loading={loading}
+                        onClick={() => setShowModal(false)}
+                        style={{
+                            backgroundColor: green,
+                            borderColor: green
+                        }}
+                    >
+                        {intl.get('close')}
+                    </Button>,
+                ]}
             >
-                <p>{intl.get('procurementItem')}：{content.items}</p>
-                <p>{intl.get('procurementPrice')}：{content.price} ￥</p>
-                <p>{intl.get('reason')}：{content.reason}</p>
-                {content.reject_reason ?
+                {showContent ? (<Skeleton active/>) : (
                     <>
-                        {intl.get('rejectReason')}：
-                        <Tag color={red}
-                             style={{marginBottom: 16}}>{content.reject_reason}</Tag>
-                    </> : null}
-                <p>{intl.get('createTime')}：{content.create_time}</p>
-                <p>{intl.get('updateTime')}：{content.update_time}</p>
-                {
-                    processLoading ? (
-                            <Space style={{flexDirection: 'column'}}>
-                                <Skeleton.Input active={true} block={false}/>
-                                <Skeleton.Input active={true} block={false}/>
-                                <Skeleton.Input active={true} block={false}/>
-                                <Skeleton.Input active={true} block={false}/>
-                            </Space>) :
-                        <div style={{marginTop: 16}}>
-                            {content.status === 0 ? <Button
-                                type="primary"
-                                loading={processLoading}
-                                onClick={() => {
-                                    getProcess(openUid)
-                                    refresh(openUid)
-                                }}
-                                disabled={isQuery}>
-                                {isQuery ? `${intl.get('refreshProcessList')}(${waitTime})` : intl.get('refreshProcessList')}
-                            </Button> : null}
-                            <div style={{marginTop: 16}}>{intl.get('approveProcess')}：</div>
-                            <Steps
-                                style={{
-                                    marginTop: 16
-                                }}
-                                direction="vertical"
-                                size="small"
-                                current={content.count}
-                                status={content.status === 0 ? 'process' : content.status === 1 ? 'finish' : 'error'}
-                            >
-                                {
-                                    processList.map((item: string, index: number) => {
-                                        return (
-                                            <Step
-                                                key={index}
-                                                title={item}
-                                            />
-                                        )
-                                    })
-                                }
-                            </Steps>
-                        </div>
-                }
-            </Drawer>
-            <Title level={2} className={'tit'}>
-                {intl.get('procurement') + ' ' + intl.get('record')}&nbsp;&nbsp;
-                <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
-                        onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
-            </Title>
-            <Spin spinning={loading} indicator={<LoadingOutlined
-                style={{
-                    fontSize: 40,
-                }}
-                spin
-            />}>
-                <Table
-                    columns={columns}
-                    dataSource={dataSource}
-                    scroll={{x: 1000}}
-                    sticky={true}
-                    pagination={{
-                        showSizeChanger: true,
-                        total: dataSource.length,
-                        showQuickJumper: true,
-                        pageSizeOptions: [5, 10, 20, 50, 100, 200],
-                        defaultPageSize: 5,
-                        hideOnSinglePage: true
-                    }}
-                />
-            </Spin>
+                        <p>{intl.get('procurementItem')}：{showInfo.items}</p>
+                        <p>{intl.get('procurementPrice')}：{showInfo.price} ￥</p>
+                        <p>{intl.get('reason')}：{showInfo.reason}</p>
+                        {showInfo.reject_reason ?
+                            <>
+                                {intl.get('rejectReason')}：
+                                <Tag color={red}>{showInfo.reject_reason}</Tag>
+                            </> : null}
+                        <p>{intl.get('createTime')}：{showInfo.create_time}</p>
+                        <p>{intl.get('updateTime')}：{showInfo.update_time}</p>
+                        <div>{intl.get('approveProcess')}：</div>
+                        {
+                            processLoading ? (
+                                    <Space style={{flexDirection: 'column', marginTop: 16}}>
+                                        <Skeleton.Input active={true} block={false}/>
+                                        <Skeleton.Input active={true} block={false}/>
+                                        <Skeleton.Input active={true} block={false}/>
+                                        <Skeleton.Input active={true} block={false}/>
+                                    </Space>) :
+                                <div style={{marginTop: 16}}>
+                                    <Steps
+                                        style={{
+                                            marginTop: 16
+                                        }}
+                                        direction="vertical"
+                                        size="small"
+                                        current={showInfo.count}
+                                        status={showInfo.status === 0 ? 'process' : showInfo.status === 1 ? 'finish' : 'error'}
+                                    >
+                                        {
+                                            processList.map((item: string, index: number) => {
+                                                return (
+                                                    <Step
+                                                        key={index}
+                                                        title={item}
+                                                    />
+                                                )
+                                            })
+                                        }
+                                    </Steps>
+                                </div>
+                        }
+                    </>
+                )}
+            </Modal>
+            <div className="record-head">
+                <Title level={2} className={'tit'}>
+                    {intl.get('procurement') + ' ' + intl.get('record')}&nbsp;&nbsp;
+                    <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
+                            onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
+                </Title>
+                <Form name="search" layout="inline" onFinish={onFinish}>
+                    <Form.Item name="search">
+                        <Input prefix={<SearchOutlined className="site-form-item-icon"/>}
+                               placeholder="搜索物品"/>
+                    </Form.Item>
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit">Search</Button>
+                    </Form.Item>
+                </Form>
+            </div>
+            <div className="skeleton-loading" style={{display: loading ? 'block' : 'none'}}>
+                <div className="skeleton-thead"/>
+                <div className="skeleton-tbody">
+                    <Skeleton.Button block active className={'skeleton-tr'}/>
+                    <Skeleton.Button block active className={'skeleton-tr'}/>
+                    <Skeleton.Button block active className={'skeleton-tr'}/>
+                    <Skeleton.Button block active className={'skeleton-tr'}/>
+                    <Skeleton.Button block active className={'skeleton-tr'}/>
+                </div>
+            </div>
+            <VirtualTable columns={columns} dataSource={showData} scroll={{y: height, x: width}}/>
         </div>
-    );
+    )
 };
 
-export default Procurement;
+export default App;

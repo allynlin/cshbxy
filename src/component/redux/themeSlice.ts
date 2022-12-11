@@ -10,7 +10,6 @@ export const themeSlice = createSlice({
     reducers: {
         light: state => {
             state.value = 'light'
-            document.body.setAttribute('theme', 'light')
             document.documentElement.setAttribute(
                 'data-scheme',
                 'light'
@@ -18,7 +17,6 @@ export const themeSlice = createSlice({
         },
         dark: state => {
             state.value = 'dark'
-            document.body.setAttribute('theme', 'dark')
             document.documentElement.setAttribute(
                 'data-scheme',
                 'dark'

@@ -1,4 +1,4 @@
-import {Table, TableProps} from "antd";
+import {Table, TableProps, Typography} from "antd";
 import React, {useEffect, useRef, useState} from "react";
 import {VariableSizeGrid as Grid} from "react-window";
 import classNames from "classnames";
@@ -91,7 +91,9 @@ const VirtualTable = <RecordType extends object>(props: TableProps<RecordType>) 
                             marginTop: 10
                         }}
                     >
-                        {(rawData[rowIndex] as any)[(mergedColumns as any)[columnIndex].dataIndex]}
+                        <Typography.Paragraph ellipsis>
+                            {(rawData[rowIndex] as any)[(mergedColumns as any)[columnIndex].dataIndex]}
+                        </Typography.Paragraph>
                     </div>
                 )}
             </Grid>

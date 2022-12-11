@@ -16,8 +16,6 @@ export const User = () => {
 
     const serverVersion = useSelector((state: any) => state.serverVersion.value);
 
-    const themeColor: String = useSelector((state: any) => state.themeColor.value)
-
     const serverLowVersion = useSelector((state: { serverLowVersion: { value: string } }) => state.serverLowVersion.value);
 
     useEffect(() => {
@@ -34,7 +32,7 @@ export const User = () => {
 
 
     return (
-        <Layout className={themeColor === 'dark' ? 'user-dark' : 'user-light'}>
+        <Layout className="user-index">
             <Header>
                 <span>{intl.get('sysName')} &nbsp;<RenderToggleLanguageSelect/></span>
             </Header>
