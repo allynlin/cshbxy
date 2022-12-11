@@ -8,7 +8,7 @@ import {
     ProjectOutlined,
 } from '@ant-design/icons';
 import React, {useEffect, useState} from 'react';
-import './playOut-light.scss'
+import './playOut.scss'
 import {Link, useLocation} from 'react-router-dom';
 import {useSelector} from "react-redux";
 import type {MenuProps} from 'antd/es/menu';

@@ -3,33 +3,41 @@ $body-top-min: 50px;
 $body-left: 200px;
 $body-bottom: 5%;
 $body-bottom-min: 20px;
-$white: #ffffff;
+$black: #000000;
 $dark: #434343;
 $dark-1: #141414;
 $dark-2: #323130;
 $dark-3: #001529;
 $dark-6: #bfbfbf;
 $outline-dark: #303030;
+$white: #ffffff;
 $font-light: rgba(255, 255, 255, 1);
 $font-light-45: rgba(255, 255, 255, 0.45);
 $font-light-65: rgba(255, 255, 255, 0.65);
 $font-light-85: rgba(255, 255, 255, 0.85);
-.home-body-dark {
+.home-body {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  min-width: 600px;
+  min-width: 1000px;
   height: 100%;
   display: flex;
-  background-color: $white;
   box-sizing: border-box;
-  color: $white;
+  color: $black;
+
+  [data-scheme='dark'] & {
+    color: $white;
+  }
 
   ::-webkit-scrollbar {
     width: 4px;
     height: 4px;
-    background-color: $dark-1;
+    background-color: $white;
+
+    [data-scheme='dark'] & {
+      background-color: $dark-1;
+    }
   }
 
   ::-webkit-scrollbar-thumb {
@@ -44,25 +52,34 @@ $font-light-85: rgba(255, 255, 255, 0.85);
       position: absolute;
       top: 0;
       left: 0;
+      background-color: $white;
       width: $body-left;
-      outline: 1px solid $outline-dark;
+      outline: 1px solid rgb(219, 219, 219);
       height: 100%;
       z-index: 120;
       display: flex;
       flex-flow: column;
-      background-color: $dark-3;
+
+      [data-scheme='dark'] & {
+        background-color: $dark-3;
+        outline: 1px solid $outline-dark;
+      }
 
       .top {
-        //min-height: 70px;
         height: $body-top;
         width: 100%;
-        outline: 1px solid $dark-1;
+        outline: 1px solid rgb(219, 219, 219);
+        background-color: $white;
         display: flex;
         overflow: hidden;
-        background-color: $dark-1;
         position: absolute;
         top: 0;
         left: 0;
+
+        [data-scheme='dark'] & {
+          outline: 1px solid $dark-1;
+          background-color: $dark-1;
+        }
 
         .logo {
           position: absolute;
@@ -74,14 +91,13 @@ $font-light-85: rgba(255, 255, 255, 0.85);
           position: relative;
           left: 55px;
           top: -10px;
-          color: $white;
         }
       }
 
       .silder_content {
         display: flex;
         width: 100%;
-        height: calc(100% - $body-top);
+        height: calc(100% - #{$body-top});
         position: absolute;
         top: $body-top;
         left: 0;
@@ -90,15 +106,14 @@ $font-light-85: rgba(255, 255, 255, 0.85);
         .playout-menu {
           width: 100%;
 
-          .ant-menu {
-            color: rgba(255, 255, 255, 0.65);
-            background: #001529;
+          [data-scheme='dark'] & {
+            .ant-menu {
+              color: rgba(255, 255, 255, 0.65);
+              background: #001529;
+            }
           }
         }
       }
-
-      border-top-left-radius: 10px;
-      border-bottom-left-radius: 10px;
     }
   }
 
@@ -110,30 +125,47 @@ $font-light-85: rgba(255, 255, 255, 0.85);
     justify-content: space-between;
 
     .header {
-      width: 100%;
+      position: absolute;
+      top: 0;
+      left: $body-left;
+      width: calc(100% - #{$body-left});
       height: $body-top;
       min-height: $body-top-min;
-      background-color: $dark-1;
-      outline: 1px solid $outline-dark;
+      background-color: $white;
+      outline: 1px solid rgb(219, 219, 219);
       z-index: 120;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-top-right-radius: 10px;
+
+      [data-scheme='dark'] & {
+        background-color: $dark-1;
+        outline: 1px solid $outline-dark;
+      }
 
       .ant-breadcrumb {
         padding-left: 20px;
-        color: $white;
+        color: $black;
+
+        [data-scheme='dark'] & {
+          color: $white;
+        }
 
         li {
-          .ant-breadcrumb-link {
-            a {
-              color: #f1f2f6;
-            }
+          &:last-child a {
+            color: #8395a7;
           }
 
-          .ant-breadcrumb-separator {
-            color: $white;
+          [data-scheme='dark'] & {
+            .ant-breadcrumb-link {
+              a {
+                color: #f1f2f6;
+              }
+            }
+
+            .ant-breadcrumb-separator {
+              color: $white;
+            }
           }
         }
       }
@@ -157,8 +189,13 @@ $font-light-85: rgba(255, 255, 255, 0.85);
       height: calc(100% - #{$body-top} - #{$body-bottom});
       overflow-x: hidden;
       overflow-y: auto;
-      background-color: $dark-2;
-      color: $white;
+      background-color: $white;
+      color: $black;
+
+      [data-scheme='dark'] & {
+        background-color: $dark-2;
+        color: $white;
+      }
     }
 
     .footer {
@@ -168,11 +205,15 @@ $font-light-85: rgba(255, 255, 255, 0.85);
       width: calc(100% - #{$body-left});
       height: $body-bottom;
       min-height: $body-bottom-min;
-      background-color: $dark-1;
-      outline: 1px solid $outline-dark;
-      border-bottom-right-radius: 10px;
+      background-color: $white;
+      outline: 1px solid rgb(219, 219, 219);
       color: #8c8c8c;
       z-index: 100;
+
+      [data-scheme='dark'] & {
+        background-color: $dark-1;
+        outline: 1px solid $outline-dark;
+      }
 
       .bq {
         width: 100%;
