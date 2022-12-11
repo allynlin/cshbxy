@@ -15,11 +15,11 @@ import {
     Card
 } from 'antd';
 import {
-    deleteTravelReimbursementApply, deleteWorkReport,
-    findTravelProcess,
-    findTravelReimbursementApplyList,
-    findUploadFilesByUid, findWorkReportByTeacherProcess, findWorkReportList,
-    refreshTravel, refreshWorkReport
+    deleteWorkReport,
+    findUploadFilesByUid,
+    findWorkReportByTeacherProcess,
+    findWorkReportList,
+    refreshWorkReport
 } from "../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";

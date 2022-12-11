@@ -130,7 +130,7 @@ const ProcessManagement = () => {
         <div className={'record-body'}>
             <div className="record-head">
                 <Title level={2} className={'tit'}>
-                    {intl.get('userManagement')}&nbsp;&nbsp;
+                    {intl.get('processManagement')}&nbsp;&nbsp;
                     <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
                             onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
                 </Title>
