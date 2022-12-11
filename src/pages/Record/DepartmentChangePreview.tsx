@@ -15,10 +15,11 @@ import {
     Card
 } from 'antd';
 import {
-    deleteTravelReimbursementApply,
+    checkTeacherChangeDepartmentRecord, deleteChangeDepartmentByTeacher,
+    deleteTravelReimbursementApply, findChangeDepartmentByTeacherProcess,
     findTravelProcess,
     findTravelReimbursementApplyList,
-    findUploadFilesByUid,
+    findUploadFilesByUid, refreshDepartmentChange,
     refreshTravel
 } from "../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
@@ -32,7 +33,7 @@ import {red, green, DownLoadURL} from "../../baseInfo";
 const {Title} = Typography;
 const {Step} = Steps;
 
-const tableName = `Travel`;
+const tableName = `ChangeDepartment`;
 
 interface DataType {
     key: React.Key;
@@ -120,7 +121,7 @@ const App: React.FC = () => {
         setIsRefresh(true)
         setIsRefreshWaitTime(5)
         setShowContent(true)
-        refreshTravel(uid).then(res => {
+        refreshDepartmentChange(uid).then(res => {
             message.success(res.msg)
             let newContent = {
                 key: res.body.uid,
@@ -164,7 +165,7 @@ const App: React.FC = () => {
 
     const getProcess = (uid: string) => {
         setProcessLoading(true)
-        findTravelProcess(uid).then((res: any) => {
+        findChangeDepartmentByTeacherProcess(uid).then((res: any) => {
             setProcessList(res.body);
         }).catch(err => {
             message.error(err.message)
@@ -197,7 +198,7 @@ const App: React.FC = () => {
         setLoading(true);
         setIsQuery(true)
         setWaitTime(10)
-        findTravelReimbursementApplyList().then((res: any) => {
+        checkTeacherChangeDepartmentRecord().then((res: any) => {
             if (res.code === 200) {
                 const newDataSource = res.body.map((item: any, index: number) => {
                     return {
@@ -241,7 +242,7 @@ const App: React.FC = () => {
         }
         // 如果有输入内容，那将 dataSource 中的 destination 进行模糊匹配
         const newShowData = dataSource.filter((item: any) => {
-            return item.destination.indexOf(values.search) !== -1
+            return item.departmentUid.indexOf(values.search) !== -1
         })
         setShowData(newShowData);
     };
@@ -250,7 +251,7 @@ const App: React.FC = () => {
     const deleteItem = (uid: string) => {
         setConfirmLoading(true);
         setOpen(false)
-        deleteTravelReimbursementApply(uid).then((res: any) => {
+        deleteChangeDepartmentByTeacher(uid, tableName).then((res: any) => {
             if (res.code === 200) {
                 message.success(res.msg);
                 const newDataSource = dataSource.filter((item: any) => item.uid !== uid);
@@ -270,12 +271,12 @@ const App: React.FC = () => {
         dataIndex: 'id',
         align: 'center',
     }, {
-        title: intl.get('destination'),
-        dataIndex: 'destination',
+        title: intl.get('departmentChange'),
+        dataIndex: 'departmentUid',
         align: 'center',
     }, {
-        title: intl.get('cost'),
-        dataIndex: 'expenses',
+        title: intl.get('reason'),
+        dataIndex: 'changeReason',
         align: 'center',
     }, {
         title: intl.get('status'),
@@ -334,9 +335,8 @@ const App: React.FC = () => {
             >
                 {showContent ? (<Skeleton active/>) : (
                     <>
-                        <p>{intl.get('destination')}：{showInfo.destination}</p>
-                        <p>{intl.get('cost')}：{showInfo.expenses}</p>
-                        <p>{intl.get('reason')}：{showInfo.reason}</p>
+                        <p>{intl.get('departmentChange')}：{showInfo.departmentUid}</p>
+                        <p>{intl.get('reason')}：{showInfo.changeReason}</p>
                         {showInfo.reject_reason ?
                             <>
                                 {intl.get('rejectReason')}：
@@ -408,14 +408,14 @@ const App: React.FC = () => {
             </Modal>
             <div className="record-head">
                 <Title level={2} className={'tit'}>
-                    {intl.get('travelReimburse') + ' ' + intl.get('record')}&nbsp;&nbsp;
+                    {intl.get('departmentChange') + ' ' + intl.get('record')}&nbsp;&nbsp;
                     <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
                             onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
                 </Title>
                 <Form name="search" layout="inline" onFinish={onFinish}>
                     <Form.Item name="search">
                         <Input prefix={<SearchOutlined className="site-form-item-icon"/>}
-                               placeholder={intl.get('search') + ' ' + intl.get('department')}/>
+                               placeholder={intl.get('search') + ' ' + intl.get('destination')}/>
                     </Form.Item>
                     <Form.Item>
                         <Button type="primary" htmlType="submit">Search</Button>

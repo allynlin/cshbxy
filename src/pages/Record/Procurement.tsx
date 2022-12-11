@@ -353,7 +353,7 @@ const App: React.FC = () => {
                 <Form name="search" layout="inline" onFinish={onFinish}>
                     <Form.Item name="search">
                         <Input prefix={<SearchOutlined className="site-form-item-icon"/>}
-                               placeholder="搜索物品"/>
+                               placeholder={intl.get('search') + ' ' + intl.get('procurementItem')}/>
                     </Form.Item>
                     <Form.Item>
                         <Button type="primary" htmlType="submit">Search</Button>

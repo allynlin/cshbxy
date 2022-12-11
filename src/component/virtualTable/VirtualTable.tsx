@@ -87,8 +87,10 @@ const VirtualTable = <RecordType extends object>(props: TableProps<RecordType>) 
                         })}
                         style={{
                             ...style,
-                            textAlign: "center",
-                            marginTop: 10
+                            marginTop: 10,
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
                         }}
                     >
                         <Typography.Paragraph ellipsis>
