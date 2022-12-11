@@ -60,3 +60,44 @@
     }
   }
 }
+
+.skeleton-file {
+  width: 100%;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+
+  > div.ant-skeleton.ant-skeleton-element {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .ant-skeleton-image {
+      width: 100%;
+      height: 100%;
+
+      .skeleton-files {
+        font-size: 60px;
+        color: #bfbfbf;
+      }
+    }
+  }
+}
+
+.showFile {
+  width: 100%;
+  height: 150px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  display: flex;
+  align-items: center;
+  background-color: rgba(236, 236, 236, 1);
+  border-radius: 3px;
+
+  .file-item {
+    margin-left: 10px;
+    width: 200px;
+  }
+}

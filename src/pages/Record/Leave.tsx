@@ -28,7 +28,7 @@ const App: React.FC = () => {
     // 全局数据
     const [dataSource, setDataSource] = useState<any>([]);
     // 筛选后的数据
-    const [showData, setShowData] = useState([]);
+    const [showData, setShowData] = useState<any>([]);
     // 当前展示数据
     const [showInfo, setShowInfo] = useState<any>({});
     // 审批流程
@@ -99,18 +99,40 @@ const App: React.FC = () => {
         refreshLeave(uid).then(res => {
             message.success(res.msg)
             let newContent = {
-                key: showInfo.key,
+                key: res.body.uid,
                 id: showInfo.id,
+                tag: RenderStatusTag(res.body.status, intl.get('leaveApply')),
+                operation: <Button
+                    type="primary"
+                    style={{
+                        backgroundColor: RenderStatusColor(res.body.status),
+                        borderColor: RenderStatusColor(res.body.status)
+                    }}
+                    onClick={() => {
+                        setShowInfo({...res.body, id: showInfo.id})
+                        getProcess(res.body.uid);
+                        setShowModal(true);
+                        setShowContent(false);
+                    }}>
+                    {intl.get('check')}
+                </Button>,
                 ...res.body
             }
             const newDataSource = dataSource.map((item: any) => {
-                if (item.key === showInfo.key) {
+                if (item.key === newContent.key) {
+                    return newContent
+                }
+                return item
+            })
+            const newShowData = showData.map((item: any) => {
+                if (item.key === newContent.key) {
                     return newContent
                 }
                 return item
             })
             setShowInfo(newContent)
             setDataSource(newDataSource)
+            setShowData(newShowData)
             setShowContent(false)
         })
     }
@@ -123,7 +145,6 @@ const App: React.FC = () => {
             message.error(err.message)
         }).finally(() => {
             setProcessLoading(false)
-            setShowContent(false)
         })
     }
 
@@ -153,9 +174,10 @@ const App: React.FC = () => {
                                 borderColor: RenderStatusColor(item.status)
                             }}
                             onClick={() => {
-                                setShowInfo(item);
+                                setShowInfo({...item, id: index + 1});
                                 getProcess(item.uid);
                                 setShowModal(true);
+                                setShowContent(false);
                             }}>
                             {intl.get('check')}
                         </Button>
@@ -270,7 +292,7 @@ const App: React.FC = () => {
                     </Button>,
                 ]}
             >
-                {showContent ? (<Skeleton/>) : (
+                {showContent ? (<Skeleton active/>) : (
                     <>
                         <p>{intl.get('startTime')}：{showInfo.start_time}</p>
                         <p>{intl.get('endTime')}：{showInfo.end_time}</p>
