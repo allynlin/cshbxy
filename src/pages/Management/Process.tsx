@@ -2,7 +2,7 @@ import {Button, List, Modal, Segmented, Spin, Tag, Transfer, Typography} from 'a
 import React, {useEffect, useState} from 'react';
 import intl from "react-intl-universal";
 import {ExclamationCircleOutlined, LoadingOutlined, SearchOutlined} from "@ant-design/icons";
-import './management.scss'
+import './index.scss'
 import {findAllProcess, findProcessUser, updateProcess} from "../../component/axios/api";
 import {yellow} from "../../baseInfo";
 

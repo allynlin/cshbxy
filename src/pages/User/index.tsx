@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, memo} from "react";
 import {Layout, message} from 'antd';
 import './index.scss'
 import {Outlet, useNavigate} from "react-router-dom";

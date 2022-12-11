@@ -1,18 +1,18 @@
-import {Button, Col, Divider, Drawer, Input, InputRef, Row, Space, Spin, Table, Tag, Typography} from 'antd';
-import {LoadingOutlined, SearchOutlined,} from '@ant-design/icons';
-import React, {useEffect, useRef, useState} from 'react';
-import '../management.scss'
-import {RenderUserStatusColor} from "../../../component/Tag/RenderUserStatusColor";
-import intl from "react-intl-universal";
+import React, {useEffect, useState} from 'react';
+import VirtualTable from "../../../component/virtualTable/VirtualTable";
+import {Button, message, Skeleton, Typography, Form, Input, Modal} from 'antd';
 import {findUserByDepartment} from "../../../component/axios/api";
+import {ColumnsType} from "antd/es/table";
+import intl from "react-intl-universal";
+import '../management.scss';
+import {SearchOutlined} from "@ant-design/icons";
+import {green} from "../../../baseInfo";
 import {RenderUserStatusTag} from "../../../component/Tag/RenderUserStatusTag";
-import type {ColumnsType, ColumnType} from 'antd/es/table';
-import type {FilterConfirmProps} from 'antd/es/table/interface';
-import Highlighter from 'react-highlight-words';
 import {RenderUserTypeTag} from "../../../component/Tag/RenderUserTypeTag";
-import ChangePassword from "./ChangePassword";
-import ChangeUsername from "./ChangeUsername";
+import {RenderUserStatusColor} from "../../../component/Tag/RenderUserStatusColor";
+import ChangeUserName from "./ChangeUserName";
 import ChangeUserInfo from "./ChangeUserInfo";
+import ChangePassword from "./ChangePassword";
 import ChangeUserStatus from "./ChangeUserStatus";
 import {useSelector} from "react-redux";
 
@@ -20,34 +20,45 @@ const {Title} = Typography;
 
 interface DataType {
     key: React.Key;
-    id: number;
-    uid: string;
-    username: string;
-    realeName: string;
-    status: number;
-    userType: string;
+    dataIndex: string;
+    align: 'left' | 'right' | 'center';
 }
 
-type DataIndex = keyof DataType;
+export default function DepartmentUser() {
 
-interface DescriptionItemProps {
-    title: string;
-    content: React.ReactNode;
-}
-
-const Index: React.FC = () => {
-    // 防止反复查询变更记录
+    // 全局数据防抖
     const [isQuery, setIsQuery] = useState<boolean>(false);
     const [waitTime, setWaitTime] = useState<number>(0);
-    const [loading, setLoading] = useState(true);
-    const [dataSource, setDataSource] = useState([]);
-    const [content, setContent] = useState<any>({});
-    const [open, setOpen] = useState(false);
-    const [searchText, setSearchText] = useState('');
-    const [searchedColumn, setSearchedColumn] = useState('');
-    const searchInput = useRef<InputRef>(null);
+    const [loading, setLoading] = useState<boolean>(true);
+    // 全局数据
+    const [dataSource, setDataSource] = useState<any>([]);
+    // 筛选后的数据
+    const [showData, setShowData] = useState<any>([]);
+    // 当前展示数据
+    const [showInfo, setShowInfo] = useState<any>({});
+    const [showContent, setShowContent] = useState<boolean>(true);
+    // 详情弹窗
+    const [showModal, setShowModal] = useState<boolean>(false);
+    // 虚拟列表的宽度和高度
+    const [width, setWidth] = useState<number>(0);
+    const [height, setHeight] = useState<number>(0);
 
-    const userInfo = useSelector((state: { userInfo: { value: any } }) => state.userInfo.value);
+    const userInfo = useSelector((state: any) => state.userInfo.value);
+
+    useEffect(() => {
+        // 获取页面宽度
+        const width = document.body.clientWidth;
+        // 获取页面高度
+        const height = document.body.clientHeight;
+        // 虚拟列表的宽度计算：页面宽度 - 左侧导航栏宽度（200）- 右侧边距（20） - 表格左右边距（20）
+        const tableWidth = width - 200 - 40;
+        // 虚拟列表高度计算：液面高度 - 页面顶部（10%，最小50px） - 页面底部（5%，最小20px） - 表格上下边距（20）
+        const bottomHeight = height * 0.05 >= 20 ? height * 0.05 : 20;
+        const topHeight = height * 0.1 >= 50 ? height * 0.1 : 50;
+        const tableHeight = height - bottomHeight - topHeight - 100 - 43;
+        setWidth(tableWidth);
+        setHeight(tableHeight);
+    }, [])
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -64,9 +75,27 @@ const Index: React.FC = () => {
         }
     }, [waitTime])
 
-    const onClose = () => {
-        setOpen(false);
-    };
+    const RenderUserStatus = (status: number) => {
+        switch (status) {
+            case 0:
+                return RenderUserStatusTag(intl.get('normal'))
+            case -1:
+                return RenderUserStatusTag(intl.get('disabled'))
+            default:
+                return RenderUserStatusTag(intl.get('unKnow'))
+        }
+    }
+
+    const RenderUserOperateButton = (status: number) => {
+        switch (status) {
+            case 0:
+                return RenderUserStatusColor(intl.get('normal'))
+            case -1:
+                return RenderUserStatusColor(intl.get('disabled'))
+            default:
+                return RenderUserStatusColor(intl.get('unKnow'))
+        }
+    }
 
     useEffect(() => {
         getDataSource();
@@ -74,344 +103,343 @@ const Index: React.FC = () => {
 
     // 获取所有数据
     const getDataSource = () => {
+        setDataSource([]);
+        setShowData([]);
         setLoading(true);
         setIsQuery(true)
         setWaitTime(10)
-        // 防止多次点击
-        if (isQuery) {
-            return
-        }
         findUserByDepartment(userInfo.uid).then(res => {
-            const data = res.body.map((item: any, index: number) => {
-                return {
-                    ...item,
-                    key: item.uid,
-                    id: index + 1,
-                    status: item.status === 0 ? intl.get('normal') : item.status === -1 ? intl.get('disabled') : intl.get('unKnow'),
-                    departmentUid: item.departmentUid === null ? intl.get('unKnow') : item.departmentUid,
-                }
-            })
-            setDataSource(data)
+            if (res.code === 200) {
+                const newDataSource = res.body.map((item: any, index: number) => {
+                    return {
+                        ...item,
+                        id: index + 1,
+                        key: item.uid,
+                        tag: RenderUserStatus(item.status),
+                        showUserType: RenderUserTypeTag(item.userType),
+                        operation: <Button
+                            type="primary"
+                            style={{
+                                backgroundColor: RenderUserOperateButton(item.status),
+                                borderColor: RenderUserOperateButton(item.status)
+                            }}
+                            onClick={() => {
+                                setShowInfo({
+                                    ...item,
+                                    id: index + 1,
+                                    key: item.uid,
+                                    tag: RenderUserStatus(item.status),
+                                    showUserType: RenderUserTypeTag(item.userType),
+                                });
+                                setShowModal(true);
+                                setShowContent(false);
+                            }}>
+                            {intl.get('check')}
+                        </Button>
+                    }
+                });
+                setDataSource(newDataSource);
+                setShowData(newDataSource);
+            } else {
+                message.warning(res.msg);
+                setDataSource([])
+            }
         }).finally(() => {
             setLoading(false)
         })
     }
 
-    const handleSearch = (
-        selectedKeys: string[],
-        confirm: (param?: FilterConfirmProps) => void,
-        dataIndex: DataIndex,
-    ) => {
-        confirm();
-        setSearchText(selectedKeys[0]);
-        setSearchedColumn(dataIndex);
+    const onFinish = (values: any) => {
+        // 如果什么内容都没有输入，那就把所有数据展示出来
+        if (!values.search) {
+            setShowData(dataSource);
+            return
+        }
+        // 如果有输入内容，那将 dataSource 中的 reason 进行模糊匹配
+        const newShowData = dataSource.filter((item: any) => {
+            return item.username.indexOf(values.search) !== -1
+        })
+        setShowData(newShowData);
     };
 
-    const handleReset = (clearFilters: () => void) => {
-        clearFilters();
-        setSearchText('');
-    };
+    const columns: ColumnsType<DataType> = [{
+        title: 'id',
+        dataIndex: 'id',
+        align: 'center',
+    }, {
+        title: intl.get('username'),
+        dataIndex: 'username',
+        align: 'center',
+    }, {
+        title: intl.get('realName'),
+        dataIndex: 'realeName',
+        align: 'center',
+    }, {
+        title: intl.get('status'),
+        dataIndex: 'tag',
+        align: 'center',
+    }, {
+        title: intl.get('userType'),
+        dataIndex: 'showUserType',
+        align: 'center',
+    }, {
+        title: intl.get('operate'),
+        dataIndex: 'operation',
+        align: 'center',
+    }];
 
-    const getColumnSearchProps = (dataIndex: DataIndex, name: string): ColumnType<DataType> => ({
-        filterDropdown: ({setSelectedKeys, selectedKeys, confirm, clearFilters}) => (
-            <div style={{padding: 8}}>
-                <Input
-                    ref={searchInput}
-                    placeholder={`${intl.get('search')} ${name}`}
-                    value={selectedKeys[0]}
-                    onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-                    onPressEnter={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
-                    style={{marginBottom: 8, display: 'block'}}
-                />
-                <Space>
+    return (
+        <div className={'record-body'}>
+            <Modal
+                title={intl.get('userInfo')}
+                onCancel={() => setShowModal(false)}
+                open={showModal}
+                footer={[
                     <Button
+                        key="link"
                         type="primary"
-                        onClick={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
-                        icon={<SearchOutlined/>}
-                        size="small"
-                        style={{width: 90}}
-                    >
-                        {intl.get('search')}
-                    </Button>
-                    <Button
-                        onClick={() => clearFilters && handleReset(clearFilters)}
-                        size="small"
-                        style={{width: 90}}
-                    >
-                        {intl.get('reset')}
-                    </Button>
-                </Space>
-            </div>
-        ),
-        filterIcon: (filtered: boolean) => (
-            <SearchOutlined style={{color: filtered ? '#1890ff' : undefined}}/>
-        ),
-        onFilter: (value, record) =>
-            record[dataIndex]
-                .toString()
-                .toLowerCase()
-                .includes((value as string).toLowerCase()),
-        onFilterDropdownOpenChange: visible => {
-            if (visible) {
-                setTimeout(() => searchInput.current?.select(), 100);
-            }
-        },
-        render: text =>
-            searchedColumn === dataIndex ? (
-                <Highlighter
-                    highlightStyle={{backgroundColor: '#ffc069', padding: 0}}
-                    searchWords={[searchText]}
-                    autoEscape
-                    textToHighlight={text ? text.toString() : ''}
-                />
-            ) : (
-                text
-            ),
-    });
-
-    const columns: ColumnsType<DataType> = [
-        {
-            title: 'id',
-            width: 100,
-            dataIndex: 'id',
-            key: 'id',
-            fixed: 'left',
-            align: 'center',
-        }, {
-            title: intl.get('username'),
-            dataIndex: 'username',
-            key: 'username',
-            width: 150,
-            align: 'center',
-            ...getColumnSearchProps('username', intl.get('username')),
-        }, {
-            title: intl.get('realName'),
-            dataIndex: 'realeName',
-            key: 'realeName',
-            width: 150,
-            align: 'center',
-            ...getColumnSearchProps('realeName', intl.get('realName')),
-        }, {
-            title: intl.get('status'),
-            dataIndex: 'status',
-            key: 'status',
-            width: 150,
-            align: 'center',
-            defaultSortOrder: 'descend',
-            sorter: (a, b) => a.status - b.status,
-            filters: [
-                {
-                    text: intl.get('normal'),
-                    value: intl.get('normal'),
-                },
-                {
-                    text: intl.get('disabled'),
-                    value: intl.get('disabled'),
-                },
-            ],
-            onFilter: (value: any, record) => record.status.toString().indexOf(value) === 0,
-            filterSearch: true,
-            render: (text: string) => {
-                return (
-                    RenderUserStatusTag(text)
-                )
-            },
-        }, {
-            title: intl.get('userType'),
-            dataIndex: 'userType',
-            key: 'userType',
-            width: 150,
-            align: 'center',
-            defaultSortOrder: 'descend',
-            sorter: (a, b) => a.userType.length - b.userType.length,
-            filters: [
-                {
-                    text: intl.get('department'),
-                    value: 'Department',
-                },
-                {
-                    text: intl.get('leader'),
-                    value: 'Leader',
-                },
-                {
-                    text: intl.get('employee'),
-                    value: 'Employee',
-                },
-            ],
-            onFilter: (value: any, record) => record.userType.indexOf(value) === 0,
-            filterSearch: true,
-            render: (text: string) => {
-                return (
-                    RenderUserTypeTag(text)
-                )
-            }
-        }, {
-            title: intl.get('operate'),
-            key: 'uid',
-            dataIndex: 'uid',
-            fixed: 'right',
-            width: 100,
-            align: 'center',
-            render: (text: any, record: any) => {
-                return (
-                    <Button
-                        type="primary"
-                        onClick={() => {
-                            setContent(record)
-                            setOpen(true)
-                        }}
+                        loading={loading}
+                        onClick={() => setShowModal(false)}
                         style={{
-                            backgroundColor: RenderUserStatusColor(record.status),
-                            borderColor: RenderUserStatusColor(record.status)
+                            backgroundColor: green,
+                            borderColor: green
                         }}
-                    >{intl.get('check')}</Button>
-                );
-            }
-        },
-    ];
-
-    const DescriptionItem = ({title, content}: DescriptionItemProps) => (
-        <div className="site-description-item-profile-wrapper">
-            <p className="site-description-item-profile-p-label">
-                {title}:&nbsp;
-                <Tag color="default">{content}</Tag>
-            </p>
-        </div>
-    );
-
-    const DescriptionNoStyleItem = ({title, content}: DescriptionItemProps) => (
-        <div className="site-description-item-profile-wrapper">
-            <div className="site-description-item-profile-p-label">
-                {title}:&nbsp;{content}
+                    >
+                        {intl.get('close')}
+                    </Button>,
+                ]}
+            >
+                {showContent ? (<Skeleton paragraph={{rows: 13}} active/>) : (
+                    <>
+                        <Title level={3}>{intl.get('baseInfo')}</Title>
+                        <p>UID：{showInfo.uid}</p>
+                        {showInfo.departmentUid ? (<p>{intl.get('department')}：{showInfo.departmentUid}</p>) : null}
+                        <p>{intl.get('username')}：{showInfo.username}</p>
+                        <p>{intl.get('realName')}：{showInfo.realeName}</p>
+                        <p>{intl.get('gender')}：{showInfo.gender}</p>
+                        <p>{intl.get('email')}：{showInfo.email}</p>
+                        <p>{intl.get('tel')}：{showInfo.tel}</p>
+                        <p>{intl.get('createTime')}：{showInfo.create_time}</p>
+                        <p>{intl.get('updateTime')}：{showInfo.update_time}</p>
+                        <p>{intl.get('status')}：{showInfo.tag}</p>
+                        <p>{intl.get('userType')}：{showInfo.showUserType}</p>
+                        <Title level={3}>{intl.get('userOperation')}</Title>
+                        <p>{<ChangePassword uid={showInfo.uid}/>}</p>
+                        <p>
+                            {<ChangeUserName info={showInfo} getChange={(newUsername: string) => {
+                                // 修改 showInfo 中的 username
+                                setShowInfo({
+                                    ...showInfo,
+                                    username: newUsername
+                                })
+                                // 修改 dataSource 中的 username
+                                const newDataSource = dataSource.map((item: any) => {
+                                    if (item.uid === showInfo.uid) {
+                                        return {
+                                            ...item,
+                                            username: newUsername,
+                                            operation: <Button
+                                                type="primary"
+                                                style={{
+                                                    backgroundColor: RenderUserOperateButton(item.status),
+                                                    borderColor: RenderUserOperateButton(item.status)
+                                                }}
+                                                onClick={() => {
+                                                    setShowInfo({
+                                                        ...showInfo,
+                                                        username: newUsername
+                                                    });
+                                                    setShowModal(true);
+                                                    setShowContent(false);
+                                                }}>
+                                                {intl.get('check')}
+                                            </Button>
+                                        }
+                                    }
+                                    return item
+                                })
+                                setDataSource(newDataSource)
+                                // 修改 showData 中的 username
+                                const newShowData = showData.map((item: any) => {
+                                    if (item.uid === showInfo.uid) {
+                                        return {
+                                            ...item,
+                                            username: newUsername,
+                                            operation: <Button
+                                                type="primary"
+                                                style={{
+                                                    backgroundColor: RenderUserOperateButton(item.status),
+                                                    borderColor: RenderUserOperateButton(item.status)
+                                                }}
+                                                onClick={() => {
+                                                    setShowInfo({
+                                                        ...showInfo,
+                                                        username: newUsername
+                                                    });
+                                                    setShowModal(true);
+                                                    setShowContent(false);
+                                                }}>
+                                                {intl.get('check')}
+                                            </Button>
+                                        }
+                                    }
+                                    return item
+                                })
+                                setShowData(newShowData)
+                            }}/>}
+                        </p>
+                        <p>
+                            {<ChangeUserInfo info={showInfo} getChange={(newContent: any) => {
+                                setShowInfo({...showInfo, ...newContent})
+                                const newDateSource = dataSource.map((item: any) => {
+                                    if (item.uid === showInfo.uid) {
+                                        return {
+                                            ...showInfo,
+                                            ...newContent,
+                                            operation: <Button
+                                                type="primary"
+                                                style={{
+                                                    backgroundColor: RenderUserOperateButton(item.status),
+                                                    borderColor: RenderUserOperateButton(item.status)
+                                                }}
+                                                onClick={() => {
+                                                    setShowInfo({
+                                                        ...showInfo,
+                                                        ...newContent
+                                                    });
+                                                    setShowModal(true);
+                                                    setShowContent(false);
+                                                }}>
+                                                {intl.get('check')}
+                                            </Button>
+                                        }
+                                    }
+                                    return item
+                                })
+                                setDataSource(newDateSource)
+                                const newShowData = showData.map((item: any) => {
+                                    if (item.uid === showInfo.uid) {
+                                        return {
+                                            ...showInfo,
+                                            ...newContent,
+                                            operation: <Button
+                                                type="primary"
+                                                style={{
+                                                    backgroundColor: RenderUserOperateButton(item.status),
+                                                    borderColor: RenderUserOperateButton(item.status)
+                                                }}
+                                                onClick={() => {
+                                                    setShowInfo({
+                                                        ...showInfo,
+                                                        ...newContent
+                                                    });
+                                                    setShowModal(true);
+                                                    setShowContent(false);
+                                                }}>
+                                                {intl.get('check')}
+                                            </Button>
+                                        }
+                                    }
+                                    return item
+                                })
+                                setShowData(newShowData)
+                            }}/>}
+                        </p>
+                        <p>
+                            {<ChangeUserStatus info={showInfo} getChange={(newStatus: number) => {
+                                setShowInfo({
+                                    ...showInfo,
+                                    tag: RenderUserStatus(newStatus),
+                                    status: newStatus,
+                                })
+                                const newDateSource = dataSource.map((item: any) => {
+                                    if (item.uid === showInfo.uid) {
+                                        return {
+                                            ...item,
+                                            tag: RenderUserStatus(newStatus),
+                                            status: newStatus,
+                                            operation: <Button
+                                                type="primary"
+                                                style={{
+                                                    backgroundColor: RenderUserOperateButton(newStatus),
+                                                    borderColor: RenderUserOperateButton(newStatus)
+                                                }}
+                                                onClick={() => {
+                                                    setShowInfo({
+                                                        ...showInfo,
+                                                        status: newStatus,
+                                                        tag: RenderUserStatus(newStatus),
+                                                    });
+                                                    setShowModal(true);
+                                                    setShowContent(false);
+                                                }}>
+                                                {intl.get('check')}
+                                            </Button>
+                                        }
+                                    }
+                                    return item
+                                })
+                                setDataSource(newDateSource)
+                                const newShowData = showData.map((item: any) => {
+                                    if (item.uid === showInfo.uid) {
+                                        return {
+                                            ...item,
+                                            tag: RenderUserStatus(newStatus),
+                                            status: newStatus,
+                                            operation: <Button
+                                                type="primary"
+                                                style={{
+                                                    backgroundColor: RenderUserOperateButton(newStatus),
+                                                    borderColor: RenderUserOperateButton(newStatus)
+                                                }}
+                                                onClick={() => {
+                                                    setShowInfo({
+                                                        ...showInfo,
+                                                        status: newStatus,
+                                                        tag: RenderUserStatus(newStatus),
+                                                    });
+                                                    setShowModal(true);
+                                                    setShowContent(false);
+                                                }}>
+                                                {intl.get('check')}
+                                            </Button>
+                                        }
+                                    }
+                                    return item
+                                })
+                                setShowData(newShowData)
+                            }}/>}
+                        </p>
+                    </>
+                )}
+            </Modal>
+            <div className="record-head">
+                <Title level={2} className={'tit'}>
+                    {intl.get('userManagement')}&nbsp;&nbsp;
+                    <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
+                            onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
+                </Title>
+                <Form name="search" layout="inline" onFinish={onFinish}>
+                    <Form.Item name="search">
+                        <Input prefix={<SearchOutlined className="site-form-item-icon"/>}
+                               placeholder={intl.get('search') + ' ' + intl.get('username')}/>
+                    </Form.Item>
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit">Search</Button>
+                    </Form.Item>
+                </Form>
             </div>
+            <div className="skeleton-loading" style={{display: loading ? 'block' : 'none'}}>
+                <div className="skeleton-thead"/>
+                <div className="skeleton-tbody">
+                    <Skeleton.Button block active className={'skeleton-tr'}/>
+                    <Skeleton.Button block active className={'skeleton-tr'}/>
+                    <Skeleton.Button block active className={'skeleton-tr'}/>
+                    <Skeleton.Button block active className={'skeleton-tr'}/>
+                    <Skeleton.Button block active className={'skeleton-tr'}/>
+                </div>
+            </div>
+            <VirtualTable columns={columns} dataSource={showData} scroll={{y: height, x: width}}/>
         </div>
-    );
-
-    return (<div className={'management-body'}>
-            <Title level={2} className={'tit'}>
-                {intl.get('userManagement')}&nbsp;&nbsp;
-                <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
-                        onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
-            </Title>
-            <Drawer width={640} placement="right" closable={false} onClose={onClose} open={open}>
-                <p className="site-description-item-profile-p" style={{marginBottom: 24}}>
-                    {intl.get('userInfo')}
-                </p>
-                <p className="site-description-item-profile-p">{intl.get('baseInfo')}</p>
-                <Row>
-                    <Col span={12}>
-                        <DescriptionItem title={'UID'} content={content.uid}/>
-                    </Col>
-                    <Col span={12}>
-                        <DescriptionItem title={intl.get('username')} content={content.username}/>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span={12}>
-                        <DescriptionItem title={intl.get('realName')} content={content.realeName}/>
-                    </Col>
-                    <Col span={12}>
-                        <DescriptionItem title={intl.get('gender')} content={content.gender}/>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span={12}>
-                        <DescriptionItem title={intl.get('email')} content={content.email}/>
-                    </Col>
-                    <Col span={12}>
-                        <DescriptionItem title={intl.get('tel')} content={content.tel}/>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span={12}>
-                        <DescriptionItem title={intl.get('createTime')} content={content.create_time}/>
-                    </Col>
-                    <Col span={12}>
-                        <DescriptionItem title={intl.get('updateTime')} content={content.update_time}/>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span={12}>
-                        <DescriptionNoStyleItem title={intl.get('status')}
-                                                content={RenderUserStatusTag(content.status)}/>
-                    </Col>
-                    <Col span={12}>
-                        <DescriptionNoStyleItem title={intl.get('userType')}
-                                                content={RenderUserTypeTag(content.userType)}/>
-                    </Col>
-                </Row>
-                <Divider/>
-                <p className="site-description-item-profile-p">{intl.get('userOperation')}</p>
-                <Row>
-                    <Col span={12}>
-                        {<ChangePassword uid={content.uid}/>}
-                    </Col>
-                    <Col span={12}>
-                        {<ChangeUsername content={content} getChange={(newUsername: string) => {
-                            if (newUsername === content.username)
-                                return
-                            setContent({...content, username: newUsername})
-                            const newDateSource: any = dataSource.map((item: any) => {
-                                if (item.uid === content.uid) {
-                                    return {...item, username: newUsername}
-                                }
-                                return item
-                            })
-                            setDataSource(newDateSource)
-                        }}/>}
-                    </Col>
-                </Row>
-                <Row style={{marginTop: 16}}>
-                    <Col span={12}>
-                        {<ChangeUserInfo content={content} getChange={(newContent: any) => {
-                            setContent(newContent)
-                            const newDateSource: any = dataSource.map((item: any) => {
-                                if (item.uid === content.uid) {
-                                    return {...newContent}
-                                }
-                                return item
-                            })
-                            setDataSource(newDateSource)
-                        }}/>}
-                    </Col>
-                    <Col span={12}>
-                        {<ChangeUserStatus content={content} getChange={(newStatus: string) => {
-                            if (newStatus === content.status)
-                                return
-                            setContent({...content, status: newStatus})
-                            const newDateSource: any = dataSource.map((item: any) => {
-                                if (item.uid === content.uid) {
-                                    return {...item, status: newStatus}
-                                }
-                                return item
-                            })
-                            setDataSource(newDateSource)
-                        }}/>}
-                    </Col>
-                </Row>
-            </Drawer>
-            <Spin spinning={loading} indicator={<LoadingOutlined
-                style={{
-                    fontSize: 40,
-                }}
-                spin
-            />}>
-                <Table
-                    columns={columns}
-                    dataSource={dataSource}
-                    scroll={{x: 1000}}
-                    sticky={true}
-                    pagination={{
-                        showSizeChanger: true,
-                        total: dataSource.length,
-                        showQuickJumper: true,
-                        pageSizeOptions: [5, 10, 20, 50, 100, 200],
-                        defaultPageSize: 50
-                    }}
-                />
-            </Spin>
-        </div>
-    );
+    )
 };
-
-export default Index;

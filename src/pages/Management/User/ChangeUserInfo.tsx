@@ -1,49 +1,76 @@
-import {Button, Form, Input, message, Modal, Radio} from 'antd';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from "react";
+import {Button, Form, Input, message, Modal, Radio} from "antd";
+import {lime7} from "../../../baseInfo";
 import intl from "react-intl-universal";
 import {updateUserInfo} from "../../../component/axios/api";
-import {lime7} from "../../../baseInfo";
 
-interface Values {
-    title: string;
-    description: string;
-    modifier: string;
-}
-
-interface CollectionCreateFormProps {
-    open: boolean;
-    onCreate: (values: Values) => void;
-    onCancel: () => void;
-}
-
-interface changeUserInfo {
-    content: any;
+interface propsCheck {
+    info: any;
     getChange: any;
 }
 
-const ChangeUserInfo: React.FC<changeUserInfo> = (props) => {
+export default function ChangeUserInfo(props: propsCheck) {
+
+    // 打开修改弹窗
     const [open, setOpen] = useState(false);
+    // 给按钮添加 loading 并且禁用
+    const [loading, setLoading] = useState(false);
 
-    const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
-                                                                           open,
-                                                                           onCreate,
-                                                                           onCancel,
-                                                                       }) => {
-        const [form] = Form.useForm();
+    const [form] = Form.useForm();
 
-        return (
+    useEffect(() => {
+        form.setFieldsValue({
+            realeName: props.info.realeName,
+            email: props.info.email,
+            tel: props.info.tel,
+            gender: props.info.gender
+        })
+    }, [props.info])
+
+    const changeUserInfo = (values: any) => {
+        setLoading(true);
+        updateUserInfo(props.info.uid, values.realeName, values.gender, values.tel, values.email).then(res => {
+            if (res.code === 200) {
+                message.success(intl.get('changeSuccess'));
+                const newContent = {
+                    realeName: values.realeName,
+                    gender: values.gender,
+                    tel: values.tel,
+                    email: values.email
+                }
+                props.getChange(newContent)
+                setOpen(false);
+            }
+        }).finally(() => {
+            setLoading(false);
+        })
+    }
+
+    return (
+        <div>
+            <Button
+                type="primary"
+                loading={loading}
+                disabled={loading}
+                style={{backgroundColor: lime7, borderColor: lime7}}
+                onClick={() => {
+                    setOpen(true);
+                }}
+            >
+                {intl.get('changeUserInfo')}
+            </Button>
             <Modal
                 open={open}
-                title={intl.get("changeUserInfo")}
+                title={intl.get("changeUsername")}
                 okText={intl.get('ok')}
+                confirmLoading={loading}
                 cancelText={intl.get('cancel')}
-                onCancel={onCancel}
+                onCancel={() => setOpen(false)}
                 onOk={() => {
                     form
                         .validateFields()
                         .then(values => {
-                            form.resetFields();
-                            onCreate(values);
+                            changeUserInfo(values);
                         })
                         .catch(err => {
                             message.error(err.message);
@@ -54,12 +81,6 @@ const ChangeUserInfo: React.FC<changeUserInfo> = (props) => {
                     form={form}
                     layout="vertical"
                     name="form_in_modal"
-                    initialValues={{
-                        realeName: props.content.realeName,
-                        email: props.content.email,
-                        tel: props.content.tel,
-                        gender: props.content.gender
-                    }}
                 >
                     <Form.Item
                         label={intl.get('realName')}
@@ -68,11 +89,10 @@ const ChangeUserInfo: React.FC<changeUserInfo> = (props) => {
                             {
                                 required: true,
                                 message: intl.get('pleaseInputRealName'),
-                                pattern: /^[\u4e00-\u9fa5]{2,4}$/
                             },
                         ]}
                     >
-                        <Input showCount maxLength={4} allowClear={true}/>
+                        <Input showCount maxLength={10} allowClear={true}/>
                     </Form.Item>
 
                     <Form.Item
@@ -120,46 +140,6 @@ const ChangeUserInfo: React.FC<changeUserInfo> = (props) => {
                     </Form.Item>
                 </Form>
             </Modal>
-        );
-    };
-
-    const onCreate = (values: any) => {
-        updateUserInfo(props.content.uid, values.realeName, values.gender, values.tel, values.email).then(res => {
-            if (res.code === 200) {
-                message.success(intl.get('changeSuccess'));
-                const newContent = {
-                    ...props.content,
-                    realeName: values.realeName,
-                    gender: values.gender,
-                    tel: values.tel,
-                    email: values.email
-                }
-                props.getChange(newContent)
-            }
-        })
-        setOpen(false);
-    };
-
-    return (
-        <div>
-            <Button
-                type="primary"
-                style={{backgroundColor: lime7, borderColor: lime7}}
-                onClick={() => {
-                    setOpen(true);
-                }}
-            >
-                {intl.get('changeUserInfo')}
-            </Button>
-            <CollectionCreateForm
-                open={open}
-                onCreate={onCreate}
-                onCancel={() => {
-                    setOpen(false);
-                }}
-            />
         </div>
-    );
-};
-
-export default ChangeUserInfo;
+    )
+}

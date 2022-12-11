@@ -1,16 +1,18 @@
 import {Button, message, Modal, Popconfirm} from 'antd';
-import React from 'react';
+import React, {useState} from 'react';
 import {deleteUser} from "../../../component/axios/api";
 import {red} from "../../../baseInfo";
 import intl from "react-intl-universal";
 import {ExclamationCircleOutlined} from '@ant-design/icons';
 
-interface delUser {
+interface propsCheck {
     content: any;
     getChange: any;
 }
 
-const DeleteUser: React.FC<delUser> = (props) => {
+export default function DeleteUser(props: propsCheck) {
+
+    const [loading, setLoading] = useState(false);
 
     const showConfirm = () => {
         Modal.confirm({
@@ -18,8 +20,10 @@ const DeleteUser: React.FC<delUser> = (props) => {
             icon: <ExclamationCircleOutlined/>,
             content: intl.get('confirmDeleteUserNotice'),
             onOk() {
+                setLoading(true);
                 deleteUser(props.content.uid).then(() => {
                     message.success(intl.get('deleteUserSuccess'));
+                    setLoading(false);
                     props.getChange('yes');
                 })
             }
@@ -29,6 +33,8 @@ const DeleteUser: React.FC<delUser> = (props) => {
     return (
         <Popconfirm title={intl.get('confirmDeleteUser')} onConfirm={showConfirm}>
             <Button
+                disabled={loading}
+                loading={loading}
                 type="primary"
                 style={{backgroundColor: red, borderColor: red}}>
                 {intl.get('deleteUser')}
@@ -36,5 +42,3 @@ const DeleteUser: React.FC<delUser> = (props) => {
         </Popconfirm>
     )
 };
-
-export default DeleteUser;

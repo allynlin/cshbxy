@@ -1,83 +1,40 @@
-import {Button, Form, Input, message, Modal} from 'antd';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from "react";
+import {Button, Form, Input, message, Modal} from "antd";
+import {orange5, purple} from "../../../baseInfo";
 import intl from "react-intl-universal";
-import {updatePassword} from "../../../component/axios/api";
-import {purple} from "../../../baseInfo";
+import {checkUsername, updatePassword, updateUserName} from "../../../component/axios/api";
 
-interface Values {
-    title: string;
-    description: string;
-    modifier: string;
+interface propsCheck {
+    uid: string;
 }
 
-interface CollectionCreateFormProps {
-    open: boolean;
-    onCreate: (values: Values) => void;
-    onCancel: () => void;
-}
+export default function ChangePassword(props: propsCheck) {
 
-interface changePassword {
-    uid: string
-}
-
-const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
-                                                                       open,
-                                                                       onCreate,
-                                                                       onCancel,
-                                                                   }) => {
-    const [form] = Form.useForm();
-    return (
-        <Modal
-            open={open}
-            title={intl.get("changePassword")}
-            okText={intl.get('ok')}
-            cancelText={intl.get('cancel')}
-            onCancel={onCancel}
-            onOk={() => {
-                form
-                    .validateFields()
-                    .then(values => {
-                        form.resetFields();
-                        onCreate(values);
-                    })
-                    .catch(err => {
-                        message.error(err.message);
-                    });
-            }}
-        >
-            <Form
-                form={form}
-                layout="vertical"
-                name="form_in_modal"
-            >
-                <Form.Item
-                    name={'password'}
-                    label={intl.get("password")}
-                    rules={[{required: true, message: intl.get('pleaseInputPassword')}]}
-                >
-                    <Input.Password maxLength={20} showCount placeholder={intl.get('pleaseInputPassword')}/>
-                </Form.Item>
-            </Form>
-        </Modal>
-    );
-};
-
-const ChangePassword: React.FC<changePassword> = (props) => {
+    // 打开修改弹窗
     const [open, setOpen] = useState(false);
+    // 给按钮添加 loading 并且禁用
+    const [loading, setLoading] = useState(false);
 
-    const onCreate = (values: any) => {
+    const [form] = Form.useForm();
+
+    const changeUserPassword = (values: any) => {
+        setLoading(true);
         updatePassword(props.uid, values.password).then(res => {
             if (res.code === 200) {
                 message.success(intl.get('changeSuccess'));
+                setOpen(false);
             }
+        }).finally(() => {
+            setLoading(false);
         })
-        setOpen(false);
-    };
+    }
 
     return (
         <div>
             <Button
                 type="primary"
+                disabled={loading}
+                loading={loading}
                 style={{backgroundColor: purple, borderColor: purple}}
                 onClick={() => {
                     setOpen(true);
@@ -85,15 +42,38 @@ const ChangePassword: React.FC<changePassword> = (props) => {
             >
                 {intl.get('changePassword')}
             </Button>
-            <CollectionCreateForm
+            <Modal
                 open={open}
-                onCreate={onCreate}
-                onCancel={() => {
-                    setOpen(false);
+                title={intl.get("changeUsername")}
+                okText={intl.get('ok')}
+                cancelText={intl.get('cancel')}
+                confirmLoading={loading}
+                onCancel={() => setOpen(false)}
+                onOk={() => {
+                    form
+                        .validateFields()
+                        .then(values => {
+                            changeUserPassword(values);
+                        })
+                        .catch(err => {
+                            message.error(err.message);
+                        });
                 }}
-            />
+            >
+                <Form
+                    form={form}
+                    layout="vertical"
+                    name="form_in_modal"
+                >
+                    <Form.Item
+                        name={'password'}
+                        label={intl.get("password")}
+                        rules={[{required: true, message: intl.get('pleaseInputPassword')}]}
+                    >
+                        <Input.Password maxLength={20} showCount placeholder={intl.get('pleaseInputPassword')}/>
+                    </Form.Item>
+                </Form>
+            </Modal>
         </div>
-    );
-};
-
-export default ChangePassword;
+    )
+}

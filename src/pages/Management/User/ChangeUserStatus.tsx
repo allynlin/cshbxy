@@ -4,34 +4,30 @@ import {updateUserStatus} from "../../../component/axios/api";
 import intl from "react-intl-universal";
 import {RenderUserStatusColor} from "../../../component/Tag/RenderUserStatusColor";
 
-interface changeUserStatus {
-    content: any;
+interface propsCheck {
+    info: any;
     getChange: any;
 }
 
-const ChangeUserStatus: React.FC<changeUserStatus> = (props) => {
+export default function ChangeUserStatus(props: propsCheck) {
     const [open, setOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
-    const [disabled, setDisabled] = useState(false);
     const [userStatus, setUserStatus] = useState<string>('');
 
+    console.log(props.info.status)
     useEffect(() => {
-        switch (props.content.status) {
-            case 'Normal':
-            case '正常':
+        switch (props.info.status) {
+            case 0:
                 setUserStatus(intl.get('disabled'));
                 break;
-            case 'Disabled':
-            case '禁用':
+            case -1:
                 setUserStatus(intl.get('normal'));
                 break;
             default:
                 setUserStatus(intl.get('statusError'));
-                setDisabled(true);
                 break;
-
         }
-    }, [props.content.status])
+    }, [props.info.status])
 
     const showPopconfirm = () => {
         setOpen(true);
@@ -54,12 +50,12 @@ const ChangeUserStatus: React.FC<changeUserStatus> = (props) => {
                 message.error(intl.get('statusError'));
                 return;
         }
-        updateUserStatus(props.content.uid, status).then(res => {
+        updateUserStatus(props.info.uid, status).then(() => {
             message.success(intl.get('changeSuccess'));
         }).finally(() => {
             setConfirmLoading(false);
             setOpen(false);
-            props.getChange(userStatus);
+            props.getChange(status);
         })
     };
 
@@ -75,7 +71,7 @@ const ChangeUserStatus: React.FC<changeUserStatus> = (props) => {
             okButtonProps={{loading: confirmLoading}}
             onCancel={handleCancel}
         >
-            <Button type="primary" disabled={disabled} onClick={showPopconfirm} style={{
+            <Button type="primary" loading={confirmLoading} disabled={confirmLoading} onClick={showPopconfirm} style={{
                 backgroundColor: RenderUserStatusColor(userStatus),
                 borderColor: RenderUserStatusColor(userStatus)
             }}>
@@ -84,5 +80,3 @@ const ChangeUserStatus: React.FC<changeUserStatus> = (props) => {
         </Popconfirm>
     );
 };
-
-export default ChangeUserStatus;
