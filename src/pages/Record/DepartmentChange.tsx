@@ -15,12 +15,11 @@ import {
     Card
 } from 'antd';
 import {
-    checkTeacherChangeDepartmentRecord, deleteChangeDepartmentByTeacher,
-    deleteTravelReimbursementApply, findChangeDepartmentByTeacherProcess,
-    findTravelProcess,
-    findTravelReimbursementApplyList,
-    findUploadFilesByUid, refreshDepartmentChange,
-    refreshTravel
+    checkTeacherChangeDepartmentRecord,
+    deleteChangeDepartmentByTeacher,
+    findChangeDepartmentByTeacherProcess,
+    findUploadFilesByUid,
+    refreshDepartmentChange,
 } from "../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
