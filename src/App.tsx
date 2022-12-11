@@ -84,12 +84,14 @@ export default function App() {
                             <li>通过审批</li>
                         </ul>
                         <Button
+                            href={'https://cshbxy-mobile.netlify.app/'}
+                            type={"link"}
+                            target={"_blank"}
                             style={{
                                 color: '#ffffff',
                                 backgroundColor: green,
                                 borderColor: green
-                            }}
-                            type="primary">点击前往移动端</Button>
+                            }}>点击前往移动端</Button>
                     </div>
                 ),
                 okText: '继续使用 Web 端',
