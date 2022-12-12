@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import VirtualTable from "../../../component/virtualTable/VirtualTable";
-import {Button, message, Skeleton, Typography, Form, Input, Modal} from 'antd';
+import {Button, Form, Input, message, Modal, Skeleton, Typography} from 'antd';
 import {findLeaveWaitApprovalList, resolveLeave} from "../../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
@@ -18,7 +18,7 @@ interface DataType {
     align: 'left' | 'right' | 'center';
 }
 
-const App: React.FC = () => {
+export default function Leave() {
 
     // 全局数据防抖
     const [isQuery, setIsQuery] = useState<boolean>(false);
@@ -187,7 +187,6 @@ const App: React.FC = () => {
                     >{intl.get('pass')}</Button>,
                     <Button
                         key="link"
-                        type="primary"
                         disabled={lock}
                         loading={loading}
                         onClick={() => setShowModal(false)}
@@ -234,5 +233,3 @@ const App: React.FC = () => {
         </div>
     )
 };
-
-export default App;

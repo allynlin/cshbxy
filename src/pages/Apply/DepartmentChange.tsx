@@ -8,13 +8,12 @@ import {
     findUserType
 } from "../../component/axios/api";
 import './apply.scss';
-import {DownLoadURL} from "../../baseInfo";
+import {DownLoadURL, tableName} from "../../baseInfo";
 import FileUpLoad from "../../component/axios/FileUpLoad";
 import {LoadingOutlined} from "@ant-design/icons";
 import intl from "react-intl-universal";
 
 const {Title} = Typography;
-const tableName = `ChangeDepartment`;
 
 const ChangeForm = () => {
     const navigate = useNavigate();
@@ -73,7 +72,7 @@ const ChangeForm = () => {
 
     // 查询上次上传的文件列表
     const checkUploadFilesList = () => {
-        checkLastTimeUploadFiles(tableName).then(res => {
+        checkLastTimeUploadFiles(tableName.departmentChange).then(res => {
             if (res.code === 200) {
                 // 遍历 res.body
                 const fileList = res.body.map((item: any) => {
@@ -225,7 +224,7 @@ const ChangeForm = () => {
                     rules={[{required: true, message: intl.get('pleaseChooseFiles')}]}
                 >
                     <FileUpLoad
-                        setTableName={tableName}
+                        setTableName={tableName.departmentChange}
                         getList={(list: []) => {
                             // 如果 list 为空，说明用户删除了所有的文件，此时需要将 fileList 也置为空
                             if (list.length === 0) {

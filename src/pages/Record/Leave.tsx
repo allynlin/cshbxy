@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import VirtualTable from "../../component/virtualTable/VirtualTable";
-import {Button, message, Skeleton, Typography, Form, Input, Modal, Tag, Popconfirm, Steps, Space} from 'antd';
+import {Button, Form, Input, message, Modal, Popconfirm, Skeleton, Space, Steps, Tag, Typography} from 'antd';
 import {deleteLeave, findLeaveList, findLeaveProcess, refreshLeave} from "../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
@@ -8,7 +8,7 @@ import {RenderStatusTag} from "../../component/Tag/RenderStatusTag";
 import {RenderStatusColor} from "../../component/Tag/RenderStatusColor";
 import '../../App.scss';
 import {SearchOutlined} from "@ant-design/icons";
-import {red, green} from "../../baseInfo";
+import {red} from "../../baseInfo";
 import {useSelector} from "react-redux";
 
 const {Title} = Typography;
@@ -265,13 +265,8 @@ const App: React.FC = () => {
                     </Button>,
                     <Button
                         key="link"
-                        type="primary"
                         loading={loading}
                         onClick={() => setShowModal(false)}
-                        style={{
-                            backgroundColor: green,
-                            borderColor: green
-                        }}
                     >
                         {intl.get('close')}
                     </Button>,

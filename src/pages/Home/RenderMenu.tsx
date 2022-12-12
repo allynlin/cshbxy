@@ -4,8 +4,10 @@ import {
     EditOutlined,
     FormOutlined,
     HomeOutlined,
+    Loading3QuartersOutlined,
+    LoginOutlined,
     ProjectOutlined,
-    LoginOutlined, TeamOutlined, Loading3QuartersOutlined,
+    TeamOutlined,
 } from '@ant-design/icons';
 import React, {useEffect, useState} from 'react';
 import {Link, useLocation} from 'react-router-dom';
@@ -128,6 +130,7 @@ const RenderMenu = () => {
     const userType = useSelector((state: any) => state.userType.value)
     const menuModeSlice = useSelector((state: any) => state.menuMode.value)
     const userInfo = useSelector((state: any) => state.userInfo.value);
+    const userLanguage = useSelector((state: any) => state.userLanguage.value);
     const isLogin = useSelector((state: any) => state.isLogin.value)
 
     useEffect(() => {
@@ -152,21 +155,24 @@ const RenderMenu = () => {
             default:
                 setMenuList(errorMenu)
         }
-    }, [userType, isLogin])
+    }, [userLanguage])
 
-    const RenderMenu = (): MenuProps['items'] => {
+    const getMenu = () => {
+        if (!isLogin) {
+            return errorMenu
+        }
         if (userInfo.username === 'admin') {
-            return adminMenu
+            return adminMenu;
         }
         switch (userType) {
             case 'Employee':
-                return employee
+                return employee;
             case 'Department':
-                return department
+                return department;
             case 'Leader':
-                return leader
+                return leader;
             default:
-                return errorMenu
+                return errorMenu;
         }
     }
 
@@ -174,7 +180,7 @@ const RenderMenu = () => {
         <Menu
             selectedKeys={[activeKey]}
             mode={menuModeSlice === 'inline' ? 'inline' : 'vertical'}
-            items={menuList}
+            items={getMenu()}
             defaultSelectedKeys={['Home']}
             style={{
                 minWidth: 0,

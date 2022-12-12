@@ -1,6 +1,5 @@
 import {Button, Form, Input, message, Modal} from 'antd';
 import React, {useState} from 'react';
-import {red} from "../../../baseInfo";
 import {rejectTravel} from "../../../component/axios/api";
 import intl from "react-intl-universal";
 
@@ -29,7 +28,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
             open={open}
             title={intl.get('confirm')}
             okText={intl.get('reject')}
-            okButtonProps={{style: {backgroundColor: red, borderColor: red}}}
+            okType="danger"
             cancelText={intl.get('cancel')}
             onCancel={onCancel}
             confirmLoading={onLoading}
@@ -87,7 +86,7 @@ const Reject = (props: any) => {
                 onClick={() => {
                     setOpen(true);
                 }}
-                style={{backgroundColor: red, borderColor: red}}
+                danger
             >
                 {intl.get('reject')}
             </Button>

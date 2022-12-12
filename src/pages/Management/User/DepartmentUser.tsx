@@ -1,14 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import VirtualTable from "../../../component/virtualTable/VirtualTable";
-import {Button, message, Skeleton, Typography, Form, Input, Modal} from 'antd';
+import {Button, Form, Input, message, Modal, Skeleton, Typography} from 'antd';
 import {findUserByDepartment} from "../../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
 import '../../../App.scss';
 import {SearchOutlined} from "@ant-design/icons";
-import {green} from "../../../baseInfo";
 import {RenderUserStatusTag} from "../../../component/Tag/RenderUserStatusTag";
-import {RenderUserTypeTag} from "../../../component/Tag/RenderUserTypeTag";
 import {RenderUserStatusColor} from "../../../component/Tag/RenderUserStatusColor";
 import ChangeUserName from "./ChangeUserName";
 import ChangeUserInfo from "./ChangeUserInfo";
@@ -99,7 +97,6 @@ export default function DepartmentUser() {
                         id: index + 1,
                         key: item.uid,
                         tag: RenderUserStatus(item.status),
-                        showUserType: RenderUserTypeTag(item.userType),
                         operation: <Button
                             type="primary"
                             style={{
@@ -112,7 +109,6 @@ export default function DepartmentUser() {
                                     id: index + 1,
                                     key: item.uid,
                                     tag: RenderUserStatus(item.status),
-                                    showUserType: RenderUserTypeTag(item.userType),
                                 });
                                 setShowModal(true);
                                 setShowContent(false);
@@ -162,10 +158,6 @@ export default function DepartmentUser() {
         dataIndex: 'tag',
         align: 'center',
     }, {
-        title: intl.get('userType'),
-        dataIndex: 'showUserType',
-        align: 'center',
-    }, {
         title: intl.get('operate'),
         dataIndex: 'operation',
         align: 'center',
@@ -180,13 +172,8 @@ export default function DepartmentUser() {
                 footer={[
                     <Button
                         key="link"
-                        type="primary"
                         loading={loading}
                         onClick={() => setShowModal(false)}
-                        style={{
-                            backgroundColor: green,
-                            borderColor: green
-                        }}
                     >
                         {intl.get('close')}
                     </Button>,
@@ -205,7 +192,6 @@ export default function DepartmentUser() {
                         <p>{intl.get('createTime')}：{showInfo.create_time}</p>
                         <p>{intl.get('updateTime')}：{showInfo.update_time}</p>
                         <p>{intl.get('status')}：{showInfo.tag}</p>
-                        <p>{intl.get('userType')}：{showInfo.showUserType}</p>
                         <Title level={3}>{intl.get('userOperation')}</Title>
                         <p>{<ChangePassword uid={showInfo.uid}/>}</p>
                         <p>
@@ -422,7 +408,8 @@ export default function DepartmentUser() {
                     <Skeleton.Button block active className={'skeleton-tr'}/>
                 </div>
             </div>
-            <VirtualTable columns={columns} dataSource={showData} scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}/>
+            <VirtualTable columns={columns} dataSource={showData}
+                          scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}/>
         </div>
     )
 };

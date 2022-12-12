@@ -238,5 +238,6 @@
   "checkUser": "Check User",
   "checkUserSuccess": "Check user success",
   "checkUserFailed": "Check user failed",
-  "lowBrowserVersion": "Your current browser does not support the modern CSS Selectors feature. This system has suspended support for low-version browsers. Please update your current browser or change to a supported browser to visit. A modern browser is recommended (e.g. Chrome, Edge, Firefox, etc.)"
+  "lowBrowserVersion": "Your current browser does not support the modern CSS Selectors feature. This system has suspended support for low-version browsers. Please update your current browser or change to a supported browser to visit. A modern browser is recommended (e.g. Chrome, Edge, Firefox, etc.)",
+  "confirmLogOut": "Are you sure you want to log out?"
 }

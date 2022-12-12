@@ -1,12 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import VirtualTable from "../../../component/virtualTable/VirtualTable";
-import {Button, message, Skeleton, Typography, Form, Input, Modal} from 'antd';
+import {Button, Form, Input, message, Modal, Skeleton, Typography} from 'antd';
 import {findAllUser} from "../../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
 import '../../../App.scss';
 import {SearchOutlined} from "@ant-design/icons";
-import {green} from "../../../baseInfo";
 import {RenderUserStatusTag} from "../../../component/Tag/RenderUserStatusTag";
 import {RenderUserTypeTag} from "../../../component/Tag/RenderUserTypeTag";
 import {RenderUserStatusColor} from "../../../component/Tag/RenderUserStatusColor";
@@ -180,13 +179,8 @@ export default function UserManagement() {
                 footer={[
                     <Button
                         key="link"
-                        type="primary"
                         loading={loading}
                         onClick={() => setShowModal(false)}
-                        style={{
-                            backgroundColor: green,
-                            borderColor: green
-                        }}
                     >
                         {intl.get('close')}
                     </Button>,

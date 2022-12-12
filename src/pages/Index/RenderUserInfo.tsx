@@ -1,4 +1,4 @@
-import {Button, Descriptions, Modal, Alert, Space, Typography} from 'antd';
+import {Alert, Button, Descriptions, Modal, Typography} from 'antd';
 import React from 'react';
 import './index.scss'
 import {useSelector} from "react-redux";

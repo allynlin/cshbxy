@@ -1,15 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import VirtualTable from "../../../component/virtualTable/VirtualTable";
-import {Button, message, Skeleton, Typography, Form, Input, Modal, Card} from 'antd';
-import {
-    findTravelWaitApprovalList,
-    findUploadFilesByUid, findWorkReportWaitApprovalList, resolveTravel, resolveWorkReport
-} from "../../../component/axios/api";
+import {Button, Card, Form, Input, message, Modal, Skeleton, Typography} from 'antd';
+import {findUploadFilesByUid, findWorkReportWaitApprovalList, resolveWorkReport} from "../../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
 import '../../../App.scss';
 import {ExclamationCircleOutlined, FileTextOutlined, SearchOutlined} from "@ant-design/icons";
-import {DownLoadURL, greenButton} from "../../../baseInfo";
+import {DownLoadURL, greenButton, tableName} from "../../../baseInfo";
 import {useSelector} from "react-redux";
 import Reject from "./Reject";
 
@@ -21,9 +18,7 @@ interface DataType {
     align: 'left' | 'right' | 'center';
 }
 
-const tableName = `WorkReport`;
-
-const App: React.FC = () => {
+export default function WorkReport() {
 
     // 全局数据防抖
     const [isQuery, setIsQuery] = useState<boolean>(false);
@@ -105,7 +100,7 @@ const App: React.FC = () => {
         let msg: any;
         setFileLoading(true)
         const hide = setTimeout(() => msg = message.loading(intl.get('gettingFileList'), 0), 500);
-        findUploadFilesByUid(uid, tableName).then((res: any) => {
+        findUploadFilesByUid(uid, tableName.workReport).then((res: any) => {
             setFileList(res.body);
         }).finally(() => {
             clearTimeout(hide)
@@ -211,7 +206,6 @@ const App: React.FC = () => {
                     >{intl.get('pass')}</Button>,
                     <Button
                         key="link"
-                        type="primary"
                         disabled={lock}
                         loading={loading}
                         onClick={() => setShowModal(false)}
@@ -278,5 +272,3 @@ const App: React.FC = () => {
         </div>
     )
 };
-
-export default App;

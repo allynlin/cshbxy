@@ -25,7 +25,7 @@ import {setLowVersion} from "./component/redux/serverLowVersionSlice";
 import ChangeSystem from "./component/ChangeSystem/ChangeSystem";
 import {getBrowserInfo} from "./checkBrowser";
 
-const locals = {
+const locales = {
     'English': require('./component/Language/en-US.json'),
     'Chinese': require('./component/Language/zh-CN.json')
 }
@@ -39,6 +39,7 @@ export const rootNavigate = (to: string) => {
 
 export default function App() {
     const [isRender, setIsRender] = useState(false);
+    const [language, setLanguage] = useState<any>(zhCN);
 
     const [messageApi, contextHolder] = message.useMessage();
     const key = 'checkUser';
@@ -48,11 +49,17 @@ export default function App() {
     const userLanguage = useSelector((state: any) => state.userLanguage.value)
 
     useEffect(() => {
-        intl.init({
-            currentLocale: userLanguage,
-            locales: locals
-        })
+        changeLanguage(userLanguage)
     }, [userLanguage])
+
+    const changeLanguage = (lang = "Chinese") => {
+        intl.init({
+            currentLocale: lang,
+            locales,
+        }).then(() => {
+            setLanguage(lang === 'Chinese' ? zhCN : enUS)
+        })
+    }
 
     useEffect(() => {
         getBrowserInfo()
@@ -189,9 +196,7 @@ export default function App() {
         <>
             {contextHolder}
             <ChangeSystem/>
-            <ConfigProvider locale={
-                userLanguage === 'English' ? enUS : zhCN
-            }>
+            <ConfigProvider locale={language}>
                 {/*// @ts-ignore*/}
                 <HistoryRouter basename={process.env.PUBLIC_URL} history={history}>
                     <RouterWaiter routes={routes} loading={<Spin/>} onRouteBefore={onRouteBefore}/>

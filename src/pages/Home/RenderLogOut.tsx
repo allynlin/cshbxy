@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import Cookie from "js-cookie";
 import React from "react";
 import intl from "react-intl-universal";
-import {ExclamationCircleOutlined, PoweroffOutlined, LoginOutlined} from "@ant-design/icons";
+import {ExclamationCircleOutlined, LoginOutlined, PoweroffOutlined} from "@ant-design/icons";
 import {red} from "../../baseInfo";
 
 const RenderLogOut = () => {

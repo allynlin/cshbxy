@@ -1,7 +1,6 @@
 import {Button, message, Modal, Popconfirm} from 'antd';
 import React, {useState} from 'react';
 import {deleteUser} from "../../../component/axios/api";
-import {red} from "../../../baseInfo";
 import intl from "react-intl-universal";
 import {ExclamationCircleOutlined} from '@ant-design/icons';
 
@@ -35,8 +34,7 @@ export default function DeleteUser(props: propsCheck) {
             <Button
                 disabled={loading}
                 loading={loading}
-                type="primary"
-                style={{backgroundColor: red, borderColor: red}}>
+                type="primary" danger>
                 {intl.get('deleteUser')}
             </Button>
         </Popconfirm>

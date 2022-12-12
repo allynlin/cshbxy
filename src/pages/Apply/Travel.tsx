@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {addTravelReimbursement, checkLastTimeUploadFiles} from "../../component/axios/api";
 import './apply.scss';
-import {BaseInfo} from "../../baseInfo";
+import {BaseInfo, tableName} from "../../baseInfo";
 import Spin from "../../component/loading/Spin";
 import FileUpLoad from "../../component/axios/FileUpLoad";
 import intl from "react-intl-universal";
@@ -11,7 +11,6 @@ import intl from "react-intl-universal";
 const {Title} = Typography;
 const {Option} = Select;
 
-const tableName = `Travel`;
 
 const URL = `${BaseInfo}/api`;
 
@@ -41,7 +40,7 @@ const LeaveForm = () => {
 
     // 查询上次上传的文件列表
     const checkUploadFilesList = () => {
-        checkLastTimeUploadFiles(tableName).then(res => {
+        checkLastTimeUploadFiles(tableName.travel).then(res => {
             if (res.code === 200) {
                 // 遍历 res.body
                 const fileList = res.body.map((item: any) => {
@@ -60,7 +59,7 @@ const LeaveForm = () => {
 
     // 表单提交
     const submitForm = () => {
-        addTravelReimbursement(destination, (expenses + moneyType), reason, tableName).then(res => {
+        addTravelReimbursement(destination, (expenses + moneyType), reason, tableName.travel).then(res => {
             setConfirmLoading(false);
             navigate('/success', {
                 state: {
@@ -169,7 +168,7 @@ const LeaveForm = () => {
                         rules={[{required: true, message: intl.get('pleaseChooseFiles')}]}
                     >
                         <FileUpLoad
-                            setTableName={tableName}
+                            setTableName={tableName.travel}
                             getList={(list: []) => {
                                 setFileList(list)
                                 form.setFieldsValue({

@@ -1,6 +1,6 @@
 import React from 'react';
 import {FloatButton} from 'antd';
-import {SettingOutlined, MobileOutlined} from '@ant-design/icons';
+import {MobileOutlined, SettingOutlined} from '@ant-design/icons';
 import light from './light.svg'
 import dark from './dark.svg'
 import zhLight from './zh-light.svg'

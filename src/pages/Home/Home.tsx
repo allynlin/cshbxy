@@ -15,14 +15,19 @@ const {Title} = Typography;
 const App: React.FC = () => {
 
     const [collapsed, setCollapsed] = useState(false);
+    const [title, setTitle] = useState('')
 
     const dispatch = useDispatch();
+
+    const serverVersion = useSelector((state: any) => state.serverVersion.value);
+    const userLanguage = useSelector((state: any) => state.userLanguage.value);
 
     // 内容区的宽度和高度
     const [width, setWidth] = useState<number>(0);
     const [height, setHeight] = useState<number>(0);
 
     useEffect(() => {
+        setTitle(userLanguage === "Chinese" ? "OA 系统" : "OA System")
         // 获取页面宽度
         const width = document.body.clientWidth;
         // 获取页面高度
@@ -43,18 +48,16 @@ const App: React.FC = () => {
         return () => {
             clearTimeout(wait)
         }
-    }, [collapsed]);
+    }, [collapsed, userLanguage]);
 
     const {
         token: {colorBgContainer},
     } = theme.useToken();
 
-    const serverVersion = useSelector((state: any) => state.serverVersion.value);
-
     return (
         <Layout>
             <Header className="header">
-                <Title level={3} className={'tit'}>{intl.get('sysName')}</Title>
+                <Title level={3} className={'tit'}>{title}</Title>
                 <RenderLogOut/>
             </Header>
             <Layout>

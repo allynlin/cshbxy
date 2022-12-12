@@ -1,5 +1,5 @@
 import type {RadioChangeEvent} from 'antd';
-import {Radio, Segmented} from 'antd';
+import {Radio} from 'antd';
 import React from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {inline, vertical} from "../../component/redux/menuModeSlice";

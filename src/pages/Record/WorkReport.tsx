@@ -1,19 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import VirtualTable from "../../component/virtualTable/VirtualTable";
-import {
-    Button,
-    message,
-    Skeleton,
-    Typography,
-    Form,
-    Input,
-    Modal,
-    Tag,
-    Popconfirm,
-    Steps,
-    Space,
-    Card
-} from 'antd';
+import {Button, Card, Form, Input, message, Modal, Popconfirm, Skeleton, Space, Steps, Tag, Typography} from 'antd';
 import {
     deleteWorkReport,
     findUploadFilesByUid,
@@ -27,13 +14,11 @@ import {RenderStatusTag} from "../../component/Tag/RenderStatusTag";
 import {RenderStatusColor} from "../../component/Tag/RenderStatusColor";
 import '../../App.scss';
 import {FileTextOutlined, SearchOutlined} from "@ant-design/icons";
-import {red, green, DownLoadURL} from "../../baseInfo";
+import {DownLoadURL, red, tableName} from "../../baseInfo";
 import {useSelector} from "react-redux";
 
 const {Title} = Typography;
 const {Step} = Steps;
-
-const tableName = `WorkReport`;
 
 interface DataType {
     key: React.Key;
@@ -162,7 +147,7 @@ const App: React.FC = () => {
         let msg: any;
         setFileLoading(true)
         const hide = setTimeout(() => msg = message.loading(intl.get('gettingFileList'), 0), 500);
-        findUploadFilesByUid(uid, tableName).then((res: any) => {
+        findUploadFilesByUid(uid, tableName.workReport).then((res: any) => {
             setFileList(res.body);
         }).finally(() => {
             clearTimeout(hide)
@@ -235,7 +220,7 @@ const App: React.FC = () => {
     const deleteItem = (uid: string) => {
         setConfirmLoading(true);
         setOpen(false)
-        deleteWorkReport(uid, tableName).then((res: any) => {
+        deleteWorkReport(uid, tableName.workReport).then((res: any) => {
             if (res.code === 200) {
                 message.success(res.msg);
                 const newDataSource = dataSource.filter((item: any) => item.uid !== uid);
@@ -305,13 +290,8 @@ const App: React.FC = () => {
                     </Button>,
                     <Button
                         key="link"
-                        type="primary"
                         loading={loading}
                         onClick={() => setShowModal(false)}
-                        style={{
-                            backgroundColor: green,
-                            borderColor: green
-                        }}
                     >
                         {intl.get('close')}
                     </Button>,

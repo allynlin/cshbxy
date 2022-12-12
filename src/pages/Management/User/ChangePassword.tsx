@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {Button, Form, Input, message, Modal} from "antd";
-import {orange5, purple} from "../../../baseInfo";
+import {purple} from "../../../baseInfo";
 import intl from "react-intl-universal";
-import {checkUsername, updatePassword, updateUserName} from "../../../component/axios/api";
+import {updatePassword} from "../../../component/axios/api";
 
 interface propsCheck {
     uid: string;

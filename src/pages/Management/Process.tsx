@@ -4,7 +4,6 @@ import intl from "react-intl-universal";
 import {ExclamationCircleOutlined, SearchOutlined} from "@ant-design/icons";
 import '../../App.scss';
 import {findAllProcess, findProcessUser, updateProcess} from "../../component/axios/api";
-import {yellow} from "../../baseInfo";
 import {useSelector} from "react-redux";
 
 const {Title} = Typography;
@@ -166,10 +165,6 @@ const ProcessManagement = () => {
                                 <Button
                                     key={'changeProcess'}
                                     type={'primary'}
-                                    style={{
-                                        backgroundColor: yellow,
-                                        borderColor: yellow
-                                    }}
                                     onClick={() => {
                                         setContent(item)
                                         setOpen(true)

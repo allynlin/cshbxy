@@ -3,13 +3,12 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {checkLastTimeUploadFiles, checkLastWeekWorkReport, submitWorkReport} from "../../component/axios/api";
 import './apply.scss';
-import {DownLoadURL} from "../../baseInfo";
+import {DownLoadURL, tableName} from "../../baseInfo";
 import FileUpLoad from "../../component/axios/FileUpLoad";
 import {ExclamationCircleOutlined, LoadingOutlined} from "@ant-design/icons";
 import intl from "react-intl-universal";
 
 const {Title} = Typography;
-const tableName = `WorkReport`;
 
 const ChangeForm = () => {
     const navigate = useNavigate();
@@ -65,7 +64,7 @@ const ChangeForm = () => {
 
     // 查询上次上传的文件列表
     const checkUploadFilesList = () => {
-        checkLastTimeUploadFiles(tableName).then(res => {
+        checkLastTimeUploadFiles(tableName.workReport).then(res => {
             if (res.code === 200) {
                 // 遍历 res.body
                 const fileList = res.body.map((item: any) => {
@@ -86,7 +85,7 @@ const ChangeForm = () => {
 
     // 表单提交
     const submitForm = () => {
-        submitWorkReport(tableName).then(res => {
+        submitWorkReport(tableName.workReport).then(() => {
             navigate('/success', {
                 state: {
                     object: {
@@ -157,7 +156,7 @@ const ChangeForm = () => {
                     rules={[{required: true, message: intl.get('pleaseUploadWorkReport')}]}
                 >
                     <FileUpLoad
-                        setTableName={tableName}
+                        setTableName={tableName.workReport}
                         getList={(list: []) => {
                             // 如果 list 为空，说明用户删除了所有的文件，此时需要将 fileList 也置为空
                             if (list.length === 0) {

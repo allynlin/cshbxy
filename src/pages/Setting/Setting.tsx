@@ -20,7 +20,7 @@ const Setting = () => {
 
     const dispatch = useDispatch();
 
-    const themeColor = useSelector((state:any) => state.themeColor.value)
+    const themeColor = useSelector((state: any) => state.themeColor.value)
 
     const backColor = themeColor === 'light' ? 'rgba(236, 243, 249, 1)' : 'rgba(236, 243, 249, 0.4)'
 
