@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import VirtualTable from "../../../component/virtualTable/VirtualTable";
 import {Button, message, Skeleton, Typography, Form, Input, Modal} from 'antd';
-import {findLeaveWaitApprovalList, resolveLeave} from "../../../component/axios/api";
+import {findProcurementWaitApprovalList, resolveLeave, resolveProcurement} from "../../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
 import '../../../App.scss';
@@ -63,7 +63,7 @@ const App: React.FC = () => {
         setLoading(true);
         setIsQuery(true)
         setWaitTime(10)
-        findLeaveWaitApprovalList().then((res: any) => {
+        findProcurementWaitApprovalList().then((res: any) => {
             if (res.code === 200) {
                 const newDataSource = res.body.map((item: any, index: number) => {
                     return {
@@ -103,7 +103,7 @@ const App: React.FC = () => {
             cancelText: intl.get('cancel'),
             onOk() {
                 setLock(true);
-                resolveLeave(uid).then((res: any) => {
+                resolveProcurement(uid).then((res: any) => {
                     if (res.code === 200) {
                         message.success(res.msg);
                         setShowModal(false);
@@ -149,12 +149,12 @@ const App: React.FC = () => {
         dataIndex: 'releaseUid',
         align: 'center',
     }, {
-        title: intl.get('startTime'),
-        dataIndex: 'start_time',
+        title: intl.get('procurementItem'),
+        dataIndex: 'items',
         align: 'center',
     }, {
-        title: intl.get('endTime'),
-        dataIndex: 'end_time',
+        title: intl.get('procurementPrice'),
+        dataIndex: 'price',
         align: 'center',
     }, {
         title: intl.get('operate'),
@@ -197,15 +197,15 @@ const App: React.FC = () => {
                 ]}
             >
                 <p>{intl.get('submitPerson')}：{showInfo.releaseUid}</p>
-                <p>{intl.get('startTime')}：{showInfo.start_time}</p>
-                <p>{intl.get('endTime')}：{showInfo.end_time}</p>
+                <p>{intl.get('procurementItem')}：{showInfo.items}</p>
+                <p>{intl.get('procurementPrice')}：{showInfo.price}</p>
                 <p>{intl.get('reason')}：{showInfo.reason}</p>
                 <p>{intl.get('createTime')}：{showInfo.create_time}</p>
                 <p>{intl.get('updateTime')}：{showInfo.update_time}</p>
             </Modal>
             <div className="record-head">
                 <Title level={2} className={'tit'}>
-                    {intl.get('leave') + ' ' + intl.get('approve')}&nbsp;&nbsp;
+                    {intl.get('procurement') + ' ' + intl.get('approve')}&nbsp;&nbsp;
                     <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
                             onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
                 </Title>

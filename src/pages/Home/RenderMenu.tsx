@@ -94,14 +94,16 @@ const RenderMenu = () => {
     ];
     const leader: MenuProps['items'] = [
         getItem((<Link to={'/home'}>{intl.get('home')}</Link>), '/home', <HomeOutlined/>),
-        getItem(<Link
-            to={'/departmentChange-approval'}>{intl.get('departmentChange')}</Link>, '/departmentChange-approval'),
-        getItem(<Link to={'/leave-approval'}>{intl.get('leave')}</Link>, '/leave-approval'),
-        getItem(<Link to={'/travel-approval'}>{intl.get('travelReimburse')}</Link>, '/travel-approval'),
-        getItem(<Link
-            to={'/procurement-approval'}>{intl.get('procurement')}</Link>, '/procurement-approval'),
-        getItem(<Link
-            to={'/workReport-approval'}>{intl.get('workReport')}</Link>, '/workReport-approval'),
+        getItem(intl.get('approve'), 'approve', <ProjectOutlined/>, [
+            getItem(<Link
+                to={'/departmentChange-approval'}>{intl.get('departmentChange')}</Link>, '/departmentChange-approval'),
+            getItem(<Link to={'/leave-approval'}>{intl.get('leave')}</Link>, '/leave-approval'),
+            getItem(<Link to={'/travel-approval'}>{intl.get('travelReimburse')}</Link>, '/travel-approval'),
+            getItem(<Link
+                to={'/procurement-approval'}>{intl.get('procurement')}</Link>, '/procurement-approval'),
+            getItem(<Link
+                to={'/workReport-approval'}>{intl.get('workReport')}</Link>, '/workReport-approval'),
+        ]),
         getItem((<Link to={'/setting'}>{intl.get('setting')}</Link>), '/setting',
             <FormOutlined/>)
     ];

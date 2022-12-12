@@ -12,3 +12,8 @@ export const blue = '#40a9ff';
 export const purple = '#9254de';
 export const orange5 = '#ffa940';
 export const lime7 = '#7cb305';
+
+export const greenButton = {
+    backgroundColor: green,
+    borderColor: green,
+}
