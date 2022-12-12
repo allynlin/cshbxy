@@ -1,6 +1,5 @@
 import React, {useState} from "react";
 import {Button, Form, Input, message, Radio, Select, Switch} from 'antd';
-import './index.scss'
 import Cookie from 'js-cookie';
 import {useNavigate} from "react-router-dom";
 import {checkUsername, findUserType, userLogin, userRegister} from "../../component/axios/api";
@@ -11,6 +10,9 @@ import {setUser} from "../../component/redux/userInfoSlice";
 import intl from "react-intl-universal";
 
 const RegisterStudent = () => {
+
+    const [loading, setLoading] = useState<boolean>(false);
+
     const dispatch = useDispatch();
 
     const [form] = Form.useForm();
@@ -68,15 +70,15 @@ const RegisterStudent = () => {
         switch (e) {
             case 'Employee':
                 dispatch(Employee())
-                navigate('/home/employee')
+                navigate('/home')
                 break;
             case 'Department':
                 dispatch(Department())
-                navigate('/home/department')
+                navigate('/home')
                 break;
             case 'Leader':
                 dispatch(Leader())
-                navigate('/home/leader')
+                navigate('/home')
                 break;
         }
     }
@@ -122,12 +124,10 @@ const RegisterStudent = () => {
         return registerType === 'Employee' ? (<Form.Item
             label={intl.get('department')}
             name="departmentUid"
-            rules={[
-                {
-                    required: true,
-                    message: intl.get('pleaseChooseDepartment'),
-                },
-            ]}
+            rules={[{
+                required: true,
+                message: intl.get('pleaseChooseDepartment'),
+            }]}
         >
             <Select
                 showSearch
@@ -145,27 +145,21 @@ const RegisterStudent = () => {
         <Form
             form={form}
             name="login"
-            labelCol={{
-                span: 8,
-            }}
-            wrapperCol={{
-                span: 8,
-            }}
+            labelCol={{span: 8}}
+            wrapperCol={{span: 8}}
             onFinish={onFinish}
             initialValues={{
                 gender: "男",
                 rememberme: true,
             }}
         >
-            <Form.Item
-                wrapperCol={{}}
-            >
+            <Form.Item wrapperCol={{offset: 8, span: 16}}>
                 <Radio.Group defaultValue="DepartmentChange" buttonStyle="solid" onChange={e => {
                     setRegisterType(e.target.value)
                 }}>
                     <Radio.Button value="Leader">{intl.get('leaderRegister')}</Radio.Button>
                     <Radio.Button value="Department">{intl.get('departmentRegister')}</Radio.Button>
-                    <Radio.Button value="DepartmentChange">{intl.get('employeeRegister')}</Radio.Button>
+                    <Radio.Button value="Employee">{intl.get('employeeRegister')}</Radio.Button>
                 </Radio.Group>
             </Form.Item>
 
@@ -277,28 +271,24 @@ const RegisterStudent = () => {
                 label={intl.get('autoLogin')}
                 name='rememberme'
                 valuePropName='checked'
-                rules={[
-                    {
-                        required: true,
-                        message: intl.get('pleaseChooseAutoLogin'),
-                    },
-                ]}
+                rules={[{
+                    required: true,
+                    message: intl.get('pleaseChooseAutoLogin'),
+                }]}
             >
                 <Switch style={{display: "flex"}} checkedChildren={intl.get('yes')} unCheckedChildren={intl.get('no')}/>
             </Form.Item>
 
-            <Form.Item
-                wrapperCol={{}}
-            >
-                <Button type="primary" htmlType="submit">
+            <Form.Item wrapperCol={{offset: 8, span: 16}}>
+                <Button type="primary" htmlType="submit" loading={loading} disabled={loading}>
                     {intl.get('register')}
                 </Button>
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <Button htmlType="button" onClick={onReset}>
+                <Button htmlType="button" disabled={loading} onClick={onReset}>
                     {intl.get('reset')}
                 </Button>
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <Button htmlType="button" onClick={() => {
+                <Button htmlType="button" disabled={loading} onClick={() => {
                     navigate('/login')
                 }}>
                     {intl.get('login')}

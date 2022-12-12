@@ -87,13 +87,13 @@ const ChangeForm = () => {
     // 表单提交
     const submitForm = () => {
         submitWorkReport(tableName).then(res => {
-            navigate('/home/success', {
+            navigate('/success', {
                 state: {
                     object: {
                         title: intl.get('workReport') + ' ' + intl.get('submitSuccess'),
                         describe: intl.get('waitApprove'),
                         toPage: intl.get('showApplyList'),
-                        toURL: '/home/record/workReport',
+                        toURL: '/record/workReport',
                     }
                 }
             })

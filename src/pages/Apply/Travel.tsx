@@ -62,13 +62,13 @@ const LeaveForm = () => {
     const submitForm = () => {
         addTravelReimbursement(destination, (expenses + moneyType), reason, tableName).then(res => {
             setConfirmLoading(false);
-            navigate('/home/success', {
+            navigate('/success', {
                 state: {
                     object: {
                         title: intl.get('travelReimburseApply') + ' ' + intl.get('submitSuccess'),
                         describe: intl.get('waitApprove'),
                         toPage: intl.get('showApplyList'),
-                        toURL: '/home/record/travel',
+                        toURL: '/record/travel',
                     }
                 }
             })

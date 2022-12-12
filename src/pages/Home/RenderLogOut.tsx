@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import Cookie from "js-cookie";
 import React from "react";
 import intl from "react-intl-universal";
-import {ExclamationCircleOutlined, PoweroffOutlined} from "@ant-design/icons";
+import {ExclamationCircleOutlined, PoweroffOutlined, LoginOutlined} from "@ant-design/icons";
 import {red} from "../../baseInfo";
 
 const RenderLogOut = () => {
@@ -25,7 +25,7 @@ const RenderLogOut = () => {
     }
 
     const showConfirm = () => {
-        Modal.confirm({
+        isLogin ? Modal.confirm({
             title: intl.get('confirmLogOut'),
             icon: <ExclamationCircleOutlined/>,
             content: intl.get('afterLogOutNeedLoginAgain'),
@@ -42,17 +42,17 @@ const RenderLogOut = () => {
             onOk() {
                 logOut()
             }
-        });
+        }) : navigate('/login', {replace: true})
     }
 
     return (
-        isLogin ?
-            <Button type="primary" danger={true} icon={<PoweroffOutlined/>} onClick={showConfirm} style={{
-                backgroundColor: '#f32401',
-                borderColor: '#f32401'
-            }}>
-                {intl.get('logOut')}
-            </Button> : null
+        <Button
+            type="primary"
+            danger={isLogin}
+            icon={isLogin ? <PoweroffOutlined/> : <LoginOutlined/>}
+            onClick={showConfirm}>
+            {intl.get(isLogin ? 'logOut' : 'login')}
+        </Button>
     )
 }
 

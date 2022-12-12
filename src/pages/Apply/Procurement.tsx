@@ -23,13 +23,13 @@ const ProcurementForm = () => {
     const submitForm = () => {
         addProcurement(items, price, reason).then(res => {
             setConfirmLoading(false);
-            navigate('/home/success', {
+            navigate('/success', {
                 state: {
                     object: {
                         title: intl.get('procurementApply') + ' ' + intl.get('submitSuccess'),
                         describe: intl.get('waitApprove'),
                         toPage: intl.get('showApplyList'),
-                        toURL: '/home/record/procurement',
+                        toURL: '/record/procurement',
                         againTitle: intl.get('continueSubmit')
                     }
                 }

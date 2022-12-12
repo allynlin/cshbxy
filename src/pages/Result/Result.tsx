@@ -10,22 +10,19 @@ import intl from "react-intl-universal";
 
 const {Paragraph, Text} = Typography;
 
-export const Error404 = () => {
-    const userType = useSelector((state: any) => state.userType.value)
-    return (
-        <Result
-            status="404"
-            title="404"
-            subTitle={intl.get('404Title')}
-            extra={
-                <Link
-                    to={userType === 'Employee' ? '/home/employee' : userType === 'Department' ? '/home/department' : '/home/leader'}>
-                    <Button type="primary">{intl.get('backToHome')}</Button>
-                </Link>
-            }
-        />
-    )
-};
+export const Error404 = () => (
+    <Result
+        status="404"
+        title="404"
+        subTitle={intl.get('404Title')}
+        extra={
+            <Link
+                to={'/home'}>
+                <Button type="primary">{intl.get('backToHome')}</Button>
+            </Link>
+        }
+    />
+)
 
 export const Error403 = () => (
     <Result
@@ -40,21 +37,18 @@ export const Error403 = () => (
     />
 );
 
-export const Error500 = () => {
-    const userType = useSelector((state: any) => state.userType.value)
-    return (<Result
-            status="500"
-            title="500"
-            subTitle={intl.get('500Title')}
-            extra={
-                <Link
-                    to={userType === 'Employee' ? '/home/employee' : userType === 'Department' ? '/home/department' : '/home/leader'}>
-                    <Button type="primary">{intl.get('backToHome')}</Button>
-                </Link>
-            }
-        />
-    )
-};
+export const Error500 = () => (<Result
+        status="500"
+        title="500"
+        subTitle={intl.get('500Title')}
+        extra={
+            <Link
+                to={'/home'}>
+                <Button type="primary">{intl.get('backToHome')}</Button>
+            </Link>
+        }
+    />
+)
 
 export const Error101: React.FC = () => {
     return (
@@ -125,7 +119,7 @@ export const Error103 = () => {
                 <>
                     {
                         version >= serverLowVersion ? <Button type="primary" key="console" onClick={() => {
-                            navigate('/')
+                            navigate('/home')
                         }}>{intl.get('backToHome')}</Button> : null
                     }
                     <RenderRefreshButton/>

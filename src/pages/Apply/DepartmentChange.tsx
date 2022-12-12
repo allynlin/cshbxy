@@ -94,13 +94,13 @@ const ChangeForm = () => {
     const submitForm = () => {
         ChangeDepartment(departmentUid, changeReason).then(() => {
             setConfirmLoading(false);
-            navigate('/home/success', {
+            navigate('/success', {
                 state: {
                     object: {
                         title: intl.get('departmentChangeApply') + ' ' + intl.get('submitSuccess'),
                         describe: intl.get('waitApprove'),
                         toPage: intl.get('showApplyList'),
-                        toURL: '/home/record/departmentChange',
+                        toURL: '/record/departmentChange',
                     }
                 }
             })

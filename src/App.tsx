@@ -5,7 +5,7 @@ import Cookie from 'js-cookie';
 import RouterWaiter from "react-router-waiter"
 import Spin from "./component/loading/Spin";
 import {useDispatch, useSelector} from "react-redux";
-import {Button, ConfigProvider, message, Modal, theme} from "antd";
+import {ConfigProvider, message} from "antd";
 import {checkUser, getLowVersion, getVersion} from "./component/axios/api";
 import {login} from "./component/redux/isLoginSlice";
 import {Department, Employee, Leader} from "./component/redux/userTypeSlice";
@@ -22,7 +22,6 @@ import zhCN from "antd/es/locale/zh_CN";
 import intl from 'react-intl-universal';
 import {setUser} from "./component/redux/userInfoSlice";
 import {setLowVersion} from "./component/redux/serverLowVersionSlice";
-import {green} from "./baseInfo";
 import ChangeSystem from "./component/ChangeSystem/ChangeSystem";
 
 const locals = {
@@ -40,18 +39,6 @@ export const rootNavigate = (to: string) => {
 export default function App() {
     const [isRender, setIsRender] = useState(false);
 
-    const themeColor = useSelector((state: any) => state.themeColor.value)
-
-    useEffect(() => {
-        switch (themeColor) {
-            case 'dark':
-                break;
-            case 'light':
-                break;
-            default:
-        }
-    }, [themeColor])
-
     const dispatch = useDispatch();
 
     const userLanguage = useSelector((state: any) => state.userLanguage.value)
@@ -63,40 +50,7 @@ export default function App() {
         })
     }, [userLanguage])
 
-    const checkMobile = () => {
-        const ua = navigator.userAgent;
-        const ipad = ua.match(/(iPad).*OS\s([\d_]+)/),
-            isIphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/),
-            isAndroid = ua.match(/(Android)\s+([\d.]+)/);
-        return isIphone || isAndroid || ipad;
-    }
-
     useEffect(() => {
-        if (checkMobile()) {
-            Modal.info({
-                title: '检测到您正在使用移动端访问，是否跳转到移动端',
-                content: (
-                    <div>
-                        <p>移动端仅支持以下功能</p>
-                        <ul>
-                            <li>用户查询，禁用，删除</li>
-                            <li>申请记录查询，删除</li>
-                            <li>通过审批</li>
-                        </ul>
-                        <Button
-                            href={'https://cshbxy-mobile.netlify.app/'}
-                            type={"link"}
-                            target={"_blank"}
-                            style={{
-                                color: '#ffffff',
-                                backgroundColor: green,
-                                borderColor: green
-                            }}>点击前往移动端</Button>
-                    </div>
-                ),
-                okText: '继续使用 Web 端',
-            });
-        }
         Cookie.get('language') === "en_US" ? dispatch(English()) : dispatch(Chinese())
         LStorage.get('menuMode') === 'vertical' ? dispatch(vertical()) : dispatch(inline())
         // 如果在 localStrong 中有颜色设置就使用 localStrong 中的颜色设置
@@ -124,8 +78,6 @@ export default function App() {
         const token = Cookie.get('token');
         if (token) {
             checkUserInfo();
-        } else {
-            rootNavigate('/login');
         }
     }, [])
 
@@ -187,23 +139,25 @@ export default function App() {
     // 路由跳转鉴权
     const onRouteBefore = ({pathname, meta}: any) => {
         if (!isRender) return false
-        if (meta.title) {
-            if (meta.titleCN === undefined) {
-                document.title = meta.title
-            } else {
-                userLanguage === 'English' ? document.title = meta.title : document.title = meta.titleCN
+        if (meta) {
+            if (meta.title) {
+                if (meta.titleCN === undefined) {
+                    document.title = meta.title
+                } else {
+                    userLanguage === 'English' ? document.title = meta.title : document.title = meta.titleCN
+                }
             }
-        }
-        if (meta.Auth) {
-            if (userType === meta.Auth)
-                return pathname
-            if (userType === meta.Auth2)
-                return pathname
-            if (!isLogin) {
-                message.warning(intl.get('pleaseLogin'))
-                return '/login'
+            if (meta.Auth) {
+                if (userType === meta.Auth)
+                    return pathname
+                if (userType === meta.Auth2)
+                    return pathname
+                if (!isLogin) {
+                    message.warning(intl.get('pleaseLogin'))
+                    return '/login'
+                }
+                return '/403'
             }
-            return '/403'
         }
         return pathname
     }

@@ -112,7 +112,7 @@
   "endTime": "销假时间",
   "notChooseStartTime": "未选择请假时间",
   "notChooseEndTime": "未选择销假时间",
-  "confirm": "确定",
+  "confirm": "确认",
   "continueSubmit": "继续提交",
   "leaveTitle-1": "正在获取提示信息",
   "leaveTitle-2": "您有未审批通过的请假申请",
@@ -227,5 +227,13 @@
   "close": "关闭",
   "details": "详情",
   "advancedFeatures": "高级功能",
-  "mobileTerminal": "移动端"
+  "mobileTerminal": "移动端",
+  "tips": "提示",
+  "tips-1": "您正在访问 Web 端",
+  "tips-2": "Web 端支持所有包括提交申请，查询申请记录，审批申请，用户管理等几十余项功能",
+  "tips-3": "您也可以通过移动端访问，移动端支持查询申请记录，用户管理，审批申请等功能",
+  "tips-4": "受限于移动端设备，移动端有部分功能无法使用",
+  "tips-5": "我们推荐手机，平板等设备使用移动端，电脑等设备使用 Web 端",
+  "tips-6": "您可以通过点击下方按钮切换到移动端",
+  "changeToMobileTerminal": "切换到移动端"
 }

@@ -15,7 +15,7 @@ export default function Token() {
                     // colorPrimary: '#ED4192'
                     colorError: '#f32401',
                     colorErrorText: '#f32401',
-                    colorSuccess: '#006c01',
+                    // colorSuccess: '#006c01',
                     colorSuccessText: '#006c01',
                     colorWarning: '#ff8d00',
                     colorWarningText: '#ff8d00',

@@ -6,6 +6,7 @@ import {
     FormOutlined,
     HomeOutlined,
     ProjectOutlined,
+    LoginOutlined,
 } from '@ant-design/icons';
 import React, {useEffect, useState} from 'react';
 import {Link, useLocation} from 'react-router-dom';
@@ -42,95 +43,96 @@ const RenderMenu = () => {
     }, [location.pathname])
 
     const employee: MenuProps['items'] = [
-        getItem((<Link to={'/home/employee'}>{intl.get('home')}</Link>), '/home/employee',
+        getItem((<Link to={'/home'}>{intl.get('home')}</Link>), '/home',
             <HomeOutlined/>),
         getItem(intl.get('apply'), 'apply', <EditOutlined/>, [
             getItem((
                 <Link
-                    to={'/home/apply/departmentChange'}>{intl.get('departmentChange')}</Link>), '/home/apply/departmentChange'),
+                    to={'/apply/departmentChange'}>{intl.get('departmentChange')}</Link>), '/apply/departmentChange'),
             getItem((<Link
-                to={'/home/apply/travel'}>{intl.get('travelReimburse')}</Link>), '/home/apply/travel'),
+                to={'/apply/travel'}>{intl.get('travelReimburse')}</Link>), '/apply/travel'),
             getItem((
-                <Link to={'/home/apply/leave'}>{intl.get('leave')}</Link>), '/home/apply/leave'),
+                <Link to={'/apply/leave'}>{intl.get('leave')}</Link>), '/apply/leave'),
             getItem((<Link
-                to={'/home/apply/procurement'}>{intl.get('procurement')}</Link>), '/home/apply/procurement'),
+                to={'/apply/procurement'}>{intl.get('procurement')}</Link>), '/apply/procurement'),
             getItem((<Link
-                to={'/home/apply/workReport'}>{intl.get('workReport')}</Link>), '/home/apply/workReport'),
+                to={'/apply/workReport'}>{intl.get('workReport')}</Link>), '/apply/workReport'),
         ]),
         getItem(intl.get('record'), 'record', <BarChartOutlined/>, [
             getItem((
                 <Link
-                    to={'/home/record/departmentChange'}>{intl.get('departmentChange')}</Link>), '/home/record/departmentChange'),
+                    to={'/record/departmentChange'}>{intl.get('departmentChange')}</Link>), '/record/departmentChange'),
             getItem((<Link
-                to={'/home/record/travel'}>{intl.get('travelReimburse')}</Link>), '/home/record/travel'),
+                to={'/record/travel'}>{intl.get('travelReimburse')}</Link>), '/record/travel'),
             getItem((<Link
-                to={'/home/record/leave'}>{intl.get('leave')}</Link>), '/home/record/leave'),
+                to={'/record/leave'}>{intl.get('leave')}</Link>), '/record/leave'),
             getItem((
-                <Link to={'/home/record/procurement'}>{intl.get('procurement')}</Link>), '/home/record/procurement'),
+                <Link to={'/record/procurement'}>{intl.get('procurement')}</Link>), '/record/procurement'),
             getItem((<Link
-                to={'/home/record/workReport'}>{intl.get('workReport')}</Link>), '/home/record/workReport'),
+                to={'/record/workReport'}>{intl.get('workReport')}</Link>), '/record/workReport'),
         ]),
-        getItem((<Link to={'/home/setting'}>{intl.get('setting')}</Link>), '/home/setting',
+        getItem((<Link to={'/setting'}>{intl.get('setting')}</Link>), '/setting',
             <FormOutlined/>)
     ];
     const department: MenuProps['items'] = [
-        getItem((<Link to={'/home/department'}>{intl.get('home')}</Link>), '/home/department', <HomeOutlined/>),
+        getItem((<Link to={'/home'}>{intl.get('home')}</Link>), '/home', <HomeOutlined/>),
         getItem(intl.get('approve'), 'approve', <ProjectOutlined/>, [
             getItem(<Link
-                to={'/home/approval/departmentChange'}>{intl.get('departmentChange')}</Link>, '/home/approval/departmentChange'),
-            getItem(<Link to={'/home/approval/leave'}>{intl.get('leave')}</Link>, '/home/approval/leave'),
-            getItem(<Link to={'/home/approval/travel'}>{intl.get('travelReimburse')}</Link>, '/home/approval/travel'),
+                to={'/approval/departmentChange'}>{intl.get('departmentChange')}</Link>, '/approval/departmentChange'),
+            getItem(<Link to={'/approval/leave'}>{intl.get('leave')}</Link>, '/approval/leave'),
+            getItem(<Link to={'/approval/travel'}>{intl.get('travelReimburse')}</Link>, '/approval/travel'),
             getItem(<Link
-                to={'/home/approval/procurement'}>{intl.get('procurement')}</Link>, '/home/approval/procurement'),
+                to={'/approval/procurement'}>{intl.get('procurement')}</Link>, '/approval/procurement'),
             getItem(<Link
-                to={'/home/approval/workReport'}>{intl.get('workReport')}</Link>, '/home/approval/workReport'),
+                to={'/approval/workReport'}>{intl.get('workReport')}</Link>, '/approval/workReport'),
         ]),
         getItem(intl.get('management'), 'management', <BarsOutlined/>, [
             getItem(<Link
-                to={'/home/management/departmentUser'}>{intl.get('departmentUser')}</Link>, '/home/management/departmentUser'),
+                to={'/management/departmentUser'}>{intl.get('departmentUser')}</Link>, '/management/departmentUser'),
         ]),
-        getItem((<Link to={'/home/setting'}>{intl.get('setting')}</Link>), '/home/setting',
+        getItem((<Link to={'/setting'}>{intl.get('setting')}</Link>), '/setting',
             <FormOutlined/>)
     ];
     const leader: MenuProps['items'] = [
-        getItem((<Link to={'/home/leader'}>{intl.get('home')}</Link>), '/home/leader', <HomeOutlined/>),
+        getItem((<Link to={'/home'}>{intl.get('home')}</Link>), '/home', <HomeOutlined/>),
         getItem(intl.get('approve'), 'approval', <ProjectOutlined/>, [
             getItem(<Link
-                to={'/home/approval/departmentChange'}>{intl.get('departmentChange')}</Link>, '/home/approval/departmentChange'),
-            getItem(<Link to={'/home/approval/leave'}>{intl.get('leave')}</Link>, '/home/approval/leave'),
-            getItem(<Link to={'/home/approval/travel'}>{intl.get('travelReimburse')}</Link>, '/home/approval/travel'),
+                to={'/approval/departmentChange'}>{intl.get('departmentChange')}</Link>, '/approval/departmentChange'),
+            getItem(<Link to={'/approval/leave'}>{intl.get('leave')}</Link>, '/approval/leave'),
+            getItem(<Link to={'/approval/travel'}>{intl.get('travelReimburse')}</Link>, '/approval/travel'),
             getItem(<Link
-                to={'/home/approval/procurement'}>{intl.get('procurement')}</Link>, '/home/approval/procurement'),
+                to={'/approval/procurement'}>{intl.get('procurement')}</Link>, '/approval/procurement'),
             getItem(<Link
-                to={'/home/approval/workReport'}>{intl.get('workReport')}</Link>, '/home/approval/workReport'),
+                to={'/approval/workReport'}>{intl.get('workReport')}</Link>, '/approval/workReport'),
         ]),
-        getItem((<Link to={'/home/setting'}>{intl.get('setting')}</Link>), '/home/setting',
+        getItem((<Link to={'/setting'}>{intl.get('setting')}</Link>), '/setting',
             <FormOutlined/>)
     ];
     const adminMenu: MenuProps['items'] = [
-        getItem((<Link to={'/home/leader'}>{intl.get('home')}</Link>), '/home/leader', <HomeOutlined/>),
+        getItem((<Link to={'/home'}>{intl.get('home')}</Link>), '/home', <HomeOutlined/>),
         getItem(intl.get('management'), 'management', <BarsOutlined/>, [
             getItem(<Link
-                to={'/home/management/user'}>{intl.get('userManagement')}</Link>, '/home/management/user'),
+                to={'/management/user'}>{intl.get('userManagement')}</Link>, '/management/user'),
             getItem(<Link
-                to={'/home/management/process'}>{intl.get('processManagement')}</Link>, '/home/management/process'),
+                to={'/management/process'}>{intl.get('processManagement')}</Link>, '/management/process'),
         ]),
-        getItem((<Link to={'/home/setting'}>{intl.get('setting')}</Link>), '/home/setting',
+        getItem((<Link to={'/setting'}>{intl.get('setting')}</Link>), '/setting',
             <FormOutlined/>)
     ];
-    const defaultMenu: MenuProps['items'] = [];
-
-    const themeColor: String = useSelector((state: any) => state.themeColor.value)
+    const errorMenu: MenuProps['items'] = [
+        getItem((<Link to={'/home'}>{intl.get('home')}</Link>), '/home', <HomeOutlined/>),
+        getItem((<Link to={'/login'}>{intl.get('login')}</Link>), '/login', <LoginOutlined/>),
+        getItem((<Link to={'/register'}>{intl.get('register')}</Link>), '/register', <FormOutlined/>),
+        getItem((<Link to={'/setting'}>{intl.get('setting')}</Link>), '/setting',
+            <FormOutlined/>)
+    ];
 
     const userType = useSelector((state: any) => state.userType.value)
 
     const menuModeSlice = useSelector((state: any) => state.menuMode.value)
 
-    const isLogin = useSelector((state: any) => state.isLogin.value)
-
     const userInfo = useSelector((state: any) => state.userInfo.value);
 
-    // const [theme, setTheme] = useState('light');
     const RenderMenu = (): MenuProps['items'] => {
         if (userInfo.username === 'admin') {
             return adminMenu
@@ -143,49 +145,24 @@ const RenderMenu = () => {
             case 'Leader':
                 return leader
             default:
-                return defaultMenu
+                return errorMenu
         }
     }
 
     const menu: MenuProps['items'] = RenderMenu()
 
-    const RenderButton = () => {
-        return (
-            <Button
-                type="primary"
-                style={{
-                    width: '100%',
-                    marginTop: 16,
-                    display: 'flex',
-                    justifyContent: 'center',
-                }}
-            >
-                <Link to={'/login'}>{intl.get('loginAgain')}</Link>
-            </Button>
-        )
-    }
-
     return (
-        isLogin ? (
-                <div className={"playout-menu"}>
-                    <Menu
-                        activeKey={activeKey}
-                        mode={menuModeSlice === 'inline' ? 'inline' : 'vertical'}
-                        items={menu}
-                        defaultSelectedKeys={['Home']}
-                        theme={themeColor === 'light' ? 'light' : 'dark'}
-                        style={{
-                            minWidth: 0,
-                            flex: 'auto',
-                            width: '100%'
-                        }}
-                    />
-                </div>
-            ) : (
-                <div className={"playout-menu"}>
-                    <RenderButton/>
-                </div>
-            )
+        <Menu
+            selectedKeys={[activeKey]}
+            mode={menuModeSlice === 'inline' ? 'inline' : 'vertical'}
+            items={menu}
+            defaultSelectedKeys={['Home']}
+            style={{
+                minWidth: 0,
+                flex: 'auto',
+                width: '100%'
+            }}
+        />
     )
 }
 

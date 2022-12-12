@@ -226,5 +226,13 @@
   "close": "Close",
   "details": "Details",
   "advancedFeatures": "Advanced Features",
-  "mobileTerminal": "Mobile Terminal"
+  "mobileTerminal": "Mobile Terminal",
+  "tips": "Tips",
+  "tips-1": "You are visiting the web",
+  "tips-2": "The web side supports dozens of functions including submitting applications, querying application records, approving applications, and user management.",
+  "tips-3": "You can also access it through the mobile terminal, which supports functions such as querying application records, user management, and approving applications.",
+  "tips-4": "Limited by mobile devices, some functions of the mobile terminal are unavailable。",
+  "tips-5": "We recommend mobile phones, tablets and other devices to use the mobile terminal, and computers and other devices to use the web terminal.",
+  "tips-6": "You can switch to the mobile terminal by clicking the button below.",
+  "changeToMobileTerminal": "Change to Mobile Terminal"
 }

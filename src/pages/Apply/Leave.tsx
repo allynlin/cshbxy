@@ -84,13 +84,13 @@ const LeaveForm = () => {
     const submitForm = () => {
         addLeave(reason, leaveTime[0].format('YYYY-MM-DD HH:mm:ss'), leaveTime[1].format('YYYY-MM-DD HH:mm:ss')).then(res => {
             setConfirmLoading(false);
-            navigate('/home/success', {
+            navigate('/success', {
                 state: {
                     object: {
                         title: intl.get('leaveApply') + ' ' + intl.get('submitSuccess'),
                         describe: intl.get('waitApprove'),
                         toPage: intl.get('showApplyList'),
-                        toURL: '/home/record/leave',
+                        toURL: '/record/leave',
                         againTitle: intl.get('continueSubmit')
                     }
                 }

@@ -1,6 +1,5 @@
-import React from "react";
+import React, {useState} from "react";
 import {Button, Form, Input, message, Radio, Switch} from 'antd';
-import './index.scss'
 import Cookie from 'js-cookie';
 import {userLogin} from "../../component/axios/api";
 import {useNavigate} from "react-router-dom";
@@ -11,6 +10,9 @@ import {setUser} from "../../component/redux/userInfoSlice";
 import intl from "react-intl-universal";
 
 const StudentForm = () => {
+
+    const [loading, setLoading] = useState<boolean>(false);
+
     const dispatch = useDispatch();
     const [form] = Form.useForm();
     const username = Form.useWatch('username', form);
@@ -20,6 +22,7 @@ const StudentForm = () => {
     const navigate = useNavigate();
 
     const onFinish = () => {
+        setLoading(true);
         userLogin(username, password, userType).then(res => {
             dispatch(setUser(res.body))
             message.success(res.msg);
@@ -27,6 +30,8 @@ const StudentForm = () => {
             loginSuccess(res.body.userType)
         }).catch(() => {
             loginError()
+        }).finally(() => {
+            setLoading(false)
         })
     };
 
@@ -37,15 +42,15 @@ const StudentForm = () => {
         switch (e) {
             case 'Employee':
                 dispatch(Employee())
-                navigate('/home/employee')
+                navigate('/home')
                 break;
             case 'Department':
                 dispatch(Department())
-                navigate('/home/department')
+                navigate('/home')
                 break;
             case 'Leader':
                 dispatch(Leader())
-                navigate('/home/leader')
+                navigate('/home')
                 break;
         }
     }
@@ -71,35 +76,33 @@ const StudentForm = () => {
         Cookie.remove('username');
         Cookie.remove('password');
         form.resetFields();
+        form.setFieldsValue({
+            rememberme: true,
+            username: '',
+            password: ''
+        })
     };
 
     return (
         <Form
             form={form}
             name="login"
-            labelCol={{
-                span: 8,
-            }}
-            wrapperCol={{
-                span: 8,
-            }}
+            labelCol={{span: 8}}
+            wrapperCol={{span: 8}}
             onFinish={onFinish}
             initialValues={{
                 username: Cookie.get("username") || "",
                 password: Cookie.get("password") || "",
                 rememberme: true,
                 userType: Cookie.get("userType") || 'Employee',
-            }}
-        >
+            }}>
             <Form.Item
                 label={intl.get('username')}
                 name="username"
-                rules={[
-                    {
-                        required: true,
-                        message: intl.get('pleaseInputUsername'),
-                    },
-                ]}
+                rules={[{
+                    required: true,
+                    message: intl.get('pleaseInputUsername'),
+                }]}
             >
                 <Input showCount maxLength={20} allowClear={true}/>
             </Form.Item>
@@ -107,12 +110,10 @@ const StudentForm = () => {
             <Form.Item
                 label={intl.get('password')}
                 name="password"
-                rules={[
-                    {
-                        required: true,
-                        message: intl.get('pleaseInputPassword'),
-                    },
-                ]}
+                rules={[{
+                    required: true,
+                    message: intl.get('pleaseInputPassword'),
+                }]}
             >
                 <Input.Password showCount maxLength={20} allowClear={true}/>
             </Form.Item>
@@ -120,12 +121,10 @@ const StudentForm = () => {
             <Form.Item
                 label={intl.get('userType')}
                 name="userType"
-                rules={[
-                    {
-                        required: true,
-                        message: intl.get('pleaseChooseUserType'),
-                    },
-                ]}
+                rules={[{
+                    required: true,
+                    message: intl.get('pleaseChooseUserType'),
+                }]}
             >
                 <Radio.Group style={{display: "flex"}} buttonStyle="solid">
                     <Radio.Button value="Employee">{intl.get('employee')}</Radio.Button>
@@ -139,28 +138,24 @@ const StudentForm = () => {
                 label={intl.get('rememberPassword')}
                 name='rememberme'
                 valuePropName='checked'
-                rules={[
-                    {
-                        required: true,
-                        message: intl.get('pleaseChooseRememberPassword'),
-                    },
-                ]}
+                rules={[{
+                    required: true,
+                    message: intl.get('pleaseChooseRememberPassword'),
+                }]}
             >
                 <Switch style={{display: "flex"}} checkedChildren={intl.get('yes')} unCheckedChildren={intl.get('no')}/>
             </Form.Item>
 
-            <Form.Item
-                wrapperCol={{}}
-            >
-                <Button type="primary" htmlType="submit">
+            <Form.Item wrapperCol={{offset: 8, span: 16}}>
+                <Button type="primary" htmlType="submit" loading={loading} disabled={loading}>
                     {intl.get('login')}
                 </Button>
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <Button htmlType="button" onClick={onReset}>
+                <Button htmlType="button" onClick={onReset} disabled={loading}>
                     {intl.get('reset')}
                 </Button>
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <Button htmlType="button" onClick={() => {
+                <Button htmlType="button" disabled={loading} onClick={() => {
                     navigate('/register')
                 }}>
                     {intl.get('register')}

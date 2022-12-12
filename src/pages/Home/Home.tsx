@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {Breadcrumb, Layout, theme, Typography} from 'antd';
+import {Layout, theme, Typography} from 'antd';
 import {Outlet} from "react-router-dom";
 import RenderMenu from "./RenderMenu";
 import {version} from "../../baseInfo";
 import {useSelector} from "react-redux";
-import RenderBreadcrumb from "./RenderBreadcrumb";
 import RenderLogOut from "./RenderLogOut";
 import './home.scss';
 import intl from "react-intl-universal";
@@ -27,8 +26,8 @@ const App: React.FC = () => {
         const height = document.body.clientHeight;
         // 内容区域宽度计算：页面宽度 - 左侧导航栏宽度（200/80）- padding（40）
         const contentWidth = collapsed ? width - 80 - 40 : width - 200 - 40;
-        // 内容区域高度计算：页面高度 - 页面顶部（54） - 页面底部（40） - padding（100）
-        const contentHeight = height - 54 - 40 - 100;
+        // 内容区域高度计算：页面高度 - 页面顶部（54） - 页面底部（40） - padding（65）
+        const contentHeight = height - 54 - 40 - 65;
         setWidth(contentWidth);
         setHeight(contentHeight);
     }, [collapsed]);
@@ -42,7 +41,7 @@ const App: React.FC = () => {
     return (
         <Layout>
             <Header className="header">
-                <Title level={2} className={'tit'}>{intl.get('sysName')}</Title>
+                <Title level={3} className={'tit'}>{intl.get('sysName')}</Title>
                 <RenderLogOut/>
             </Header>
             <Layout>
@@ -54,18 +53,12 @@ const App: React.FC = () => {
                     <RenderMenu/>
                 </Sider>
                 <Layout style={{padding: '0 24px 24px'}}>
-                    <Breadcrumb style={{margin: '16px 0'}}>
-                        <RenderBreadcrumb/>
-                    </Breadcrumb>
                     <Content
+                        className={'layout-content'}
                         style={{
-                            padding: 24,
-                            margin: 0,
-                            minHeight: 280,
                             background: colorBgContainer,
                             width: width,
                             height: height,
-                            overflow: 'auto',
                         }}
                     >
                         <Outlet/>

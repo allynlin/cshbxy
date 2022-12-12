@@ -42,9 +42,9 @@ const Employee: React.FC = () => {
                 <Descriptions.Item label={intl.get('status')}>
                     {userInfo.status === 0 ? intl.get('normal') : intl.get('disabled')}
                 </Descriptions.Item>
-                <Descriptions.Item label={intl.get('department')}>
+                {userInfo.departmentUid ? <Descriptions.Item label={intl.get('department')}>
                     {userInfo.departmentUid}
-                </Descriptions.Item>
+                </Descriptions.Item> : null}
             </Descriptions>
         </div>
     )
