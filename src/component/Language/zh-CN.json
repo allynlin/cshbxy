@@ -238,5 +238,6 @@
   "changeToMobileTerminal": "切换到移动端",
   "checkUser": "校验用户",
   "checkUserSuccess": "校验用户成功",
-  "checkUserFailed": "校验用户失败"
+  "checkUserFailed": "校验用户失败",
+  "lowBrowserVersion": "您当前浏览器暂不支持现代 CSS Selectors 特性，本系统已暂停对低版本浏览器的支持，请更新当前浏览器或更换受支持的浏览器访问。建议使用现代浏览器（如 Chrome,Edge,Firefox 等等）"
 }

@@ -23,6 +23,7 @@ import intl from 'react-intl-universal';
 import {setUser} from "./component/redux/userInfoSlice";
 import {setLowVersion} from "./component/redux/serverLowVersionSlice";
 import ChangeSystem from "./component/ChangeSystem/ChangeSystem";
+import {getBrowserInfo} from "./checkBrowser";
 
 const locals = {
     'English': require('./component/Language/en-US.json'),
@@ -54,6 +55,7 @@ export default function App() {
     }, [userLanguage])
 
     useEffect(() => {
+        getBrowserInfo()
         Cookie.get('language') === "en_US" ? dispatch(English()) : dispatch(Chinese())
         LStorage.get('menuMode') === 'vertical' ? dispatch(vertical()) : dispatch(inline())
         // 如果在 localStrong 中有颜色设置就使用 localStrong 中的颜色设置

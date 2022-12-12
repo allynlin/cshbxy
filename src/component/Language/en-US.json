@@ -237,5 +237,6 @@
   "changeToMobileTerminal": "Change to Mobile Terminal",
   "checkUser": "Check User",
   "checkUserSuccess": "Check user success",
-  "checkUserFailed": "Check user failed"
+  "checkUserFailed": "Check user failed",
+  "lowBrowserVersion": "Your current browser does not support the modern CSS Selectors feature. This system has suspended support for low-version browsers. Please update your current browser or change to a supported browser to visit. A modern browser is recommended (e.g. Chrome, Edge, Firefox, etc.)"
 }
