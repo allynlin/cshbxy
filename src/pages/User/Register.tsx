@@ -154,7 +154,7 @@ const RegisterStudent = () => {
             }}
         >
             <Form.Item wrapperCol={{offset: 8, span: 16}}>
-                <Radio.Group defaultValue="DepartmentChange" buttonStyle="solid" onChange={e => {
+                <Radio.Group defaultValue="Employee" buttonStyle="solid" onChange={e => {
                     setRegisterType(e.target.value)
                 }}>
                     <Radio.Button value="Leader">{intl.get('leaderRegister')}</Radio.Button>

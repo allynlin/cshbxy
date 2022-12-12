@@ -235,5 +235,8 @@
   "tips-4": "受限于移动端设备，移动端有部分功能无法使用",
   "tips-5": "我们推荐手机，平板等设备使用移动端，电脑等设备使用 Web 端",
   "tips-6": "您可以通过点击下方按钮切换到移动端",
-  "changeToMobileTerminal": "切换到移动端"
+  "changeToMobileTerminal": "切换到移动端",
+  "checkUser": "校验用户",
+  "checkUserSuccess": "校验用户成功",
+  "checkUserFailed": "校验用户失败"
 }

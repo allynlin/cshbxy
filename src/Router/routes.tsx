@@ -7,6 +7,9 @@ import Home from "../pages/Home/Home";
 
 const routes = [{
     path: '/',
+    redirect: '/home'
+}, {
+    path: '/',
     element: <Home/>,
     meta: {
         title: 'Home',
@@ -14,6 +17,13 @@ const routes = [{
     },
     // 根元素使用 element 的方式导入，避免路由导航的时候刷新根元素
     children: [{
+        path: 'home',
+        component: () => import('../pages/Index/Index'),
+        meta: {
+            title: 'Home',
+            titleCN: '首页'
+        }
+    }, {
         path: 'login',
         component: () => import('../pages/User/Login'),
         meta: {
@@ -26,13 +36,6 @@ const routes = [{
         meta: {
             title: 'Register',
             titleCN: '注册'
-        }
-    }, {
-        path: 'home',
-        component: () => import('../pages/Index/Index'),
-        meta: {
-            title: 'Home',
-            titleCN: '首页'
         }
     }, {
         path: 'setting',

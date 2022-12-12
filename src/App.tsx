@@ -39,6 +39,9 @@ export const rootNavigate = (to: string) => {
 export default function App() {
     const [isRender, setIsRender] = useState(false);
 
+    const [messageApi, contextHolder] = message.useMessage();
+    const key = 'checkUser';
+
     const dispatch = useDispatch();
 
     const userLanguage = useSelector((state: any) => state.userLanguage.value)
@@ -77,6 +80,11 @@ export default function App() {
         })
         const token = Cookie.get('token');
         if (token) {
+            messageApi.open({
+                key,
+                type: 'loading',
+                content: intl.get('checkUser'),
+            });
             checkUserInfo();
         }
     }, [])
@@ -111,6 +119,12 @@ export default function App() {
     const checkUserInfo = () => {
         checkUser().then(res => {
             if (res.code === 200) {
+                messageApi.open({
+                    key,
+                    type: 'success',
+                    content: intl.get('checkUserSuccess'),
+                    duration: 3,
+                });
                 dispatch(setUser(res.body))
                 dispatch(login())
                 setIsRender(true)
@@ -130,6 +144,13 @@ export default function App() {
                 }
             } else {
                 message.error(res.msg)
+                messageApi.open({
+                    key,
+                    type: 'error',
+                    content: intl.get('checkUserFailed'),
+                    duration: 3,
+                });
+                rootNavigate('/login')
             }
         }).finally(() => {
             setIsRender(true)
@@ -164,6 +185,7 @@ export default function App() {
 
     return (
         <>
+            {contextHolder}
             <ChangeSystem/>
             <ConfigProvider locale={
                 userLanguage === 'English' ? enUS : zhCN
