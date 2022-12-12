@@ -51,11 +51,11 @@ export default function DepartmentUser() {
         // 获取页面高度
         const height = document.body.clientHeight;
         // 虚拟列表的宽度计算：页面宽度 - 左侧导航栏宽度（200）- 右侧边距（20） - 表格左右边距（20）
-        const tableWidth = width - 200 - 40;
+        const tableWidth = width - 100 - 40;
         // 虚拟列表高度计算：液面高度 - 页面顶部（10%，最小50px） - 页面底部（5%，最小20px） - 表格上下边距（20）
-        const bottomHeight = height * 0.05 >= 20 ? height * 0.05 : 20;
-        const topHeight = height * 0.1 >= 50 ? height * 0.1 : 50;
-        const tableHeight = height - bottomHeight - topHeight - 100 - 43;
+        // const bottomHeight = height * 0.05 >= 20 ? height * 0.05 : 20;
+        // const topHeight = height * 0.1 >= 50 ? height * 0.1 : 50;
+        const tableHeight = height - 54 - 64 - 67 - 100 - 43 - 80;
         setWidth(tableWidth);
         setHeight(tableHeight);
     }, [])

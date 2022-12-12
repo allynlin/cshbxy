@@ -1,20 +1,18 @@
 import type {RadioChangeEvent} from 'antd';
-import {Radio} from 'antd';
+import {Radio, Segmented} from 'antd';
 import React from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {inline, vertical} from "../../component/redux/menuModeSlice";
-import {LStorage} from "../../component/localStrong";
 import intl from "react-intl-universal";
 
 const MenuModeSetting = () => {
 
     const dispatch = useDispatch();
 
-    const menuModeSlice = useSelector((state: { menuMode: { value: 'inline' | 'vertical' } }) => state.menuMode.value)
+    const menuModeSlice = useSelector((state: any) => state.menuMode.value)
 
     const onChange = (e: RadioChangeEvent) => {
         dispatch(e.target.value === 'inline' ? inline() : vertical())
-        LStorage.set('menuMode', e.target.value)
     };
 
     return (

@@ -29,7 +29,7 @@ export default function ChangeSystem() {
     }
 
     return (
-        <FloatButton.Group icon={<SettingOutlined/>} trigger="click">
+        <FloatButton.Group type="primary" icon={<SettingOutlined/>} trigger="click">
             <FloatButton
                 onClick={() => themeColor === 'light' ? dispatch(darkTheme()) : dispatch(lightTheme())}
                 tooltip={themeColor === 'light' ? intl.get('darkMode') : intl.get('lightMode')}

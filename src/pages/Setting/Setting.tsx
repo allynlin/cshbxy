@@ -4,7 +4,6 @@ import {blue, yellow} from "../../baseInfo";
 import MenuModeSetting from "./MenuModeSetting";
 import ThemeSetting from "./ThemeSetting";
 import LanguageSetting from "./LanguageSetting";
-import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {inline} from "../../component/redux/menuModeSlice";
 import {sysTheme} from "../../component/redux/sysColorSlice";
@@ -19,14 +18,9 @@ const {Title} = Typography;
 
 const Setting = () => {
 
-    const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const themeColor = useSelector((state: {
-        themeColor: {
-            value: 'light' | 'dark'
-        }
-    }) => state.themeColor.value)
+    const themeColor = useSelector((state:any) => state.themeColor.value)
 
     const backColor = themeColor === 'light' ? 'rgba(236, 243, 249, 1)' : 'rgba(236, 243, 249, 0.4)'
 

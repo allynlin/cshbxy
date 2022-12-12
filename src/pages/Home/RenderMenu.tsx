@@ -8,7 +8,6 @@ import {
     ProjectOutlined,
 } from '@ant-design/icons';
 import React, {useEffect, useState} from 'react';
-import './playOut.scss'
 import {Link, useLocation} from 'react-router-dom';
 import {useSelector} from "react-redux";
 import type {MenuProps} from 'antd/es/menu';
@@ -167,8 +166,7 @@ const RenderMenu = () => {
     }
 
     return (
-        isLogin ?
-            (
+        isLogin ? (
                 <div className={"playout-menu"}>
                     <Menu
                         activeKey={activeKey}
@@ -183,8 +181,7 @@ const RenderMenu = () => {
                         }}
                     />
                 </div>
-            ) :
-            (
+            ) : (
                 <div className={"playout-menu"}>
                     <RenderButton/>
                 </div>

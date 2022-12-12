@@ -1,4 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit'
+import {LStorage} from "../localStrong";
 
 const initialState: { value: 'vertical' | 'inline' } = {
     value: 'inline',
@@ -10,9 +11,11 @@ export const menuModeSlice = createSlice({
     reducers: {
         inline: state => {
             state.value = "inline"
+            LStorage.set('menuMode', 'inline')
         },
         vertical: state => {
             state.value = "vertical"
+            LStorage.set('menuMode', 'vertical')
         }
     },
 })

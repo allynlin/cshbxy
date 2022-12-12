@@ -1,4 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit'
+import {LStorage} from "../localStrong";
 
 const initialState: { value: 'light' | 'dark' | 'sys' } = {
     value: 'sys',
@@ -10,12 +11,15 @@ export const sysColorSlice = createSlice({
     reducers: {
         lightTheme: state => {
             state.value = 'light'
+            LStorage.set('themeColor', 'light')
         },
         darkTheme: state => {
             state.value = 'dark'
+            LStorage.set('themeColor', 'dark')
         },
         sysTheme: state => {
             state.value = 'sys'
+            LStorage.set('themeColor', 'sys')
         }
     },
 })

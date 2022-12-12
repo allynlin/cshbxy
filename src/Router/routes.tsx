@@ -1,10 +1,10 @@
-import PlayOut from "../pages/Home/PlayOut";
 import apply from './apply'
 import record from "./record";
 import approval from "./approval";
 import management from "./management";
 import {Error101, Error103, Error403, Error404, Error500, Success} from "../pages/Result/Result";
 import {User} from "../pages/User";
+import Home from "../pages/Home/Home";
 
 const routes = [
     {
@@ -36,7 +36,7 @@ const routes = [
         ]
     }, {
         path: '/home',
-        element: <PlayOut/>,
+        element: <Home/>,
         meta: {
             title: 'Home',
             titleCN: '首页'

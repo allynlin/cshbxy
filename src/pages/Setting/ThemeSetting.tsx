@@ -3,7 +3,6 @@ import {Radio} from 'antd';
 import React from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {darkTheme, lightTheme, sysTheme} from "../../component/redux/sysColorSlice";
-import {LStorage} from "../../component/localStrong";
 import intl from "react-intl-universal";
 
 const ThemeSetting = () => {
@@ -26,7 +25,6 @@ const ThemeSetting = () => {
             default:
                 dispatch(sysTheme())
         }
-        LStorage.set('themeColor', e.target.value)
     };
 
     return (
