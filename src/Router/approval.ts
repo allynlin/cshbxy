@@ -27,7 +27,7 @@ const teacherRecord = [{
     }
 }, {
     path: 'procurement-approval',
-    component: () => import('../pages/Approval/Procurement/ProcurementPreview'),
+    component: () => import('../pages/Approval/Procurement'),
     meta: {
         title: 'Approval Procurement',
         titleCN: '采购',

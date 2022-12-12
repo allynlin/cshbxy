@@ -81,7 +81,7 @@ const Reject = (props: any) => {
     };
 
     return (
-        <div>
+        <>
             <Button
                 type="primary"
                 onClick={() => {
@@ -99,7 +99,7 @@ const Reject = (props: any) => {
                     setOpen(false);
                 }}
             />
-        </div>
+        </>
     );
 };
 

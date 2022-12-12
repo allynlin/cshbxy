@@ -347,8 +347,10 @@ const App: React.FC = () => {
                                                     <Card size="small" className="file-item" hoverable key={index}
                                                           title={intl.get('file') + (index + 1)}
                                                           bordered={false}>
-                                                        <a href={`${DownLoadURL}/downloadFile?filename=${item.fileName}`}
-                                                           target="_self">{item.oldFileName}</a>
+                                                        <Typography.Paragraph ellipsis>
+                                                            <a href={`${DownLoadURL}/downloadFile?filename=${item.fileName}`}
+                                                               target="_self">{item.oldFileName}</a>
+                                                        </Typography.Paragraph>
                                                     </Card>
                                                 )
                                             })}

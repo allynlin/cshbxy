@@ -331,29 +331,26 @@ const App: React.FC = () => {
                         <p>{intl.get('file')}：</p>
                         {
                             fileLoading ? (
-                                    <div className="skeleton-file">
-                                        <Skeleton.Node active>
-                                            <FileTextOutlined className={'skeleton-files'}/>
-                                        </Skeleton.Node>
-                                    </div>
-                                ) :
-                                // 如果 fileList 不为空则渲染
-                                fileList.length > 0 ? (
-                                    <>
-                                        <div className="showFile">
-                                            {fileList.map((item: any, index: number) => {
-                                                return (
-                                                    <Card size="small" className="file-item" hoverable key={index}
-                                                          title={intl.get('file') + (index + 1)}
-                                                          bordered={false}>
-                                                        <a href={`${DownLoadURL}/downloadFile?filename=${item.fileName}`}
-                                                           target="_self">{item.oldFileName}</a>
-                                                    </Card>
-                                                )
-                                            })}
-                                        </div>
-                                    </>
-                                ) : null
+                                <div className="skeleton-file">
+                                    <Skeleton.Node active>
+                                        <FileTextOutlined className={'skeleton-files'}/>
+                                    </Skeleton.Node>
+                                </div>
+                            ) : <div className="showFile">
+                                {fileList.map((item: any, index: number) => {
+                                    return (
+                                        <Card size="small" className="file-item" hoverable key={index}
+                                              title={intl.get('file') + (index + 1)}
+                                              bordered={false}>
+                                            <Typography.Paragraph ellipsis>
+                                                <a href={`${DownLoadURL}/downloadFile?filename=${item.fileName}`}
+                                                   target="_self">{item.oldFileName}</a>
+                                            </Typography.Paragraph>
+                                        </Card>
+                                    )
+                                })
+                                }
+                            </div>
                         }
                         <p>{intl.get('approveProcess')}：</p>
                         {
