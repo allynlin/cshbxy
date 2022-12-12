@@ -35,9 +35,14 @@ const App: React.FC = () => {
         const tableWidth = collapsed ? width - 80 - 40 : width - 200 - 40;
         // 虚拟列表高度计算：页面高度 - 页面顶部（54） - 页面底部（40） - padding（65）
         const tableHeight = height - 54 - 40 - 220;
-        dispatch(setTableSize({tableWidth, tableHeight}));
-        setWidth(contentWidth);
-        setHeight(contentHeight);
+        const wait = setTimeout(() => {
+            dispatch(setTableSize({tableWidth, tableHeight}));
+            setWidth(contentWidth);
+            setHeight(contentHeight);
+        }, 500)
+        return () => {
+            clearTimeout(wait)
+        }
     }, [collapsed]);
 
     const {
@@ -56,7 +61,7 @@ const App: React.FC = () => {
                 <Sider
                     collapsible
                     collapsed={collapsed}
-                    style={{background: colorBgContainer}}
+                    theme={'light'}
                     onCollapse={(value) => setCollapsed(value)}>
                     <RenderMenu/>
                 </Sider>
