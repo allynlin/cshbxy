@@ -15,6 +15,7 @@ import ChangeUserInfo from "./ChangeUserInfo";
 import ChangePassword from "./ChangePassword";
 import ChangeUserStatus from "./ChangeUserStatus";
 import DeleteUser from "./DeleteUser";
+import {useSelector} from "react-redux";
 
 const {Title} = Typography;
 
@@ -39,24 +40,8 @@ export default function UserManagement() {
     const [showContent, setShowContent] = useState<boolean>(true);
     // 详情弹窗
     const [showModal, setShowModal] = useState<boolean>(false);
-    // 虚拟列表的宽度和高度
-    const [width, setWidth] = useState<number>(0);
-    const [height, setHeight] = useState<number>(0);
 
-    useEffect(() => {
-        // 获取页面宽度
-        const width = document.body.clientWidth;
-        // 获取页面高度
-        const height = document.body.clientHeight;
-        // 虚拟列表的宽度计算：页面宽度 - 左侧导航栏宽度（200）- 右侧边距（20） - 表格左右边距（20）
-        const tableWidth = width - 200 - 40;
-        // 虚拟列表高度计算：液面高度 - 页面顶部（10%，最小50px） - 页面底部（5%，最小20px） - 表格上下边距（20）
-        const bottomHeight = height * 0.05 >= 20 ? height * 0.05 : 20;
-        const topHeight = height * 0.1 >= 50 ? height * 0.1 : 50;
-        const tableHeight = height - bottomHeight - topHeight - 100 - 43;
-        setWidth(tableWidth);
-        setHeight(tableHeight);
-    }, [])
+    const tableSize = useSelector((state: any) => state.tableSize.value);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -454,7 +439,8 @@ export default function UserManagement() {
                     <Skeleton.Button block active className={'skeleton-tr'}/>
                 </div>
             </div>
-            <VirtualTable columns={columns} dataSource={showData} scroll={{y: height, x: width}}/>
+            <VirtualTable columns={columns} dataSource={showData}
+                          scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}/>
         </div>
     )
 };

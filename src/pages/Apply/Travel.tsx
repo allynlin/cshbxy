@@ -68,7 +68,7 @@ const LeaveForm = () => {
                         title: intl.get('travelReimburseApply') + ' ' + intl.get('submitSuccess'),
                         describe: intl.get('waitApprove'),
                         toPage: intl.get('showApplyList'),
-                        toURL: '/record/travel',
+                        toURL: '/travel-record',
                     }
                 }
             })

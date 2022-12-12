@@ -5,6 +5,7 @@ import {ExclamationCircleOutlined, SearchOutlined} from "@ant-design/icons";
 import '../../App.scss';
 import {findAllProcess, findProcessUser, updateProcess} from "../../component/axios/api";
 import {yellow} from "../../baseInfo";
+import {useSelector} from "react-redux";
 
 const {Title} = Typography;
 
@@ -23,24 +24,7 @@ const ProcessManagement = () => {
     const [content, setContent] = useState<any>(null);
     const [open, setOpen] = useState(false);
 
-    // 虚拟列表的宽度和高度
-    const [width, setWidth] = useState<number>(0);
-    const [height, setHeight] = useState<number>(0);
-
-    useEffect(() => {
-        // 获取页面宽度
-        const width = document.body.clientWidth;
-        // 获取页面高度
-        const height = document.body.clientHeight;
-        // 虚拟列表的宽度计算：页面宽度 - 左侧导航栏宽度（200）- 右侧边距（20） - 表格左右边距（20）
-        const tableWidth = width - 200 - 40;
-        // 虚拟列表高度计算：液面高度 - 页面顶部（10%，最小50px） - 页面底部（5%，最小20px） - 表格上下边距（20）
-        const bottomHeight = height * 0.05 >= 20 ? height * 0.05 : 20;
-        const topHeight = height * 0.1 >= 50 ? height * 0.1 : 50;
-        const tableHeight = height - bottomHeight - topHeight - 100;
-        setWidth(tableWidth);
-        setHeight(tableHeight);
-    }, [])
+    const tableSize = useSelector((state: any) => state.tableSize.value);
 
     useEffect(() => {
         getProcessPerson();
@@ -171,10 +155,11 @@ const ProcessManagement = () => {
                     render={item => item.title}
                 />
             </Modal>
-            <div style={{width: width, height: height}}>
+            <>
                 {loading ? <Skeleton active paragraph={{rows: 10}}/> : <List
                     itemLayout="horizontal"
                     dataSource={dataSource}
+                    style={{width: tableSize.tableWidth - 100, height: tableSize.tableHeight}}
                     renderItem={(item: any) => (
                         <List.Item
                             actions={[
@@ -208,7 +193,7 @@ const ProcessManagement = () => {
                         </List.Item>
                     )}
                 />}
-            </div>
+            </>
         </div>
     )
 };

@@ -29,7 +29,7 @@ const ProcurementForm = () => {
                         title: intl.get('procurementApply') + ' ' + intl.get('submitSuccess'),
                         describe: intl.get('waitApprove'),
                         toPage: intl.get('showApplyList'),
-                        toURL: '/record/procurement',
+                        toURL: '/procurement-record',
                         againTitle: intl.get('continueSubmit')
                     }
                 }
