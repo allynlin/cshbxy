@@ -24,6 +24,7 @@ import {setUser} from "./component/redux/userInfoSlice";
 import {setLowVersion} from "./component/redux/serverLowVersionSlice";
 import ChangeSystem from "./component/ChangeSystem/ChangeSystem";
 import {getBrowserInfo} from "./checkBrowser";
+import {version} from "./baseInfo";
 
 const locales = {
     'English': require('./component/Language/en-US.json'),
@@ -38,7 +39,6 @@ export const rootNavigate = (to: string) => {
 
 
 export default function App() {
-    const [isRender, setIsRender] = useState(false);
     const [language, setLanguage] = useState<any>(zhCN);
 
     const [messageApi, contextHolder] = message.useMessage();
@@ -47,6 +47,8 @@ export default function App() {
     const dispatch = useDispatch();
 
     const userLanguage = useSelector((state: any) => state.userLanguage.value)
+    const sysColor = useSelector((state: any) => state.sysColor.value)
+    const serverLowVersion = useSelector((state: any) => state.serverLowVersion.value)
 
     useEffect(() => {
         changeLanguage(userLanguage)
@@ -86,6 +88,9 @@ export default function App() {
         })
         getLowVersion().then(res => {
             dispatch(setLowVersion(res.body))
+            if (version < res.body) {
+                rootNavigate('/103');
+            }
         })
         const token = Cookie.get('token');
         if (token) {
@@ -97,8 +102,6 @@ export default function App() {
             checkUserInfo();
         }
     }, [])
-
-    const sysColor = useSelector((state: any) => state.sysColor.value)
 
     // 当 themeColor 为 sys 时，根据系统颜色设置主题颜色
     useEffect(() => {
@@ -136,7 +139,6 @@ export default function App() {
                 });
                 dispatch(setUser(res.body))
                 dispatch(login())
-                setIsRender(true)
                 switch (res.body.userType) {
                     case 'Employee':
                         dispatch(Employee())
@@ -146,9 +148,6 @@ export default function App() {
                         break
                     case 'Leader':
                         dispatch(Leader())
-                        break
-                    default:
-                        setIsRender(true)
                         break
                 }
             } else {
@@ -161,14 +160,18 @@ export default function App() {
                 });
                 rootNavigate('/login')
             }
-        }).finally(() => {
-            setIsRender(true)
+        }).catch(() => {
+            messageApi.open({
+                key,
+                type: 'error',
+                content: intl.get('checkUserFailed'),
+                duration: 3,
+            })
         })
     }
 
     // 路由跳转鉴权
     const onRouteBefore = ({pathname, meta}: any) => {
-        if (!isRender) return false
         if (meta) {
             if (meta.title) {
                 if (meta.titleCN === undefined) {
