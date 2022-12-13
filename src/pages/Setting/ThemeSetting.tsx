@@ -28,10 +28,10 @@ const ThemeSetting = () => {
     };
 
     return (
-        <Radio.Group onChange={onChange} value={sysColor}>
-            <Radio value={"light"}>{intl.get('lightMode')}</Radio>
-            <Radio value={"dark"}>{intl.get('darkMode')}</Radio>
-            <Radio value={"sys"}>{intl.get('autoMode')}</Radio>
+        <Radio.Group onChange={onChange} value={sysColor} buttonStyle="solid">
+            <Radio.Button value={"light"}>{intl.get('lightMode')}</Radio.Button>
+            <Radio.Button value={"dark"}>{intl.get('darkMode')}</Radio.Button>
+            <Radio.Button value={"sys"}>{intl.get('autoMode')}</Radio.Button>
         </Radio.Group>
     );
 };

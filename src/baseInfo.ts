@@ -14,25 +14,6 @@ export const tableName = {
 }
 
 // 色彩
-export const red = '#f32401';
-export const green = '#006c01';
-export const yellow = '#ff8d00';
-export const blue = '#40a9ff';
 export const purple = '#9254de';
 export const orange5 = '#ffa940';
 export const lime7 = '#7cb305';
-
-export const greenButton = {
-    backgroundColor: green,
-    borderColor: green,
-}
-
-export const redButton = {
-    backgroundColor: red,
-    borderColor: red,
-}
-
-export const yellowButton = {
-    backgroundColor: yellow,
-    borderColor: yellow,
-}

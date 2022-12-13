@@ -4,14 +4,18 @@ import './index.scss';
 import Token from "./Token";
 import {Provider} from "react-redux";
 import store from "./component/redux/store";
+import ErrorBoundary from "./ErrorBoundary";
+
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
 root.render(
     <React.StrictMode>
-        <Provider store={store}>
-            <Token/>
-        </Provider>
+        <ErrorBoundary>
+            <Provider store={store}>
+                <Token/>
+            </Provider>
+        </ErrorBoundary>
     </React.StrictMode>
 );

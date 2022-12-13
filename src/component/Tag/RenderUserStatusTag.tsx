@@ -10,27 +10,26 @@ import {CheckCircleOutlined, CloseCircleOutlined, ExclamationCircleOutlined} fro
 import React from "react";
 import intl from "react-intl-universal";
 
-import {blue, green, red} from "../../baseInfo";
-
 export const RenderUserStatusTag = (status: string) => {
+
     switch (status) {
         case 'Normal':
         case '正常':
             return (
-                <Tag icon={<CheckCircleOutlined/>} color={green}>
+                <Tag icon={<CheckCircleOutlined/>} color={"success"}>
                     {intl.get('normal')}
                 </Tag>
             )
         case 'Disabled':
         case '禁用':
             return (
-                <Tag icon={<CloseCircleOutlined/>} color={red}>
+                <Tag icon={<CloseCircleOutlined/>} color={"error"}>
                     {intl.get('disabled')}
                 </Tag>
             )
         default:
             return (
-                <Tag icon={<ExclamationCircleOutlined/>} color={blue}>
+                <Tag icon={<ExclamationCircleOutlined/>} color={"processing"}>
                     {intl.get('unKnowUserType')}
                 </Tag>
             )

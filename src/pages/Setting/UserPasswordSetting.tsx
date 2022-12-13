@@ -1,4 +1,4 @@
-import {Button, Form, Input, Modal, notification} from 'antd';
+import {Button, Form, Input, message, Modal} from 'antd';
 import React, {useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import intl from "react-intl-universal";
@@ -7,7 +7,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {logout} from "../../component/redux/isLoginSlice";
 import {all} from "../../component/redux/userTypeSlice";
 import Cookie from "js-cookie";
-import {purple} from "../../baseInfo";
 
 interface Values {
     title: string;
@@ -50,11 +49,7 @@ const UserPasswordSetting: React.FC = () => {
                             onCreate(values);
                         })
                         .catch(() => {
-                            notification["error"]({
-                                message: intl.get('submitFailed'),
-                                description: intl.get('pleaseInputAllInfo'),
-                                className: 'back-drop'
-                            });
+                            message.error(intl.get("pleaseInputAllInfo"))
                         });
                 }}
             >
@@ -84,20 +79,12 @@ const UserPasswordSetting: React.FC = () => {
 
     const onCreate = (values: any) => {
         if (values.password !== values.repeatPassword) {
-            notification["error"]({
-                message: intl.get('submitFailed'),
-                description: intl.get('twoPasswordIsNotSame'),
-                className: 'back-drop'
-            })
+            message.error(intl.get('twoPasswordIsNotSame'));
             return
         }
         updatePassword(userInfo.uid, values.password).then(res => {
             if (res.code === 200) {
-                notification["success"]({
-                    message: intl.get('changeSuccess'),
-                    description: intl.get('changeSuccessNotice'),
-                    className: 'back-drop'
-                })
+                message.success(intl.get('changeSuccessNotice'));
                 dispatch(logout())
                 dispatch(all())
                 Cookie.remove('token');
@@ -112,14 +99,9 @@ const UserPasswordSetting: React.FC = () => {
         <div>
             <Button
                 type="primary"
-                style={{backgroundColor: purple, borderColor: purple}}
                 onClick={() => {
                     setOpen(true);
-                    notification["warning"]({
-                        message: intl.get('attention'),
-                        description: intl.get('changePasswordNotice'),
-                        className: 'back-drop'
-                    });
+                    message.warning(intl.get('changePasswordNotice'))
                 }}
             >
                 {intl.get('changePassword')}

@@ -142,8 +142,8 @@ const ChangeForm = () => {
             <Form
                 form={form}
                 name="basic"
-                labelCol={{span: 8}}
-                wrapperCol={{span: 16}}
+                labelCol={{span: 6}}
+                wrapperCol={{span: 12}}
                 onFinish={onFinish}
                 initialValues={{
                     file: fileList
@@ -173,7 +173,7 @@ const ChangeForm = () => {
                     />
                 </Form.Item>
 
-                <Form.Item wrapperCol={{offset: 8, span: 16}} style={{textAlign: "center"}}>
+                <Form.Item wrapperCol={{offset: 6, span: 12}} style={{textAlign: "center"}}>
                     <Button type="primary" htmlType="submit">
                         {intl.get('submit')}
                     </Button>

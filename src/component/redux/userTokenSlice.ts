@@ -1,11 +1,18 @@
 import {createSlice} from '@reduxjs/toolkit'
+import {LStorage} from "../localStrong";
 
 interface Interface {
     value: object
 }
 
 const initialState: Interface = {
-    value: {} as object,
+    value: {
+        colorPrimary: '#1677ff',
+        borderRadius: 6,
+        colorError: '#f32401',
+        colorSuccess: '#006c01',
+        colorWarning: '#ff8d00',
+    },
 }
 
 export const userTokenSlice = createSlice({
@@ -13,7 +20,8 @@ export const userTokenSlice = createSlice({
     initialState,
     reducers: {
         setToken: (state, action) => {
-            state.value = action.payload
+            state.value = action.payload;
+            LStorage.set('userToken', action.payload);
         }
     },
 })

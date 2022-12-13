@@ -1,9 +1,8 @@
-import {Button, Form, Input, Modal, notification} from 'antd';
+import {Button, Form, Input, Modal, message} from 'antd';
 import React, {useState} from 'react';
 import intl from "react-intl-universal";
 import {checkUsername, updateUserName} from "../../component/axios/api";
 import {useDispatch, useSelector} from "react-redux";
-import {orange5} from "../../baseInfo";
 import {logout} from "../../component/redux/isLoginSlice";
 import {all} from "../../component/redux/userTypeSlice";
 import Cookie from "js-cookie";
@@ -59,10 +58,7 @@ const UserInfoSetting: React.FC = () => {
                 onCancel={onCancel}
                 onOk={() => {
                     if (!usernameUse) {
-                        notification["error"]({
-                            message: intl.get('usernameIsExist'),
-                            className: 'back-drop'
-                        });
+                        message.error(intl.get("usernameIsExist"))
                         return
                     }
                     form
@@ -71,13 +67,7 @@ const UserInfoSetting: React.FC = () => {
                             form.resetFields();
                             onCreate(values);
                         })
-                        .catch(() => {
-                            notification["error"]({
-                                message: intl.get('submitFailed'),
-                                description: intl.get('pleaseInputAllInfo'),
-                                className: 'back-drop'
-                            });
-                        });
+                        .catch(() => message.error(intl.get("pleaseInputAllInfo")));
                 }}
             >
                 <Form
@@ -111,11 +101,7 @@ const UserInfoSetting: React.FC = () => {
     const onCreate = (values: any) => {
         updateUserName(userInfo.uid, values.username).then(res => {
             if (res.code === 200) {
-                notification["success"]({
-                    message: intl.get('changeSuccess'),
-                    description: intl.get('changeSuccessNotice'),
-                    className: 'back-drop'
-                })
+                message.success(intl.get("changeSuccessNotice"));
                 dispatch(logout())
                 dispatch(all())
                 Cookie.remove('token');
@@ -130,14 +116,9 @@ const UserInfoSetting: React.FC = () => {
         <div>
             <Button
                 type="primary"
-                style={{backgroundColor: orange5, borderColor: orange5}}
                 onClick={() => {
                     setOpen(true);
-                    notification["warning"]({
-                        message: intl.get('attention'),
-                        description: intl.get('changeUsernameNotice'),
-                        className: 'back-drop'
-                    });
+                    message.warning(intl.get("changeUsernameNotice"))
                 }}
             >
                 {intl.get('changeUsername')}

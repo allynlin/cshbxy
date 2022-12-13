@@ -23,9 +23,9 @@ const ThemeSetting = memo(() => {
     }
 
     return (
-        <Radio.Group onChange={(e: any) => handleChange(e.target.value)} value={userLanguage}>
-            <Radio value={"Chinese"}>简体中文（Simple Chinses）</Radio>
-            <Radio value={"English"}>English</Radio>
+        <Radio.Group onChange={(e: any) => handleChange(e.target.value)} value={userLanguage} buttonStyle="solid">
+            <Radio.Button value={"Chinese"}>简体中文（Simple Chinses）</Radio.Button>
+            <Radio.Button value={"English"}>English</Radio.Button>
         </Radio.Group>
     );
 });

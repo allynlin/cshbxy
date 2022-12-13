@@ -10,34 +10,33 @@ import {CheckCircleOutlined, CloseCircleOutlined, ExclamationCircleOutlined, Syn
 import React from "react";
 import intl from "react-intl-universal";
 
-import {blue, green, red, yellow} from "../../baseInfo";
-
 export const RenderStatusTag = (status: number, msg = intl.get('apply')) => {
+
     switch (status) {
         case 0:
             return (
-                <Tag icon={<SyncOutlined spin/>} color={yellow}
+                <Tag icon={<SyncOutlined spin/>} color={"warning"}
                      onClick={() => message.warning(intl.get('underApproveMessage', {name: msg}))}>
                     {intl.get('underApprove')}
                 </Tag>
             )
         case 1:
             return (
-                <Tag icon={<CheckCircleOutlined/>} color={green}
+                <Tag icon={<CheckCircleOutlined/>} color={"success"}
                      onClick={() => message.success(intl.get('passApproveMessage', {name: msg}))}>
                     {intl.get('passApprove')}
                 </Tag>
             )
         case 2:
             return (
-                <Tag icon={<CloseCircleOutlined/>} color={red}
+                <Tag icon={<CloseCircleOutlined/>} color={"error"}
                      onClick={() => message.error(intl.get('rejectApproveMessage', {name: msg}))}>
                     {intl.get('rejectApprove')}
                 </Tag>
             )
         default:
             return (
-                <Tag icon={<ExclamationCircleOutlined/>} color={blue}
+                <Tag icon={<ExclamationCircleOutlined/>} color={"processing"}
                      onClick={() => message.info(intl.get('errorApproveMessage', {name: msg}))}>
                     {intl.get('errorApprove')}
                 </Tag>

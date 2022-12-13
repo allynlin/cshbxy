@@ -56,7 +56,7 @@ const App: React.FC = () => {
 
     return (
         <Layout>
-            <Header className="header">
+            <Header className="header" style={{background: colorBgContainer}}>
                 <Title level={3} className={'tit'}>{title}</Title>
                 <RenderLogOut/>
             </Header>

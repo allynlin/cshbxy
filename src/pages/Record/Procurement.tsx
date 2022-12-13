@@ -13,7 +13,6 @@ import {RenderStatusTag} from "../../component/Tag/RenderStatusTag";
 import {RenderStatusColor} from "../../component/Tag/RenderStatusColor";
 import '../../App.scss';
 import {SearchOutlined} from "@ant-design/icons";
-import {red} from "../../baseInfo";
 import {useSelector} from "react-redux";
 
 const {Title} = Typography;
@@ -52,6 +51,7 @@ const App: React.FC = () => {
     const [confirmLoading, setConfirmLoading] = useState(false);
 
     const tableSize = useSelector((state: any) => state.tableSize.value);
+    const userToken = useSelector((state: any) => state.userToken.value)
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -285,7 +285,7 @@ const App: React.FC = () => {
                         {showInfo.reject_reason ?
                             <>
                                 {intl.get('rejectReason')}：
-                                <Tag color={red}>{showInfo.reject_reason}</Tag>
+                                <Tag color={userToken.colorError}>{showInfo.reject_reason}</Tag>
                             </> : null}
                         <p>{intl.get('createTime')}：{showInfo.create_time}</p>
                         <p>{intl.get('updateTime')}：{showInfo.update_time}</p>

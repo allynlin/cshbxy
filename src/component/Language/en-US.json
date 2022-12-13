@@ -239,5 +239,15 @@
   "checkUserSuccess": "Check user success",
   "checkUserFailed": "Check user failed",
   "lowBrowserVersion": "Your current browser does not support the modern CSS Selectors feature. This system has suspended support for low-version browsers. Please update your current browser or change to a supported browser to visit. A modern browser is recommended (e.g. Chrome, Edge, Firefox, etc.)",
-  "confirmLogOut": "Are you sure you want to log out?"
+  "confirmLogOut": "Are you sure you want to log out?",
+  "requiredItem": "Required Item",
+  "tokenSetting": "Token Setting",
+  "token-1": "Token is the global theme color, which is used to build the overall theme color of buttons, input boxes, tabs and other components.",
+  "token-2": "At present, we provide a perfect dark mode and light mode, you can switch through the button on the left, or switch through the button floating in the lower right corner.",
+  "token-3": "In order to meet the different needs of different users, we provide a color visualization option for building theme colors, which includes the styles of adjustable components on all pages. You can use this example to refer to and modify your global theme colors.",
+  "token-4": "We provide preset theme colors in the following three sets",
+  "themeWarning": "experimental features",
+  "primaryThemeWarning": "Usually, we only recommend changing the theme color",
+  "changeThemeTitle": "Are you sure to modify the theme color?",
+  "changeThemeNotice": "After modifying the theme color, the theme color of all pages will be modified (In order to ensure the normal use of some functions, some colors do not support modification). Currently, this function is an experimental function, and some unknown problems may occur, please be informed. If you have any problems during use, please restore the default theme in time."
 }

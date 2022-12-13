@@ -6,7 +6,7 @@ import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
 import '../../../App.scss';
 import {ExclamationCircleOutlined, FileTextOutlined, SearchOutlined} from "@ant-design/icons";
-import {DownLoadURL, greenButton, tableName} from "../../../baseInfo";
+import {DownLoadURL, tableName} from "../../../baseInfo";
 import {useSelector} from "react-redux";
 import Reject from "./Reject";
 
@@ -39,6 +39,7 @@ export default function Travel() {
     const [fileList, setFileList] = useState<any>([]);
 
     const tableSize = useSelector((state: any) => state.tableSize.value)
+    const userToken = useSelector((state: any) => state.userToken.value)
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -115,7 +116,12 @@ export default function Travel() {
             icon: <ExclamationCircleOutlined/>,
             content: intl.get('afterPassCannotChange'),
             okText: intl.get('ok'),
-            okButtonProps: {style: greenButton},
+            okButtonProps: {
+                style: {
+                    backgroundColor: userToken.colorSuccess,
+                    borderColor: userToken.colorSuccess
+                }
+            },
             okType: 'primary',
             cancelText: intl.get('cancel'),
             onOk() {
@@ -205,7 +211,10 @@ export default function Travel() {
                         type="primary"
                         disabled={lock}
                         loading={lock}
-                        style={greenButton}
+                        style={{
+                            backgroundColor: userToken.colorSuccess,
+                            borderColor: userToken.colorSuccess
+                        }}
                         onClick={() => showResolveConfirm(showInfo.uid)}
                     >{intl.get('pass')}</Button>,
                     <Button

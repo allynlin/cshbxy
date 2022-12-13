@@ -25,6 +25,7 @@ import {setLowVersion} from "./component/redux/serverLowVersionSlice";
 import ChangeSystem from "./component/ChangeSystem/ChangeSystem";
 import {getBrowserInfo} from "./checkBrowser";
 import {version} from "./baseInfo";
+import {setToken} from "./component/redux/userTokenSlice";
 
 const locales = {
     'English': require('./component/Language/en-US.json'),
@@ -40,6 +41,7 @@ export const rootNavigate = (to: string) => {
 
 export default function App() {
     const [language, setLanguage] = useState<any>(zhCN);
+    const [authCheck, setAuthCheck] = useState<boolean>(false);
 
     const [messageApi, contextHolder] = message.useMessage();
     const key = 'checkUser';
@@ -48,7 +50,6 @@ export default function App() {
 
     const userLanguage = useSelector((state: any) => state.userLanguage.value)
     const sysColor = useSelector((state: any) => state.sysColor.value)
-    const serverLowVersion = useSelector((state: any) => state.serverLowVersion.value)
 
     useEffect(() => {
         changeLanguage(userLanguage)
@@ -59,7 +60,7 @@ export default function App() {
             currentLocale: lang,
             locales,
         }).then(() => {
-            setLanguage(lang === 'Chinese' ? zhCN : enUS)
+            setLanguage(lang === 'English' ? enUS : zhCN)
         })
     }
 
@@ -67,6 +68,10 @@ export default function App() {
         getBrowserInfo()
         Cookie.get('language') === "en_US" ? dispatch(English()) : dispatch(Chinese())
         LStorage.get('menuMode') === 'vertical' ? dispatch(vertical()) : dispatch(inline())
+        const userThemeToken = LStorage.get('userToken')
+        if (userThemeToken) {
+            dispatch(setToken(userThemeToken))
+        }
         // 如果在 localStrong 中有颜色设置就使用 localStrong 中的颜色设置
         const sysColor = LStorage.get('themeColor');
         switch (sysColor) {
@@ -167,11 +172,14 @@ export default function App() {
                 content: intl.get('checkUserFailed'),
                 duration: 3,
             })
+        }).finally(() => {
+            setAuthCheck(true)
         })
     }
 
     // 路由跳转鉴权
     const onRouteBefore = ({pathname, meta}: any) => {
+
         if (meta) {
             if (meta.title) {
                 if (meta.titleCN === undefined) {
@@ -181,6 +189,8 @@ export default function App() {
                 }
             }
             if (meta.Auth) {
+                if (!authCheck)
+                    return
                 if (userType === meta.Auth)
                     return pathname
                 if (userType === meta.Auth2)
@@ -196,6 +206,7 @@ export default function App() {
     }
 
     return (
+
         <>
             {contextHolder}
             <ChangeSystem/>

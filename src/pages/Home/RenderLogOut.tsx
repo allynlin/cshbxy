@@ -7,7 +7,6 @@ import Cookie from "js-cookie";
 import React from "react";
 import intl from "react-intl-universal";
 import {ExclamationCircleOutlined, LoginOutlined, PoweroffOutlined} from "@ant-design/icons";
-import {red} from "../../baseInfo";
 
 const RenderLogOut = () => {
 
@@ -15,6 +14,7 @@ const RenderLogOut = () => {
     const navigate = useNavigate();
 
     const isLogin = useSelector((state: any) => state.isLogin.value)
+    const userToken = useSelector((state: any) => state.userToken.value)
 
     const logOut = () => {
         dispatch(logout())
@@ -34,8 +34,8 @@ const RenderLogOut = () => {
             okButtonProps: {
                 danger: true,
                 style: {
-                    backgroundColor: red,
-                    borderColor: red
+                    backgroundColor: userToken.errorColor,
+                    borderColor: userToken.errorColor,
                 },
             },
             cancelText: intl.get('cancel'),

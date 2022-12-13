@@ -1,5 +1,5 @@
 import React from "react";
-import {red, version} from "../../baseInfo";
+import {version} from "../../baseInfo";
 import {useDispatch, useSelector} from "react-redux";
 import {getLowVersion, getVersion} from "../axios/api";
 import {Button, message} from "antd";
@@ -15,6 +15,7 @@ export default function RenderRefreshButton() {
     const dispatch = useDispatch();
 
     const serverVersion = useSelector((state: any) => state.serverVersion.value);
+    const userToken = useSelector((state: any) => state.userToken.value)
 
     const getVer = () => {
         getLowVersion().then(res => {
@@ -42,8 +43,8 @@ export default function RenderRefreshButton() {
     return (
         <Button
             style={{
-                backgroundColor: red,
-                borderColor: red,
+                backgroundColor: userToken.errorColor,
+                borderColor: userToken.errorColor,
                 color: '#ffffff'
             }}
             onClick={e => {

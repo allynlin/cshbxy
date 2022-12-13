@@ -1,9 +1,8 @@
-import {Button, Form, Input, Modal, notification, Radio} from 'antd';
+import {Button, Form, Input, Modal, message, Radio} from 'antd';
 import React, {useState} from 'react';
 import intl from "react-intl-universal";
 import {updateUserInfo} from "../../component/axios/api";
 import {useDispatch, useSelector} from "react-redux";
-import {lime7} from "../../baseInfo";
 import {setUser} from "../../component/redux/userInfoSlice";
 
 interface Values {
@@ -44,13 +43,7 @@ const UserInfoSetting: React.FC = () => {
                             form.resetFields();
                             onCreate(values);
                         })
-                        .catch(() => {
-                            notification["error"]({
-                                message: intl.get('submitFailed'),
-                                description: intl.get('pleaseInputAllInfo'),
-                                className: 'back-drop'
-                            });
-                        });
+                        .catch(() => message.error(intl.get("pleaseInputAllInfo")));
                 }}
             >
                 <Form
@@ -129,10 +122,7 @@ const UserInfoSetting: React.FC = () => {
     const onCreate = (values: any) => {
         updateUserInfo(userInfo.uid, values.realeName, values.gender, values.tel, values.email).then(res => {
             if (res.code === 200) {
-                notification["success"]({
-                    message: intl.get('changeSuccess'),
-                    className: 'back-drop'
-                })
+                message.success(intl.get('changeSuccess'));
                 const newUserInfo = {
                     ...userInfo,
                     realeName: values.realeName,
@@ -150,7 +140,6 @@ const UserInfoSetting: React.FC = () => {
         <div>
             <Button
                 type="primary"
-                style={{backgroundColor: lime7, borderColor: lime7}}
                 onClick={() => {
                     setOpen(true);
                 }}

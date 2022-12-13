@@ -16,9 +16,9 @@ const MenuModeSetting = () => {
     };
 
     return (
-        <Radio.Group onChange={onChange} value={menuModeSlice}>
-            <Radio value={"inline"}>{intl.get('horizontalMenu')}</Radio>
-            <Radio value={"vertical"}>{intl.get('verticalMenu')}</Radio>
+        <Radio.Group onChange={onChange} value={menuModeSlice} buttonStyle="solid">
+            <Radio.Button value={"inline"}>{intl.get('horizontalMenu')}</Radio.Button>
+            <Radio.Button value={"vertical"}>{intl.get('verticalMenu')}</Radio.Button>
         </Radio.Group>
     );
 };
