@@ -11,19 +11,6 @@ const Employee: React.FC = () => {
 
     const userInfo = useSelector((state: { userInfo: { value: any } }) => state.userInfo.value)
 
-    const confirmToMobile = () => {
-        Modal.confirm({
-            title: intl.get('confirm'),
-            icon: <ExclamationCircleOutlined/>,
-            content: intl.get('changeToMobileTerminal'),
-            okText: intl.get('ok'),
-            cancelText: intl.get('cancel'),
-            onOk: () => {
-                window.location.replace('https://cshbxy-mobile.netlify.app/')
-            }
-        });
-    }
-
     return (
         <div className={'index-body'}>
             <Alert
@@ -35,8 +22,12 @@ const Employee: React.FC = () => {
                         <Paragraph>{intl.get('tips-4')}</Paragraph>
                         <Paragraph>{intl.get('tips-5')}</Paragraph>
                         <Paragraph>{intl.get('tips-6')}</Paragraph>
-                        <Button type="primary" onClick={() => confirmToMobile()}
-                                block>{intl.get('changeToMobileTerminal')}</Button>
+                        <Button
+                            type="primary"
+                            target="_blank"
+                            onClick={() => window.location.replace('https://cshbxy-mobile.netlify.app/')}
+                            block
+                        >{intl.get('changeToMobileTerminal')}</Button>
                     </>
                 }
                 type="info"
