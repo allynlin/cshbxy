@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {Button, Form, Input, message, Radio, Select, Switch} from 'antd';
-import Cookie from 'js-cookie';
+import setCookie from "../../component/cookie/setCookie";
 import {useNavigate} from "react-router-dom";
 import {checkUsername, findUserType, userLogin, userRegister} from "../../component/axios/api";
 import {useDispatch} from "react-redux";
@@ -40,6 +40,7 @@ const RegisterStudent = () => {
             message.error(intl.get('twoPasswordIsNotSame'));
             return
         }
+        setLoading(true);
         userRegister(username, password, realeName, gender, tel, email, departmentUid, registerType).then(res => {
             if (res.code === 200) {
                 message.success(res.msg);
@@ -47,6 +48,8 @@ const RegisterStudent = () => {
             } else {
                 message.error(res.msg)
             }
+        }).finally(() => {
+            setLoading(false)
         })
     };
 
@@ -66,7 +69,6 @@ const RegisterStudent = () => {
     // 登录成功或失败所作的操作
     const loginSuccess = (e: string) => {
         dispatch(login())
-        Cookie.set('userType', e, {expires: 7, path: '/', sameSite: 'strict'})
         switch (e) {
             case 'Employee':
                 dispatch(Employee())
@@ -84,9 +86,9 @@ const RegisterStudent = () => {
     }
 
     const isRemember = () => {
-        Cookie.set('username', username, {expires: 7, path: '/', sameSite: 'strict'});
-        Cookie.set('password', password, {expires: 7, path: '/', sameSite: 'strict'});
-        Cookie.set('userType', registerType, {expires: 7, path: '/', sameSite: 'strict'});
+        setCookie({name: 'cshbxy-oa-username', value: username});
+        setCookie({name: 'cshbxy-oa-password', value: password});
+        setCookie({name: 'cshbxy-oa-userType', value: registerType});
     }
 
     const onReset = () => {

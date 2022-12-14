@@ -18,8 +18,8 @@ interface FileUpLoadProps {
 const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
     const [fileList, setFileList] = useState<any>([]);
 
-    const apiToken = Cookie.get('token');
-    const language = Cookie.get('language') || 'en_US';
+    const apiToken = Cookie.get('cshbxy-oa-token');
+    const language = Cookie.get('cshbxy-oa-language') || 'en_US';
     const tableName = props.setTableName;
 
     // 接收父组件传递的 fileList

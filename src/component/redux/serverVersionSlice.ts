@@ -1,7 +1,8 @@
 import {createSlice} from '@reduxjs/toolkit'
+import {LStorage} from "../localStrong";
 
 const initialState: { value: string } = {
-    value: '0.0.0',
+    value: LStorage.get('cshbxy-oa-serverVersion') || '0.0.0',
 }
 
 export const serverVersionSlice = createSlice({
@@ -10,6 +11,7 @@ export const serverVersionSlice = createSlice({
     reducers: {
         setVersion: (state, action) => {
             state.value = action.payload
+            LStorage.set('cshbxy-oa-serverVersion', action.payload)
         }
     },
 })

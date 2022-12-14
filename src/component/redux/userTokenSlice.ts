@@ -21,7 +21,7 @@ export const userTokenSlice = createSlice({
     reducers: {
         setToken: (state, action) => {
             state.value = action.payload;
-            LStorage.set('userToken', action.payload);
+            LStorage.set('cshbxy-oa-userToken', action.payload);
         }
     },
 })

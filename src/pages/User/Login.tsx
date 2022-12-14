@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import {Button, Form, Input, message, Radio, Switch} from 'antd';
 import Cookie from 'js-cookie';
+import setCookie from "../../component/cookie/setCookie";
 import {userLogin} from "../../component/axios/api";
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
@@ -38,7 +39,6 @@ const StudentForm = () => {
     // 登录成功或失败所作的操作
     const loginSuccess = (e: string) => {
         dispatch(login())
-        Cookie.set('userType', e, {expires: 7, path: '/', sameSite: 'strict'})
         switch (e) {
             case 'Employee':
                 dispatch(Employee())
@@ -57,24 +57,24 @@ const StudentForm = () => {
 
     const isRemember = () => {
         if (rememberme) {
-            Cookie.set('username', username, {expires: 7, path: '/', sameSite: 'strict'});
-            Cookie.set('password', password, {expires: 7, path: '/', sameSite: 'strict'});
-            Cookie.set('userType', userType, {expires: 7, path: '/', sameSite: 'strict'});
+            setCookie({name: 'cshbxy-oa-username', value: username});
+            setCookie({name: 'cshbxy-oa-password', value: password});
+            setCookie({name: 'cshbxy-oa-userType', value: userType});
         } else {
-            Cookie.remove('username');
-            Cookie.remove('password');
+            Cookie.remove('cshbxy-oa-username');
+            Cookie.remove('cshbxy-oa-password');
         }
     }
 
     const loginError = () => {
-        Cookie.remove('username');
-        Cookie.remove('password');
-        Cookie.remove('userType');
+        Cookie.remove('cshbxy-oa-username');
+        Cookie.remove('cshbxy-oa-password');
+        Cookie.remove('cshbxy-oa-userType');
     }
 
     const onReset = () => {
-        Cookie.remove('username');
-        Cookie.remove('password');
+        Cookie.remove('cshbxy-oa-username');
+        Cookie.remove('cshbxy-oa-password');
         form.resetFields();
         form.setFieldsValue({
             rememberme: true,
@@ -91,10 +91,10 @@ const StudentForm = () => {
             wrapperCol={{span: 8}}
             onFinish={onFinish}
             initialValues={{
-                username: Cookie.get("username") || "",
-                password: Cookie.get("password") || "",
+                username: Cookie.get("cshbxy-oa-username") || "",
+                password: Cookie.get("cshbxy-oa-password") || "",
                 rememberme: true,
-                userType: Cookie.get("userType") || 'Employee',
+                userType: Cookie.get("cshbxy-oa-userType") || 'Employee',
             }}>
             <Form.Item
                 label={intl.get('username')}

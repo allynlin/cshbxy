@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit'
-import Cookie from "js-cookie";
+import setCookie from "../cookie/setCookie";
 
 const initialState: { value: 'Chinese' | 'English' } = {
     value: 'Chinese',
@@ -11,11 +11,11 @@ export const userLanguageSlice = createSlice({
     reducers: {
         Chinese: state => {
             state.value = "Chinese"
-            Cookie.set('language', 'zh')
+            setCookie({name: "cshbxy-oa-language", value: "zh"})
         },
         English: state => {
             state.value = "English"
-            Cookie.set('language', 'en_US')
+            setCookie({name: "cshbxy-oa-language", value: "en_US"})
         }
     },
 })

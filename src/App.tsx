@@ -66,14 +66,14 @@ export default function App() {
 
     useEffect(() => {
         getBrowserInfo()
-        Cookie.get('language') === "en_US" ? dispatch(English()) : dispatch(Chinese())
-        LStorage.get('menuMode') === 'vertical' ? dispatch(vertical()) : dispatch(inline())
-        const userThemeToken = LStorage.get('userToken')
+        Cookie.get('cshbxy-oa-language') === "en_US" ? dispatch(English()) : dispatch(Chinese())
+        LStorage.get('cshbxy-oa-menuMode') === 'vertical' ? dispatch(vertical()) : dispatch(inline())
+        const userThemeToken = LStorage.get('cshbxy-oa-userToken')
         if (userThemeToken) {
             dispatch(setToken(userThemeToken))
         }
         // 如果在 localStrong 中有颜色设置就使用 localStrong 中的颜色设置
-        const sysColor = LStorage.get('themeColor');
+        const sysColor = LStorage.get('cshbxy-oa-themeColor');
         switch (sysColor) {
             case 'light':
                 dispatch(lightTheme());
@@ -97,7 +97,7 @@ export default function App() {
                 rootNavigate('/103');
             }
         })
-        const token = Cookie.get('token');
+        const token = Cookie.get('cshbxy-oa-token');
         if (token) {
             messageApi.open({
                 key,
@@ -129,7 +129,6 @@ export default function App() {
     }, [sysColor])
 
     const isLogin = useSelector((state: any) => state.isLogin.value)
-
     const userType: String = useSelector((state: any) => state.userType.value)
 
     // 校验用户

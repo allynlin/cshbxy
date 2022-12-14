@@ -4,6 +4,7 @@ import qs from 'qs';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css'
 import Cookie from "js-cookie";
+import setCookie from "../cookie/setCookie";
 import {BaseInfo, version} from "../../baseInfo";
 import {rootNavigate} from "../../App";
 import intl from "react-intl-universal";
@@ -17,8 +18,8 @@ export const MethodType = {
  * 模块说明:有api_token的请求
  */
 export const Request = (api: String, method = MethodType.GET, params = {}, config = {headers: {}}) => {
-    const apiToken = Cookie.get('token');
-    const language = Cookie.get('language') || 'en_US';
+    const apiToken = Cookie.get('cshbxy-oa-token');
+    const language = Cookie.get('cshbxy-oa-language') || 'en_US';
     // 如果不是登录和注册接口（/login 或 /register 或 /query 开头），POST 请求，没有获取到 token，就跳转到登录页面
     if (apiToken === undefined && method === MethodType.POST && !api.startsWith('/api/user') && !api.startsWith('/query')) {
         rootNavigate('/403');
@@ -75,7 +76,7 @@ export const Request = (api: String, method = MethodType.GET, params = {}, confi
                     if (res.data.code >= 200 && res.data.code < 400) {
                         // 如果返回了 token 则更新本地 token
                         if (res.data.token !== null && res.data.token !== undefined)
-                            Cookie.set('token', res.data.token, {expires: 7, path: '/', sameSite: 'strict'})
+                            setCookie({name: "cshbxy-oa-token", value: res.data.token})
                         resolve(res.data)
                     } else {
                         message.error(res.data.msg)
