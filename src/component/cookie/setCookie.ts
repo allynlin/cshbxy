@@ -11,11 +11,6 @@ const setCookie = (cookie: cookie) => {
         path: '/',
         sameSite: 'strict',
     })
-    Cookie.set(cookie.name, cookie.value, {
-        expires: 7,
-        path: '/',
-        sameSite: 'strict',
-    })
 }
 
 export default setCookie;
