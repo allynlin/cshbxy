@@ -9,7 +9,7 @@ const setCookie = (cookie: cookie) => {
     Cookie.set(cookie.name, cookie.value, {
         expires: 7,
         path: '/',
-        domain: '.netlify.app',
+        sameSite: 'strict'
     })
 }
 

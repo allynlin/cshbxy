@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit'
-import setCookie from "../cookie/setCookie";
+import {LStorage} from "../localStrong";
 
 const initialState: { value: 'light' | 'dark' | 'sys' } = {
     value: 'sys',
@@ -11,15 +11,15 @@ export const sysColorSlice = createSlice({
     reducers: {
         lightTheme: state => {
             state.value = 'light'
-            setCookie({name: 'cshbxy-oa-sysColor', value: 'light'})
+            LStorage.set('cshbxy-oa-sysColor', 'light')
         },
         darkTheme: state => {
             state.value = 'dark'
-            setCookie({name: 'cshbxy-oa-sysColor', value: 'dark'})
+            LStorage.set('cshbxy-oa-sysColor', 'dark')
         },
         sysTheme: state => {
             state.value = 'sys'
-            setCookie({name: 'cshbxy-oa-sysColor', value: 'sys'})
+            LStorage.set('cshbxy-oa-sysColor', 'sys')
         }
     },
 })
