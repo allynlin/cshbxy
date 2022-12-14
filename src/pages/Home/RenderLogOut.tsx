@@ -19,7 +19,8 @@ const RenderLogOut = () => {
     const logOut = () => {
         dispatch(logout())
         dispatch(all())
-        Cookie.remove('token');
+        Cookie.remove('cshbxy-oa-token');
+        Cookie.remove('cshbxy-oa-password');
         message.success(intl.get('logOutSuccess'))
         navigate('/login', {replace: true})
     }
