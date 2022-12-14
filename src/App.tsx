@@ -73,7 +73,7 @@ export default function App() {
             dispatch(setToken(userThemeToken))
         }
         // 如果在 localStrong 中有颜色设置就使用 localStrong 中的颜色设置
-        const sysColor = LStorage.get('cshbxy-oa-themeColor');
+        const sysColor = Cookie.get('cshbxy-oa-sysColor') || LStorage.get('cshbxy-oa-sysColor');
         switch (sysColor) {
             case 'light':
                 dispatch(lightTheme());
