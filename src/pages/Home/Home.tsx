@@ -6,7 +6,6 @@ import {version} from "../../baseInfo";
 import {useDispatch, useSelector} from "react-redux";
 import RenderLogOut from "./RenderLogOut";
 import './home.scss';
-import intl from "react-intl-universal";
 import {setTableSize} from "../../component/redux/tableSizeSlice";
 
 const {Header, Content, Footer, Sider} = Layout;
@@ -79,7 +78,8 @@ const App: React.FC = () => {
                     >
                         <Outlet/>
                     </Content>
-                    <Footer style={{textAlign: 'center', margin: 0, padding: 16}}>OA &copy; 2022 Created by allynlin
+                    <Footer style={{textAlign: 'center', margin: 0, padding: 16}}>OA &copy; 2022-2023 Created by
+                        allynlin
                         Version：{version} Server：{serverVersion}</Footer>
                 </Layout>
             </Layout>

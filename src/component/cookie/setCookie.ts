@@ -10,15 +10,11 @@ const setCookie = (cookie: cookie) => {
         expires: 7,
         path: '/',
         sameSite: 'strict',
-        domain: 'cshbxy-mobile.netlify.app',
-        secure: true
     })
     Cookie.set(cookie.name, cookie.value, {
         expires: 7,
         path: '/',
         sameSite: 'strict',
-        domain: 'allynlin.netlify.app',
-        secure: true
     })
 }
 

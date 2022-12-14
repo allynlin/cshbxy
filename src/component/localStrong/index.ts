@@ -20,10 +20,9 @@ interface IStoredItem {
     expires?: number
 }
 
-const SECRET_KEY = 'nkldsx@#45#VDss9' // 密钥
+const SECRET_KEY = 'cshbxy@allynlin2022-2023' // 密钥
 const PREFIX = config.name + '_' + config.version + '_' // 前缀
-const IS_DEV = false
-
+const IS_DEV = process.env.NODE_ENV === 'development' // 开发环境就不加密，生产环境加密
 // const IS_DEV = process.env.NODE_ENV === 'production' // 是否为开发环境
 
 class MyStorage {
