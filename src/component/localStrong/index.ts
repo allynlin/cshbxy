@@ -22,7 +22,9 @@ interface IStoredItem {
 
 const SECRET_KEY = 'nkldsx@#45#VDss9' // 密钥
 const PREFIX = config.name + '_' + config.version + '_' // 前缀
-const IS_DEV = process.env.NODE_ENV === 'production' // 是否为开发环境
+const IS_DEV = false
+
+// const IS_DEV = process.env.NODE_ENV === 'production' // 是否为开发环境
 
 class MyStorage {
     storage: Storage
