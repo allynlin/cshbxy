@@ -36,6 +36,7 @@ export default function Token() {
                     colorSuccess: userThemeToken.colorSuccess || '#006c01',
                     colorWarning: userThemeToken.colorWarning || '#ff8d00',
                 },
+
                 algorithm: themeColor === "dark" ? theme.darkAlgorithm : theme.defaultAlgorithm,
             }}>
             <App/>

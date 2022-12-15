@@ -15,6 +15,7 @@ const RegisterStudent = () => {
 
     const dispatch = useDispatch();
 
+    const [api, contextHolder] = message.useMessage();
     const [form] = Form.useForm();
     const username = Form.useWatch('username', form);
     const password = Form.useWatch('password', form);
@@ -33,20 +34,20 @@ const RegisterStudent = () => {
 
     const onFinish = () => {
         if (!usernameUse) {
-            message.error(intl.get('usernameIsExist'))
+            api.error(intl.get('usernameIsExist'))
             return
         }
         if (password !== enterPassword) {
-            message.error(intl.get('twoPasswordIsNotSame'));
+            api.error(intl.get('twoPasswordIsNotSame'));
             return
         }
         setLoading(true);
         userRegister(username, password, realeName, gender, tel, email, departmentUid, registerType).then(res => {
             if (res.code === 200) {
-                message.success(res.msg);
+                api.success(res.msg);
                 loginAutomatic();
             } else {
-                message.error(res.msg)
+                api.error(res.msg)
             }
         }).finally(() => {
             setLoading(false)
@@ -60,7 +61,7 @@ const RegisterStudent = () => {
         }
         userLogin(username, password, registerType).then(res => {
             dispatch(setUser(res.body))
-            message.success(res.msg);
+            api.success(res.msg);
             isRemember()
             loginSuccess(res.body.userType)
         })
@@ -155,6 +156,7 @@ const RegisterStudent = () => {
                 rememberme: true,
             }}
         >
+            {contextHolder}
             <Form.Item wrapperCol={{offset: 8, span: 16}}>
                 <Radio.Group defaultValue="Employee" buttonStyle="solid" onChange={e => {
                     setRegisterType(e.target.value)

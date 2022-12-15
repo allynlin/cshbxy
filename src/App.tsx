@@ -195,7 +195,7 @@ export default function App() {
                 if (userType === meta.Auth2)
                     return pathname
                 if (!isLogin) {
-                    message.warning(intl.get('pleaseLogin'))
+                    messageApi.warning(intl.get('pleaseLogin'))
                     return '/login'
                 }
                 return '/403'
@@ -205,7 +205,6 @@ export default function App() {
     }
 
     return (
-
         <>
             {contextHolder}
             <ChangeSystem/>

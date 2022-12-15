@@ -15,6 +15,7 @@ const StudentForm = () => {
     const [loading, setLoading] = useState<boolean>(false);
 
     const dispatch = useDispatch();
+    const [api, contextHolder] = message.useMessage();
     const [form] = Form.useForm();
     const username = Form.useWatch('username', form);
     const password = Form.useWatch('password', form);
@@ -26,7 +27,7 @@ const StudentForm = () => {
         setLoading(true);
         userLogin(username, password, userType).then(res => {
             dispatch(setUser(res.body))
-            message.success(res.msg);
+            api.success(res.msg);
             isRemember()
             loginSuccess(res.body.userType)
         }).catch(() => {
@@ -96,6 +97,7 @@ const StudentForm = () => {
                 rememberme: true,
                 userType: Cookie.get("cshbxy-oa-userType") || 'Employee',
             }}>
+            {contextHolder}
             <Form.Item
                 label={intl.get('username')}
                 name="username"

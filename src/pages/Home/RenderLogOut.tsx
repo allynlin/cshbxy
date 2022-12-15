@@ -10,6 +10,8 @@ import {ExclamationCircleOutlined, LoginOutlined, PoweroffOutlined} from "@ant-d
 
 const RenderLogOut = () => {
 
+    const [modal, contextHolder] = Modal.useModal();
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -26,7 +28,7 @@ const RenderLogOut = () => {
     }
 
     const showConfirm = () => {
-        isLogin ? Modal.confirm({
+        isLogin ? modal.confirm({
             title: intl.get('confirmLogOut'),
             icon: <ExclamationCircleOutlined/>,
             content: intl.get('afterLogOutNeedLoginAgain'),
@@ -47,13 +49,16 @@ const RenderLogOut = () => {
     }
 
     return (
-        <Button
-            type="primary"
-            danger={isLogin}
-            icon={isLogin ? <PoweroffOutlined/> : <LoginOutlined/>}
-            onClick={showConfirm}>
-            {intl.get(isLogin ? 'logOut' : 'login')}
-        </Button>
+        <>
+            {contextHolder}
+            <Button
+                type="primary"
+                danger={isLogin}
+                icon={isLogin ? <PoweroffOutlined/> : <LoginOutlined/>}
+                onClick={showConfirm}>
+                {intl.get(isLogin ? 'logOut' : 'login')}
+            </Button>
+        </>
     )
 }
 

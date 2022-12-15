@@ -17,6 +17,7 @@ interface FileUpLoadProps {
 
 const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
     const [fileList, setFileList] = useState<any>([]);
+    const [api, contextHolder] = message.useMessage();
 
     const apiToken = Cookie.get('cshbxy-oa-token');
     const language = Cookie.get('cshbxy-oa-language') || 'en_US';
@@ -42,7 +43,7 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
         // 如果上传的文件大于 20M，就提示错误
         beforeUpload: (file: any) => {
             if (file.size / 1024 / 1024 > 20) {
-                message.warning(intl.get('maxFileSize', {size: 20}));
+                api.warning(intl.get('maxFileSize', {size: 20}));
                 // 将对应文件的状态设置为 error
                 file.status = 'error';
                 return false;
@@ -68,11 +69,11 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
                         case 401:
                         case 403:
                             info.file.status = 'error';
-                            message.error(intl.get('noPermission'));
+                            api.error(intl.get('noPermission'));
                             break;
                         case 500:
                             info.file.status = 'error';
-                            message.error(intl.get('sysError'));
+                            api.error(intl.get('sysError'));
                             break;
                         default:
                             // 传递参数给父组件, 用于更新父组件的 fileList，如果 info.fileList 为空，就传递一个空数组
@@ -85,7 +86,7 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
             }
             if (status === 'done') {
                 if (info.file.response.code === 200) {
-                    message.success(info.file.response.msg);
+                    api.success(info.file.response.msg);
                     // 找到对应的文件，将它的 uid 修改为 response.body
                     const newFileList = fileList.map((item: any) => {
                         if (item.uid === info.file.uid) {
@@ -97,10 +98,10 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
                     })
                     setFileList(newFileList);
                 } else {
-                    message.error(info.file.response.msg);
+                    api.error(info.file.response.msg);
                 }
             } else if (status === 'error') {
-                message.error(`${info.file.name} ${intl.get('uploadFailed')}`);
+                api.error(`${info.file.name} ${intl.get('uploadFailed')}`);
             }
         },
         onRemove(info: any) {
@@ -109,7 +110,7 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
                 // 获取需要删除的文件的 uid
                 const uid = info.uid;
                 deleteFile(uid).then(res => {
-                    message.success(res.msg);
+                    api.success(res.msg);
                 })
             }
         },
@@ -129,6 +130,7 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
 
     return (
         <Upload.Dragger {...Setting}>
+            {contextHolder}
             <p className="ant-upload-drag-icon">
                 <InboxOutlined/>
             </p>

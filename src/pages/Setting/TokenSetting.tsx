@@ -42,14 +42,16 @@ const pinkTheme: TokenSettingProps = {
 
 export default function TokenSetting() {
 
+    const [modal, contextHolder] = Modal.useModal();
+    const [api, messageHolder] = message.useMessage();
+    const [form] = Form.useForm();
+
     const dispatch = useDispatch();
 
     const userToken = useSelector((state: any) => state.userToken.value)
 
-    const [form] = Form.useForm();
-
     const onFinish = (values: TokenSettingProps) => {
-        Modal.confirm({
+        modal.confirm({
             title: intl.get('changeThemeTitle'),
             icon: <ExclamationCircleOutlined/>,
             content: intl.get('changeThemeNotice'),
@@ -58,7 +60,7 @@ export default function TokenSetting() {
             onOk() {
                 dispatch(setToken(values))
                 setTimeout(() => {
-                    message.success(intl.get('changeSuccess'))
+                    api.success(intl.get('changeSuccess'))
                 }, 1000)
             }
         });
@@ -80,6 +82,8 @@ export default function TokenSetting() {
 
     return (
         <Typography>
+            {contextHolder}
+            {messageHolder}
             <Title level={3}>{intl.get('tokenSetting')} <Tag color={"warning"}>{intl.get('themeWarning')}</Tag></Title>
             <Paragraph>{intl.get('token-1')}</Paragraph>
             <Paragraph>{intl.get('token-2')}</Paragraph>
