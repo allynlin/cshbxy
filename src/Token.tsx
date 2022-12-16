@@ -11,18 +11,12 @@ export default function Token() {
     const [userThemeToken, setUserThemeToken] = useState<any>({
         colorPrimary: userToken.colorPrimary,
         borderRadius: userToken.borderRadius,
-        colorError: userToken.colorError,
-        colorSuccess: userToken.colorSuccess,
-        colorWarning: userToken.colorWarning,
     })
 
     useEffect(() => {
         setUserThemeToken({
             colorPrimary: userToken.colorPrimary,
             borderRadius: userToken.borderRadius,
-            colorError: userToken.colorError,
-            colorSuccess: userToken.colorSuccess,
-            colorWarning: userToken.colorWarning,
         })
     }, [userToken])
 
@@ -32,11 +26,7 @@ export default function Token() {
                 token: {
                     colorPrimary: userThemeToken.colorPrimary || '#1677ff',
                     borderRadius: userThemeToken.borderRadius || 6,
-                    colorError: userThemeToken.colorError || '#f32401',
-                    colorSuccess: userThemeToken.colorSuccess || '#006c01',
-                    colorWarning: userThemeToken.colorWarning || '#ff8d00',
                 },
-
                 algorithm: themeColor === "dark" ? theme.darkAlgorithm : theme.defaultAlgorithm,
             }}>
             <App/>

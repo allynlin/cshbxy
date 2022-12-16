@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import {Button, Form, Input, message, Modal, Radio} from "antd";
-import {lime7} from "../../../baseInfo";
 import intl from "react-intl-universal";
 import {updateUserInfo} from "../../../component/axios/api";
 
@@ -52,7 +51,6 @@ export default function ChangeUserInfo(props: propsCheck) {
                 type="primary"
                 loading={loading}
                 disabled={loading}
-                style={{backgroundColor: lime7, borderColor: lime7}}
                 onClick={() => {
                     setOpen(true);
                 }}

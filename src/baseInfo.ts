@@ -12,8 +12,3 @@ export const tableName = {
     departmentChange: 'ChangeDepartment',
     travel: 'Travel'
 }
-
-// 色彩
-export const purple = '#9254de';
-export const orange5 = '#ffa940';
-export const lime7 = '#7cb305';

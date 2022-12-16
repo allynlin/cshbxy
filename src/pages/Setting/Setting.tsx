@@ -17,6 +17,7 @@ const Setting = () => (
             message={intl.get('attention') + ': ' + intl.get('settingScopesNotice')}
             type="info"
             showIcon
+            style={{marginBottom: 16}}
         />
         <Space size={"large"} align={"start"}>
             <div>

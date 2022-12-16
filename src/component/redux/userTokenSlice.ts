@@ -9,9 +9,6 @@ const initialState: Interface = {
     value: {
         colorPrimary: '#1677ff',
         borderRadius: 6,
-        colorError: '#f32401',
-        colorSuccess: '#006c01',
-        colorWarning: '#ff8d00',
     },
 }
 

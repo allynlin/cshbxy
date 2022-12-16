@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import {Button, Form, Input, message, Modal} from "antd";
-import {orange5} from "../../../baseInfo";
 import intl from "react-intl-universal";
 import {checkUsername, updateUserName} from "../../../component/axios/api";
 
@@ -58,7 +57,6 @@ export default function ChangeUserNamePreview(props: propsCheck) {
                 type="primary"
                 disabled={loading}
                 loading={loading}
-                style={{backgroundColor: orange5, borderColor: orange5}}
                 onClick={() => {
                     setOpen(true);
                 }}

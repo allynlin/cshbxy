@@ -249,5 +249,7 @@
   "themeWarning": "experimental features",
   "primaryThemeWarning": "Usually, we only recommend changing the theme color",
   "changeThemeTitle": "Are you sure to modify the theme color?",
-  "changeThemeNotice": "After modifying the theme color, the theme color of all pages will be modified (In order to ensure the normal use of some functions, some colors do not support modification). Currently, this function is an experimental function, and some unknown problems may occur, please be informed. If you have any problems during use, please restore the default theme in time."
+  "changeThemeNotice": "After modifying the theme color, the theme color of all pages will be modified (In order to ensure the normal use of some functions, some colors do not support modification). Currently, this function is an experimental function, and some unknown problems may occur, please be informed. If you have any problems during use, please restore the default theme in time.",
+  "primaryColor": "Primary Color",
+  "borderRadius": "Border Radius"
 }

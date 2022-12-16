@@ -1,6 +1,5 @@
 import React, {useState} from "react";
 import {Button, Form, Input, message, Modal} from "antd";
-import {purple} from "../../../baseInfo";
 import intl from "react-intl-universal";
 import {updatePassword} from "../../../component/axios/api";
 
@@ -35,7 +34,6 @@ export default function ChangePassword(props: propsCheck) {
                 type="primary"
                 disabled={loading}
                 loading={loading}
-                style={{backgroundColor: purple, borderColor: purple}}
                 onClick={() => {
                     setOpen(true);
                 }}

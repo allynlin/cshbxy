@@ -4,7 +4,6 @@
  * @return {string} 颜色
  * update 2022-10-07
  */
-import {lime7, orange5, purple} from "../../baseInfo";
 import intl from "react-intl-universal";
 import {Tag} from "antd";
 import React from "react";
@@ -12,11 +11,11 @@ import React from "react";
 export const RenderUserTypeTag = (text: string) => {
     switch (text) {
         case 'Department':
-            return <Tag color={orange5}>{intl.get('department')}</Tag>
+            return <Tag color='#ffa940'>{intl.get('department')}</Tag>
         case 'Leader':
-            return <Tag color={purple}>{intl.get('leader')}</Tag>
+            return <Tag color='#9254de'>{intl.get('leader')}</Tag>
         case 'Employee':
-            return <Tag color={lime7}>{intl.get('employee')}</Tag>
+            return <Tag color='#7cb305'>{intl.get('employee')}</Tag>
         default:
             return <Tag color={"processing"}>{intl.get('unKnowUserType')}</Tag>
     }
