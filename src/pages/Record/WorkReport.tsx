@@ -99,10 +99,6 @@ const App: React.FC = () => {
                 tag: RenderStatusTag(res.body.status, intl.get('travelReimburseApply')),
                 operation: <Button
                     type="primary"
-                    style={{
-                        backgroundColor: RenderStatusColor(res.body.status),
-                        borderColor: RenderStatusColor(res.body.status)
-                    }}
                     onClick={() => {
                         setShowInfo({...res.body, id: showInfo.id});
                         getProcess(res.body.uid);
@@ -178,10 +174,6 @@ const App: React.FC = () => {
                         tag: RenderStatusTag(item.status, intl.get('travelReimburseApply')),
                         operation: <Button
                             type="primary"
-                            style={{
-                                backgroundColor: RenderStatusColor(item.status),
-                                borderColor: RenderStatusColor(item.status)
-                            }}
                             onClick={() => {
                                 setShowInfo({...item, id: index + 1});
                                 getProcess(item.uid);

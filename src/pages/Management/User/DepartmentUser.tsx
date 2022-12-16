@@ -99,10 +99,6 @@ export default function DepartmentUser() {
                         tag: RenderUserStatus(item.status),
                         operation: <Button
                             type="primary"
-                            style={{
-                                backgroundColor: RenderUserOperateButton(item.status),
-                                borderColor: RenderUserOperateButton(item.status)
-                            }}
                             onClick={() => {
                                 setShowInfo({
                                     ...item,

@@ -10,7 +10,6 @@ import {
 import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
 import {RenderStatusTag} from "../../component/Tag/RenderStatusTag";
-import {RenderStatusColor} from "../../component/Tag/RenderStatusColor";
 import '../../App.scss';
 import {SearchOutlined} from "@ant-design/icons";
 import {useSelector} from "react-redux";
@@ -94,10 +93,6 @@ const App: React.FC = () => {
                 tag: RenderStatusTag(res.body.status, intl.get('leaveApply')),
                 operation: <Button
                     type="primary"
-                    style={{
-                        backgroundColor: RenderStatusColor(res.body.status),
-                        borderColor: RenderStatusColor(res.body.status)
-                    }}
                     onClick={() => {
                         setShowInfo({...res.body, id: showInfo.id})
                         getProcess(res.body.uid);
@@ -159,10 +154,6 @@ const App: React.FC = () => {
                         tag: RenderStatusTag(item.status, intl.get('leaveApply')),
                         operation: <Button
                             type="primary"
-                            style={{
-                                backgroundColor: RenderStatusColor(item.status),
-                                borderColor: RenderStatusColor(item.status)
-                            }}
                             onClick={() => {
                                 setShowInfo({...item, id: index + 1});
                                 getProcess(item.uid);

@@ -5,6 +5,7 @@ import Token from "./Token";
 import {Provider} from "react-redux";
 import store from "./component/redux/store";
 import ErrorBoundary from "./ErrorBoundary";
+import 'antd/dist/reset.css';
 
 
 const root = ReactDOM.createRoot(

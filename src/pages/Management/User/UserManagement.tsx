@@ -101,10 +101,6 @@ export default function UserManagement() {
                         showUserType: RenderUserTypeTag(item.userType),
                         operation: <Button
                             type="primary"
-                            style={{
-                                backgroundColor: RenderUserOperateButton(item.status),
-                                borderColor: RenderUserOperateButton(item.status)
-                            }}
                             onClick={() => {
                                 setShowInfo({
                                     ...item,
