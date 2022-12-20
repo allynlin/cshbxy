@@ -11,7 +11,6 @@ import {
 import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
 import {RenderStatusTag} from "../../component/Tag/RenderStatusTag";
-import {RenderStatusColor} from "../../component/Tag/RenderStatusColor";
 import '../../App.scss';
 import {FileTextOutlined, SearchOutlined} from "@ant-design/icons";
 import {DownLoadURL, tableName} from "../../baseInfo";
@@ -96,7 +95,7 @@ const App: React.FC = () => {
             let newContent = {
                 key: res.body.uid,
                 id: showInfo.id,
-                tag: RenderStatusTag(res.body.status, intl.get('travelReimburseApply')),
+                tag: RenderStatusTag(res.body, intl.get('travelReimburseApply')),
                 operation: <Button
                     type="primary"
                     onClick={() => {
@@ -171,7 +170,7 @@ const App: React.FC = () => {
                         ...item,
                         id: index + 1,
                         key: item.uid,
-                        tag: RenderStatusTag(item.status, intl.get('travelReimburseApply')),
+                        tag: RenderStatusTag(item, intl.get('travelReimburseApply')),
                         operation: <Button
                             type="primary"
                             onClick={() => {

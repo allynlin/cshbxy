@@ -90,7 +90,7 @@ const App: React.FC = () => {
             let newContent = {
                 key: res.body.uid,
                 id: showInfo.id,
-                tag: RenderStatusTag(res.body.status, intl.get('leaveApply')),
+                tag: RenderStatusTag(res.body, intl.get('leaveApply')),
                 operation: <Button
                     type="primary"
                     onClick={() => {
@@ -151,7 +151,7 @@ const App: React.FC = () => {
                         ...item,
                         id: index + 1,
                         key: item.uid,
-                        tag: RenderStatusTag(item.status, intl.get('leaveApply')),
+                        tag: RenderStatusTag(item, intl.get('leaveApply')),
                         operation: <Button
                             type="primary"
                             onClick={() => {

@@ -70,7 +70,11 @@ export default function App() {
         LStorage.get('cshbxy-oa-menuMode') === 'vertical' ? dispatch(vertical()) : dispatch(inline())
         const userThemeToken = LStorage.get('cshbxy-oa-userToken')
         if (userThemeToken) {
-            dispatch(setToken(userThemeToken))
+            dispatch(setToken({
+                colorPrimary: userThemeToken.colorPrimary,
+                borderRadius: userThemeToken.borderRadius,
+                colorError: '#f32401'
+            }))
         }
         // 如果在 localStrong 中有颜色设置就使用 localStrong 中的颜色设置
         const sysColor = LStorage.get('cshbxy-oa-sysColor');

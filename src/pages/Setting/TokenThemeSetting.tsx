@@ -8,14 +8,16 @@ import {useDispatch} from "react-redux";
 type ThemeData = {
     borderRadius: number;
     colorPrimary: string;
+    colorError: string;
 };
 
 const defaultData: ThemeData = {
     borderRadius: 6,
     colorPrimary: '#1677ff',
+    colorError: '#f32401'
 };
-
 export default () => {
+
     const [form] = Form.useForm();
 
     const [data, setData] = React.useState<ThemeData>(defaultData);

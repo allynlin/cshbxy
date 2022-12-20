@@ -11,21 +11,25 @@ const {Title, Paragraph} = Typography;
 interface TokenSettingProps {
     colorPrimary: string;
     borderRadius: number;
+    colorError: string;
 }
 
 const defaultTheme: TokenSettingProps = {
     colorPrimary: '#1677ff',
     borderRadius: 6,
+    colorError: '#f32401'
 }
 
 const greenTheme: TokenSettingProps = {
     colorPrimary: '#00b96b',
     borderRadius: 6,
+    colorError: '#f32401'
 }
 
 const pinkTheme: TokenSettingProps = {
     colorPrimary: '#ed4192',
-    borderRadius: 6,
+    borderRadius: 10,
+    colorError: '#f32401'
 }
 
 export default function TokenSetting() {

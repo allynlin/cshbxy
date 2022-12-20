@@ -1,6 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import VirtualTable from "../../component/virtualTable/VirtualTable";
-import {Button, Form, Input, message, Modal, Popconfirm, Skeleton, Space, Steps, Tag, Typography} from 'antd';
+import {
+    Button,
+    Form,
+    Input,
+    message,
+    Modal,
+    Popconfirm,
+    Skeleton,
+    Space,
+    Steps,
+    Tag,
+    Typography,
+} from 'antd';
 import {deleteLeave, findLeaveList, findLeaveProcess, refreshLeave} from "../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
@@ -85,7 +97,7 @@ const App: React.FC = () => {
                 let newContent = {
                     key: res.body.uid,
                     id: showInfo.id,
-                    tag: RenderStatusTag(res.body.status, intl.get('leaveApply')),
+                    tag: RenderStatusTag(res.body, intl.get('leaveApply')),
                     operation: <Button
                         type="primary"
                         onClick={() => {
@@ -146,7 +158,7 @@ const App: React.FC = () => {
                             ...item,
                             id: index + 1,
                             key: item.uid,
-                            tag: RenderStatusTag(item.status, intl.get('leaveApply')),
+                            tag: RenderStatusTag(item, intl.get('leaveApply')),
                             operation: <Button
                                 type="primary"
                                 onClick={() => {

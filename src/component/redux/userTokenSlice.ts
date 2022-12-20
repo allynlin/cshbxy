@@ -9,6 +9,7 @@ const initialState: Interface = {
     value: {
         colorPrimary: '#1677ff',
         borderRadius: 6,
+        colorError: '#f32401',
     },
 }
 
