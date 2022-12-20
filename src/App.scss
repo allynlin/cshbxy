@@ -19,6 +19,11 @@
     }
   }
 
+  .status-tag {
+    display: flex;
+    flex-direction: column;
+  }
+
   .skeleton-loading {
     width: 100%;
     height: calc(100% - 200px);
@@ -104,9 +109,4 @@
     margin-left: 10px;
     width: 200px;
   }
-}
-
-.status-tag {
-  display: flex;
-  flex-direction: column;
 }

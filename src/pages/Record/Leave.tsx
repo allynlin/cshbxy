@@ -281,10 +281,10 @@ const App: React.FC = () => {
                             <p>{intl.get('endTime')}：{showInfo.end_time}</p>
                             <p>{intl.get('reason')}：{showInfo.reason}</p>
                             {showInfo.reject_reason ?
-                                <>
+                                <p>
                                     {intl.get('rejectReason')}：
                                     <Tag color={userToken.colorError}>{showInfo.reject_reason}</Tag>
-                                </> : null}
+                                </p> : null}
                             <p>{intl.get('createTime')}：{showInfo.create_time}</p>
                             <p>{intl.get('updateTime')}：{showInfo.update_time}</p>
                             <div>{intl.get('approveProcess')}：</div>

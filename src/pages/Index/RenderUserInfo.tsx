@@ -3,7 +3,7 @@ import React from 'react';
 import './index.scss'
 import {useSelector} from "react-redux";
 import intl from "react-intl-universal";
-import {ExclamationCircleOutlined} from "@ant-design/icons";
+import ShowTour from "./ShowTour";
 
 const {Paragraph, Title} = Typography;
 
@@ -34,9 +34,12 @@ const Employee: React.FC = () => {
                 closable
             />
             <Descriptions
-                title={<Title level={3}>{intl.get('hello') + ',' + userInfo.realeName}</Title>}
-                bordered
-                column={{xxl: 2, xl: 2, lg: 2, md: 2, sm: 1, xs: 1}}
+                title={
+                    <>
+                        <Title level={3}>{intl.get('hello') + ',' + userInfo.realeName}</Title>
+                        <ShowTour/>
+                    </>
+                }
                 style={{
                     padding: '16px 0',
                 }}
