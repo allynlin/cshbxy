@@ -1,6 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
+import domtoimage from 'dom-to-image';
 import VirtualTable from "../../component/virtualTable/VirtualTable";
 import {
+    Card,
     Button,
     Form,
     Input,
@@ -12,6 +14,7 @@ import {
     Steps,
     Tag,
     Typography,
+    Watermark
 } from 'antd';
 import {deleteLeave, findLeaveList, findLeaveProcess, refreshLeave} from "../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
@@ -20,9 +23,11 @@ import {RenderStatusTag} from "../../component/Tag/RenderStatusTag";
 import '../../App.scss';
 import {SearchOutlined} from "@ant-design/icons";
 import {useSelector} from "react-redux";
+import {RenderWatermarkColor} from "../../component/Tag/RenderWatermarkColor";
 
 const {Title} = Typography;
 const {Step} = Steps;
+const {Meta} = Card;
 
 interface DataType {
     key: React.Key;
@@ -31,6 +36,8 @@ interface DataType {
 }
 
 const App: React.FC = () => {
+
+        const ref = useRef<any>(null);
 
         // 全局数据防抖
         const [isQuery, setIsQuery] = useState<boolean>(false);
@@ -55,9 +62,12 @@ const App: React.FC = () => {
         // 删除确认框
         const [open, setOpen] = useState(false);
         const [confirmLoading, setConfirmLoading] = useState(false);
+        // 生成图片模式
+        const [showImage, setShowImage] = useState<boolean>(false);
 
         const tableSize = useSelector((state: any) => state.tableSize.value)
         const userToken = useSelector((state: any) => state.userToken.value)
+        const userInfo = useSelector((state: any) => state.userInfo.value)
 
         useEffect(() => {
             const timer = setTimeout(() => {
@@ -236,6 +246,37 @@ const App: React.FC = () => {
             align: 'center',
         }];
 
+        const savePic = () => {
+            setTimeout(() => {
+                domtoimage.toPng(ref.current).then((dataUrl) => {
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = dataUrl;
+                    downloadLink.download = 'my-image.jpg';
+                    downloadLink.click();
+                }).catch((error) => {
+                    message.error(intl.get('sysError'));
+                    console.error('oops, something went wrong!', error);
+                }).finally(() => {
+                    setShowImage(false)
+                    setLoading(false)
+                    setIsRefresh(false)
+                })
+            }, 1000)
+        }
+
+        const getStatus = (status: number) => {
+            switch (status) {
+                case 0:
+                    return intl.get('underApprove')
+                case 1:
+                    return intl.get('passApprove')
+                case 2:
+                    return intl.get('rejectApprove')
+                default:
+                    return intl.get('errorApprove')
+            }
+        }
+
         return (
             <div className={'record-body'}>
                 <Modal
@@ -267,60 +308,140 @@ const App: React.FC = () => {
                             {isRefresh ? `${intl.get('refreshProcessList')}(${isRefreshWaitTime})` : intl.get('refreshProcessList')}
                         </Button>,
                         <Button
+                            key="save"
+                            type="primary"
+                            loading={loading}
+                            onClick={() => {
+                                setLoading(true)
+                                setIsRefresh(true)
+                                setShowImage(true)
+                                savePic()
+                            }}
+                        >
+                            {intl.get('savePicture')}
+                        </Button>,
+                        <Button
                             key="link"
                             loading={loading}
                             onClick={() => setShowModal(false)}
                         >
                             {intl.get('close')}
-                        </Button>,
+                        </Button>
                     ]}
                 >
-                    {showContent ? (<Skeleton active/>) : (
-                        <>
-                            <p>{intl.get('startTime')}：{showInfo.start_time}</p>
-                            <p>{intl.get('endTime')}：{showInfo.end_time}</p>
-                            <p>{intl.get('reason')}：{showInfo.reason}</p>
-                            {showInfo.reject_reason ?
-                                <p>
-                                    {intl.get('rejectReason')}：
-                                    <Tag color={userToken.colorError}>{showInfo.reject_reason}</Tag>
-                                </p> : null}
-                            <p>{intl.get('createTime')}：{showInfo.create_time}</p>
-                            <p>{intl.get('updateTime')}：{showInfo.update_time}</p>
-                            <div>{intl.get('approveProcess')}：</div>
-                            {
-                                processLoading ? (
-                                        <Space style={{flexDirection: 'column', marginTop: 16}}>
-                                            <Skeleton.Input active={true} block={false}/>
-                                            <Skeleton.Input active={true} block={false}/>
-                                            <Skeleton.Input active={true} block={false}/>
-                                            <Skeleton.Input active={true} block={false}/>
-                                        </Space>) :
-                                    <div style={{marginTop: 16}}>
-                                        <Steps
-                                            style={{
-                                                marginTop: 16
-                                            }}
-                                            direction="vertical"
-                                            size="small"
-                                            current={showInfo.count}
-                                            status={showInfo.status === 0 ? 'process' : showInfo.status === 1 ? 'finish' : 'error'}
-                                        >
-                                            {
-                                                processList.map((item: string, index: number) => {
-                                                    return (
-                                                        <Step
-                                                            key={index}
-                                                            title={item}
-                                                        />
-                                                    )
-                                                })
-                                            }
-                                        </Steps>
-                                    </div>
-                            }
-                        </>
-                    )}
+                    {
+                        showImage ?
+                            <div ref={ref} style={{
+                                padding: showImage ? 16 : 0
+                            }}>
+                                <Card>
+                                    <Watermark
+                                        content={["OA", userInfo.realeName, getStatus(showInfo.status)]}
+                                        gap={[70, 70]}
+                                        font={{
+                                            color: RenderWatermarkColor(showInfo.status),
+                                        }}
+                                    >
+                                        <Title level={2} className={'tit'}>
+                                            {intl.get('leave') + ' ' + intl.get('record')}
+                                        </Title>
+                                        {showContent ? (<Skeleton active/>) : (
+                                            <>
+                                                <p>UID：{showInfo.uid}</p>
+                                                <p>{intl.get('startTime')}：{showInfo.start_time}</p>
+                                                <p>{intl.get('endTime')}：{showInfo.end_time}</p>
+                                                <p>{intl.get('reason')}：{showInfo.reason}</p>
+                                                {showInfo.reject_reason ?
+                                                    <p>
+                                                        {intl.get('rejectReason')}：
+                                                        <Tag color={userToken.colorError}>{showInfo.reject_reason}</Tag>
+                                                    </p> : null}
+                                                <p>{intl.get('createTime')}：{showInfo.create_time}</p>
+                                                <p>{intl.get('updateTime')}：{showInfo.update_time}</p>
+                                                <div>{intl.get('approveProcess')}：</div>
+                                                {processLoading ? (
+                                                        <Space style={{flexDirection: 'column', marginTop: 16}}>
+                                                            <Skeleton.Input active={true} block={false}/>
+                                                            <Skeleton.Input active={true} block={false}/>
+                                                            <Skeleton.Input active={true} block={false}/>
+                                                            <Skeleton.Input active={true} block={false}/>
+                                                        </Space>) :
+                                                    <div style={{marginTop: 16}}>
+                                                        <Steps
+                                                            style={{
+                                                                marginTop: 16
+                                                            }}
+                                                            direction="vertical"
+                                                            size="small"
+                                                            current={showInfo.count}
+                                                            status={showInfo.status === 0 ? 'process' : showInfo.status === 1 ? 'finish' : 'error'}
+                                                        >
+                                                            {processList.map((item: string, index: number) => {
+                                                                return (
+                                                                    <Step
+                                                                        key={index}
+                                                                        title={item}/>
+                                                                );
+                                                            })}
+                                                        </Steps>
+                                                    </div>}
+                                            </>
+                                        )}
+                                    </Watermark>
+                                    <Meta title={userInfo.realeName + ' ' + userInfo.uid} description={
+                                        <>
+                                            <Tag>{userInfo.departmentUid}</Tag>
+                                            <Tag>{userInfo.gender}</Tag>
+                                            <Tag>{userInfo.email}</Tag>
+                                            <Tag>{userInfo.tel}</Tag>
+                                        </>
+                                    }/>
+                                </Card>
+                            </div> :
+                            <>
+                                {showContent ? (<Skeleton active/>) : (
+                                    <>
+                                        <p>{intl.get('startTime')}：{showInfo.start_time}</p>
+                                        <p>{intl.get('endTime')}：{showInfo.end_time}</p>
+                                        <p>{intl.get('reason')}：{showInfo.reason}</p>
+                                        {showInfo.reject_reason ?
+                                            <p>
+                                                {intl.get('rejectReason')}：
+                                                <Tag color={userToken.colorError}>{showInfo.reject_reason}</Tag>
+                                            </p> : null}
+                                        <p>{intl.get('createTime')}：{showInfo.create_time}</p>
+                                        <p>{intl.get('updateTime')}：{showInfo.update_time}</p>
+                                        <div>{intl.get('approveProcess')}：</div>
+                                        {processLoading ? (
+                                                <Space style={{flexDirection: 'column', marginTop: 16}}>
+                                                    <Skeleton.Input active={true} block={false}/>
+                                                    <Skeleton.Input active={true} block={false}/>
+                                                    <Skeleton.Input active={true} block={false}/>
+                                                    <Skeleton.Input active={true} block={false}/>
+                                                </Space>) :
+                                            <div style={{marginTop: 16}}>
+                                                <Steps
+                                                    style={{
+                                                        marginTop: 16
+                                                    }}
+                                                    direction="vertical"
+                                                    size="small"
+                                                    current={showInfo.count}
+                                                    status={showInfo.status === 0 ? 'process' : showInfo.status === 1 ? 'finish' : 'error'}
+                                                >
+                                                    {processList.map((item: string, index: number) => {
+                                                        return (
+                                                            <Step
+                                                                key={index}
+                                                                title={item}/>
+                                                        );
+                                                    })}
+                                                </Steps>
+                                            </div>}
+                                    </>
+                                )}
+                            </>
+                    }
                 </Modal>
                 <div className="record-head">
                     <Title level={2} className={'tit'}>
