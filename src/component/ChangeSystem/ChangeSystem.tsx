@@ -1,6 +1,7 @@
 import React from 'react';
+import {useNavigate, useLocation} from "react-router-dom";
 import {FloatButton} from 'antd';
-import {MobileOutlined, SettingOutlined} from '@ant-design/icons';
+import {LaptopOutlined, MobileOutlined, SettingOutlined} from '@ant-design/icons';
 import light from './light.svg'
 import dark from './dark.svg'
 import zhLight from './zh-light.svg'
@@ -14,6 +15,8 @@ import {Chinese, English} from "../redux/userLanguageSlice";
 
 export default function ChangeSystem() {
 
+    const navigate = useNavigate();
+    const location = useLocation();
     const dispatch = useDispatch();
 
     const themeColor = useSelector((state: any) => state.themeColor.value);
@@ -41,10 +44,9 @@ export default function ChangeSystem() {
                 icon={<img src={languageIcon()} alt={'language'} style={{width: '100%'}}/>}
             />
             <FloatButton
-                href={'https://cshbxy-mobile.netlify.app/'}
-                target={'_blank'}
-                tooltip={intl.get('mobileTerminal')}
-                icon={<MobileOutlined/>}
+                tooltip={location.pathname.slice(0, 2) === '/m' ?intl.get('WebTerminal'):intl.get('mobileTerminal')}
+                icon={location.pathname.slice(0, 2) === '/m' ? <LaptopOutlined/> : <MobileOutlined/>}
+                onClick={() => location.pathname.slice(0, 2) === '/m' ? navigate('/home') : navigate('/m/home')}
             />
         </FloatButton.Group>
     )

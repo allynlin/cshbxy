@@ -14,11 +14,19 @@ export const themeSlice = createSlice({
                 'data-scheme',
                 'light'
             )
+            document.documentElement.setAttribute(
+                'data-prefers-color-scheme',
+                'light'
+            )
         },
         dark: state => {
             state.value = 'dark'
             document.documentElement.setAttribute(
                 'data-scheme',
+                'dark'
+            )
+            document.documentElement.setAttribute(
+                'data-prefers-color-scheme',
                 'dark'
             )
         }

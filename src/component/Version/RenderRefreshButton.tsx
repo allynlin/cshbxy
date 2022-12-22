@@ -43,8 +43,8 @@ export default function RenderRefreshButton() {
     return (
         <Button
             style={{
-                backgroundColor: userToken.errorColor,
-                borderColor: userToken.errorColor,
+                backgroundColor: userToken.colorError,
+                borderColor: userToken.colorError,
                 color: '#ffffff'
             }}
             onClick={e => {

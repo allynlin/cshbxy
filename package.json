@@ -1,6 +1,6 @@
 {
   "name": "cshbxy",
-  "version": "2.1.5",
+  "version": "3.0.0",
   "private": true,
   "homepage": "https://allynlin.netlify.app/",
   "dependencies": {
@@ -18,8 +18,10 @@
     "@types/react": "^18.0.20",
     "@types/react-color": "^3.0.6",
     "@types/react-dom": "^18.0.6",
+    "@types/react-virtualized": "^9.21.21",
     "@types/react-window": "^1.8.5",
     "antd": "5.1.0",
+    "antd-mobile": "^5.27.0",
     "axios": "^0.27.2",
     "crypto-js": "^4.1.1",
     "dom-to-image": "^2.6.0",
@@ -39,6 +41,7 @@
     "react-router-dom": "^6.4.0",
     "react-router-waiter": "^1.1.7",
     "react-scripts": "5.0.1",
+    "react-virtualized": "^9.22.3",
     "react-window": "^1.8.8",
     "sass": "^1.54.9",
     "typescript": "^4.8.3",

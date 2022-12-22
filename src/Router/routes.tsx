@@ -3,7 +3,15 @@ import record from "./record";
 import approval from "./approval";
 import management from "./management";
 import {Error101, Error103, Error403, Error404, Error500, Success} from "../pages/Result/Result";
-import Home from "../pages/Home/Home";
+import {
+    Error404 as MobileError404,
+    Error403 as MobileError403,
+    Error500 as MobileError500,
+} from "../pages/Result/MobileResult";
+import Home from "../pages/Home/Web";
+import Mobile from "../pages/Home/Mobile";
+import mobileRecord from "./mobileRecord";
+import mobileApproval from "./mobileApproval";
 
 const routes = [{
     path: '/',
@@ -58,6 +66,80 @@ const routes = [{
         ...management
     ]
 }, {
+    path: '/m',
+    element: <Mobile/>,
+    meta: {
+        title: 'Home',
+        titleCN: '首页'
+    },
+    children: [{
+        path: 'home',
+        component: () => import('../pages/Index/MobileIndex'),
+        meta: {
+            title: 'Home',
+            titleCN: '首页'
+        }
+    }, {
+        path: 'login',
+        component: () => import('../pages/User/MobileLogin'),
+        meta: {
+            title: 'Login',
+            titleCN: '登录'
+        }
+    }, {
+        path: 'register',
+        component: () => import('../pages/User/MobileRegister'),
+        meta: {
+            title: 'Register',
+            titleCN: '注册'
+        }
+    }, {
+        path: 'setting',
+        component: () => import('../pages/Setting/MobileSetting'),
+        meta: {
+            title: 'Setting',
+            titleCN: '设置',
+        }
+    }, {
+        path: 'departmentUser',
+        component: () => import('../pages/Management/DepartmentUser'),
+        meta: {
+            title: '部门用户',
+            Auth: 'Department'
+        }
+    }, {
+        path: 'userManagement',
+        component: () => import('../pages/Management/UserManagement'),
+        meta: {
+            title: '用户管理',
+            Auth: 'Leader'
+        }
+    }, {
+        path: '404',
+        element: <MobileError404/>,
+        meta: {
+            title: '404',
+        }
+    }, {
+        path: '403',
+        element: <MobileError403/>,
+        meta: {
+            title: '403',
+        }
+    }, {
+        path: '500',
+        element: <MobileError500/>,
+        meta: {
+            title: '500',
+        }
+    }, {
+        path: '*',
+        redirect: '/m/404'
+    },
+        ...mobileRecord,
+        ...mobileApproval
+    ]
+}, {
     path: '/403',
     element: <Error403/>,
     meta: {
@@ -69,31 +151,29 @@ const routes = [{
     meta: {
         title: '404'
     }
-},
-    {
-        path: '/500',
-        element: <Error500/>,
-        meta: {
-            title: '500'
-        }
-    }, {
-        path: '/101',
-        element: <Error101/>,
-        meta: {
-            title: 'Version Error',
-            titleCN: '版本获取失败'
-        }
-    }, {
-        path: '/103',
-        element: <Error103/>,
-        meta: {
-            title: 'Low Version',
-            titleCN: '版本过低'
-        }
-    }, {
-        path: '*',
-        redirect: '/404'
+}, {
+    path: '/500',
+    element: <Error500/>,
+    meta: {
+        title: '500'
     }
-]
+}, {
+    path: '/101',
+    element: <Error101/>,
+    meta: {
+        title: 'Version Error',
+        titleCN: '版本获取失败'
+    }
+}, {
+    path: '/103',
+    element: <Error103/>,
+    meta: {
+        title: 'Low Version',
+        titleCN: '版本过低'
+    }
+}, {
+    path: '*',
+    redirect: '/404'
+}]
 
 export default routes

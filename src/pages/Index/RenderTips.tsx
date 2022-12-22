@@ -1,10 +1,12 @@
 import React from 'react';
-import {Button, Modal, Result, Typography} from 'antd';
+import {useNavigate} from "react-router-dom";
+import {Button, Result, Typography} from 'antd';
 import intl from "react-intl-universal";
-import {ExclamationCircleOutlined} from '@ant-design/icons';
 
 const {Paragraph, Text} = Typography;
 const RenderTips: React.FC = () => {
+
+    const navigate = useNavigate();
 
     return (
         <Result title={intl.get('tips')}>
@@ -27,7 +29,7 @@ const RenderTips: React.FC = () => {
                 <Button
                     type="primary"
                     target="_blank"
-                    onClick={() => window.location.replace('https://cshbxy-mobile.netlify.app/')}
+                    onClick={() => navigate('/m/home')}
                     block
                 >{intl.get('changeToMobileTerminal')}</Button>
             </div>

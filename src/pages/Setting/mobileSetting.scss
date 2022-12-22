@@ -1,0 +1,10 @@
+.copy {
+  font-size: 12px;
+  text-align: center;
+  color: rgba(0, 0, 0, .45);
+  margin-top: 20px;
+
+  [data-prefers-color-scheme='dark'] & {
+    color: rgba(255, 255, 255, .45);
+  }
+}

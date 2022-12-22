@@ -211,10 +211,11 @@ export default function App() {
     return (
         <>
             {contextHolder}
-            <ChangeSystem/>
+
             <ConfigProvider locale={language}>
                 {/*// @ts-ignore*/}
                 <HistoryRouter basename={process.env.PUBLIC_URL} history={history}>
+                    <ChangeSystem/>
                     <RouterWaiter routes={routes} loading={<Spin/>} onRouteBefore={onRouteBefore}/>
                 </HistoryRouter>
             </ConfigProvider>

@@ -1,5 +1,6 @@
-import {Alert, Button, Descriptions, Modal, Typography} from 'antd';
+import {Alert, Button, Descriptions, Typography} from 'antd';
 import React from 'react';
+import {useNavigate} from "react-router-dom";
 import './index.scss'
 import {useSelector} from "react-redux";
 import intl from "react-intl-universal";
@@ -8,6 +9,8 @@ import ShowTour from "./ShowTour";
 const {Paragraph, Title} = Typography;
 
 const Employee: React.FC = () => {
+
+    const navigate = useNavigate();
 
     const userInfo = useSelector((state: { userInfo: { value: any } }) => state.userInfo.value)
 
@@ -25,7 +28,7 @@ const Employee: React.FC = () => {
                         <Button
                             type="primary"
                             target="_blank"
-                            onClick={() => window.location.replace('https://cshbxy-mobile.netlify.app/')}
+                            onClick={() => navigate('/m/home')}
                             block
                         >{intl.get('changeToMobileTerminal')}</Button>
                     </>

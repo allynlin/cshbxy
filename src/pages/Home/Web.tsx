@@ -5,7 +5,7 @@ import RenderMenu from "./RenderMenu";
 import {version} from "../../baseInfo";
 import {useDispatch, useSelector} from "react-redux";
 import RenderLogOut from "./RenderLogOut";
-import './home.scss';
+import './web.scss';
 import {setTableSize} from "../../component/redux/tableSizeSlice";
 
 const {Header, Content, Footer, Sider} = Layout;

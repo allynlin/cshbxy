@@ -13,10 +13,8 @@ const root = ReactDOM.createRoot(
 );
 root.render(
     <React.StrictMode>
-        <ErrorBoundary>
-            <Provider store={store}>
-                <Token/>
-            </Provider>
-        </ErrorBoundary>
+        <Provider store={store}>
+            <Token/>
+        </Provider>
     </React.StrictMode>
 );
