@@ -8,6 +8,7 @@ import UserPasswordSetting from "./UserPasswordSetting";
 import UserInfoSetting from "./UserInfoSetting";
 import UsernameSetting from "./UsernameSetting";
 import TokenSetting from "./TokenSetting";
+import ShowAlert from "./ShowAlert";
 import {LStorage} from "../../component/localStrong";
 
 const {Title, Text} = Typography;
@@ -34,6 +35,11 @@ const Setting = () => (
                 </Space>
                 <Title level={3}>{intl.get('baseSetting')}</Title>
                 <br/>
+                <Space size={"middle"} align={"center"}>
+                    <Text>{intl.get('alertMessageStatus')}</Text>
+                    <ShowAlert/>
+                </Space>
+                <br/><br/>
                 <Space size={"middle"} align={"center"}>
                     <Text>{intl.get('menuMode')}</Text>
                     <MenuModeSetting/>

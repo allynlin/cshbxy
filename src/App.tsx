@@ -5,7 +5,7 @@ import Cookie from 'js-cookie';
 import RouterWaiter from "react-router-waiter"
 import Spin from "./component/loading/Spin";
 import {useDispatch, useSelector} from "react-redux";
-import {ConfigProvider, message} from "antd";
+import {ConfigProvider, message, Modal} from "antd";
 import {checkUser, getLowVersion, getVersion} from "./component/axios/api";
 import {login} from "./component/redux/isLoginSlice";
 import {Department, Employee, Leader} from "./component/redux/userTypeSlice";
@@ -44,6 +44,7 @@ export default function App() {
     const [authCheck, setAuthCheck] = useState<boolean>(false);
 
     const [messageApi, contextHolder] = message.useMessage();
+    const [modal, modalHolder] = Modal.useModal();
     const key = 'checkUser';
 
     const dispatch = useDispatch();
@@ -101,6 +102,21 @@ export default function App() {
                 rootNavigate('/103');
             }
         })
+        const showVersionModal = LStorage.get('cshbxy-oa-3.0.2');
+        if (!showVersionModal) {
+            modal.info({
+                title: '3.0.2 ' + intl.get('updateVersion'),
+                content: (
+                    <>
+                        <p>{intl.get('3.0.2-1')}</p>
+                        <p>{intl.get('3.0.2-2')}</p>
+                    </>
+                ),
+                onOk() {
+                    LStorage.set('cshbxy-oa-3.0.2', true)
+                },
+            });
+        }
         const token = Cookie.get('cshbxy-oa-token');
         if (token) {
             messageApi.open({
@@ -211,7 +227,7 @@ export default function App() {
     return (
         <>
             {contextHolder}
-
+            {modalHolder}
             <ConfigProvider locale={language}>
                 {/*// @ts-ignore*/}
                 <HistoryRouter basename={process.env.PUBLIC_URL} history={history}>

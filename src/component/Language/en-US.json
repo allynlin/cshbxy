@@ -263,5 +263,14 @@
   "tour-3": "You can approve applications that require your approval. For rejected applications, you must provide reasons for the rejection, otherwise they cannot be submitted. If you are a department, you can also manage your department members, directly modify the user name, password or basic information for him/her, and you can even disable the user.",
   "tour-4": "You can manage users, modify user information, and disable users. You can also manage the approval process. Please note that the modified approval process will only be applied after the modification is successful, and the previously submitted applications will still follow the previous process.",
   "savePicture": "Save Picture",
-  "WebTerminal": "Web Terminal"
+  "WebTerminal": "Web Terminal",
+  "updateVersion": "Update Version",
+  "3.0.2-1": "1. Added the function of permanently closing the prompt, and there will be no prompt after closing.",
+  "3.0.2-2": "2. Fixed some known issues.",
+  "alertMessageStatus": "Alert Message Status",
+  "showAlert": "Show Alert",
+  "hideAlert": "Hide Alert",
+  "showAlertMessage": "Show Alert Message",
+  "hideAlertMessage": "Hide Alert Message",
+  "alertMessageStatusError": "Alert Message Status Error"
 }
