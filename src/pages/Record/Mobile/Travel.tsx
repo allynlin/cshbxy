@@ -8,9 +8,7 @@ import {RenderStatusTag} from "../../../component/Tag/RenderStatusTagMobile";
 import {Card, Dialog, DotLoading, List, PullToRefresh, Result, Tag, Toast} from 'antd-mobile'
 import {AutoSizer, List as VirtualizedList} from 'react-virtualized'
 import {PullStatus} from "antd-mobile/es/components/pull-to-refresh";
-import {DownLoadURL} from "../../../baseInfo";
-
-const tableName = `Travel`;
+import {DownLoadURL, tableName} from "../../../baseInfo";
 
 const statusRecord: Record<PullStatus, string> = {
     pulling: '下拉获取最新记录',
@@ -153,7 +151,7 @@ const Travel: React.FC = () => {
                                 key: 'files',
                                 text: '查看文件',
                                 onClick: async () => {
-                                    await findUploadFilesByUid(item.uid, tableName).then((res: any) => {
+                                    await findUploadFilesByUid(item.uid, tableName.travel).then((res: any) => {
                                         Dialog.alert({
                                             title: '文件列表',
                                             content: (

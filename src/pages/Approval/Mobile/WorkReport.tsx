@@ -1,11 +1,9 @@
 import React, {CSSProperties, useEffect, useState} from 'react';
 import {findUploadFilesByUid, findWorkReportWaitApprovalList, resolveWorkReport} from '../../../component/axios/api';
-import {DownLoadURL} from "../../../baseInfo";
+import {DownLoadURL, tableName} from "../../../baseInfo";
 import {PullStatus} from "antd-mobile/es/components/pull-to-refresh";
 import {Card, Dialog, DotLoading, List, PullToRefresh, Result, Toast} from "antd-mobile";
 import {AutoSizer, List as VirtualizedList} from "react-virtualized";
-
-const tableName = `WorkReport`;
 
 const statusRecord: Record<PullStatus, string> = {
     pulling: '下拉获取待审批申请',
@@ -142,7 +140,7 @@ const WorkReport: React.FC = () => {
                             key: 'files',
                             text: '查看文件',
                             onClick: async () => {
-                                await findUploadFilesByUid(item.uid, tableName).then((res: any) => {
+                                await findUploadFilesByUid(item.uid, tableName.workReport).then((res: any) => {
                                     Dialog.alert({
                                         title: '文件列表',
                                         content: (
