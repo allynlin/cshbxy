@@ -1,14 +1,17 @@
-import {Alert, Button, Descriptions, Typography} from 'antd';
+import {Alert, Button, Descriptions, notification, Typography} from 'antd';
 import React from 'react';
 import {useNavigate} from "react-router-dom";
 import './index.scss'
 import {useSelector} from "react-redux";
 import intl from "react-intl-universal";
 import ShowTour from "./ShowTour";
+import {LStorage} from "../../component/localStrong";
 
 const {Paragraph, Title} = Typography;
 
 const Employee: React.FC = () => {
+
+    const [api, contextHolder] = notification.useNotification();
 
     const navigate = useNavigate();
 
@@ -16,26 +19,36 @@ const Employee: React.FC = () => {
 
     return (
         <div className={'index-body'}>
-            <Alert
-                message={intl.get('tips-1')}
-                description={
-                    <>
-                        <Paragraph>{intl.get('tips-2')}</Paragraph>
-                        <Paragraph>{intl.get('tips-3')}</Paragraph>
-                        <Paragraph>{intl.get('tips-4')}</Paragraph>
-                        <Paragraph>{intl.get('tips-5')}</Paragraph>
-                        <Paragraph>{intl.get('tips-6')}</Paragraph>
-                        <Button
-                            type="primary"
-                            target="_blank"
-                            onClick={() => navigate('/m/home')}
-                            block
-                        >{intl.get('changeToMobileTerminal')}</Button>
-                    </>
-                }
-                type="info"
-                closable
-            />
+            {contextHolder}
+            {
+                LStorage.get('cshbxy-oa-isShowAlert') === false ?null:
+                    <Alert
+                        message={intl.get('tips-1')}
+                        description={
+                            <>
+                                <Paragraph>{intl.get('tips-2')}</Paragraph>
+                                <Paragraph>{intl.get('tips-3')}</Paragraph>
+                                <Paragraph>{intl.get('tips-4')}</Paragraph>
+                                <Paragraph>{intl.get('tips-5')}</Paragraph>
+                                <Paragraph>{intl.get('tips-6')}</Paragraph>
+                                <Button
+                                    type="primary"
+                                    target="_blank"
+                                    onClick={() => navigate('/m/home')}
+                                    block
+                                >{intl.get('changeToMobileTerminal')}</Button>
+                            </>
+                        }
+                        type="info"
+                        closable
+                        onClose={() => {
+                            api.info({
+                                message: intl.get('tips-7'),
+                            })
+                            LStorage.set('cshbxy-oa-isShowAlert', false)
+                        }}
+                    />
+            }
             <Descriptions
                 title={
                     <>

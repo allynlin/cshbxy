@@ -88,10 +88,10 @@ const StudentForm = () => {
                 }
                 onFinish={onFinish}
                 initialValues={{
-                    username: Cookie.get("username") || "",
-                    password: Cookie.get("password") || "",
+                    username: Cookie.get("cshbxy-oa-username") || "",
+                    password: Cookie.get("cshbxy-oa-password") || "",
                     rememberme: 'true',
-                    userType: Cookie.get("userType") || 'Employee',
+                    userType: Cookie.get("cshbxy-oa-userType") || 'Employee',
                 }}
             >
                 <Form.Item

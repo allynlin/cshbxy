@@ -8,17 +8,22 @@ import UserPasswordSetting from "./UserPasswordSetting";
 import UserInfoSetting from "./UserInfoSetting";
 import UsernameSetting from "./UsernameSetting";
 import TokenSetting from "./TokenSetting";
+import {LStorage} from "../../component/localStrong";
 
 const {Title, Text} = Typography;
 
 const Setting = () => (
     <Typography>
-        <Alert
-            message={intl.get('attention') + ': ' + intl.get('settingScopesNotice')}
-            type="info"
-            showIcon
-            style={{marginBottom: 16}}
-        />
+        {
+            LStorage.get('cshbxy-oa-settingAlert') === false ? null : <Alert
+                message={intl.get('attention') + ': ' + intl.get('settingScopesNotice')}
+                type="info"
+                showIcon
+                closable
+                style={{marginBottom: 16}}
+                onClose={() => LStorage.set('cshbxy-oa-settingAlert', false)}
+            />
+        }
         <Space size={"large"} align={"start"}>
             <div>
                 <Title level={3}>{intl.get('userSetting')}</Title>

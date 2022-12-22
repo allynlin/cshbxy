@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Button, Tour} from 'antd';
 import type {TourProps} from 'antd';
 import intl from "react-intl-universal";
+import {LStorage} from "../../component/localStrong";
 
 const App: React.FC = () => {
 
@@ -22,9 +23,12 @@ const App: React.FC = () => {
     }];
 
     return (
-        <>
-            <Button type="primary" onClick={() => setOpen(true)}>{intl.get('beginTour')}</Button>
-            <Tour open={open} onClose={() => setOpen(false)} steps={steps}/>
+        LStorage.get('cshbxy-oa-isShowTour') === false ? null : <>
+            <Button type="primary"
+                    onClick={() => setOpen(true)}>{intl.get('beginTour')}</Button>
+            <Tour open={open} onClose={() => setOpen(false)} steps={steps} onFinish={() => {
+                LStorage.set('cshbxy-oa-isShowTour', false)
+            }}/>
         </>
     );
 };
