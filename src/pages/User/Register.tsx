@@ -28,7 +28,6 @@ const RegisterStudent = () => {
     const rememberme = Form.useWatch('rememberme', form);
 
     const [departmentOptions, setDepartmentOptions] = useState([]);
-    const [registerType, setRegisterType] = useState('Employee');
     const [usernameUse, setUsernameUse] = useState(true);
     const navigate = useNavigate();
 
@@ -42,7 +41,7 @@ const RegisterStudent = () => {
             return
         }
         setLoading(true);
-        userRegister(username, password, realeName, gender, tel, email, departmentUid, registerType).then(res => {
+        userRegister(username, password, realeName, gender, tel, email, departmentUid, "Employee").then(res => {
             if (res.code === 200) {
                 api.success(res.msg);
                 loginAutomatic();
@@ -59,7 +58,7 @@ const RegisterStudent = () => {
             navigate('/login')
             return
         }
-        userLogin(username, password, registerType).then(res => {
+        userLogin(username, password, "Employee").then(res => {
             dispatch(setUser(res.body))
             api.success(res.msg);
             isRemember()
@@ -89,7 +88,7 @@ const RegisterStudent = () => {
     const isRemember = () => {
         setCookie({name: 'cshbxy-oa-username', value: username});
         setCookie({name: 'cshbxy-oa-password', value: password});
-        setCookie({name: 'cshbxy-oa-userType', value: registerType});
+        setCookie({name: 'cshbxy-oa-userType', value: "Employee"});
     }
 
     const onReset = () => {
@@ -101,7 +100,7 @@ const RegisterStudent = () => {
     const checkUserName = (e: any) => {
         clearTimeout(timeOut)
         timeOut = setTimeout(() => {
-            checkUsername(e.target.value, registerType).then(() => {
+            checkUsername(e.target.value, "Employee").then(() => {
                 setUsernameUse(true)
             }).catch(() => {
                 setUsernameUse(false)
@@ -122,28 +121,6 @@ const RegisterStudent = () => {
         })
     }
 
-    // 动态渲染不同注册所需要填写的表单
-    const RenderField = () => {
-        return registerType === 'Employee' ? (<Form.Item
-            label={intl.get('department')}
-            name="departmentUid"
-            rules={[{
-                required: true,
-                message: intl.get('pleaseChooseDepartment'),
-            }]}
-        >
-            <Select
-                showSearch
-                style={{
-                    width: '100%',
-                }}
-                onFocus={getDepartmentOptions}
-                placeholder={intl.get('pleaseChooseDepartment')}
-                options={departmentOptions}
-            />
-        </Form.Item>) : null
-    }
-
     return (
         <Form
             form={form}
@@ -157,16 +134,6 @@ const RegisterStudent = () => {
             }}
         >
             {contextHolder}
-            <Form.Item wrapperCol={{offset: 8, span: 16}}>
-                <Radio.Group defaultValue="Employee" buttonStyle="solid" onChange={e => {
-                    setRegisterType(e.target.value)
-                }}>
-                    <Radio.Button value="Leader">{intl.get('leaderRegister')}</Radio.Button>
-                    <Radio.Button value="Department">{intl.get('departmentRegister')}</Radio.Button>
-                    <Radio.Button value="Employee">{intl.get('employeeRegister')}</Radio.Button>
-                </Radio.Group>
-            </Form.Item>
-
             <Form.Item
                 label={intl.get('username')}
                 name="username"
@@ -269,7 +236,24 @@ const RegisterStudent = () => {
                 <Input type={"email"} showCount maxLength={30} allowClear={true}/>
             </Form.Item>
 
-            {RenderField()}
+            <Form.Item
+                label={intl.get('department')}
+                name="departmentUid"
+                rules={[{
+                    required: true,
+                    message: intl.get('pleaseChooseDepartment'),
+                }]}
+            >
+                <Select
+                    showSearch
+                    style={{
+                        width: '100%',
+                    }}
+                    onFocus={getDepartmentOptions}
+                    placeholder={intl.get('pleaseChooseDepartment')}
+                    options={departmentOptions}
+                />
+            </Form.Item>
 
             <Form.Item
                 label={intl.get('autoLogin')}

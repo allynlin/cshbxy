@@ -1,13 +1,12 @@
-import {Alert, Button, Descriptions, notification, Typography} from 'antd';
+import {Alert, Button, notification, Typography} from 'antd';
 import React from 'react';
 import {useNavigate} from "react-router-dom";
 import './index.scss'
-import {useSelector} from "react-redux";
 import intl from "react-intl-universal";
-import ShowTour from "./ShowTour";
 import {LStorage} from "../../component/localStrong";
+import HomeDescriptions from "./HomeDescriptions";
 
-const {Paragraph, Title} = Typography;
+const {Paragraph} = Typography;
 
 const Employee: React.FC = () => {
 
@@ -15,13 +14,11 @@ const Employee: React.FC = () => {
 
     const navigate = useNavigate();
 
-    const userInfo = useSelector((state: { userInfo: { value: any } }) => state.userInfo.value)
-
     return (
         <div className={'index-body'}>
             {contextHolder}
             {
-                LStorage.get('cshbxy-oa-isShowAlert') === false ?null:
+                LStorage.get('cshbxy-oa-isShowAlert') === false ? null :
                     <Alert
                         message={intl.get('tips-1')}
                         description={
@@ -49,48 +46,7 @@ const Employee: React.FC = () => {
                         }}
                     />
             }
-            <Descriptions
-                title={
-                    <>
-                        <Title level={3}>{intl.get('hello') + ',' + userInfo.realeName}</Title>
-                        <ShowTour/>
-                    </>
-                }
-                style={{
-                    padding: '16px 0',
-                }}
-            >
-                <Descriptions.Item label={'UID'}>
-                    {userInfo.uid}
-                </Descriptions.Item>
-                <Descriptions.Item label={intl.get('username')}>
-                    {userInfo.username}
-                </Descriptions.Item>
-                <Descriptions.Item label={intl.get('realName')}>
-                    {userInfo.realeName}
-                </Descriptions.Item>
-                <Descriptions.Item label={intl.get('gender')}>
-                    {userInfo.gender}
-                </Descriptions.Item>
-                <Descriptions.Item label={intl.get('tel')}>
-                    {userInfo.tel}
-                </Descriptions.Item>
-                <Descriptions.Item label={intl.get('email')}>
-                    {userInfo.email}
-                </Descriptions.Item>
-                <Descriptions.Item label={intl.get('createTime')}>
-                    {userInfo.create_time}
-                </Descriptions.Item>
-                <Descriptions.Item label={intl.get('updateTime')}>
-                    {userInfo.update_time}
-                </Descriptions.Item>
-                <Descriptions.Item label={intl.get('status')}>
-                    {userInfo.status === 0 ? intl.get('normal') : intl.get('disabled')}
-                </Descriptions.Item>
-                {userInfo.departmentUid ? <Descriptions.Item label={intl.get('department')}>
-                    {userInfo.departmentUid}
-                </Descriptions.Item> : null}
-            </Descriptions>
+            <HomeDescriptions/>
         </div>
     )
 };

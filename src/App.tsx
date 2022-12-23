@@ -102,21 +102,6 @@ export default function App() {
                 rootNavigate('/103');
             }
         })
-        const showVersionModal = LStorage.get('cshbxy-oa-3.0.2');
-        if (!showVersionModal) {
-            modal.info({
-                title: '3.0.2 ' + intl.get('updateVersion'),
-                content: (
-                    <>
-                        <p>{intl.get('3.0.2-1')}</p>
-                        <p>{intl.get('3.0.2-2')}</p>
-                    </>
-                ),
-                onOk() {
-                    LStorage.set('cshbxy-oa-3.0.2', true)
-                },
-            });
-        }
         const token = Cookie.get('cshbxy-oa-token');
         if (token) {
             messageApi.open({

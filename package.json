@@ -1,10 +1,11 @@
 {
   "name": "cshbxy",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "private": true,
   "homepage": "https://allynlin.netlify.app/",
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
+    "@arco-design/web-react": "^2.42.2",
     "@reduxjs/toolkit": "^1.8.5",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
