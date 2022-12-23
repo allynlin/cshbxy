@@ -43,7 +43,7 @@ const App: React.FC = () => {
             dispatch(setTableSize({tableWidth, tableHeight}));
             setWidth(contentWidth);
             setHeight(contentHeight);
-        }, 500)
+        }, 16)
         return () => {
             clearTimeout(wait)
         }

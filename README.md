@@ -1,17 +1,19 @@
 # OA 系统
 
-## 您可以通过下面的链接快速查看[allynlin.netlify.app](allynlin.netlify.app)
+## 系统介绍
 
-## 内置账号：管理员账号
+### 预览地址
 
-| 用户名 | 密码       | 登录渠道 |
-| ------ | ---------- | -------- |
-| admin  | 12345678   | 领导     |
+[allynlin.netlify.app](allynlin.netlify.app)
 
-## 内置账号：员工、部门、领导(每个登录渠道都有如下账号)
+### 技术栈
 
-| 用户名 | 密码       |
-| ------ | ---------- |
-| test1  | adminadmin |
-| test2  | adminadmin |
-| test3  | adminadmin |
+`React` `React Router` `Redux` `Ant Design` `Axios` `ES6` `Webpack`
+
+### 内置账号：超级管理员账号
+
+| 用户名   | 密码       | 登录渠道 |
+|-------|----------|------|
+| admin | 12345678 | 管理员  |
+
+其余内置账号，请登录超级管理员后查看，除管理员之外默认密码均为 adminadmin
