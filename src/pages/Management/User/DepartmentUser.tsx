@@ -205,10 +205,6 @@ export default function DepartmentUser() {
                                             username: newUsername,
                                             operation: <Button
                                                 type="primary"
-                                                style={{
-                                                    backgroundColor: RenderUserOperateButton(item.status),
-                                                    borderColor: RenderUserOperateButton(item.status)
-                                                }}
                                                 onClick={() => {
                                                     setShowInfo({
                                                         ...showInfo,
@@ -232,10 +228,6 @@ export default function DepartmentUser() {
                                             username: newUsername,
                                             operation: <Button
                                                 type="primary"
-                                                style={{
-                                                    backgroundColor: RenderUserOperateButton(item.status),
-                                                    borderColor: RenderUserOperateButton(item.status)
-                                                }}
                                                 onClick={() => {
                                                     setShowInfo({
                                                         ...showInfo,
@@ -263,10 +255,6 @@ export default function DepartmentUser() {
                                             ...newContent,
                                             operation: <Button
                                                 type="primary"
-                                                style={{
-                                                    backgroundColor: RenderUserOperateButton(item.status),
-                                                    borderColor: RenderUserOperateButton(item.status)
-                                                }}
                                                 onClick={() => {
                                                     setShowInfo({
                                                         ...showInfo,
@@ -289,10 +277,6 @@ export default function DepartmentUser() {
                                             ...newContent,
                                             operation: <Button
                                                 type="primary"
-                                                style={{
-                                                    backgroundColor: RenderUserOperateButton(item.status),
-                                                    borderColor: RenderUserOperateButton(item.status)
-                                                }}
                                                 onClick={() => {
                                                     setShowInfo({
                                                         ...showInfo,
@@ -325,10 +309,6 @@ export default function DepartmentUser() {
                                             status: newStatus,
                                             operation: <Button
                                                 type="primary"
-                                                style={{
-                                                    backgroundColor: RenderUserOperateButton(newStatus),
-                                                    borderColor: RenderUserOperateButton(newStatus)
-                                                }}
                                                 onClick={() => {
                                                     setShowInfo({
                                                         ...showInfo,
@@ -353,10 +333,6 @@ export default function DepartmentUser() {
                                             status: newStatus,
                                             operation: <Button
                                                 type="primary"
-                                                style={{
-                                                    backgroundColor: RenderUserOperateButton(newStatus),
-                                                    borderColor: RenderUserOperateButton(newStatus)
-                                                }}
                                                 onClick={() => {
                                                     setShowInfo({
                                                         ...showInfo,
@@ -380,7 +356,7 @@ export default function DepartmentUser() {
             </Modal>
             <div className="record-head">
                 <Title level={2} className={'tit'}>
-                    {intl.get('userManagement')}&nbsp;&nbsp;
+                    {intl.get('departmentUser')}&nbsp;&nbsp;
                     <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
                             onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
                 </Title>

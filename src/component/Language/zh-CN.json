@@ -218,7 +218,7 @@
   "confirmDeleteUserNotice": "删除用户后不可恢复，请谨慎操作",
   "confirmDeleteUserAgain": "最后一次确认删除用户吗？",
   "deleteUserSuccess": "删除用户成功",
-  "departmentUser": "部门用户",
+  "departmentUser": "部门用户管理",
   "processManagement": "流程管理",
   "changeProcess": "修改流程",
   "confirmChangeProcess": "确认修改流程吗？",
