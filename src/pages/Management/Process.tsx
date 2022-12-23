@@ -72,7 +72,7 @@ const ProcessManagement = () => {
                 return {
                     ...item,
                     key: item.uid,
-                    name: item.name,
+                    name: item.realeName,
                     process: item.process,
                     chosen: false
                 }
