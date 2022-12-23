@@ -42,8 +42,17 @@ const routes = [{
         path: 'register',
         component: () => import('../pages/User/Register'),
         meta: {
-            title: 'Register',
-            titleCN: '注册'
+            title: 'Add User',
+            titleCN: '添加用户',
+            Auth: 'Department'
+        }
+    }, {
+        path: 'departmentRegister',
+        component: () => import('../pages/User/DepartmentRegister'),
+        meta: {
+            title: 'Add User',
+            titleCN: '添加用户',
+            Auth: 'Department'
         }
     }, {
         path: 'setting',

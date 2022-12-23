@@ -112,7 +112,7 @@ export default function UserManagement() {
                                 setShowModal(true);
                                 setShowContent(false);
                             }}>
-                            {intl.get('check')}
+                            {intl.get('management')}
                         </Button>
                     }
                 });
@@ -213,10 +213,6 @@ export default function UserManagement() {
                                             username: newUsername,
                                             operation: <Button
                                                 type="primary"
-                                                style={{
-                                                    backgroundColor: RenderUserOperateButton(item.status),
-                                                    borderColor: RenderUserOperateButton(item.status)
-                                                }}
                                                 onClick={() => {
                                                     setShowInfo({
                                                         ...showInfo,
@@ -225,7 +221,7 @@ export default function UserManagement() {
                                                     setShowModal(true);
                                                     setShowContent(false);
                                                 }}>
-                                                {intl.get('check')}
+                                                {intl.get('management')}
                                             </Button>
                                         }
                                     }
@@ -240,10 +236,6 @@ export default function UserManagement() {
                                             username: newUsername,
                                             operation: <Button
                                                 type="primary"
-                                                style={{
-                                                    backgroundColor: RenderUserOperateButton(item.status),
-                                                    borderColor: RenderUserOperateButton(item.status)
-                                                }}
                                                 onClick={() => {
                                                     setShowInfo({
                                                         ...showInfo,
@@ -252,7 +244,7 @@ export default function UserManagement() {
                                                     setShowModal(true);
                                                     setShowContent(false);
                                                 }}>
-                                                {intl.get('check')}
+                                                {intl.get('management')}
                                             </Button>
                                         }
                                     }
@@ -271,10 +263,6 @@ export default function UserManagement() {
                                             ...newContent,
                                             operation: <Button
                                                 type="primary"
-                                                style={{
-                                                    backgroundColor: RenderUserOperateButton(item.status),
-                                                    borderColor: RenderUserOperateButton(item.status)
-                                                }}
                                                 onClick={() => {
                                                     setShowInfo({
                                                         ...showInfo,
@@ -283,7 +271,7 @@ export default function UserManagement() {
                                                     setShowModal(true);
                                                     setShowContent(false);
                                                 }}>
-                                                {intl.get('check')}
+                                                {intl.get('management')}
                                             </Button>
                                         }
                                     }
@@ -297,10 +285,6 @@ export default function UserManagement() {
                                             ...newContent,
                                             operation: <Button
                                                 type="primary"
-                                                style={{
-                                                    backgroundColor: RenderUserOperateButton(item.status),
-                                                    borderColor: RenderUserOperateButton(item.status)
-                                                }}
                                                 onClick={() => {
                                                     setShowInfo({
                                                         ...showInfo,
@@ -309,7 +293,7 @@ export default function UserManagement() {
                                                     setShowModal(true);
                                                     setShowContent(false);
                                                 }}>
-                                                {intl.get('check')}
+                                                {intl.get('management')}
                                             </Button>
                                         }
                                     }
@@ -333,10 +317,6 @@ export default function UserManagement() {
                                             status: newStatus,
                                             operation: <Button
                                                 type="primary"
-                                                style={{
-                                                    backgroundColor: RenderUserOperateButton(newStatus),
-                                                    borderColor: RenderUserOperateButton(newStatus)
-                                                }}
                                                 onClick={() => {
                                                     setShowInfo({
                                                         ...showInfo,
@@ -346,7 +326,7 @@ export default function UserManagement() {
                                                     setShowModal(true);
                                                     setShowContent(false);
                                                 }}>
-                                                {intl.get('check')}
+                                                {intl.get('management')}
                                             </Button>
                                         }
                                     }
@@ -361,10 +341,6 @@ export default function UserManagement() {
                                             status: newStatus,
                                             operation: <Button
                                                 type="primary"
-                                                style={{
-                                                    backgroundColor: RenderUserOperateButton(newStatus),
-                                                    borderColor: RenderUserOperateButton(newStatus)
-                                                }}
                                                 onClick={() => {
                                                     setShowInfo({
                                                         ...showInfo,
@@ -374,7 +350,7 @@ export default function UserManagement() {
                                                     setShowModal(true);
                                                     setShowContent(false);
                                                 }}>
-                                                {intl.get('check')}
+                                                {intl.get('management')}
                                             </Button>
                                         }
                                     }

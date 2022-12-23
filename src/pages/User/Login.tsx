@@ -130,9 +130,9 @@ const StudentForm = () => {
             >
                 <Radio.Group style={{display: "flex"}} buttonStyle="solid">
                     <Radio.Button value="Employee">{intl.get('employee')}</Radio.Button>
+                    <Radio.Button value="Leader">{intl.get('leader')}</Radio.Button>
                     <Radio.Button value="Department">{intl.get
                     ('department')}</Radio.Button>
-                    <Radio.Button value="Leader">{intl.get('leader')}</Radio.Button>
                 </Radio.Group>
             </Form.Item>
 
@@ -155,12 +155,6 @@ const StudentForm = () => {
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <Button htmlType="button" onClick={onReset} disabled={loading}>
                     {intl.get('reset')}
-                </Button>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                <Button htmlType="button" disabled={loading} onClick={() => {
-                    navigate('/register')
-                }}>
-                    {intl.get('register')}
                 </Button>
             </Form.Item>
         </Form>

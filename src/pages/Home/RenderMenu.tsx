@@ -78,16 +78,8 @@ const RenderMenu = () => {
     ];
     const department: MenuProps['items'] = [
         getItem((<Link to={'/home'}>{intl.get('home')}</Link>), '/home', <HomeOutlined/>),
-        // getItem(intl.get('approve'), 'approve', <ProjectOutlined/>, [
-        //     getItem(<Link
-        //         to={'/departmentChange-approval'}>{intl.get('departmentChange')}</Link>, '/departmentChange-approval'),
-        //     getItem(<Link to={'/leave-approval'}>{intl.get('leave')}</Link>, '/leave-approval'),
-        //     getItem(<Link to={'/travel-approval'}>{intl.get('travelReimburse')}</Link>, '/travel-approval'),
-        //     getItem(<Link
-        //         to={'/procurement-approval'}>{intl.get('procurement')}</Link>, '/procurement-approval'),
-        //     getItem(<Link
-        //         to={'/workReport-approval'}>{intl.get('workReport')}</Link>, '/workReport-approval'),
-        // ]),
+        getItem((<Link to={'/departmentRegister'}>{intl.get('register')}</Link>), '/departmentRegister',
+            <FormOutlined/>),
         getItem(<Link
                 to={'/departmentUser-management'}>{intl.get('departmentUser')}</Link>, '/departmentUser-management',
             <TeamOutlined/>),
@@ -113,6 +105,7 @@ const RenderMenu = () => {
         getItem((<Link to={'/home'}>{intl.get('home')}</Link>), '/home', <HomeOutlined/>),
         getItem(<Link
             to={'/user-management'}>{intl.get('userManagement')}</Link>, '/user-management', <TeamOutlined/>),
+        getItem((<Link to={'/register'}>{intl.get('register')}</Link>), '/register', <FormOutlined/>),
         getItem(<Link
                 to={'/process-management'}>{intl.get('processManagement')}</Link>, '/process-management',
             <Loading3QuartersOutlined/>),
@@ -122,7 +115,6 @@ const RenderMenu = () => {
     const errorMenu: MenuProps['items'] = [
         getItem((<Link to={'/home'}>{intl.get('home')}</Link>), '/home', <HomeOutlined/>),
         getItem((<Link to={'/login'}>{intl.get('login')}</Link>), '/login', <LoginOutlined/>),
-        getItem((<Link to={'/register'}>{intl.get('register')}</Link>), '/register', <FormOutlined/>),
         getItem((<Link to={'/setting'}>{intl.get('setting')}</Link>), '/setting',
             <FormOutlined/>)
     ];

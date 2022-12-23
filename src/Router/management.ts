@@ -4,7 +4,7 @@ const management = [{
     meta: {
         title: 'User management',
         titleCN: '用户管理',
-        Auth: 'Leader'
+        Auth: 'Department'
     }
 }, {
     path: 'departmentUser-management',
@@ -20,7 +20,7 @@ const management = [{
     meta: {
         title: 'Process management',
         titleCN: '流程管理',
-        Auth: 'Leader'
+        Auth: 'Department'
     }
 }]
 

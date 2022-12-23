@@ -4,8 +4,7 @@ const teacherRecord = [{
     meta: {
         title: 'Approval Department Change',
         titleCN: '部门变更',
-        Auth: 'Department',
-        Auth2: 'Leader'
+        Auth: 'Leader'
     }
 }, {
     path: 'leave-approval',
@@ -13,8 +12,7 @@ const teacherRecord = [{
     meta: {
         title: 'Approval Leave',
         titleCN: '请假',
-        Auth: 'Department',
-        Auth2: 'Leader'
+        Auth: 'Leader'
     }
 }, {
     path: 'travel-approval',
@@ -22,8 +20,7 @@ const teacherRecord = [{
     meta: {
         title: 'Approval Travel Reimbursement',
         titleCN: '差旅报销',
-        Auth: 'Department',
-        Auth2: 'Leader'
+        Auth: 'Leader'
     }
 }, {
     path: 'procurement-approval',
@@ -31,8 +28,7 @@ const teacherRecord = [{
     meta: {
         title: 'Approval Procurement',
         titleCN: '采购',
-        Auth: 'Department',
-        Auth2: 'Leader'
+        Auth: 'Leader'
     }
 }, {
     path: 'workReport-approval',
@@ -40,8 +36,7 @@ const teacherRecord = [{
     meta: {
         title: 'Approval Work WorkReport',
         titleCN: '工作汇报',
-        Auth: 'Department',
-        Auth2: 'Leader'
+        Auth: 'Leader'
     }
 }]
 

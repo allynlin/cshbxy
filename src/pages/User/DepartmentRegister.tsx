@@ -3,10 +3,13 @@ import {Button, Form, Input, message, Radio, Select} from 'antd';
 import {checkUsername, findUserType, userRegister} from "../../component/axios/api";
 import {Employee} from "../../component/redux/userTypeSlice";
 import intl from "react-intl-universal";
+import {useSelector} from "react-redux";
 
 const RegisterStudent = () => {
 
     const [loading, setLoading] = useState<boolean>(false);
+    const [departmentOptions, setDepartmentOptions] = useState([]);
+    const [usernameUse, setUsernameUse] = useState(true);
 
     const [api, contextHolder] = message.useMessage();
     const [form] = Form.useForm();
@@ -17,10 +20,8 @@ const RegisterStudent = () => {
     const gender = Form.useWatch('gender', form);
     const tel = Form.useWatch('tel', form);
     const email = Form.useWatch('email', form);
-    const departmentUid = Form.useWatch('departmentUid', form);
-    const userType = Form.useWatch('userType', form);
 
-    const [usernameUse, setUsernameUse] = useState(true);
+    const userInfo = useSelector((state: any) => state.userInfo.value);
 
     const onFinish = () => {
         if (!usernameUse) {
@@ -32,7 +33,7 @@ const RegisterStudent = () => {
             return
         }
         setLoading(true);
-        userRegister(username, password, realeName, gender, tel, email, departmentUid, userType).then(res => {
+        userRegister(username, password, realeName, gender, tel, email, userInfo.uid, "Employee").then(res => {
             if (res.code === 200) {
                 api.success(res.msg);
                 form.resetFields();
@@ -53,12 +54,25 @@ const RegisterStudent = () => {
     const checkUserName = (e: any) => {
         clearTimeout(timeOut)
         timeOut = setTimeout(() => {
-            checkUsername(e.target.value, userType).then(() => {
+            checkUsername(e.target.value, "Employee").then(() => {
                 setUsernameUse(true)
             }).catch(() => {
                 setUsernameUse(false)
             })
         }, 500)
+    }
+
+
+    const getDepartmentOptions = () => {
+        findUserType().then(res => {
+            const options = res.body.map((item: { uid: string, realeName: string }) => {
+                return {
+                    value: item.uid,
+                    label: item.realeName
+                }
+            })
+            setDepartmentOptions(options)
+        })
     }
 
     return (
@@ -70,7 +84,6 @@ const RegisterStudent = () => {
             onFinish={onFinish}
             initialValues={{
                 gender: "男",
-                userType: "Employee",
             }}
         >
             {contextHolder}
@@ -174,23 +187,6 @@ const RegisterStudent = () => {
             >
                 <Input type={"email"} showCount maxLength={30} allowClear={true}/>
             </Form.Item>
-
-            <Form.Item
-                label={intl.get('userType')}
-                name="userType"
-                rules={[
-                    {
-                        required: true,
-                        message: intl.get('pleaseChooseUserType'),
-                    },
-                ]}
-            >
-                <Radio.Group buttonStyle="solid">
-                    <Radio.Button value="Employee">{intl.get('employee')}</Radio.Button>
-                    <Radio.Button value="Leader">{intl.get('leader')}</Radio.Button>
-                </Radio.Group>
-            </Form.Item>
-
 
             <Form.Item wrapperCol={{offset: 8, span: 16}}>
                 <Button type="primary" htmlType="submit" loading={loading} disabled={loading}>

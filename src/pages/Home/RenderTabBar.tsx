@@ -124,10 +124,6 @@ const Home = () => {
         title: '去登陆',
         icon: <UserOutline/>,
     }, {
-        key: 'register',
-        title: '去注册',
-        icon: <FillinOutline/>,
-    }, {
         key: 'setting',
         title: '设置',
         icon: <SetOutline/>,

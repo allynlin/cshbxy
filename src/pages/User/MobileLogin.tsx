@@ -83,7 +83,6 @@ const StudentForm = () => {
                     <>
                         <Button type="submit" color="success" block>登录</Button>
                         <Button type="reset" onClick={() => onReset()} block>重置</Button>
-                        <Button type="button" color="primary" onClick={() => navigate('/m/register')} block>注册</Button>
                     </>
                 }
                 onFinish={onFinish}
@@ -133,8 +132,8 @@ const StudentForm = () => {
                 >
                     <Radio.Group>
                         <Radio value="Employee">员工</Radio>
-                        <Radio value="Department">部门</Radio>
                         <Radio value="Leader">领导</Radio>
+                        <Radio value="Department">管理员</Radio>
                     </Radio.Group>
                 </Form.Item>
 

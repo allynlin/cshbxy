@@ -26,7 +26,7 @@ const App: React.FC = () => {
     const [height, setHeight] = useState<number>(0);
 
     useEffect(() => {
-        setTitle(userLanguage === "Chinese" ? "OA 系统" : "OA System")
+        setTitle(userLanguage === "Chinese" ? "长沙星辰软件有限公司 OA 系统" : "长沙星辰软件有限公司 OA System")
         // 获取页面宽度
         const width = document.body.clientWidth;
         // 获取页面高度
@@ -78,7 +78,8 @@ const App: React.FC = () => {
                     >
                         <Outlet/>
                     </Content>
-                    <Footer style={{textAlign: 'center', margin: 0, padding: 16}}>OA &copy; 2022-2023 Created by
+                    <Footer style={{textAlign: 'center', margin: 0, padding: 16}}>长沙星辰软件有限公司
+                        OA &copy; 2022-2023 Created by
                         allynlin
                         Version：{version} Server：{serverVersion}</Footer>
                 </Layout>

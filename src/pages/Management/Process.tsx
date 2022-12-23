@@ -1,4 +1,4 @@
-import {Button, List, Modal, Segmented, Skeleton, Tag, Transfer, Typography} from 'antd';
+import {Button, List, Modal, Skeleton, Steps, Tag, Transfer, Typography} from 'antd';
 import React, {useEffect, useState} from 'react';
 import intl from "react-intl-universal";
 import {ExclamationCircleOutlined, SearchOutlined} from "@ant-design/icons";
@@ -38,12 +38,6 @@ const ProcessManagement = () => {
                     description: item.realeName,
                     chosen: false
                 }
-            })
-            data.push({
-                key: 'nowDepartment',
-                title: 'nowDepartment',
-                description: 'nowDepartment',
-                chosen: false
             })
             setMockData(data)
         })
@@ -94,8 +88,17 @@ const ProcessManagement = () => {
         // 将 process 按照 || 分割成数组
         const processArray: string[] = process.split('||');
 
+        const newArray = processArray.map((item, index) => {
+            return {
+                title: item,
+            }
+        })
+
         return (
-            <Segmented options={processArray}/>
+            <Steps
+                current={0}
+                items={newArray}
+            />
         )
     }
 
