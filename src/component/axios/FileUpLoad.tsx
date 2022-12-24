@@ -1,12 +1,14 @@
 import React, {useEffect, useState} from "react";
 import {UploadProps} from "antd/es/upload/interface";
-import {DownLoadURL, version} from "../../baseInfo";
+import intl from "react-intl-universal";
 import {message, Upload} from "antd";
-import {deleteFile} from "./api";
 import Cookie from "js-cookie";
 import {InboxOutlined} from "@ant-design/icons";
+
 import {rootNavigate} from "../../App";
-import intl from "react-intl-universal";
+import {DownLoadURL, version} from "../../baseInfo";
+import {deleteFile} from "./api";
+
 
 interface FileUpLoadProps {
     setTableName: string
@@ -37,13 +39,12 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
             'Accept-Language': language
         },
         multiple: true,
-        maxCount: props.max ? props.max : undefined,
         action: `${DownLoadURL}/uploadFile`,
         fileList: fileList,
-        // 如果上传的文件大于 20M，就提示错误
+        // 如果上传的文件大于 500M，就提示错误
         beforeUpload: (file: any) => {
-            if (file.size / 1024 / 1024 > 20) {
-                api.warning(intl.get('maxFileSize', {size: 20}));
+            if (file.size / 1024 / 1024 > 500) {
+                api.warning(intl.get('maxFileSize', {size: 500}));
                 // 将对应文件的状态设置为 error
                 file.status = 'error';
                 return false;

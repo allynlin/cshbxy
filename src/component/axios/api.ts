@@ -2,12 +2,12 @@ import {MethodType} from "./promise";
 
 const promise = require('./promise');
 
-// 获取服务器版本
+// 服务器版本
 export const getVersion = async () => {
     return promise.Request('/api/getVersion', MethodType.GET);
 }
 
-// 获取服务器最低支持版本
+// 服务器最低支持版本
 export const getLowVersion = async () => {
     return promise.Request('/api/getLowVersion', MethodType.GET);
 }
@@ -17,6 +17,20 @@ export const userLogin = async (username: string, password: string, userType: st
     return promise.Request('/api/user/login', MethodType.POST, {
         username,
         password,
+        userType
+    });
+}
+
+// 注册
+export const userRegister = async (username: String, password: String, realeName: String, gender: String, tel: String, email: String, departmentUid: String, userType: string) => {
+    return promise.Request('/api/user/add', MethodType.POST, {
+        username,
+        password,
+        realeName,
+        gender,
+        tel,
+        email,
+        departmentUid,
         userType
     });
 }
@@ -39,24 +53,29 @@ export const checkUsername = async (username: string, userType: string) => {
     });
 }
 
-// 注册
-export const userRegister = async (username: String, password: String, realeName: String, gender: String, tel: String, email: String, departmentUid: String, userType: string) => {
-    return promise.Request('/api/user/add', MethodType.POST, {
-        username,
-        password,
-        realeName,
-        gender,
-        tel,
-        email,
-        departmentUid,
-        userType
-    });
+// 查询上次上传的文件
+export const checkLastTimeUploadFiles = async (tableUid: String) => {
+    return promise.Request('/api/checkLastTimeUploadFiles', MethodType.POST, {}, {headers: {tableUid: tableUid}});
+}
+
+// 查询对应申请上传的文件
+export const findUploadFilesByUid = async (RowUid: String, tableUid: String) => {
+    return promise.Request('/api/findUploadFilesByUid', MethodType.POST, {
+        RowUid
+    }, {headers: {tableUid: tableUid}});
 }
 
 // 删除文件
 export const deleteFile = async (fileName: String) => {
     return promise.Request('/api/deleteUploadFile', MethodType.POST, {
         fileName
+    });
+}
+
+// 查询审批流程
+export const findWorkReportByTeacherProcess = async (uid: String) => {
+    return promise.Request('/apply/workReport/findProcess', MethodType.POST, {
+        uid
     });
 }
 
@@ -73,22 +92,13 @@ export const checkTeacherChangeDepartment = async () => {
     return promise.Request('/apply/departmentChange/checkLastTime', MethodType.POST);
 }
 
-// 查询上次上传的文件
-export const checkLastTimeUploadFiles = async (tableUid: String) => {
-    return promise.Request('/api/checkLastTimeUploadFiles', MethodType.POST, {}, {headers: {tableUid: tableUid}});
-}
 
 // 查询部门变更记录
 export const checkTeacherChangeDepartmentRecord = async () => {
     return promise.Request('/apply/departmentChange/findApplyList', MethodType.POST);
 }
 
-// 查询对应申请上传的文件
-export const findUploadFilesByUid = async (RowUid: String, tableUid: String) => {
-    return promise.Request('/api/findUploadFilesByUid', MethodType.POST, {
-        RowUid
-    }, {headers: {tableUid: tableUid}});
-}
+
 
 // 查询变更部门审批流程
 export const findChangeDepartmentByTeacherProcess = async (uid: String) => {
@@ -131,13 +141,6 @@ export const deleteWorkReport = async (uid: String, tableUid: String) => {
     }, {headers: {tableUid: tableUid}});
 }
 
-// 查询审批流程
-export const findWorkReportByTeacherProcess = async (uid: String) => {
-    return promise.Request('/apply/workReport/findProcess', MethodType.POST, {
-        uid
-    });
-}
-
 // 刷新当前工作报告
 export const refreshWorkReport = async (uid: string) => {
     return promise.Request('/apply/workReport/refresh', MethodType.POST, {uid});
@@ -174,16 +177,6 @@ export const deleteLeave = async (uid: String) => {
 // 检查上一次提交的请假申请
 export const checkLastTimeLeave = async () => {
     return promise.Request('/apply/leave/checkLastTime', MethodType.POST);
-}
-
-// 修改请假申请
-export const updateLeave = async (uid: String, reason: String, start_time: String, end_time: String) => {
-    return promise.Request('/apply/leave/update', MethodType.POST, {
-        uid,
-        reason,
-        start_time,
-        end_time
-    });
 }
 
 // 刷新当前请假申请
@@ -255,16 +248,6 @@ export const findProcurementProcess = async (uid: String) => {
 export const deleteProcurement = async (uid: String) => {
     return promise.Request('/apply/procurement/delete', MethodType.POST, {
         uid
-    });
-}
-
-// 修改采购申请
-export const updateProcurement = async (uid: String, items: string, price: string, reason: string) => {
-    return promise.Request('/apply/procurement/update', MethodType.POST, {
-        uid,
-        items,
-        price,
-        reason
     });
 }
 

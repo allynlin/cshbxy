@@ -1,9 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import {Provider} from "react-redux";
+
 import './index.scss';
 import Token from "./Token";
-import {Provider} from "react-redux";
 import store from "./component/redux/store";
+
 import 'antd/dist/reset.css';
 
 const root = ReactDOM.createRoot(

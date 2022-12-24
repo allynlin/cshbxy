@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from "react";
-import App from "./App";
-import {ConfigProvider, theme, App as MyApp} from "antd";
+import {ConfigProvider, theme} from "antd";
 import {useSelector} from "react-redux";
+
+import App from "./App";
 
 interface token {
     colorPrimary: string,
@@ -38,9 +39,7 @@ export default function Token() {
                 },
                 algorithm: themeColor === "dark" ? theme.darkAlgorithm : theme.defaultAlgorithm,
             }}>
-            <MyApp>
-                <App/>
-            </MyApp>
+            <App/>
         </ConfigProvider>
     );
 }
