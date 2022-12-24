@@ -1,17 +1,17 @@
 import React, {useEffect, useState} from 'react';
-import VirtualTable from "../../../component/VirtualTable";
+import {useSelector} from "react-redux";
 import {Button, Card, Form, Input, message, Modal, Skeleton, Typography} from 'antd';
+import {ColumnsType} from "antd/es/table";
+import {ExclamationCircleOutlined, FileTextOutlined, SearchOutlined} from "@ant-design/icons";
+import intl from "react-intl-universal";
+
+import VirtualTable from "../../../component/VirtualTable";
 import {
     findDepartmentChangeWaitApprovalList,
     findUploadFilesByUid,
     resolveDepartmentChange
 } from "../../../component/axios/api";
-import {ColumnsType} from "antd/es/table";
-import intl from "react-intl-universal";
-import '../../../App.scss';
-import {ExclamationCircleOutlined, FileTextOutlined, SearchOutlined} from "@ant-design/icons";
 import {DownLoadURL, tableName} from "../../../baseInfo";
-import {useSelector} from "react-redux";
 import Reject from "./Reject";
 
 const {Title} = Typography;

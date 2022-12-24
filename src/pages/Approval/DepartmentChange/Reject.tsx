@@ -1,7 +1,8 @@
-import {Button, Form, Input, message, Modal} from 'antd';
 import React, {useState} from 'react';
-import {rejectDepartmentChange} from "../../../component/axios/api";
 import intl from "react-intl-universal";
+import {Button, Form, Input, message, Modal} from 'antd';
+
+import {rejectDepartmentChange} from "../../../component/axios/api";
 
 interface Values {
     title: string;

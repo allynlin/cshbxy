@@ -4,7 +4,6 @@ import {Button, Card, Form, Input, message, Modal, Skeleton, Typography} from 'a
 import {findUploadFilesByUid, findWorkReportWaitApprovalList, resolveWorkReport} from "../../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
-import '../../../App.scss';
 import {ExclamationCircleOutlined, FileTextOutlined, SearchOutlined} from "@ant-design/icons";
 import {DownLoadURL, tableName} from "../../../baseInfo";
 import {useSelector} from "react-redux";

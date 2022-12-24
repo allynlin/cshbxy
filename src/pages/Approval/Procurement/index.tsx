@@ -4,7 +4,6 @@ import {Button, Form, Input, message, Modal, Skeleton, Typography} from 'antd';
 import {findProcurementWaitApprovalList, resolveProcurement} from "../../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
-import '../../../App.scss';
 import {ExclamationCircleOutlined, SearchOutlined} from "@ant-design/icons";
 import {useSelector} from "react-redux";
 import Reject from "./Reject";
