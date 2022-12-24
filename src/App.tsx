@@ -19,7 +19,7 @@ import {inline, vertical} from "./component/redux/menuModeSlice";
 import {Chinese, English} from "./component/redux/userLanguageSlice";
 import {setUser} from "./component/redux/userInfoSlice";
 import {setLowVersion} from "./component/redux/serverLowVersionSlice";
-import ChangeSystem from "./component/ChangeSystem/ChangeSystem";
+import ChangeSystem from "./component/ChangeSystem";
 import {setToken} from "./component/redux/userTokenSlice";
 
 import enUS from "antd/es/locale/en_US";

@@ -1,13 +1,13 @@
 import {Alert, Button, DatePicker, Form, Input, Modal, Typography} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {addLeave, checkLastTimeLeave,} from "../../component/axios/api";
-import './apply.scss';
 import Marquee from 'react-fast-marquee';
 import moment from "moment";
 import intl from "react-intl-universal";
 import type {Dayjs} from 'dayjs';
 import dayjs from 'dayjs';
+
+import {addLeave, checkLastTimeLeave,} from "../../component/axios/api";
 
 const {Title} = Typography;
 
@@ -157,7 +157,7 @@ const LeaveForm = () => {
     ];
 
     return (
-        <div className={'apply-body'}>
+        <div className={'cshbxy-100per'}>
             {isHaveLastLeave ? <RenderAlert/> : null}
             <Modal
                 title={intl.get('confirm')}
@@ -170,7 +170,7 @@ const LeaveForm = () => {
                 <p>{intl.get('endTime')}：{leaveTime ? leaveTime[1].format('YYYY-MM-DD HH:mm:ss') : intl.get('notChooseEndTime')}</p>
                 <p>{intl.get('reason')}：{reason}</p>
             </Modal>
-            <Title level={2} className={'tit'}>{intl.get('leaveApply')}</Title>
+            <Title level={2} className={'flex-center'}>{intl.get('leaveApply')}</Title>
             <Form
                 form={form}
                 name="basic"

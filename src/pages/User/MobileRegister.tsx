@@ -7,7 +7,7 @@ import {Department, Employee, Leader} from "../../component/redux/userTypeSlice"
 import {login} from "../../component/redux/isLoginSlice";
 import {setUser} from "../../component/redux/userInfoSlice";
 import {PickerColumn} from "antd-mobile/es/components/picker-view";
-import setCookie from "../../component/cookie/setCookie";
+import setCookie from "../../component/setCookie";
 
 const RegisterStudent = () => {
     const dispatch = useDispatch();

@@ -1,17 +1,18 @@
-import {Button, Form, Input, Modal, Result, Select, Typography} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
+import {Button, Form, Input, Modal, Result, Select, Typography} from 'antd';
+import {LoadingOutlined} from "@ant-design/icons";
+import intl from "react-intl-universal";
+
 import {
     ChangeDepartment,
     checkLastTimeUploadFiles,
     checkTeacherChangeDepartment,
     findUserType
 } from "../../component/axios/api";
-import './apply.scss';
 import {DownLoadURL, tableName} from "../../baseInfo";
 import FileUpLoad from "../../component/axios/FileUpLoad";
-import {LoadingOutlined} from "@ant-design/icons";
-import intl from "react-intl-universal";
+
 
 const {Title} = Typography;
 
@@ -158,7 +159,7 @@ const ChangeForm = () => {
                 </Button>
             }
         />) : (
-        <div className={'apply-body'}>
+        <div className={'cshbxy-100per'}>
             <Modal
                 title={intl.get('Confirm')}
                 open={isModalVisible}
@@ -173,7 +174,7 @@ const ChangeForm = () => {
                     fileList.filter((item: any) => item.status === 'done').map((item: any) => item.name).join('、')
                 }</p>
             </Modal>
-            <Title level={2} className={'tit'}>{intl.get('departmentChangeApply')}</Title>
+            <Title level={2} className={'flex-center'}>{intl.get('departmentChangeApply')}</Title>
             <Form
                 form={form}
                 name="basic"

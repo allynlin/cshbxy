@@ -3,7 +3,7 @@ import React, {useEffect} from 'react';
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {version} from "../../baseInfo";
-import RenderRefreshButton from "../../component/Version/RenderRefreshButton";
+import RenderRefreshButton from "../../component/RenderRefreshButton";
 import {CloseCircleOutlined} from "@ant-design/icons";
 import './result.scss'
 import intl from "react-intl-universal";

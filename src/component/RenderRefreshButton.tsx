@@ -1,12 +1,14 @@
 import React from "react";
-import {version} from "../../baseInfo";
 import {useDispatch, useSelector} from "react-redux";
-import {getLowVersion, getVersion} from "../axios/api";
-import {Button, message} from "antd";
-import {setVersion} from "../redux/serverVersionSlice";
-import intl from "react-intl-universal";
-import {setLowVersion} from "../redux/serverLowVersionSlice";
 import {useNavigate} from "react-router-dom";
+import {Button, message} from "antd";
+import intl from "react-intl-universal";
+
+import {version} from "../baseInfo";
+import {getLowVersion, getVersion} from "./axios/api";
+import {setVersion} from "./redux/serverVersionSlice";
+import {setLowVersion} from "./redux/serverLowVersionSlice";
+
 
 export default function RenderRefreshButton() {
 

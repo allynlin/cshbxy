@@ -1,16 +1,15 @@
-import {Button, Form, Input, InputNumber, Modal, Select, Typography} from 'antd';
 import React, {useEffect, useState} from 'react';
+import {Button, Form, Input, InputNumber, Modal, Select, Typography} from 'antd';
 import {useNavigate} from 'react-router-dom';
+import intl from "react-intl-universal";
+
 import {addTravelReimbursement, checkLastTimeUploadFiles} from "../../component/axios/api";
-import './apply.scss';
 import {BaseInfo, tableName} from "../../baseInfo";
 import Spin from "../../component/loading/Spin";
 import FileUpLoad from "../../component/axios/FileUpLoad";
-import intl from "react-intl-universal";
 
 const {Title} = Typography;
 const {Option} = Select;
-
 
 const URL = `${BaseInfo}/api`;
 
@@ -92,7 +91,7 @@ const LeaveForm = () => {
 
     return (
         isRenderResult ? <Spin/> :
-            <div className={'apply-body'}>
+            <div className={'cshbxy-100per'}>
                 <Modal
                     title={intl.get('confirm')}
                     open={isModalVisible}
@@ -108,7 +107,7 @@ const LeaveForm = () => {
                         fileList.filter((item: any) => item.status === 'done').map((item: any) => item.name).join('、')
                     }</p>
                 </Modal>
-                <Title level={2} className={'tit'}>{intl.get('travelReimburseApply')}</Title>
+                <Title level={2} className={'flex-center'}>{intl.get('travelReimburseApply')}</Title>
                 <Form
                     form={form}
                     name="basic"

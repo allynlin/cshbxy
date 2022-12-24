@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useRef} from 'react';
 import domtoimage from 'dom-to-image';
-import VirtualTable from "../../component/virtualTable/VirtualTable";
+import VirtualTable from "../../component/VirtualTable";
 import {
     Card,
     Button,

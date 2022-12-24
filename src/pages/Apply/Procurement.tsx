@@ -1,9 +1,9 @@
-import {Button, Form, Input, InputNumber, message, Modal, Typography} from 'antd';
 import React, {useState} from 'react';
+import {Button, Form, Input, InputNumber, message, Modal, Typography} from 'antd';
 import {useNavigate} from 'react-router-dom';
-import {addProcurement} from "../../component/axios/api";
-import './apply.scss';
 import intl from "react-intl-universal";
+
+import {addProcurement} from "../../component/axios/api";
 
 const {Title} = Typography;
 
@@ -58,7 +58,7 @@ const ProcurementForm = () => {
     };
 
     return (
-        <div className={'apply-body'}>
+        <div className={'cshbxy-100per'}>
             <Modal
                 title={intl.get('confirm')}
                 open={isModalVisible}
@@ -70,7 +70,7 @@ const ProcurementForm = () => {
                 <p>{intl.get('procurementPrice')}：{price}</p>
                 <p>{intl.get('reason')}：{reason}</p>
             </Modal>
-            <Title level={2} className={'tit'}>{intl.get('procurementApply')}</Title>
+            <Title level={2} className={'flex-center'}>{intl.get('procurementApply')}</Title>
             <Form
                 form={form}
                 name="basic"

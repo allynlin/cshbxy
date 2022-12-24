@@ -1,12 +1,12 @@
-import {Button, Form, Modal, Result, Typography} from 'antd';
 import React, {useEffect, useState} from 'react';
+import {Button, Form, Modal, Result, Typography} from 'antd';
 import {useNavigate} from 'react-router-dom';
+import intl from "react-intl-universal";
+
 import {checkLastTimeUploadFiles, checkLastWeekWorkReport, submitWorkReport} from "../../component/axios/api";
-import './apply.scss';
 import {DownLoadURL, tableName} from "../../baseInfo";
 import FileUpLoad from "../../component/axios/FileUpLoad";
 import {ExclamationCircleOutlined, LoadingOutlined} from "@ant-design/icons";
-import intl from "react-intl-universal";
 
 const {Title} = Typography;
 
@@ -137,8 +137,8 @@ const ChangeForm = () => {
                 </Button>
             }
         />) : (
-        <div className={'apply-body'}>
-            <Title level={2} className={'tit'}>{intl.get('workReport')}</Title>
+        <div className={'cshbxy-100per'}>
+            <Title level={2} className={'flex-center'}>{intl.get('workReport')}</Title>
             <Form
                 form={form}
                 name="basic"

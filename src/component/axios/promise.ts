@@ -4,7 +4,7 @@ import qs from 'qs';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css'
 import Cookie from "js-cookie";
-import setCookie from "../cookie/setCookie";
+import setCookie from "../setCookie";
 import {BaseInfo, version} from "../../baseInfo";
 import {rootNavigate} from "../../App";
 import intl from "react-intl-universal";

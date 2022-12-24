@@ -1,6 +1,5 @@
 import React from "react";
 import intl from "react-intl-universal";
-import ShowTour from "./ShowTour";
 import {Descriptions, Typography} from "antd";
 import {useSelector} from "react-redux";
 
@@ -12,12 +11,7 @@ const HomeDescriptions: React.FC = () => {
 
     return (
         <Descriptions
-            title={
-                <>
-                    <Title level={3}>{intl.get('hello') + ',' + userInfo.realeName}</Title>
-                    <ShowTour/>
-                </>
-            }
+            title={<Title level={3}>{intl.get('hello') + ',' + userInfo.realeName}</Title>}
             bordered
             layout="vertical"
             style={{

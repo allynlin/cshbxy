@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import VirtualTable from "../../../component/virtualTable/VirtualTable";
+import VirtualTable from "../../../component/VirtualTable";
 import {Button, Card, Form, Input, message, Modal, Skeleton, Typography} from 'antd';
 import {findTravelWaitApprovalList, findUploadFilesByUid, resolveTravel} from "../../../component/axios/api";
 import {ColumnsType} from "antd/es/table";

@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit'
-import setCookie from "../cookie/setCookie";
+import setCookie from "../setCookie";
 
 const initialState: { value: 'Chinese' | 'English' } = {
     value: 'Chinese',

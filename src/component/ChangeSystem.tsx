@@ -6,8 +6,8 @@ import {useDispatch, useSelector} from "react-redux";
 import intl from "react-intl-universal";
 import {IconSun} from "@arco-design/web-react/icon";
 
-import {darkTheme, lightTheme} from "../redux/sysColorSlice";
-import {Chinese, English} from "../redux/userLanguageSlice";
+import {darkTheme, lightTheme} from "./redux/sysColorSlice";
+import {Chinese, English} from "./redux/userLanguageSlice";
 
 export default function ChangeSystem() {
 

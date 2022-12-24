@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {Button, Form, Input, message, Radio, Switch} from 'antd';
 import Cookie from 'js-cookie';
-import setCookie from "../../component/cookie/setCookie";
+import setCookie from "../../component/setCookie";
 import {userLogin} from "../../component/axios/api";
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
