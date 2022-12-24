@@ -3,12 +3,18 @@ import App from "./App";
 import {ConfigProvider, theme, App as MyApp} from "antd";
 import {useSelector} from "react-redux";
 
+interface token {
+    colorPrimary: string,
+    borderRadius: number,
+    colorError: string
+}
+
 export default function Token() {
 
     const themeColor = useSelector((state: any) => state.themeColor.value)
     const userToken = useSelector((state: any) => state.userToken.value)
 
-    const [userThemeToken, setUserThemeToken] = useState<any>({
+    const [userThemeToken, setUserThemeToken] = useState<token>({
         colorPrimary: userToken.colorPrimary,
         borderRadius: userToken.borderRadius,
         colorError: userToken.colorError,
