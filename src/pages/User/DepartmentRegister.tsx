@@ -67,6 +67,7 @@ const RegisterStudent = () => {
                 content: err.message || err.msg || intl.get('usernameIsExist'),
                 duration: 3,
             });
+            form.resetFields(['username']);
             return;
         })
     };

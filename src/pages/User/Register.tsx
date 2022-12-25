@@ -28,7 +28,7 @@ const RegisterStudent = () => {
             content: intl.get('checkUserNameing'),
             duration: 0,
         });
-        checkUsername(username, userType).then(()=>{
+        checkUsername(username, userType).then(() => {
             if (password !== enterPassword) {
                 api.open({
                     key,
@@ -66,6 +66,7 @@ const RegisterStudent = () => {
                 content: err.message || err.msg || intl.get('usernameIsExist'),
                 duration: 3,
             });
+            form.resetFields(['username']);
             return;
         });
     };
