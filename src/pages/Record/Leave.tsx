@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState, useRef, memo} from 'react';
 import domtoimage from 'dom-to-image';
 import VirtualTable from "../../component/VirtualTable";
 import {
@@ -330,6 +330,7 @@ const App: React.FC = () => {
                     ]}
                 >
                     {
+
                         showImage ?
                             <div ref={ref} style={{
                                 padding: showImage ? 16 : 0
