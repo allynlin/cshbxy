@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {message, notification} from 'antd';
+import {message} from 'antd';
 import qs from 'qs';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css'
@@ -79,9 +79,7 @@ export const Request = (api: String, method = MethodType.GET, params = {}, confi
                             setCookie({name: "cshbxy-oa-token", value: res.data.token})
                         resolve(res.data)
                     } else {
-                        notification.error({
-                            message: res.data.msg
-                        })
+                        message.error(res.data.msg)
                         reject(res.data)
                     }
             }

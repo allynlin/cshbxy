@@ -272,5 +272,6 @@
   "hideAlert": "Hide Alert",
   "showAlertMessage": "Show Alert Message",
   "hideAlertMessage": "Hide Alert Message",
-  "alertMessageStatusError": "Alert Message Status Error"
+  "alertMessageStatusError": "Alert Message Status Error",
+  "checkUserNameing": "Checking user name..."
 }

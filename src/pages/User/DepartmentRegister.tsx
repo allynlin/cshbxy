@@ -8,8 +8,6 @@ import {useSelector} from "react-redux";
 const RegisterStudent = () => {
 
     const [loading, setLoading] = useState<boolean>(false);
-    const [departmentOptions, setDepartmentOptions] = useState([]);
-    const [usernameUse, setUsernameUse] = useState(true);
 
     const [api, contextHolder] = message.useMessage();
     const [form] = Form.useForm();
@@ -24,56 +22,58 @@ const RegisterStudent = () => {
     const userInfo = useSelector((state: any) => state.userInfo.value);
 
     const onFinish = () => {
-        if (!usernameUse) {
-            api.error(intl.get('usernameIsExist'))
-            return
-        }
-        if (password !== enterPassword) {
-            api.error(intl.get('twoPasswordIsNotSame'));
-            return
-        }
-        setLoading(true);
-        userRegister(username, password, realeName, gender, tel, email, userInfo.uid, "Employee").then(res => {
-            if (res.code === 200) {
-                api.success(res.msg);
-                form.resetFields();
-            } else {
-                api.error(res.msg)
+        const key = 'checkUsername'
+        api.open({
+            key,
+            type: 'loading',
+            content: intl.get('checkUserNameing'),
+            duration: 0,
+        });
+        checkUsername(username, "Employee").then(() => {
+            if (password !== enterPassword) {
+                api.open({
+                    key,
+                    type: 'error',
+                    content: intl.get('twoPasswordIsNotSame'),
+                    duration: 3,
+                });
+                return
             }
-        }).finally(() => {
-            setLoading(false)
+            setLoading(true);
+            userRegister(username, password, realeName, gender, tel, email, userInfo.uid, "Employee").then(res => {
+                if (res.code === 200) {
+                    api.open({
+                        key,
+                        type: 'success',
+                        content: res.msg,
+                        duration: 3,
+                    });
+                    form.resetFields();
+                } else {
+                    api.open({
+                        key,
+                        type: 'error',
+                        content: res.msg,
+                        duration: 3,
+                    });
+                }
+            }).finally(() => {
+                setLoading(false)
+            })
+        }).catch(err => {
+            api.open({
+                key,
+                type: 'error',
+                content: err.message || err.msg || intl.get('usernameIsExist'),
+                duration: 3,
+            });
+            return;
         })
     };
 
     const onReset = () => {
         form.resetFields();
     };
-
-    let timeOut: any;
-
-    const checkUserName = (e: any) => {
-        clearTimeout(timeOut)
-        timeOut = setTimeout(() => {
-            checkUsername(e.target.value, "Employee").then(() => {
-                setUsernameUse(true)
-            }).catch(() => {
-                setUsernameUse(false)
-            })
-        }, 500)
-    }
-
-
-    const getDepartmentOptions = () => {
-        findUserType().then(res => {
-            const options = res.body.map((item: { uid: string, realeName: string }) => {
-                return {
-                    value: item.uid,
-                    label: item.realeName
-                }
-            })
-            setDepartmentOptions(options)
-        })
-    }
 
     return (
         <Form
@@ -98,9 +98,7 @@ const RegisterStudent = () => {
                     },
                 ]}
             >
-                <Input showCount maxLength={20} allowClear={true} onChange={e => {
-                    checkUserName(e)
-                }}/>
+                <Input showCount maxLength={20} allowClear={true}/>
             </Form.Item>
 
             <Form.Item

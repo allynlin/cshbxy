@@ -20,46 +20,59 @@ const RegisterStudent = () => {
     const departmentUid = Form.useWatch('departmentUid', form);
     const userType = Form.useWatch('userType', form);
 
-    const [usernameUse, setUsernameUse] = useState(true);
-
     const onFinish = () => {
-        if (!usernameUse) {
-            api.error(intl.get('usernameIsExist'))
-            return
-        }
-        if (password !== enterPassword) {
-            api.error(intl.get('twoPasswordIsNotSame'));
-            return
-        }
-        setLoading(true);
-        userRegister(username, password, realeName, gender, tel, email, departmentUid, userType).then(res => {
-            if (res.code === 200) {
-                api.success(res.msg);
-                form.resetFields();
-            } else {
-                api.error(res.msg)
+        const key = 'checkUsername'
+        api.open({
+            key,
+            type: 'loading',
+            content: intl.get('checkUserNameing'),
+            duration: 0,
+        });
+        checkUsername(username, userType).then(()=>{
+            if (password !== enterPassword) {
+                api.open({
+                    key,
+                    type: 'error',
+                    content: intl.get('twoPasswordIsNotSame'),
+                    duration: 3,
+                });
+                return
             }
-        }).finally(() => {
-            setLoading(false)
-        })
+            setLoading(true);
+            userRegister(username, password, realeName, gender, tel, email, departmentUid, userType).then(res => {
+                if (res.code === 200) {
+                    api.open({
+                        key,
+                        type: 'success',
+                        content: res.msg,
+                        duration: 3,
+                    });
+                    form.resetFields();
+                } else {
+                    api.open({
+                        key,
+                        type: 'error',
+                        content: res.msg,
+                        duration: 3,
+                    });
+                }
+            }).finally(() => {
+                setLoading(false)
+            })
+        }).catch(err => {
+            api.open({
+                key,
+                type: 'error',
+                content: err.message || err.msg || intl.get('usernameIsExist'),
+                duration: 3,
+            });
+            return;
+        });
     };
 
     const onReset = () => {
         form.resetFields();
     };
-
-    let timeOut: any;
-
-    const checkUserName = (e: any) => {
-        clearTimeout(timeOut)
-        timeOut = setTimeout(() => {
-            checkUsername(e.target.value, userType).then(() => {
-                setUsernameUse(true)
-            }).catch(() => {
-                setUsernameUse(false)
-            })
-        }, 500)
-    }
 
     return (
         <Form
@@ -85,9 +98,7 @@ const RegisterStudent = () => {
                     },
                 ]}
             >
-                <Input showCount maxLength={20} allowClear={true} onChange={e => {
-                    checkUserName(e)
-                }}/>
+                <Input showCount maxLength={20} allowClear={true}/>
             </Form.Item>
 
             <Form.Item
@@ -188,6 +199,7 @@ const RegisterStudent = () => {
                 <Radio.Group buttonStyle="solid">
                     <Radio.Button value="Employee">{intl.get('employee')}</Radio.Button>
                     <Radio.Button value="Leader">{intl.get('leader')}</Radio.Button>
+                    <Radio.Button value="Department">{intl.get('department')}</Radio.Button>
                 </Radio.Group>
             </Form.Item>
 

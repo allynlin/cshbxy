@@ -272,5 +272,6 @@
   "hideAlert": "隐藏提示",
   "showAlertMessage": "显示提示信息",
   "hideAlertMessage": "隐藏提示信息",
-  "alertMessageStatusError": "提示信息状态错误"
+  "alertMessageStatusError": "提示信息状态错误",
+  "checkUserNameing": "检查用户名中"
 }
