@@ -2,9 +2,10 @@ import {Button, List, Modal, Skeleton, Steps, Tag, Transfer, Typography} from 'a
 import React, {useEffect, useState} from 'react';
 import intl from "react-intl-universal";
 import {ExclamationCircleOutlined, SearchOutlined} from "@ant-design/icons";
-import '../../App.scss';
 import {findAllProcess, findProcessUser, updateProcess} from "../../component/axios/api";
 import {useSelector} from "react-redux";
+
+import {useStyles} from "../../styles/webStyle";
 
 const {Title} = Typography;
 
@@ -16,6 +17,9 @@ interface RecordType {
 }
 
 const ProcessManagement = () => {
+
+    const classes = useStyles();
+
     const [isQuery, setIsQuery] = useState<boolean>(false);
     const [waitTime, setWaitTime] = useState<number>(0);
     const [loading, setLoading] = useState<boolean>(true);
@@ -113,9 +117,9 @@ const ProcessManagement = () => {
     };
 
     return (
-        <div className={'record-body'}>
-            <div className="record-head">
-                <Title level={2} className={'tit'}>
+        <div className={classes.contentBody}>
+            <div className={classes.contentHead}>
+                <Title level={2} className={classes.tit}>
                     {intl.get('processManagement')}&nbsp;&nbsp;
                     <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
                             onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>

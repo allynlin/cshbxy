@@ -12,11 +12,15 @@ import {
 } from "../../component/axios/api";
 import {DownLoadURL, tableName} from "../../baseInfo";
 import FileUpLoad from "../../component/axios/FileUpLoad";
+import {useStyles} from "../../styles/webStyle";
 
 
 const {Title} = Typography;
 
 const ChangeForm = () => {
+
+    const classes = useStyles();
+
     const navigate = useNavigate();
     // 防止反复查询变更记录
     const [isQuery, setIsQuery] = useState<boolean>(false);
@@ -159,7 +163,7 @@ const ChangeForm = () => {
                 </Button>
             }
         />) : (
-        <div className={'cshbxy-100per'}>
+        <div className={classes.cshbxy100Per}>
             <Modal
                 title={intl.get('Confirm')}
                 open={isModalVisible}
@@ -174,7 +178,7 @@ const ChangeForm = () => {
                     fileList.filter((item: any) => item.status === 'done').map((item: any) => item.name).join('、')
                 }</p>
             </Modal>
-            <Title level={2} className={'flex-center'}>{intl.get('departmentChangeApply')}</Title>
+            <Title level={2} className={classes.flexCenter}>{intl.get('departmentChangeApply')}</Title>
             <Form
                 form={form}
                 name="basic"

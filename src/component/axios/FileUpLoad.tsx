@@ -59,14 +59,6 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
                 // 如果 fileList 为空，就传递一个空数组
                 if (info.file.response !== undefined) {
                     switch (info.file.response.code) {
-                        case 101:
-                            info.file.status = 'error';
-                            rootNavigate('/101');
-                            break;
-                        case 103:
-                            info.file.status = 'error';
-                            rootNavigate('/103');
-                            break;
                         case 401:
                         case 403:
                             info.file.status = 'error';

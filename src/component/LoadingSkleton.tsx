@@ -1,8 +1,7 @@
 import React from 'react';
 import {Skeleton} from 'antd';
-import './Spin.scss'
 
-export default function App() {
+export default function LoadingSkleton() {
     return (
         <Skeleton active/>
     )

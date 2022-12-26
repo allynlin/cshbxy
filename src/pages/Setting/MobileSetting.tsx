@@ -7,18 +7,18 @@ import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import Cookie from "js-cookie";
 import {version} from '../../baseInfo'
-import './mobileSetting.scss'
 import {logout} from "../../component/redux/isLoginSlice";
 import {all} from "../../component/redux/userTypeSlice";
+import {useStyles} from "../../styles/mobileStyle";
 
 const Setting = () => {
+
+    const classes = useStyles();
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const isLogin = useSelector((state: any) => state.isLogin.value)
-
-    const serverVersion = useSelector((state: any) => state.serverVersion.value);
 
     return (
         <>
@@ -52,9 +52,7 @@ const Setting = () => {
                     前往 Web 端
                 </List.Item>
             </List>
-            <p className={'copy'}>
-                服务器版本号：{serverVersion}
-                <br/>
+            <p className={classes.copy}>
                 系统版本号：{version}
                 <br/>
                 OA 系统 &copy; 2022-2023 Created by allynlin

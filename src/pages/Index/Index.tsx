@@ -1,5 +1,4 @@
 import React from 'react';
-import './index.scss'
 import {useSelector} from "react-redux";
 import RenderTips from "./RenderTips";
 import RenderUserInfo from "./RenderUserInfo";

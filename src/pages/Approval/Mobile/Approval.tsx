@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {Tabs} from 'antd-mobile'
-import './approval.scss'
 import {Outlet, useLocation, useNavigate} from "react-router-dom";
+import {useStyles} from "../../../styles/mobileStyle";
 
 const tabs = [{
     key: 'departmentChange',
@@ -22,6 +22,8 @@ const tabs = [{
 
 export default function Record() {
 
+    const classes = useStyles();
+
     const [activeKey, setActiveKey] = useState('key1')
 
     const location = useLocation();
@@ -38,13 +40,13 @@ export default function Record() {
     }
 
     return (
-        <div className={'tabBar-container'}>
-            <Tabs className={'tabBar'} activeKey={activeKey} onChange={e => changeItem(e)}>
+        <div className={classes.tabBarContainer}>
+            <Tabs className={classes.tabs} activeKey={activeKey} onChange={e => changeItem(e)}>
                 {tabs.map(item => (
                     <Tabs.Tab key={item.key} title={item.title}/>
                 ))}
             </Tabs>
-            <div className="tabBar-outlet">
+            <div className={classes.tabBarOutlet}>
                 <Outlet/>
             </div>
         </div>

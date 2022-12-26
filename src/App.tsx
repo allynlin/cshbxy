@@ -7,28 +7,24 @@ import RouterWaiter from "react-router-waiter"
 import {useDispatch, useSelector} from "react-redux";
 import {ConfigProvider, message} from "antd";
 
-import Spin from "./component/loading/Spin";
-import {checkUser, getLowVersion, getVersion} from "./component/axios/api";
+import Spin from "./component/LoadingSkleton";
+import {checkUser} from "./component/axios/api";
 import {login} from "./component/redux/isLoginSlice";
 import {Department, Employee, Leader} from "./component/redux/userTypeSlice";
-import {setVersion} from "./component/redux/serverVersionSlice";
 import {darkTheme, lightTheme, sysTheme} from "./component/redux/sysColorSlice";
 import {dark, light} from "./component/redux/themeSlice";
 import {LStorage} from "./component/localStrong";
 import {inline, vertical} from "./component/redux/menuModeSlice";
 import {Chinese, English} from "./component/redux/userLanguageSlice";
 import {setUser} from "./component/redux/userInfoSlice";
-import {setLowVersion} from "./component/redux/serverLowVersionSlice";
 import ChangeSystem from "./component/ChangeSystem";
 import {setToken} from "./component/redux/userTokenSlice";
 
 import enUS from "antd/es/locale/en_US";
 import zhCN from "antd/es/locale/zh_CN";
 
-import './App.scss';
 import routes from "./Router/routes";
 import {getBrowserInfo} from "./checkBrowser";
-import {version} from "./baseInfo";
 
 // 导入自定义语言包
 const locales = {
@@ -67,7 +63,6 @@ export default function App() {
         getSysColorSetting()
         getSysSetting()
         getThemeToken()
-        getSysVersion()
         getToken()
     }, [])
 
@@ -94,19 +89,6 @@ export default function App() {
                 dispatch(sysTheme());
                 break;
         }
-    }
-
-    const getSysVersion = () => {
-        // 从服务器获取版本号和最低支持版本号，如果版本号低于最低支持版本号，就提示用户升级系统后才能使用
-        getVersion().then(res => {
-            dispatch(setVersion(res.body))
-        })
-        getLowVersion().then(res => {
-            dispatch(setLowVersion(res.body))
-            if (version < res.body) {
-                rootNavigate('/103');
-            }
-        })
     }
 
     const getSysSetting = () => {

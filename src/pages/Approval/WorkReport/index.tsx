@@ -8,6 +8,7 @@ import {ExclamationCircleOutlined, FileTextOutlined, SearchOutlined} from "@ant-
 import {DownLoadURL, tableName} from "../../../baseInfo";
 import {useSelector} from "react-redux";
 import Reject from "./Reject";
+import {useStyles} from "../../../styles/webStyle";
 
 const {Title} = Typography;
 
@@ -18,6 +19,8 @@ interface DataType {
 }
 
 export default function WorkReport() {
+
+    const classes = useStyles();
 
     // 全局数据防抖
     const [isQuery, setIsQuery] = useState<boolean>(false);
@@ -115,10 +118,12 @@ export default function WorkReport() {
             icon: <ExclamationCircleOutlined/>,
             content: intl.get('afterPassCannotChange'),
             okText: intl.get('ok'),
-            okButtonProps: {style: {
+            okButtonProps: {
+                style: {
                     backgroundColor: userToken.colorSuccess,
                     borderColor: userToken.colorSuccess
-                }},
+                }
+            },
             okType: 'primary',
             cancelText: intl.get('cancel'),
             onOk() {
@@ -179,7 +184,7 @@ export default function WorkReport() {
     }];
 
     return (
-        <div className={'record-body'}>
+        <div className={classes.contentBody}>
             <Modal
                 title={intl.get('details')}
                 onCancel={() => setShowModal(false)}
@@ -226,15 +231,15 @@ export default function WorkReport() {
                 <p>{intl.get('file')}：</p>
                 {
                     fileLoading ? (
-                        <div className="skeleton-file">
+                        <div className={classes.skeletonFile}>
                             <Skeleton.Node active>
-                                <FileTextOutlined className={'skeleton-files'}/>
+                                <FileTextOutlined className={classes.skeletonFiles}/>
                             </Skeleton.Node>
                         </div>
-                    ) : <div className="showFile">
+                    ) : <div className={classes.showFile}>
                         {fileList.map((item: any, index: number) => {
                             return (
-                                <Card size="small" className="file-item" hoverable key={index}
+                                <Card size="small" className={classes.fileItem} hoverable key={index}
                                       title={intl.get('file') + (index + 1)}
                                       bordered={false}>
                                     <Typography.Paragraph ellipsis>
@@ -247,8 +252,8 @@ export default function WorkReport() {
                     </div>
                 }
             </Modal>
-            <div className="record-head">
-                <Title level={2} className={'tit'}>
+            <div className={classes.contentHead}>
+                <Title level={2} className={classes.tit}>
                     {intl.get('workReport') + ' ' + intl.get('approve')}&nbsp;&nbsp;
                     <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
                             onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
@@ -263,14 +268,14 @@ export default function WorkReport() {
                     </Form.Item>
                 </Form>
             </div>
-            <div className="skeleton-loading" style={{display: loading ? 'block' : 'none'}}>
-                <div className="skeleton-thead"/>
-                <div className="skeleton-tbody">
-                    <Skeleton.Button block active className={'skeleton-tr'}/>
-                    <Skeleton.Button block active className={'skeleton-tr'}/>
-                    <Skeleton.Button block active className={'skeleton-tr'}/>
-                    <Skeleton.Button block active className={'skeleton-tr'}/>
-                    <Skeleton.Button block active className={'skeleton-tr'}/>
+            <div className={classes.skeletonLoading} style={{display: loading ? 'block' : 'none'}}>
+                <div className={classes.skeletonThead}/>
+                <div className={classes.skeletonTbody}>
+                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
+                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
+                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
+                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
+                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
                 </div>
             </div>
             <VirtualTable columns={columns} dataSource={showData}

@@ -4,10 +4,14 @@ import {useNavigate} from 'react-router-dom';
 import intl from "react-intl-universal";
 
 import {addProcurement} from "../../component/axios/api";
+import {useStyles} from "../../styles/webStyle";
 
 const {Title} = Typography;
 
 const ProcurementForm = () => {
+
+    const classes = useStyles();
+
     const navigate = useNavigate();
     // 确认框状态
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
@@ -58,7 +62,7 @@ const ProcurementForm = () => {
     };
 
     return (
-        <div className={'cshbxy-100per'}>
+        <div className={classes.cshbxy100Per}>
             <Modal
                 title={intl.get('confirm')}
                 open={isModalVisible}
@@ -70,7 +74,7 @@ const ProcurementForm = () => {
                 <p>{intl.get('procurementPrice')}：{price}</p>
                 <p>{intl.get('reason')}：{reason}</p>
             </Modal>
-            <Title level={2} className={'flex-center'}>{intl.get('procurementApply')}</Title>
+            <Title level={2} className={classes.flexCenter}>{intl.get('procurementApply')}</Title>
             <Form
                 form={form}
                 name="basic"

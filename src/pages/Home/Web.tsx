@@ -1,23 +1,25 @@
 import React, {useEffect, useState} from 'react';
 import {Layout, theme, Typography} from 'antd';
+import {useDispatch, useSelector} from "react-redux";
 import {Outlet} from "react-router-dom";
+
 import RenderMenu from "./RenderMenu";
 import {version} from "../../baseInfo";
-import {useDispatch, useSelector} from "react-redux";
 import RenderLogOut from "./RenderLogOut";
-import './web.scss';
 import {setTableSize} from "../../component/redux/tableSizeSlice";
+import {useStyles} from "../../styles/webStyle";
 
 const {Header, Content, Footer, Sider} = Layout;
 const {Title} = Typography;
 
 const App: React.FC = () => {
 
+    const classes = useStyles();
+
     const [collapsed, setCollapsed] = useState(false);
 
     const dispatch = useDispatch();
 
-    const serverVersion = useSelector((state: any) => state.serverVersion.value);
     const userLanguage = useSelector((state: any) => state.userLanguage.value);
 
     // 内容区的宽度和高度
@@ -53,7 +55,7 @@ const App: React.FC = () => {
 
     return (
         <Layout>
-            <Header className="header" style={{background: colorBgContainer}}>
+            <Header className={classes.webHeader} style={{background: colorBgContainer}}>
                 <Title level={3} className={'tit'}>长沙星辰软件有限公司 OA 系统</Title>
                 <RenderLogOut/>
             </Header>
@@ -67,7 +69,7 @@ const App: React.FC = () => {
                 </Sider>
                 <Layout style={{padding: '0 24px 24px'}}>
                     <Content
-                        className={'layout-content'}
+                        className={classes.webLayoutContent}
                         style={{
                             background: colorBgContainer,
                             width: width,
@@ -79,7 +81,7 @@ const App: React.FC = () => {
                     <Footer style={{textAlign: 'center', margin: 0, padding: 16}}>长沙星辰软件有限公司
                         OA &copy; 2022-2023 Created by
                         allynlin
-                        Version：{version} Server：{serverVersion}</Footer>
+                        Version：{version}</Footer>
                 </Layout>
             </Layout>
         </Layout>

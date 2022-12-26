@@ -1,21 +1,23 @@
 import {Alert, Button, notification, Typography} from 'antd';
 import React from 'react';
 import {useNavigate} from "react-router-dom";
-import './index.scss'
 import intl from "react-intl-universal";
 import {LStorage} from "../../component/localStrong";
 import HomeDescriptions from "./HomeDescriptions";
+import {useStyles} from "../../styles/webStyle";
 
 const {Paragraph} = Typography;
 
 const Employee: React.FC = () => {
+
+    const classes = useStyles();
 
     const [api, contextHolder] = notification.useNotification();
 
     const navigate = useNavigate();
 
     return (
-        <div className={'index-body'}>
+        <div className={classes.webHomeBody}>
             {contextHolder}
             {
                 LStorage.get('cshbxy-oa-isShowAlert') === false ? null :

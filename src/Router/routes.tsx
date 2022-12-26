@@ -2,7 +2,7 @@ import apply from './apply'
 import record from "./record";
 import approval from "./approval";
 import management from "./management";
-import {Error101, Error103, Error403, Error404, Error500, Success} from "../pages/Result/Result";
+import {Error403, Error404, Error500, Success} from "../pages/Result/Result";
 import {
     Error404 as MobileError404,
     Error403 as MobileError403,
@@ -40,7 +40,7 @@ const routes = [{
         }
     }, {
         path: 'register',
-        component: () => import('../pages/User/Register'),
+        component: () => import('../pages/User/AddUser'),
         meta: {
             title: 'Add User',
             titleCN: '添加用户',
@@ -165,20 +165,6 @@ const routes = [{
     element: <Error500/>,
     meta: {
         title: '500'
-    }
-}, {
-    path: '/101',
-    element: <Error101/>,
-    meta: {
-        title: 'Version Error',
-        titleCN: '版本获取失败'
-    }
-}, {
-    path: '/103',
-    element: <Error103/>,
-    meta: {
-        title: 'Low Version',
-        titleCN: '版本过低'
     }
 }, {
     path: '*',

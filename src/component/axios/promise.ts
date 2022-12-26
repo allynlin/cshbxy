@@ -54,14 +54,6 @@ export const Request = (api: String, method = MethodType.GET, params = {}, confi
         axios(axiosConfig).then(res => {
             NProgress.done(true);
             switch (res.data.code) {
-                case 101:
-                    reject(res.data)
-                    rootNavigate('/101')
-                    break;
-                case 103:
-                    reject(res.data)
-                    rootNavigate('/103')
-                    break;
                 case 401:
                 case 403:
                     reject(res.data)

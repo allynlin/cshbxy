@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import './mobile.scss'
 import {useLocation, useNavigate} from 'react-router-dom';
 import {useSelector} from "react-redux";
 import {AppOutline, FillinOutline, HistogramOutline, SetOutline, TeamOutline, UserOutline} from "antd-mobile-icons";

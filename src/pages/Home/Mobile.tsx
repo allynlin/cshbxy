@@ -1,41 +1,18 @@
-import React, {useEffect} from 'react';
-import './mobile.scss'
-import {Outlet, useNavigate} from 'react-router-dom';
-import {useSelector} from "react-redux";
-import {version} from "../../baseInfo";
-import {ExclamationCircleOutline,} from "antd-mobile-icons";
+import React from 'react';
+import {Outlet} from 'react-router-dom';
 import RenderTabBar from "./RenderTabBar";
-import {Toast} from "antd-mobile";
+import {useStyles} from "../../styles/mobileStyle";
 
 const Home = () => {
 
-    const navigate = useNavigate();
-
-    const serverVersion = useSelector((state: any) => state.serverVersion.value);
-
-    const serverLowVersion = useSelector((state: any) => state.serverLowVersion.value);
-
-    useEffect(() => {
-        if (serverLowVersion === "0.0.0") {
-            return;
-        }
-        if (version < serverLowVersion) {
-            navigate('/m/103')
-        }
-        if (version < serverVersion) {
-            Toast.show({
-                content: '您当前使用的版本过低，请及时更新',
-                icon: <ExclamationCircleOutline/>,
-            })
-        }
-    }, [serverLowVersion, serverVersion])
+    const classes = useStyles();
 
     return (
-        <div className={'home-body'}>
-            <div className="out">
+        <div className={classes.mobileHomeBody}>
+            <div className={classes.outlet}>
                 <Outlet/>
             </div>
-            <div className="tabBar">
+            <div className={classes.tabBar}>
                 <RenderTabBar/>
             </div>
         </div>

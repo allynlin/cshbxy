@@ -1,6 +1,6 @@
 import React, {useState} from "react";
-import {Button, Form, Input, message, Radio, Select} from 'antd';
-import {checkUsername, findUserType, userRegister} from "../../component/axios/api";
+import {Button, Form, Input, message, Radio} from 'antd';
+import {checkUsername, userRegister} from "../../component/axios/api";
 import {Employee} from "../../component/redux/userTypeSlice";
 import intl from "react-intl-universal";
 import {useSelector} from "react-redux";

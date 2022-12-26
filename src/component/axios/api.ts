@@ -2,16 +2,6 @@ import {MethodType} from "./promise";
 
 const promise = require('./promise');
 
-// 服务器版本
-export const getVersion = async () => {
-    return promise.Request('/api/getVersion', MethodType.GET);
-}
-
-// 服务器最低支持版本
-export const getLowVersion = async () => {
-    return promise.Request('/api/getLowVersion', MethodType.GET);
-}
-
 // 登录
 export const userLogin = async (username: string, password: string, userType: string) => {
     return promise.Request('/api/user/login', MethodType.POST, {
@@ -97,7 +87,6 @@ export const checkTeacherChangeDepartment = async () => {
 export const checkTeacherChangeDepartmentRecord = async () => {
     return promise.Request('/apply/departmentChange/findApplyList', MethodType.POST);
 }
-
 
 
 // 查询变更部门审批流程

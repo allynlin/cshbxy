@@ -1,20 +1,9 @@
 import React, {useState} from 'react';
 import {List, Modal, Form, Input, Button, Toast} from "antd-mobile";
-import {useDispatch, useSelector} from "react-redux";
-import {updatePassword} from "../../component/axios/api";
-import {logout} from "../../component/redux/isLoginSlice";
-import {all} from "../../component/redux/userTypeSlice";
-import Cookie from "js-cookie";
-import {useNavigate} from "react-router-dom";
 
 const ThemeSetting = () => {
 
     const [visible, setVisible] = useState(false);
-
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-
-    const userInfo = useSelector((state: { userInfo: { value: any } }) => state.userInfo.value);
 
     const onFinish = (values: any) => {
         if (values.password !== values.enterPassword) {

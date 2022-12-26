@@ -1,6 +1,5 @@
 import React, {useState} from "react";
 import {Typography, Tag, Segmented, Alert} from "antd";
-import './token.scss'
 import {useDispatch} from "react-redux";
 import intl from "react-intl-universal";
 import {setToken} from "../../component/redux/userTokenSlice";
@@ -64,7 +63,7 @@ export default function TokenSetting() {
             <Alert message={intl.get('token-4')} type="warning"/>
             <Segmented style={{marginTop: 16}} value={value} block options={['默认', '知识协作', '桃花缘']}
                        onChange={(e: any) => handleChange(e)}/>
-            <div className={'component'}>
+            <div style={{padding: 16}}>
                 <TokenThemeSetting/>
             </div>
         </Typography>

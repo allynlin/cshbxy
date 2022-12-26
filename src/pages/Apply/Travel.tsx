@@ -5,8 +5,9 @@ import intl from "react-intl-universal";
 
 import {addTravelReimbursement, checkLastTimeUploadFiles} from "../../component/axios/api";
 import {BaseInfo, tableName} from "../../baseInfo";
-import Spin from "../../component/loading/Spin";
+import Spin from "../../component/LoadingSkleton";
 import FileUpLoad from "../../component/axios/FileUpLoad";
+import {useStyles} from "../../styles/webStyle";
 
 const {Title} = Typography;
 const {Option} = Select;
@@ -14,6 +15,8 @@ const {Option} = Select;
 const URL = `${BaseInfo}/api`;
 
 const LeaveForm = () => {
+
+    const classes = useStyles();
 
     const navigate = useNavigate();
 
@@ -91,7 +94,7 @@ const LeaveForm = () => {
 
     return (
         isRenderResult ? <Spin/> :
-            <div className={'cshbxy-100per'}>
+            <div className={classes.cshbxy100Per}>
                 <Modal
                     title={intl.get('confirm')}
                     open={isModalVisible}
@@ -107,7 +110,7 @@ const LeaveForm = () => {
                         fileList.filter((item: any) => item.status === 'done').map((item: any) => item.name).join('、')
                     }</p>
                 </Modal>
-                <Title level={2} className={'flex-center'}>{intl.get('travelReimburseApply')}</Title>
+                <Title level={2} className={classes.flexCenter}>{intl.get('travelReimburseApply')}</Title>
                 <Form
                     form={form}
                     name="basic"

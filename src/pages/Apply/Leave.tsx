@@ -8,10 +8,14 @@ import type {Dayjs} from 'dayjs';
 import dayjs from 'dayjs';
 
 import {addLeave, checkLastTimeLeave,} from "../../component/axios/api";
+import {useStyles} from "../../styles/webStyle";
 
 const {Title} = Typography;
 
 const LeaveForm = () => {
+
+    const classes = useStyles();
+
     const navigate = useNavigate();
     // 防止反复查询变更记录
     const [isQuery, setIsQuery] = useState<boolean>(false);
@@ -157,7 +161,7 @@ const LeaveForm = () => {
     ];
 
     return (
-        <div className={'cshbxy-100per'}>
+        <div className={classes.cshbxy100Per}>
             {isHaveLastLeave ? <RenderAlert/> : null}
             <Modal
                 title={intl.get('confirm')}
@@ -170,7 +174,7 @@ const LeaveForm = () => {
                 <p>{intl.get('endTime')}：{leaveTime ? leaveTime[1].format('YYYY-MM-DD HH:mm:ss') : intl.get('notChooseEndTime')}</p>
                 <p>{intl.get('reason')}：{reason}</p>
             </Modal>
-            <Title level={2} className={'flex-center'}>{intl.get('leaveApply')}</Title>
+            <Title level={2} className={classes.flexCenter}>{intl.get('leaveApply')}</Title>
             <Form
                 form={form}
                 name="basic"

@@ -7,10 +7,14 @@ import {checkLastTimeUploadFiles, checkLastWeekWorkReport, submitWorkReport} fro
 import {DownLoadURL, tableName} from "../../baseInfo";
 import FileUpLoad from "../../component/axios/FileUpLoad";
 import {ExclamationCircleOutlined, LoadingOutlined} from "@ant-design/icons";
+import {useStyles} from "../../styles/webStyle";
 
 const {Title} = Typography;
 
 const ChangeForm = () => {
+
+    const classes = useStyles();
+
     const navigate = useNavigate();
     // 防止反复查询变更记录
     const [isQuery, setIsQuery] = useState<boolean>(false);
@@ -137,8 +141,8 @@ const ChangeForm = () => {
                 </Button>
             }
         />) : (
-        <div className={'cshbxy-100per'}>
-            <Title level={2} className={'flex-center'}>{intl.get('workReport')}</Title>
+        <div className={classes.cshbxy100Per}>
+            <Title level={2} className={classes.flexCenter}>{intl.get('workReport')}</Title>
             <Form
                 form={form}
                 name="basic"

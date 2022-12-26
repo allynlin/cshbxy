@@ -1,14 +1,7 @@
-import {Button, Result, Typography} from 'antd';
-import React, {useEffect} from 'react';
+import {Button, Result} from 'antd';
+import React from 'react';
 import {Link, useLocation, useNavigate} from "react-router-dom";
-import {useSelector} from "react-redux";
-import {version} from "../../baseInfo";
-import RenderRefreshButton from "../../component/RenderRefreshButton";
-import {CloseCircleOutlined} from "@ant-design/icons";
-import './result.scss'
 import intl from "react-intl-universal";
-
-const {Paragraph, Text} = Typography;
 
 export const Error404 = () => (
     <Result
@@ -49,116 +42,6 @@ export const Error500 = () => (<Result
         }
     />
 )
-
-export const Error101: React.FC = () => {
-    return (
-        <Result
-            status="error"
-            title={intl.get('101Title')}
-        >
-            <div className="desc">
-                <Paragraph>
-                    <Text
-                        strong
-                        style={{
-                            fontSize: 16,
-                        }}
-                    >
-                        {intl.get('101Desc-1')}
-                    </Text>
-                </Paragraph>
-                <Paragraph>
-                    <CloseCircleOutlined className="site-result-demo-error-icon"/>
-                    &nbsp;{intl.get('101Desc-2')}
-                </Paragraph>
-                <Paragraph>
-                    <CloseCircleOutlined className="site-result-demo-error-icon"/>
-                    &nbsp;{intl.get('101Desc-3')}
-                </Paragraph>
-                <Paragraph>
-                    <CloseCircleOutlined className="site-result-demo-error-icon"/>
-                    &nbsp;{intl.get('101Desc-4')}
-                </Paragraph>
-            </div>
-        </Result>
-    )
-};
-
-export const Error103 = () => {
-
-    const navigate = useNavigate();
-
-    const serverVersion = useSelector((state: any) => state.serverVersion.value);
-
-    const serverLowVersion = useSelector((state: any) => state.serverLowVersion.value);
-
-    useEffect(() => {
-        if (version >= serverVersion) {
-            navigate(-1)
-        }
-    }, [serverLowVersion])
-
-    const RenderVersion = () => {
-        return (
-            <div>
-                <Text>{intl.get('sysVersion')}</Text>
-                <Text code>{version}</Text>
-                &nbsp;&nbsp;
-                <Text>{intl.get('supportLowVersion')}</Text>
-                <Text code>{serverLowVersion}</Text>
-            </div>
-        )
-    }
-
-    return (
-        <Result
-            status="error"
-            title={intl.get('lowVersion')}
-            subTitle={<RenderVersion/>}
-            extra={
-                <>
-                    {
-                        version >= serverLowVersion ? <Button type="primary" key="console" onClick={() => {
-                            navigate('/home')
-                        }}>{intl.get('backToHome')}</Button> : null
-                    }
-                    <RenderRefreshButton/>
-                </>
-            }
-        >
-            <div className="desc">
-                <Paragraph>
-                    <Text
-                        strong
-                        style={{
-                            fontSize: 16,
-                        }}
-                    >
-                        {intl.get('103Desc-1')}
-                    </Text>
-                </Paragraph>
-                <Paragraph>
-                    <CloseCircleOutlined className="site-result-demo-error-icon"/>
-                    &nbsp;{intl.get('103Desc-2')}&nbsp;
-                    <a onClick={e => {
-                        e.preventDefault();
-                        window.location.reload();
-                    }}>{intl.get('refresh')}</a>
-                </Paragraph>
-                <Paragraph>
-                    <CloseCircleOutlined className="site-result-demo-error-icon"/>
-                    &nbsp;{intl.get('103Desc-3')}
-                    <a
-                        href={'https://github.com/allynlin/cshbxy'}>GitHub</a>
-                </Paragraph>
-                <Paragraph>
-                    <CloseCircleOutlined className="site-result-demo-error-icon"/>
-                    &nbsp;{intl.get('103Desc-4')}
-                </Paragraph>
-            </div>
-        </Result>
-    )
-};
 
 export const Success: React.FC = () => {
 

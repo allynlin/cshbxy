@@ -7,6 +7,7 @@ import intl from "react-intl-universal";
 import {ExclamationCircleOutlined, SearchOutlined} from "@ant-design/icons";
 import {useSelector} from "react-redux";
 import Reject from "./Reject";
+import {useStyles} from "../../../styles/webStyle";
 
 const {Title} = Typography;
 
@@ -17,6 +18,8 @@ interface DataType {
 }
 
 export default function Procurement() {
+
+    const classes = useStyles();
 
     // 全局数据防抖
     const [isQuery, setIsQuery] = useState<boolean>(false);
@@ -167,7 +170,7 @@ export default function Procurement() {
     }];
 
     return (
-        <div className={'record-body'}>
+        <div className={classes.contentBody}>
             <Modal
                 title={intl.get('details')}
                 onCancel={() => setShowModal(false)}
@@ -209,8 +212,8 @@ export default function Procurement() {
                 <p>{intl.get('createTime')}：{showInfo.create_time}</p>
                 <p>{intl.get('updateTime')}：{showInfo.update_time}</p>
             </Modal>
-            <div className="record-head">
-                <Title level={2} className={'tit'}>
+            <div className={classes.contentHead}>
+                <Title level={2} className={classes.tit}>
                     {intl.get('procurement') + ' ' + intl.get('approve')}&nbsp;&nbsp;
                     <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
                             onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
@@ -225,14 +228,14 @@ export default function Procurement() {
                     </Form.Item>
                 </Form>
             </div>
-            <div className="skeleton-loading" style={{display: loading ? 'block' : 'none'}}>
-                <div className="skeleton-thead"/>
-                <div className="skeleton-tbody">
-                    <Skeleton.Button block active className={'skeleton-tr'}/>
-                    <Skeleton.Button block active className={'skeleton-tr'}/>
-                    <Skeleton.Button block active className={'skeleton-tr'}/>
-                    <Skeleton.Button block active className={'skeleton-tr'}/>
-                    <Skeleton.Button block active className={'skeleton-tr'}/>
+            <div className={classes.skeletonLoading} style={{display: loading ? 'block' : 'none'}}>
+                <div className={classes.skeletonThead}/>
+                <div className={classes.skeletonTbody}>
+                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
+                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
+                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
+                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
+                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
                 </div>
             </div>
             <VirtualTable columns={columns} dataSource={showData}

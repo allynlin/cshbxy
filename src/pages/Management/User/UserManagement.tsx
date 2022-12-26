@@ -4,7 +4,6 @@ import {Button, Form, Input, message, Modal, Skeleton, Typography} from 'antd';
 import {findAllUser} from "../../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
-import '../../../App.scss';
 import {SearchOutlined} from "@ant-design/icons";
 import {RenderUserStatusTag} from "../../../component/Tag/RenderUserStatusTag";
 import {RenderUserTypeTag} from "../../../component/Tag/RenderUserTypeTag";
@@ -16,6 +15,8 @@ import ChangeUserStatus from "./ChangeUserStatus";
 import DeleteUser from "./DeleteUser";
 import {useSelector} from "react-redux";
 
+import {useStyles} from "../../../styles/webStyle";
+
 const {Title} = Typography;
 
 interface DataType {
@@ -25,6 +26,8 @@ interface DataType {
 }
 
 export default function UserManagement() {
+
+    const classes = useStyles();
 
     // 全局数据防抖
     const [isQuery, setIsQuery] = useState<boolean>(false);
@@ -167,7 +170,7 @@ export default function UserManagement() {
     }];
 
     return (
-        <div className={'record-body'}>
+        <div className={classes.contentBody}>
             <Modal
                 title={intl.get('userInfo')}
                 onCancel={() => setShowModal(false)}
@@ -379,8 +382,8 @@ export default function UserManagement() {
                     </>
                 )}
             </Modal>
-            <div className="record-head">
-                <Title level={2} className={'tit'}>
+            <div className={classes.contentHead}>
+                <Title level={2} className={classes.tit}>
                     {intl.get('userManagement')}&nbsp;&nbsp;
                     <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
                             onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
@@ -395,14 +398,14 @@ export default function UserManagement() {
                     </Form.Item>
                 </Form>
             </div>
-            <div className="skeleton-loading" style={{display: loading ? 'block' : 'none'}}>
-                <div className="skeleton-thead"/>
-                <div className="skeleton-tbody">
-                    <Skeleton.Button block active className={'skeleton-tr'}/>
-                    <Skeleton.Button block active className={'skeleton-tr'}/>
-                    <Skeleton.Button block active className={'skeleton-tr'}/>
-                    <Skeleton.Button block active className={'skeleton-tr'}/>
-                    <Skeleton.Button block active className={'skeleton-tr'}/>
+            <div className={classes.skeletonLoading} style={{display: loading ? 'block' : 'none'}}>
+                <div className={classes.skeletonThead}/>
+                <div className={classes.skeletonTbody}>
+                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
+                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
+                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
+                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
+                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
                 </div>
             </div>
             <VirtualTable columns={columns} dataSource={showData}
