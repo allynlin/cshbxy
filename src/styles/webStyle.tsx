@@ -57,7 +57,7 @@ export const useStyles = createUseStyles({
     },
     skeletonThead: {
         width: '100%',
-        height: 55
+        height: 35,
     },
     skeletonTbody: {
         display: 'flex',
@@ -68,7 +68,7 @@ export const useStyles = createUseStyles({
     },
     skeletonTbodyTr: {
         width: 'calc(100% - 4px)',
-        height: 51,
+        height: 50,
         margin: 2
     },
     skeletonFile: {

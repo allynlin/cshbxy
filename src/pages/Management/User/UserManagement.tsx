@@ -195,7 +195,8 @@ const MyApp = () => {
                     <Typography>
                         <Title level={3}>{intl.get('baseInfo')}</Title>
                         <Paragraph>UID：{showInfo.uid}</Paragraph>
-                        {showInfo.departmentUid ? (<Paragraph>{intl.get('department')}：{showInfo.departmentUid}</Paragraph>) : null}
+                        {showInfo.departmentUid ? (
+                            <Paragraph>{intl.get('department')}：{showInfo.departmentUid}</Paragraph>) : null}
                         <Paragraph>{intl.get('username')}：{showInfo.username}</Paragraph>
                         <Paragraph>{intl.get('realName')}：{showInfo.realeName}</Paragraph>
                         <Paragraph>{intl.get('gender')}：{showInfo.gender}</Paragraph>
