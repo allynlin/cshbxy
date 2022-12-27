@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Form, Modal, Result, Typography} from 'antd';
+import {Button, Form, Modal, Result, Typography, App} from 'antd';
 import {useNavigate} from 'react-router-dom';
 import intl from "react-intl-universal";
 
@@ -14,6 +14,8 @@ const {Title} = Typography;
 const ChangeForm = () => {
 
     const classes = useStyles();
+
+    const {message} = App.useApp();
 
     const navigate = useNavigate();
     // 防止反复查询变更记录
@@ -50,18 +52,13 @@ const ChangeForm = () => {
     const checkIsSubmitWorkReport = () => {
         setIsQuery(true)
         setWaitTime(10)
-        // 防止多次点击
-        if (isQuery) {
-            return
-        }
         checkLastWeekWorkReport().then(res => {
-            if (res.code === 200) {
-                setRenderResultTitle(intl.get('obtainLastTimeUploadFiles'))
-                checkUploadFilesList();
-            } else {
+            if (res.code !== 200) {
                 setRenderResultTitle(res.msg)
                 setIsRenderInfo(true)
             }
+            setRenderResultTitle(intl.get('obtainLastTimeUploadFiles'))
+            checkUploadFilesList();
         })
     }
 
@@ -69,27 +66,29 @@ const ChangeForm = () => {
     // 查询上次上传的文件列表
     const checkUploadFilesList = () => {
         checkLastTimeUploadFiles(tableName.workReport).then(res => {
-            if (res.code === 200) {
-                // 遍历 res.body
-                const fileList = res.body.map((item: any) => {
-                    return {
-                        uid: item.fileName,
-                        name: item.oldFileName,
-                        status: 'done',
-                        url: `${DownLoadURL}/downloadFile?filename=${item.fileName}`,
-                    }
-                })
-                setFileList(fileList)
-            }
             setIsRenderResult(false)
-        }).catch(err => {
-            setRenderResultTitle(err.message)
+            // 遍历 res.body
+            const fileList = res.body.map((item: any) => {
+                return {
+                    uid: item.fileName,
+                    name: item.oldFileName,
+                    status: 'done',
+                    url: `${DownLoadURL}/downloadFile?filename=${item.fileName}`,
+                }
+            })
+            setFileList(fileList)
+        }).catch(() => {
+            checkUploadFilesList();
         })
     }
 
     // 表单提交
     const submitForm = () => {
-        submitWorkReport(tableName.workReport).then(() => {
+        submitWorkReport(tableName.workReport).then(res => {
+            if (res.code !== 200) {
+                message.error(res.msg)
+                return
+            }
             navigate('/success', {
                 state: {
                     object: {
@@ -153,7 +152,6 @@ const ChangeForm = () => {
                     file: fileList
                 }}
             >
-
                 <Form.Item
                     label={intl.get('workReport')}
                     name="file"
@@ -192,7 +190,9 @@ const ChangeForm = () => {
 
 const WorkReport = () => {
     return (
-        <ChangeForm/>
+        <App>
+            <ChangeForm/>
+        </App>
     )
 }
 

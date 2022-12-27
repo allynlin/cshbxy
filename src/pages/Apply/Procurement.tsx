@@ -1,16 +1,18 @@
 import React, {useState} from 'react';
-import {Button, Form, Input, InputNumber, message, Modal, Typography} from 'antd';
+import {Button, Form, Input, InputNumber, Modal, Typography, App} from 'antd';
 import {useNavigate} from 'react-router-dom';
 import intl from "react-intl-universal";
 
 import {addProcurement} from "../../component/axios/api";
 import {useStyles} from "../../styles/webStyle";
 
-const {Title} = Typography;
+const {Title, Paragraph} = Typography;
 
 const ProcurementForm = () => {
 
     const classes = useStyles();
+
+    const {message} = App.useApp();
 
     const navigate = useNavigate();
     // 确认框状态
@@ -26,7 +28,10 @@ const ProcurementForm = () => {
     // 表单提交
     const submitForm = () => {
         addProcurement(items, price, reason).then(res => {
-            setConfirmLoading(false);
+            if (res.code !== 200) {
+                message.error(res.msg)
+                return
+            }
             navigate('/success', {
                 state: {
                     object: {
@@ -38,8 +43,7 @@ const ProcurementForm = () => {
                     }
                 }
             })
-        }).catch(err => {
-            message.error(err.message);
+        }).finally(() => {
             setConfirmLoading(false);
         })
     }
@@ -70,9 +74,11 @@ const ProcurementForm = () => {
                 confirmLoading={confirmLoading}
                 onCancel={handleCancel}
             >
-                <p>{intl.get('procurementItem')}：{items}</p>
-                <p>{intl.get('procurementPrice')}：{price}</p>
-                <p>{intl.get('reason')}：{reason}</p>
+                <Typography>
+                    <Paragraph>{intl.get('procurementItem')}：{items}</Paragraph>
+                    <Paragraph>{intl.get('procurementPrice')}：{price}</Paragraph>
+                    <Paragraph>{intl.get('reason')}：{reason}</Paragraph>
+                </Typography>
             </Modal>
             <Title level={2} className={classes.flexCenter}>{intl.get('procurementApply')}</Title>
             <Form
@@ -123,7 +129,9 @@ const ProcurementForm = () => {
 
 const Procurement = () => {
     return (
-        <ProcurementForm/>
+        <App>
+            <ProcurementForm/>
+        </App>
     )
 }
 

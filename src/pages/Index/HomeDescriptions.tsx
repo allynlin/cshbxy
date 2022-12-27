@@ -14,9 +14,6 @@ const HomeDescriptions: React.FC = () => {
             title={<Title level={3}>{intl.get('hello') + ',' + userInfo.realeName}</Title>}
             bordered
             layout="vertical"
-            style={{
-                padding: '16px 0',
-            }}
         >
             <Descriptions.Item label={'UID'}>
                 {userInfo.uid}

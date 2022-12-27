@@ -1,5 +1,6 @@
 import axios from 'axios';
 import qs from 'qs';
+import {message} from "antd";
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css'
 import Cookie from "js-cookie";
@@ -64,6 +65,7 @@ export const Request = (api: String, method = MethodType.GET, params = {}, confi
                 setCookie({name: "cshbxy-oa-token", value: res.data.token})
             resolve(res.data);
         }).catch(error => {
+            message.error(error.message);
             reject(error);
         }).finally(() => {
             NProgress.done(true);

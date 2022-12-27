@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {Button, Form, Input, Modal, Result, Select, Typography} from 'antd';
+import {Button, Form, Input, Modal, Result, Select, Typography, App} from 'antd';
 import {LoadingOutlined} from "@ant-design/icons";
 import intl from "react-intl-universal";
 
@@ -15,11 +15,13 @@ import FileUpLoad from "../../component/axios/FileUpLoad";
 import {useStyles} from "../../styles/webStyle";
 
 
-const {Title} = Typography;
+const {Title, Paragraph} = Typography;
 
 const ChangeForm = () => {
 
     const classes = useStyles();
+
+    const {message} = App.useApp();
 
     const navigate = useNavigate();
     // 防止反复查询变更记录
@@ -48,7 +50,6 @@ const ChangeForm = () => {
     useEffect(() => {
         const timer = setTimeout(() => {
             if (waitTime > 1) {
-                setIsQuery(true)
                 setWaitTime(e => e - 1)
                 setIsQuery(true)
             } else {
@@ -65,39 +66,42 @@ const ChangeForm = () => {
         setIsQuery(true)
         setWaitTime(10)
         checkTeacherChangeDepartment().then(res => {
-            if (res.code === 200) {
-                setRenderResultTitle(intl.get('obtainLastTimeUploadFiles'))
-                checkUploadFilesList();
-            } else {
+            if (res.code !== 200) {
                 setIsRenderInfo(true)
                 setRenderResultTitle(intl.get('pleaseWaitApprove'))
+                return
             }
+            setRenderResultTitle(intl.get('obtainLastTimeUploadFiles'))
+            checkUploadFilesList();
         })
     }
 
     // 查询上次上传的文件列表
     const checkUploadFilesList = () => {
         checkLastTimeUploadFiles(tableName.departmentChange).then(res => {
-            if (res.code === 200) {
-                // 遍历 res.body
-                const fileList = res.body.map((item: any) => {
-                    return {
-                        uid: item.fileName,
-                        name: item.oldFileName,
-                        status: 'done',
-                        url: `${DownLoadURL}/downloadFile?filename=${item.fileName}`,
-                    }
-                })
-                setFileList(fileList)
-            }
             setIsRenderResult(false)
+            // 遍历 res.body
+            const fileList = res.body.map((item: any) => {
+                return {
+                    uid: item.fileName,
+                    name: item.oldFileName,
+                    status: 'done',
+                    url: `${DownLoadURL}/downloadFile?filename=${item.fileName}`,
+                }
+            })
+            setFileList(fileList)
+        }).catch(() => {
+            checkUploadFilesList()
         })
     }
 
     // 表单提交
     const submitForm = () => {
-        ChangeDepartment(departmentUid, changeReason).then(() => {
-            setConfirmLoading(false);
+        ChangeDepartment(departmentUid, changeReason).then(res => {
+            if (res.code !== 200) {
+                message.error(res.msg)
+                return
+            }
             navigate('/success', {
                 state: {
                     object: {
@@ -108,7 +112,7 @@ const ChangeForm = () => {
                     }
                 }
             })
-        }).catch(() => {
+        }).finally(() => {
             setConfirmLoading(false);
         })
     }
@@ -116,6 +120,10 @@ const ChangeForm = () => {
     // 获取部门列表
     const getDepartmentOptions = () => {
         findUserType().then(res => {
+            if (res.code !== 200) {
+                message.error(res.msg)
+                return
+            }
             const departmentOptions = res.body.map((item: { uid: String; realeName: String; }) => {
                 return {
                     value: item.uid,
@@ -123,6 +131,8 @@ const ChangeForm = () => {
                 }
             })
             setDepartmentOptions(departmentOptions);
+        }).catch(() => {
+            getDepartmentOptions();
         })
     }
 
@@ -171,12 +181,13 @@ const ChangeForm = () => {
                 confirmLoading={confirmLoading}
                 onCancel={handleCancel}
             >
-                <p>{intl.get('departmentChange') + ': '}{departmentUid}</p>
-                <p>{intl.get('reason') + ': '}{changeReason}</p>
-                {/*将变更材料 changeFile 中的 fileList 数组中的状态为 done 的每一项 name 输出出来*/}
-                <p>{intl.get('file') + ': '}{
-                    fileList.filter((item: any) => item.status === 'done').map((item: any) => item.name).join('、')
-                }</p>
+                <Typography>
+                    <Paragraph>{intl.get('departmentChange') + ': '}{departmentUid}</Paragraph>
+                    <Paragraph>{intl.get('reason') + ': '}{changeReason}</Paragraph>
+                    <Paragraph>{intl.get('file') + ': '}{
+                        fileList.filter((item: any) => item.status === 'done').map((item: any) => item.name).join('、')
+                    }</Paragraph>
+                </Typography>
             </Modal>
             <Title level={2} className={classes.flexCenter}>{intl.get('departmentChangeApply')}</Title>
             <Form
@@ -260,7 +271,9 @@ const ChangeForm = () => {
 };
 
 const DepartmentChange = () => (
-    <ChangeForm/>
+    <App>
+        <ChangeForm/>
+    </App>
 )
 
 

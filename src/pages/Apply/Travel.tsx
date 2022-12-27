@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Form, Input, InputNumber, Modal, Select, Typography} from 'antd';
+import {Button, Form, Input, InputNumber, Modal, Select, Typography, App} from 'antd';
 import {useNavigate} from 'react-router-dom';
 import intl from "react-intl-universal";
 
@@ -9,7 +9,7 @@ import Spin from "../../component/LoadingSkleton";
 import FileUpLoad from "../../component/axios/FileUpLoad";
 import {useStyles} from "../../styles/webStyle";
 
-const {Title} = Typography;
+const {Title, Paragraph} = Typography;
 const {Option} = Select;
 
 const URL = `${BaseInfo}/api`;
@@ -17,6 +17,8 @@ const URL = `${BaseInfo}/api`;
 const LeaveForm = () => {
 
     const classes = useStyles();
+
+    const {message} = App.useApp();
 
     const navigate = useNavigate();
 
@@ -42,26 +44,29 @@ const LeaveForm = () => {
     // 查询上次上传的文件列表
     const checkUploadFilesList = () => {
         checkLastTimeUploadFiles(tableName.travel).then(res => {
-            if (res.code === 200) {
-                // 遍历 res.body
-                const fileList = res.body.map((item: any) => {
-                    return {
-                        uid: item.fileName,
-                        name: item.oldFileName,
-                        status: 'done',
-                        url: `${URL}/downloadFile?filename=${item.fileName}`,
-                    }
-                })
-                setFileList(fileList)
-            }
             setIsRenderResult(false)
+            // 遍历 res.body
+            const fileList = res.body.map((item: any) => {
+                return {
+                    uid: item.fileName,
+                    name: item.oldFileName,
+                    status: 'done',
+                    url: `${URL}/downloadFile?filename=${item.fileName}`,
+                }
+            })
+            setFileList(fileList)
+        }).catch(() => {
+            checkUploadFilesList();
         })
     }
 
     // 表单提交
     const submitForm = () => {
         addTravelReimbursement(destination, (expenses + moneyType), reason, tableName.travel).then(res => {
-            setConfirmLoading(false);
+            if (res.code !== 200) {
+                message.error(res.msg);
+                return
+            }
             navigate('/success', {
                 state: {
                     object: {
@@ -72,6 +77,8 @@ const LeaveForm = () => {
                     }
                 }
             })
+        }).finally(() => {
+            setConfirmLoading(false);
         })
     }
 
@@ -102,13 +109,14 @@ const LeaveForm = () => {
                     confirmLoading={confirmLoading}
                     onCancel={handleCancel}
                 >
-                    <p>{intl.get('destination')}{destination}</p>
-                    <p>{intl.get('cost')}{expenses} {moneyType}</p>
-                    <p>{intl.get('reason')}{reason}</p>
-                    {/*将变更材料 changeFile 中的 fileList 数组中的状态为 done 的每一项 name 输出出来*/}
-                    <p>{intl.get('file')}{
-                        fileList.filter((item: any) => item.status === 'done').map((item: any) => item.name).join('、')
-                    }</p>
+                    <Typography>
+                        <Paragraph>{intl.get('destination')}{destination}</Paragraph>
+                        <Paragraph>{intl.get('cost')}{expenses} {moneyType}</Paragraph>
+                        <Paragraph>{intl.get('reason')}{reason}</Paragraph>
+                        <Paragraph>{intl.get('file') + ': '}{
+                            fileList.filter((item: any) => item.status === 'done').map((item: any) => item.name).join('、')
+                        }</Paragraph>
+                    </Typography>
                 </Modal>
                 <Title level={2} className={classes.flexCenter}>{intl.get('travelReimburseApply')}</Title>
                 <Form
@@ -195,7 +203,9 @@ const LeaveForm = () => {
 
 const Travel = () => {
     return (
-        <LeaveForm/>
+        <App>
+            <LeaveForm/>
+        </App>
     )
 }
 

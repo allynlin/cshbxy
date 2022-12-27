@@ -24,12 +24,7 @@ export const RenderStatusTag = (item: any) => {
     switch (item.status) {
         case 0:
             return (
-                <>
-                    <Tag icon={<SyncOutlined spin/>} color={"warning"}>
-                        {intl.get('underApprove')}
-                    </Tag>
-                    <Progress percent={getProcess()} steps={getSteps()}/>
-                </>
+                <Progress percent={getProcess()} steps={getSteps()}/>
             )
         case 1:
             return (
@@ -45,12 +40,9 @@ export const RenderStatusTag = (item: any) => {
             )
         default:
             return (
-                <>
-                    <Tag icon={<ExclamationCircleOutlined/>} color={"processing"}>
-                        {intl.get('errorApprove')}
-                    </Tag>
-                    <Progress percent={0} steps={getSteps()} status="exception"/>
-                </>
+                <Tag icon={<ExclamationCircleOutlined/>} color={"processing"}>
+                    {intl.get('errorApprove')}
+                </Tag>
             )
     }
 }

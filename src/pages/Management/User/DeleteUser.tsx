@@ -12,9 +12,10 @@ interface propsCheck {
 export default function DeleteUser(props: propsCheck) {
 
     const [loading, setLoading] = useState(false);
+    const [modal, contextHolder] = Modal.useModal();
 
     const showConfirm = () => {
-        Modal.confirm({
+        modal.confirm({
             title: intl.get('confirmDeleteUserAgain'),
             icon: <ExclamationCircleOutlined/>,
             content: intl.get('confirmDeleteUserNotice'),
@@ -31,6 +32,7 @@ export default function DeleteUser(props: propsCheck) {
 
     return (
         <Popconfirm title={intl.get('confirmDeleteUser')} onConfirm={showConfirm}>
+            {contextHolder}
             <Button
                 disabled={loading}
                 loading={loading}

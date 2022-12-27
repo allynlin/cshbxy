@@ -5,7 +5,6 @@ export const useStyles = createUseStyles({
     webHomeBody: {
         width: '100%',
         height: '100%',
-        padding: 10
     },
     webHeader: {
         width: '100%',

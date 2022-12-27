@@ -1,4 +1,4 @@
-import {Alert, Button, DatePicker, Form, Input, Modal, Typography} from 'antd';
+import {Alert, Button, DatePicker, Form, Input, Modal, Typography, App} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import Marquee from 'react-fast-marquee';
@@ -10,11 +10,13 @@ import dayjs from 'dayjs';
 import {addLeave, checkLastTimeLeave,} from "../../component/axios/api";
 import {useStyles} from "../../styles/webStyle";
 
-const {Title} = Typography;
+const {Title, Paragraph} = Typography;
 
 const LeaveForm = () => {
 
     const classes = useStyles();
+
+    const {message} = App.useApp();
 
     const navigate = useNavigate();
     // 防止反复查询变更记录
@@ -36,7 +38,6 @@ const LeaveForm = () => {
     useEffect(() => {
         const timer = setTimeout(() => {
             if (waitTime > 1) {
-                setIsQuery(true)
                 setWaitTime(e => e - 1)
                 setIsQuery(true)
             } else {
@@ -50,44 +51,46 @@ const LeaveForm = () => {
 
     useEffect(() => {
         checkLastTimeLeave().then(res => {
-                if (res.code === 200) {
-                    if (res.body.status === 0) {
-                        setAlertType('warning')
-                        setAlertMessage(intl.get('leaveTitle-2'))
-                        setAlertDescription(intl.get('leaveDesc-2'))
-                    } else if (res.body.status === 1) {
-                        setAlertType('success')
-                        setAlertMessage(intl.get('leaveTitle-3'))
-                        // 判断 res.body.start_time 和现在的时间差，是已经过去了还是还没到
-                        const now = moment().format('YYYY-MM-DD HH:mm:ss')
-                        const startTime = moment(res.body.start_time).format('YYYY-MM-DD HH:mm:ss')
-                        const endTime = moment(res.body.end_time).format('YYYY-MM-DD HH:mm:ss')
-                        if (moment(now).isBefore(startTime)) {
-                            setAlertDescription(intl.get('leaveDesc-3'))
-                        } else if (moment(now).isAfter(endTime)) {
-                            setAlertDescription(intl.get('leaveDesc-4'))
-                        } else {
-                            setAlertDescription(intl.get('leaveDesc-5'))
-                        }
-                    } else {
-                        setAlertType('error')
-                        setAlertMessage(intl.get('leaveTitle-4'))
-                        setAlertDescription(intl.get('leaveDesc-6'))
-                    }
-                    setIsHaveLastLeave(true)
-                } else {
-                    setAlertDescription(intl.get('leaveDesc-7'))
-                    setIsHaveLastLeave(false)
-                }
+            if (res.code !== 200) {
+                setAlertDescription(intl.get('leaveDesc-7'))
+                setIsHaveLastLeave(false)
+                return
             }
-        )
+            if (res.body.status === 0) {
+                setAlertType('warning')
+                setAlertMessage(intl.get('leaveTitle-2'))
+                setAlertDescription(intl.get('leaveDesc-2'))
+            } else if (res.body.status === 1) {
+                setAlertType('success')
+                setAlertMessage(intl.get('leaveTitle-3'))
+                // 判断 res.body.start_time 和现在的时间差，是已经过去了还是还没到
+                const now = moment().format('YYYY-MM-DD HH:mm:ss')
+                const startTime = moment(res.body.start_time).format('YYYY-MM-DD HH:mm:ss')
+                const endTime = moment(res.body.end_time).format('YYYY-MM-DD HH:mm:ss')
+                if (moment(now).isBefore(startTime)) {
+                    setAlertDescription(intl.get('leaveDesc-3'))
+                } else if (moment(now).isAfter(endTime)) {
+                    setAlertDescription(intl.get('leaveDesc-4'))
+                } else {
+                    setAlertDescription(intl.get('leaveDesc-5'))
+                }
+            } else {
+                setAlertType('error')
+                setAlertMessage(intl.get('leaveTitle-4'))
+                setAlertDescription(intl.get('leaveDesc-6'))
+            }
+            setIsHaveLastLeave(true)
+        })
     }, [])
 
 
     // 表单提交
     const submitForm = () => {
         addLeave(reason, leaveTime[0].format('YYYY-MM-DD HH:mm:ss'), leaveTime[1].format('YYYY-MM-DD HH:mm:ss')).then(res => {
-            setConfirmLoading(false);
+            if (res.code !== 200) {
+                message.error(res.msg)
+                return
+            }
             navigate('/success', {
                 state: {
                     object: {
@@ -99,7 +102,7 @@ const LeaveForm = () => {
                     }
                 }
             })
-        }).catch(() => {
+        }).finally(() => {
             setConfirmLoading(false);
         })
     }
@@ -170,9 +173,11 @@ const LeaveForm = () => {
                 confirmLoading={confirmLoading}
                 onCancel={handleCancel}
             >
-                <p>{intl.get('startTime')}：{leaveTime ? leaveTime[0].format('YYYY-MM-DD HH:mm:ss') : intl.get('notChooseStartTime')}</p>
-                <p>{intl.get('endTime')}：{leaveTime ? leaveTime[1].format('YYYY-MM-DD HH:mm:ss') : intl.get('notChooseEndTime')}</p>
-                <p>{intl.get('reason')}：{reason}</p>
+                <Typography>
+                    <Paragraph>{intl.get('startTime')}：{leaveTime ? leaveTime[0].format('YYYY-MM-DD HH:mm:ss') : intl.get('notChooseStartTime')}</Paragraph>
+                    <Paragraph>{intl.get('endTime')}：{leaveTime ? leaveTime[1].format('YYYY-MM-DD HH:mm:ss') : intl.get('notChooseEndTime')}</Paragraph>
+                    <Paragraph>{intl.get('reason')}：{reason}</Paragraph>
+                </Typography>
             </Modal>
             <Title level={2} className={classes.flexCenter}>{intl.get('leaveApply')}</Title>
             <Form
@@ -222,7 +227,9 @@ const LeaveForm = () => {
 
 const Leave = () => {
     return (
-        <LeaveForm/>
+        <App>
+            <LeaveForm/>
+        </App>
     )
 }
 
