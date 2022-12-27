@@ -90,8 +90,6 @@ const ChangeForm = () => {
                 }
             })
             setFileList(fileList)
-        }).catch(() => {
-            checkUploadFilesList()
         })
     }
 

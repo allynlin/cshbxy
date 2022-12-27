@@ -55,8 +55,6 @@ const LeaveForm = () => {
                 }
             })
             setFileList(fileList)
-        }).catch(() => {
-            checkUploadFilesList();
         })
     }
 
