@@ -100,7 +100,9 @@ const ProcessManagement = () => {
 
         return (
             <Steps
-                current={0}
+                progressDot
+                status="wait"
+                current={newArray.length}
                 items={newArray}
             />
         )
