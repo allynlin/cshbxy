@@ -33,7 +33,7 @@ const routes = [{
         }
     }, {
         path: 'login',
-        component: () => import('../pages/User/Login'),
+        component: () => import('../pages/User/WebLogin'),
         meta: {
             title: 'Login',
             titleCN: '登录'

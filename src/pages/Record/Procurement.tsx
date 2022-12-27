@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import VirtualTable from "../../component/VirtualTable";
-import {Button, Form, Input, message, Modal, Popconfirm, Skeleton, Space, Steps, Tag, Typography} from 'antd';
+import {App, Button, Form, Input, Modal, Popconfirm, Result, Skeleton, Space, Steps, Tag, Typography} from 'antd';
 import {
     deleteProcurement,
     findProcurementList,
@@ -10,11 +10,13 @@ import {
 import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
 import {RenderStatusTag} from "../../component/Tag/RenderStatusTag";
-import {SearchOutlined} from "@ant-design/icons";
+import {FolderOpenOutlined, SearchOutlined} from "@ant-design/icons";
 import {useSelector} from "react-redux";
 import {useStyles} from "../../styles/webStyle";
+import {getProcessStatus} from '../../component/getProcessStatus';
+import {RenderVirtualTableSkeleton} from "../../component/RenderVirtualTableSkeleton";
 
-const {Title} = Typography;
+const {Title, Paragraph} = Typography;
 const {Step} = Steps;
 
 interface DataType {
@@ -23,9 +25,11 @@ interface DataType {
     align: 'left' | 'right' | 'center';
 }
 
-const App: React.FC = () => {
+const MyApp: React.FC = () => {
 
     const classes = useStyles();
+
+    const {message} = App.useApp();
 
     // 全局数据防抖
     const [isQuery, setIsQuery] = useState<boolean>(false);
@@ -50,9 +54,13 @@ const App: React.FC = () => {
     // 删除确认框
     const [open, setOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
+    // 是否为空数据
+    const [isEmpty, setIsEmpty] = useState<boolean>(false);
 
     const tableSize = useSelector((state: any) => state.tableSize.value);
-    const userToken = useSelector((state: any) => state.userToken.value)
+    const userToken = useSelector((state: any) => state.userToken.value);
+
+    const key = "refresh"
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -84,15 +92,25 @@ const App: React.FC = () => {
     }, [isRefreshWaitTime])
 
     const refresh = (uid: string) => {
+        message.open({
+            key,
+            type: 'loading',
+            content: intl.get("refreshing"),
+            duration: 0,
+        })
         setIsRefresh(true)
         setIsRefreshWaitTime(5)
         setShowContent(true)
         refreshProcurement(uid).then(res => {
-            message.success(res.msg)
+            message.open({
+                key,
+                type: 'success',
+                content: res.msg
+            })
             let newContent = {
                 key: res.body.uid,
                 id: showInfo.id,
-                tag: RenderStatusTag(res.body, intl.get('leaveApply')),
+                tag: RenderStatusTag(res.body),
                 operation: <Button
                     type="primary"
                     onClick={() => {
@@ -121,13 +139,24 @@ const App: React.FC = () => {
             setDataSource(newDataSource)
             setShowData(newShowData)
             setShowContent(false)
+        }).catch(() => {
+            message.open({
+                key,
+                type: 'error',
+                content: intl.get('refreshingFailed')
+            })
         })
     }
 
     const getProcess = (uid: string) => {
         setProcessLoading(true)
         findProcurementProcess(uid).then((res: any) => {
-            setProcessList(res.body);
+            const newProcessList = res.body.map((item: any, index: number) => {
+                return {
+                    title: item
+                }
+            })
+            setProcessList(newProcessList)
         }).catch(err => {
             message.error(err.message)
         }).finally(() => {
@@ -147,31 +176,37 @@ const App: React.FC = () => {
         setIsQuery(true)
         setWaitTime(10)
         findProcurementList().then(res => {
-            if (res.code === 200) {
-                const newDataSource = res.body.map((item: any, index: number) => {
-                    return {
-                        ...item,
-                        id: index + 1,
-                        key: item.uid,
-                        tag: RenderStatusTag(item, intl.get('leaveApply')),
-                        operation: <Button
-                            type="primary"
-                            onClick={() => {
-                                setShowInfo({...item, id: index + 1});
-                                getProcess(item.uid);
-                                setShowModal(true);
-                                setShowContent(false);
-                            }}>
-                            {intl.get('check')}
-                        </Button>
-                    }
-                });
-                setDataSource(newDataSource);
-                setShowData(newDataSource);
-            } else {
-                message.warning(res.msg);
+            if (res.code === 300) {
+                setIsEmpty(true)
                 setDataSource([])
+                setShowData([])
+                return
             }
+            if (res.code !== 200) {
+                message.error(res.msg)
+                setIsEmpty(true)
+                return
+            }
+            const newDataSource = res.body.map((item: any, index: number) => {
+                return {
+                    ...item,
+                    id: index + 1,
+                    key: item.uid,
+                    tag: RenderStatusTag(item),
+                    operation: <Button
+                        type="primary"
+                        onClick={() => {
+                            setShowInfo({...item, id: index + 1});
+                            getProcess(item.uid);
+                            setShowModal(true);
+                            setShowContent(false);
+                        }}>
+                        {intl.get('check')}
+                    </Button>
+                }
+            });
+            setDataSource(newDataSource);
+            setShowData(newDataSource);
         }).finally(() => {
             setLoading(false)
         })
@@ -195,15 +230,21 @@ const App: React.FC = () => {
         setConfirmLoading(true);
         setOpen(false)
         deleteProcurement(uid).then((res: any) => {
-            if (res.code === 200) {
-                message.success(res.msg);
-                const newDataSource = dataSource.filter((item: any) => item.uid !== uid);
-                setDataSource(newDataSource);
-                const newShowData = showData.filter((item: any) => item.uid !== uid);
-                setShowData(newShowData);
-            } else {
-                message.error(res.msg);
+            if (res.code !== 200) {
+                message.error(res.msg)
+                return
             }
+            message.success(res.msg);
+            const newDataSource = dataSource.filter((item: any) => item.uid !== uid);
+            if (newDataSource.length === 0) {
+                setIsEmpty(true)
+                setDataSource([])
+                setShowData([])
+                return
+            }
+            setDataSource(newDataSource);
+            const newShowData = showData.filter((item: any) => item.uid !== uid);
+            setShowData(newShowData);
         }).finally(() => {
             setConfirmLoading(false);
             setShowModal(false);
@@ -230,6 +271,13 @@ const App: React.FC = () => {
         dataIndex: 'operation',
         align: 'center',
     }];
+
+    const RenderGetDataSourceButton = () => {
+        return (
+            <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
+                    onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
+        )
+    }
 
     return (
         <div className={classes.contentBody}>
@@ -271,18 +319,18 @@ const App: React.FC = () => {
                 ]}
             >
                 {showContent ? (<Skeleton active/>) : (
-                    <>
-                        <p>{intl.get('procurementItem')}：{showInfo.items}</p>
-                        <p>{intl.get('procurementPrice')}：{showInfo.price} ￥</p>
-                        <p>{intl.get('reason')}：{showInfo.reason}</p>
+                    <Typography>
+                        <Paragraph>{intl.get('procurementItem')}：{showInfo.items}</Paragraph>
+                        <Paragraph>{intl.get('procurementPrice')}：{showInfo.price} ￥</Paragraph>
+                        <Paragraph>{intl.get('reason')}：{showInfo.reason}</Paragraph>
                         {showInfo.reject_reason ?
-                            <p>
+                            <Paragraph>
                                 {intl.get('rejectReason')}：
                                 <Tag color={userToken.colorError}>{showInfo.reject_reason}</Tag>
-                            </p> : null}
-                        <p>{intl.get('createTime')}：{showInfo.create_time}</p>
-                        <p>{intl.get('updateTime')}：{showInfo.update_time}</p>
-                        <div>{intl.get('approveProcess')}：</div>
+                            </Paragraph> : null}
+                        <Paragraph>{intl.get('createTime')}：{showInfo.create_time}</Paragraph>
+                        <Paragraph>{intl.get('updateTime')}：{showInfo.update_time}</Paragraph>
+                        <Paragraph>{intl.get('approveProcess')}：</Paragraph>
                         {
                             processLoading ? (
                                     <Space style={{flexDirection: 'column', marginTop: 16}}>
@@ -293,35 +341,22 @@ const App: React.FC = () => {
                                     </Space>) :
                                 <div style={{marginTop: 16}}>
                                     <Steps
-                                        style={{
-                                            marginTop: 16
-                                        }}
                                         direction="vertical"
-                                        size="small"
+                                        progressDot
                                         current={showInfo.count}
-                                        status={showInfo.status === 0 ? 'process' : showInfo.status === 1 ? 'finish' : 'error'}
-                                    >
-                                        {
-                                            processList.map((item: string, index: number) => {
-                                                return (
-                                                    <Step
-                                                        key={index}
-                                                        title={item}
-                                                    />
-                                                )
-                                            })
-                                        }
-                                    </Steps>
+                                        status={getProcessStatus(showInfo.status)}
+                                        size="small"
+                                        items={processList}
+                                    />
                                 </div>
                         }
-                    </>
+                    </Typography>
                 )}
             </Modal>
             <div className={classes.contentHead}>
                 <Title level={2} className={classes.tit}>
                     {intl.get('procurement') + ' ' + intl.get('record')}&nbsp;&nbsp;
-                    <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
-                            onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
+                    <RenderGetDataSourceButton/>
                 </Title>
                 <Form name="search" layout="inline" onFinish={onFinish}>
                     <Form.Item name="search">
@@ -334,19 +369,30 @@ const App: React.FC = () => {
                 </Form>
             </div>
             <div className={classes.skeletonLoading} style={{display: loading ? 'block' : 'none'}}>
-                <div className={classes.skeletonThead}/>
-                <div className={classes.skeletonTbody}>
-                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
-                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
-                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
-                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
-                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
-                </div>
+                <RenderVirtualTableSkeleton/>
             </div>
-            <VirtualTable columns={columns} dataSource={showData}
-                          scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}/>
+            {
+                isEmpty ? (
+                    <Result
+                        icon={<FolderOpenOutlined/>}
+                        title={intl.get('noData')}
+                        extra={<RenderGetDataSourceButton/>}
+                    />
+                ) : (
+                    <VirtualTable columns={columns} dataSource={showData}
+                                  scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}/>
+                )
+            }
         </div>
     )
 };
 
-export default App;
+const ProcurementRecord = () => {
+    return (
+        <App>
+            <MyApp/>
+        </App>
+    )
+}
+
+export default ProcurementRecord;

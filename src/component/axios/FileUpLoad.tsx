@@ -5,7 +5,6 @@ import {message, Upload} from "antd";
 import Cookie from "js-cookie";
 import {InboxOutlined} from "@ant-design/icons";
 
-import {rootNavigate} from "../../App";
 import {DownLoadURL, version} from "../../baseInfo";
 import {deleteFile} from "./api";
 

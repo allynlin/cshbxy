@@ -1,6 +1,6 @@
 {
   "name": "cshbxy",
-  "version": "3.1.0",
+  "version": "3.1.4",
   "private": true,
   "homepage": "https://allynlin.netlify.app/",
   "dependencies": {
@@ -21,7 +21,7 @@
     "@types/react-dom": "^18.0.6",
     "@types/react-virtualized": "^9.21.21",
     "@types/react-window": "^1.8.5",
-    "antd": "5.1.0",
+    "antd": "5.1.1",
     "antd-mobile": "^5.27.0",
     "axios": "^0.27.2",
     "crypto-js": "^4.1.1",

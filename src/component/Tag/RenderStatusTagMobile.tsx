@@ -1,10 +1,3 @@
-/**
- *  渲染状态标签
- *  @param {string} status 状态。0：待审核，1：审核通过，2：审核不通过
- *  @return {JSX.Element} 状态标签
- *  点击标签弹出全局 message，显示状态对应的文字
- *  update 2022-12-08
- */
 import React from "react";
 import {Tag} from 'antd-mobile'
 

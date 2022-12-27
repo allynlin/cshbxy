@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Button, Form, Input, message, Radio, Switch} from 'antd';
+import {Button, Form, Input, Radio, Switch, App} from 'antd';
 import Cookie from 'js-cookie';
 import setCookie from "../../component/setCookie";
 import {userLogin} from "../../component/axios/api";
@@ -10,12 +10,15 @@ import {Department, Employee, Leader} from "../../component/redux/userTypeSlice"
 import {setUser} from "../../component/redux/userInfoSlice";
 import intl from "react-intl-universal";
 
-const StudentForm = () => {
+const LoginForm = () => {
+
+    const {message} = App.useApp();
+
+    const key = "userLogin"
 
     const [loading, setLoading] = useState<boolean>(false);
 
     const dispatch = useDispatch();
-    const [api, contextHolder] = message.useMessage();
     const [form] = Form.useForm();
     const username = Form.useWatch('username', form);
     const password = Form.useWatch('password', form);
@@ -24,34 +27,67 @@ const StudentForm = () => {
     const navigate = useNavigate();
 
     const onFinish = () => {
+        message.open({
+            key,
+            type: 'loading',
+            content: intl.get('userLoging'),
+            duration: 0,
+        })
+        loginUser();
+    };
+
+    const loginUser = () => {
         setLoading(true);
         userLogin(username, password, userType).then(res => {
-            dispatch(setUser(res.body))
-            api.success(res.msg);
-            isRemember()
-            loginSuccess(res.body.userType)
-        }).catch(() => {
-            loginError()
-        }).finally(() => {
             setLoading(false)
+            if (res.code !== 200) {
+                message.open({
+                    key,
+                    type: 'error',
+                    content: res.msg,
+                    duration: 3,
+                })
+                loginError()
+                return;
+            }
+            message.open({
+                key,
+                type: 'success',
+                content: res.msg,
+                duration: 0.5,
+            }).then(() => {
+                dispatch(setUser(res.body))
+                isRemember()
+                loginSuccess(res.body.userType)
+            })
+        }).catch(() => {
+            message.open({
+                key,
+                type: 'loading',
+                content: intl.get('tryingAgain'),
+                duration: 0,
+            })
+            loginUser()
         })
-    };
+    }
 
     // 登录成功或失败所作的操作
     const loginSuccess = (e: string) => {
         dispatch(login())
+        dispatchUserType(e)
+        navigate('/home')
+    }
+
+    const dispatchUserType = (e: string) => {
         switch (e) {
             case 'Employee':
                 dispatch(Employee())
-                navigate('/home')
                 break;
             case 'Department':
                 dispatch(Department())
-                navigate('/home')
                 break;
             case 'Leader':
                 dispatch(Leader())
-                navigate('/home')
                 break;
         }
     }
@@ -87,7 +123,6 @@ const StudentForm = () => {
     return (
         <Form
             form={form}
-            name="login"
             labelCol={{span: 8}}
             wrapperCol={{span: 8}}
             onFinish={onFinish}
@@ -97,7 +132,6 @@ const StudentForm = () => {
                 rememberme: true,
                 userType: Cookie.get("cshbxy-oa-userType") || 'Employee',
             }}>
-            {contextHolder}
             <Form.Item
                 label={intl.get('username')}
                 name="username"
@@ -145,7 +179,8 @@ const StudentForm = () => {
                     message: intl.get('pleaseChooseRememberPassword'),
                 }]}
             >
-                <Switch style={{display: "flex"}} checkedChildren={intl.get('yes')} unCheckedChildren={intl.get('no')}/>
+                <Switch style={{display: "flex"}} checkedChildren={intl.get('yes')}
+                        unCheckedChildren={intl.get('no')}/>
             </Form.Item>
 
             <Form.Item wrapperCol={{offset: 8, span: 16}}>
@@ -161,9 +196,11 @@ const StudentForm = () => {
     )
 }
 
-const Login = () => (
-    <StudentForm/>
+const WebLogin = () => (
+    <App>
+        <LoginForm/>
+    </App>
 )
 
 
-export default Login
+export default WebLogin

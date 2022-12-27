@@ -47,10 +47,6 @@ export const useStyles = createUseStyles({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    statusTag: {
-        display: 'flex',
-        flexDirection: 'column'
-    },
     skeletonLoading: {
         width: '100%',
         height: 'calc(100% - 200x)',

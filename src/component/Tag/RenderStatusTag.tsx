@@ -1,16 +1,9 @@
-/**
- *  渲染状态标签
- *  @param {string} status 状态。0：待审核，1：审核通过，2：审核不通过
- *  @return {JSX.Element} 状态标签
- *  点击标签弹出全局 message，显示状态对应的文字
- *  update 2022-10-07
- */
-import {message, Progress, Tag} from "antd";
+import {Progress, Tag} from "antd";
 import {CheckCircleOutlined, CloseCircleOutlined, ExclamationCircleOutlined, SyncOutlined} from "@ant-design/icons";
 import React from "react";
 import intl from "react-intl-universal";
 
-export const RenderStatusTag = (item: any, msg = intl.get('apply')) => {
+export const RenderStatusTag = (item: any) => {
 
     const getProcess = () => {
         // 将 item.process 中的字符串按照 || 分割成数组
@@ -28,12 +21,18 @@ export const RenderStatusTag = (item: any, msg = intl.get('apply')) => {
         return process.length;
     }
 
+    const styles: React.CSSProperties = {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+    }
+
     switch (item.status) {
         case 0:
             return (
-                <div className={'status-tag'}>
-                    <Tag icon={<SyncOutlined spin/>} color={"warning"}
-                         onClick={() => message.warning(intl.get('underApproveMessage', {name: msg}))}>
+                <div style={styles}>
+                    <Tag icon={<SyncOutlined spin/>} color={"warning"}>
                         {intl.get('underApprove')}
                     </Tag>
                     <Progress percent={getProcess()} steps={getSteps()}/>
@@ -41,9 +40,8 @@ export const RenderStatusTag = (item: any, msg = intl.get('apply')) => {
             )
         case 1:
             return (
-                <div className={'status-tag'}>
-                    <Tag icon={<CheckCircleOutlined/>} color={"success"}
-                         onClick={() => message.success(intl.get('passApproveMessage', {name: msg}))}>
+                <div style={styles}>
+                    <Tag icon={<CheckCircleOutlined/>} color={"success"}>
                         {intl.get('passApprove')}
                     </Tag>
                     <Progress percent={100} steps={getSteps()}/>
@@ -51,9 +49,8 @@ export const RenderStatusTag = (item: any, msg = intl.get('apply')) => {
             )
         case 2:
             return (
-                <div className={'status-tag'}>
-                    <Tag icon={<CloseCircleOutlined/>} color={"error"}
-                         onClick={() => message.error(intl.get('rejectApproveMessage', {name: msg}))}>
+                <div style={styles}>
+                    <Tag icon={<CloseCircleOutlined/>} color={"error"}>
                         {intl.get('rejectApprove')}
                     </Tag>
                     <Progress percent={getProcess()} steps={getSteps()} status="exception"/>
@@ -61,9 +58,8 @@ export const RenderStatusTag = (item: any, msg = intl.get('apply')) => {
             )
         default:
             return (
-                <div className={'status-tag'}>
-                    <Tag icon={<ExclamationCircleOutlined/>} color={"processing"}
-                         onClick={() => message.info(intl.get('errorApproveMessage', {name: msg}))}>
+                <div style={styles}>
+                    <Tag icon={<ExclamationCircleOutlined/>} color={"processing"}>
                         {intl.get('errorApprove')}
                     </Tag>
                     <Progress percent={0} steps={getSteps()} status="exception"/>

@@ -273,5 +273,10 @@
   "showAlertMessage": "Show Alert Message",
   "hideAlertMessage": "Hide Alert Message",
   "alertMessageStatusError": "Alert Message Status Error",
-  "checkUserNameing": "Checking user name..."
+  "checkUserNameing": "Checking user name...",
+  "userLoging": "User logging...",
+  "tryingAgain": "Trying again...",
+  "noData": "No Data",
+  "refreshing": "Refreshing...",
+  "refreshingFailed": "Refreshing failed"
 }

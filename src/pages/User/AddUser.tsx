@@ -1,14 +1,17 @@
 import React, {useState} from "react";
-import {Button, Form, Input, message, Radio} from 'antd';
-import {checkUsername, userRegister} from "../../component/axios/api";
-import {Employee} from "../../component/redux/userTypeSlice";
+import {Button, Form, Input, Radio, App} from 'antd';
 import intl from "react-intl-universal";
 
-const RegisterStudent = () => {
+import {checkUsername, userRegister} from "../../component/axios/api";
+import {Employee} from "../../component/redux/userTypeSlice";
+
+
+const AddUserByAdmin = () => {
 
     const [loading, setLoading] = useState<boolean>(false);
 
-    const [api, contextHolder] = message.useMessage();
+    const {message} = App.useApp();
+
     const [form] = Form.useForm();
     const username = Form.useWatch('username', form);
     const password = Form.useWatch('password', form);
@@ -20,17 +23,32 @@ const RegisterStudent = () => {
     const departmentUid = Form.useWatch('departmentUid', form);
     const userType = Form.useWatch('userType', form);
 
+    const key = 'register'
+
     const onFinish = () => {
-        const key = 'checkUsername'
-        api.open({
+        message.open({
             key,
             type: 'loading',
             content: intl.get('checkUserNameing'),
             duration: 0,
         });
-        checkUsername(username, userType).then(() => {
+        checkUserName();
+    };
+
+    const checkUserName = () => {
+        checkUsername(username, userType).then(res => {
+            if (res.code !== 200) {
+                message.open({
+                    key,
+                    type: 'error',
+                    content: intl.get('usernameIsExist'),
+                    duration: 3,
+                });
+                form.resetFields(['username']);
+                return;
+            }
             if (password !== enterPassword) {
-                api.open({
+                message.open({
                     key,
                     type: 'error',
                     content: intl.get('twoPasswordIsNotSame'),
@@ -39,37 +57,47 @@ const RegisterStudent = () => {
                 return
             }
             setLoading(true);
-            userRegister(username, password, realeName, gender, tel, email, departmentUid, userType).then(res => {
-                if (res.code === 200) {
-                    api.open({
-                        key,
-                        type: 'success',
-                        content: res.msg,
-                        duration: 3,
-                    });
-                    form.resetFields();
-                } else {
-                    api.open({
-                        key,
-                        type: 'error',
-                        content: res.msg,
-                        duration: 3,
-                    });
-                }
-            }).finally(() => {
-                setLoading(false)
-            })
-        }).catch(err => {
-            api.open({
+            register();
+        }).catch(() => {
+            message.open({
                 key,
                 type: 'error',
-                content: err.message || err.msg || intl.get('usernameIsExist'),
+                content: intl.get('tryingAgain'),
                 duration: 3,
             });
-            form.resetFields(['username']);
-            return;
+            checkUserName()
         });
-    };
+    }
+
+    const register = () => {
+        userRegister(username, password, realeName, gender, tel, email, departmentUid, userType).then(res => {
+            setLoading(false)
+            if (res.code !== 200) {
+                message.open({
+                    key,
+                    type: 'error',
+                    content: res.msg,
+                    duration: 3,
+                });
+                return
+            }
+            message.open({
+                key,
+                type: 'success',
+                content: res.msg,
+                duration: 3,
+            });
+            onReset();
+        }).catch(() => {
+            message.open({
+                key,
+                type: 'error',
+                content: intl.get('tryingAgain'),
+                duration: 3,
+            });
+            register()
+        });
+    }
 
     const onReset = () => {
         form.resetFields();
@@ -87,7 +115,6 @@ const RegisterStudent = () => {
                 userType: "Employee",
             }}
         >
-            {contextHolder}
             <Form.Item
                 label={intl.get('username')}
                 name="username"
@@ -218,9 +245,11 @@ const RegisterStudent = () => {
     )
 }
 
-const DepartmentLogin = () => (
-    <RegisterStudent/>
+const AddUser = () => (
+    <App>
+        <AddUserByAdmin/>
+    </App>
 )
 
 
-export default DepartmentLogin;
+export default AddUser;

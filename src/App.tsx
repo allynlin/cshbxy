@@ -1,11 +1,11 @@
-import React, {useEffect, useLayoutEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import Cookie from 'js-cookie';
 import intl from 'react-intl-universal';
 import {unstable_HistoryRouter as HistoryRouter} from 'react-router-dom'
 import {createBrowserHistory} from 'history'
 import RouterWaiter from "react-router-waiter"
 import {useDispatch, useSelector} from "react-redux";
-import {ConfigProvider, message} from "antd";
+import {ConfigProvider, App as AntdApp} from "antd";
 
 import Spin from "./component/LoadingSkleton";
 import {checkUser} from "./component/axios/api";
@@ -43,11 +43,11 @@ export const rootNavigate = (to: string) => {
     history.push(`${process.env.PUBLIC_URL}${to}`)
 };
 
-export default function App() {
+const MyApp = () => {
     const [language, setLanguage] = useState<any>(zhCN);
     const [authCheck, setAuthCheck] = useState<boolean>(false);
 
-    const [messageApi, contextHolder] = message.useMessage();
+    const {message} = AntdApp.useApp();
 
     const dispatch = useDispatch();
 
@@ -58,7 +58,7 @@ export default function App() {
 
     const key = 'checkUser';
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         getBrowserInfo()
         getSysColorSetting()
         getSysSetting()
@@ -115,7 +115,7 @@ export default function App() {
         // 从 Cookie 中获取 token，如果获取到就向后端发送请求验证 token 是否有效，如果有效就继续，否之跳转用户登录页面
         const token = Cookie.get('cshbxy-oa-token');
         if (token) {
-            messageApi.open({
+            message.open({
                 key,
                 type: 'loading',
                 content: intl.get('checkUser'),
@@ -158,10 +158,11 @@ export default function App() {
     // 校验用户
     const checkUserInfo = () => {
         checkUser().then(res => {
+            setAuthCheck(true)
             // 如果校验失败，则提示用户 token 失效，跳转到登录页面
             if (res.code !== 200) {
                 message.error(res.msg)
-                messageApi.open({
+                message.open({
                     key,
                     type: 'error',
                     content: intl.get('checkUserFailed'),
@@ -170,7 +171,7 @@ export default function App() {
                 rootNavigate('/login')
                 return
             }
-            messageApi.open({
+            message.open({
                 key,
                 type: 'success',
                 content: intl.get('checkUserSuccess'),
@@ -190,15 +191,13 @@ export default function App() {
                     break
             }
         }).catch(() => {
-            messageApi.open({
+            message.open({
                 key,
                 type: 'error',
-                content: intl.get('checkUserFailed'),
+                content: intl.get('tryingAgain'),
                 duration: 3,
-            })
-            rootNavigate('/login')
-        }).finally(() => {
-            setAuthCheck(true)
+            });
+            checkUserInfo()
         })
     }
 
@@ -219,7 +218,7 @@ export default function App() {
             if (userType === meta.Auth)
                 return pathname
             if (!isLogin) {
-                messageApi.warning(intl.get('pleaseLogin'))
+                message.warning(intl.get('pleaseLogin'))
                 return '/login'
             }
             return '/403'
@@ -228,15 +227,22 @@ export default function App() {
     }
 
     return (
-        <>
-            {contextHolder}
-            <ConfigProvider locale={language}>
-                {/*// @ts-ignore*/}
-                <HistoryRouter basename={process.env.PUBLIC_URL} history={history}>
-                    <ChangeSystem/>
-                    <RouterWaiter routes={routes} loading={<Spin/>} onRouteBefore={onRouteBefore}/>
-                </HistoryRouter>
-            </ConfigProvider>
-        </>
+        <ConfigProvider locale={language}>
+            {/*// @ts-ignore*/}
+            <HistoryRouter basename={process.env.PUBLIC_URL} history={history}>
+                <ChangeSystem/>
+                <RouterWaiter routes={routes} loading={<Spin/>} onRouteBefore={onRouteBefore}/>
+            </HistoryRouter>
+        </ConfigProvider>
     );
 }
+
+const App = () => {
+    return (
+        <AntdApp>
+            <MyApp/>
+        </AntdApp>
+    )
+}
+
+export default App;

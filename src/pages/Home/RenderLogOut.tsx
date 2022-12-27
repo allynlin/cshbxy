@@ -1,4 +1,4 @@
-import {Button, message, Modal} from 'antd'
+import {Button, App} from 'antd'
 import {useNavigate} from "react-router-dom";
 import {logout} from "../../component/redux/isLoginSlice";
 import {all} from "../../component/redux/userTypeSlice";
@@ -10,7 +10,7 @@ import {ExclamationCircleOutlined, LoginOutlined, PoweroffOutlined} from "@ant-d
 
 const RenderLogOut = () => {
 
-    const [modal, contextHolder] = Modal.useModal();
+    const {message, modal} = App.useApp();
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -49,17 +49,22 @@ const RenderLogOut = () => {
     }
 
     return (
-        <>
-            {contextHolder}
-            <Button
-                type="primary"
-                danger={isLogin}
-                icon={isLogin ? <PoweroffOutlined/> : <LoginOutlined/>}
-                onClick={showConfirm}>
-                {intl.get(isLogin ? 'logOut' : 'login')}
-            </Button>
-        </>
+        <Button
+            type="primary"
+            danger={isLogin}
+            icon={isLogin ? <PoweroffOutlined/> : <LoginOutlined/>}
+            onClick={showConfirm}>
+            {intl.get(isLogin ? 'logOut' : 'login')}
+        </Button>
     )
 }
 
-export default RenderLogOut
+const MyApp = () => {
+    return (
+        <App>
+            <RenderLogOut/>
+        </App>
+    )
+}
+
+export default MyApp

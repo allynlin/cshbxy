@@ -273,5 +273,10 @@
   "showAlertMessage": "显示提示信息",
   "hideAlertMessage": "隐藏提示信息",
   "alertMessageStatusError": "提示信息状态错误",
-  "checkUserNameing": "检查用户名中"
+  "checkUserNameing": "检查用户名中",
+  "userLoging": "用户登录中",
+  "tryingAgain": "正在重试中",
+  "noData": "暂无数据",
+  "refreshing": "正在刷新中",
+  "refreshingFailed": "刷新失败"
 }
