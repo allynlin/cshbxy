@@ -31,11 +31,9 @@ export const useStyles = createUseStyles({
     contentBody: {
         width: '100%',
         height: '100%',
-        padding: 20,
         position: 'relative',
     },
     contentHead: {
-        marginTop: 5,
         width: '100%',
         height: 50,
         display: 'flex',

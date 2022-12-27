@@ -1,16 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import VirtualTable from "../../../component/VirtualTable";
-import {Button, Card, Form, Input, message, Modal, Skeleton, Typography} from 'antd';
+import {Button, Card, Form, Input, Modal, Skeleton, Typography, App, Result} from 'antd';
 import {findTravelWaitApprovalList, findUploadFilesByUid, resolveTravel} from "../../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
-import {ExclamationCircleOutlined, FileTextOutlined, SearchOutlined} from "@ant-design/icons";
+import {ExclamationCircleOutlined, FileTextOutlined, FolderOpenOutlined, SearchOutlined} from "@ant-design/icons";
 import {DownLoadURL, tableName} from "../../../baseInfo";
 import {useSelector} from "react-redux";
 import Reject from "./Reject";
 import {useStyles} from "../../../styles/webStyle";
+import {RenderVirtualTableSkeleton} from "../../../component/RenderVirtualTableSkeleton";
 
-const {Title} = Typography;
+const {Title, Paragraph} = Typography;
 
 interface DataType {
     key: React.Key;
@@ -18,9 +19,11 @@ interface DataType {
     align: 'left' | 'right' | 'center';
 }
 
-export default function Travel() {
+const MyApp = () => {
 
     const classes = useStyles();
+
+    const {message} = App.useApp();
 
     // 全局数据防抖
     const [isQuery, setIsQuery] = useState<boolean>(false);
@@ -39,6 +42,10 @@ export default function Travel() {
     // 关联文件
     const [fileLoading, setFileLoading] = useState<boolean>(true);
     const [fileList, setFileList] = useState<any>([]);
+    // 是否为空数据
+    const [isEmpty, setIsEmpty] = useState<boolean>(false);
+
+    const getFile = "getFile"
 
     const tableSize = useSelector((state: any) => state.tableSize.value)
     const userToken = useSelector((state: any) => state.userToken.value)
@@ -70,45 +77,76 @@ export default function Travel() {
         setIsQuery(true)
         setWaitTime(10)
         findTravelWaitApprovalList().then((res: any) => {
-            if (res.code === 200) {
-                const newDataSource = res.body.map((item: any, index: number) => {
-                    return {
-                        ...item,
-                        id: index + 1,
-                        key: item.uid,
-                        operation: <Button
-                            type="primary"
-                            onClick={() => {
-                                setShowInfo({...item, id: index + 1});
-                                getFiles(item.uid);
-                                setShowModal(true);
-                            }}>
-                            {intl.get('check')}
-                        </Button>
-
-                    }
-                });
-                setDataSource(newDataSource);
-                setShowData(newDataSource);
-            } else {
-                message.warning(res.msg);
+            if (res.code === 300) {
+                setIsEmpty(true)
                 setDataSource([])
+                setShowData([])
+                return
             }
+            if (res.code !== 200) {
+                message.error(res.msg)
+                setIsEmpty(true)
+                return
+            }
+            const newDataSource = res.body.map((item: any, index: number) => {
+                return {
+                    ...item,
+                    id: index + 1,
+                    key: item.uid,
+                    operation: <Button
+                        type="primary"
+                        onClick={() => {
+                            setShowInfo({...item, id: index + 1});
+                            getFiles(item.uid);
+                            setShowModal(true);
+                        }}>
+                        {intl.get('check')}
+                    </Button>
+
+                }
+            });
+            setDataSource(newDataSource);
+            setShowData(newDataSource);
         }).finally(() => {
             setLoading(false)
         })
     }
 
     const getFiles = (uid: string) => {
-        let msg: any;
+        message.open({
+            key: getFile,
+            type: 'loading',
+            content: intl.get("gettingFileList"),
+            duration: 0,
+        })
         setFileLoading(true)
-        const hide = setTimeout(() => msg = message.loading(intl.get('gettingFileList'), 0), 500);
+        findFiles(uid)
+    }
+
+    const findFiles = (uid: string) => {
         findUploadFilesByUid(uid, tableName.travel).then((res: any) => {
-            setFileList(res.body);
-        }).finally(() => {
-            clearTimeout(hide)
-            msg && msg();
             setFileLoading(false)
+            if (res.code !== 200) {
+                message.open({
+                    key: getFile,
+                    type: 'error',
+                    content: res.msg,
+                })
+            }
+            setFileList(res.body);
+            message.open({
+                key: getFile,
+                type: 'success',
+                content: res.msg,
+            })
+        }).catch(() => {
+            message.open({
+                key: getFile,
+                type: 'loading',
+                content: intl.get('tryingAgain'),
+                duration: 0,
+            })
+            findFiles(uid)
         })
     }
 
@@ -143,13 +181,16 @@ export default function Travel() {
 
     const changeData = () => {
         const newDataSource = dataSource.filter((item: any) => item.uid !== showInfo.uid);
+        if (newDataSource.length === 0) {
+            setIsEmpty(true)
+            setDataSource([])
+            setShowData([])
+            return
+        }
         setDataSource(newDataSource);
         const newShowData = showData.filter((item: any) => item.uid !== showInfo.uid);
         setShowData(newShowData);
         setShowInfo({});
-        if (newDataSource.length === 0) {
-            message.warning(intl.get('noRecord'));
-        }
     }
 
     const onFinish = (values: any) => {
@@ -186,6 +227,13 @@ export default function Travel() {
         dataIndex: 'operation',
         align: 'center',
     }];
+
+    const RenderGetDataSourceButton = () => {
+        return (
+            <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
+                    onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
+        )
+    }
 
     return (
         <div className={classes.contentBody}>
@@ -229,41 +277,42 @@ export default function Travel() {
                     </Button>,
                 ]}
             >
-                <p>{intl.get('submitPerson')}：{showInfo.releaseUid}</p>
-                <p>{intl.get('destination')}：{showInfo.destination}</p>
-                <p>{intl.get('cost')}：{showInfo.expenses}</p>
-                <p>{intl.get('reason')}：{showInfo.reason}</p>
-                <p>{intl.get('createTime')}：{showInfo.create_time}</p>
-                <p>{intl.get('updateTime')}：{showInfo.update_time}</p>
-                <p>{intl.get('file')}：</p>
-                {
-                    fileLoading ? (
-                        <div className={classes.skeletonFile}>
-                            <Skeleton.Node active>
-                                <FileTextOutlined className={classes.skeletonFiles}/>
-                            </Skeleton.Node>
+                <Typography>
+                    <Paragraph>{intl.get('submitPerson')}：{showInfo.releaseUid}</Paragraph>
+                    <Paragraph>{intl.get('destination')}：{showInfo.destination}</Paragraph>
+                    <Paragraph>{intl.get('cost')}：{showInfo.expenses}</Paragraph>
+                    <Paragraph>{intl.get('reason')}：{showInfo.reason}</Paragraph>
+                    <Paragraph>{intl.get('createTime')}：{showInfo.create_time}</Paragraph>
+                    <Paragraph>{intl.get('updateTime')}：{showInfo.update_time}</Paragraph>
+                    <Paragraph>{intl.get('file')}：</Paragraph>
+                    {
+                        fileLoading ? (
+                            <div className={classes.skeletonFile}>
+                                <Skeleton.Node active>
+                                    <FileTextOutlined className={classes.skeletonFiles}/>
+                                </Skeleton.Node>
+                            </div>
+                        ) : <div className={classes.showFile}>
+                            {fileList.map((item: any, index: number) => {
+                                return (
+                                    <Card size="small" className={classes.fileItem} hoverable key={index}
+                                          title={intl.get('file') + (index + 1)}
+                                          bordered={false}>
+                                        <Typography.Paragraph ellipsis>
+                                            <a href={`${DownLoadURL}/downloadFile?filename=${item.fileName}`}
+                                               target="_self">{item.oldFileName}</a>
+                                        </Typography.Paragraph>
+                                    </Card>
+                                )
+                            })}
                         </div>
-                    ) : <div className={classes.showFile}>
-                        {fileList.map((item: any, index: number) => {
-                            return (
-                                <Card size="small" className={classes.fileItem} hoverable key={index}
-                                      title={intl.get('file') + (index + 1)}
-                                      bordered={false}>
-                                    <Typography.Paragraph ellipsis>
-                                        <a href={`${DownLoadURL}/downloadFile?filename=${item.fileName}`}
-                                           target="_self">{item.oldFileName}</a>
-                                    </Typography.Paragraph>
-                                </Card>
-                            )
-                        })}
-                    </div>
-                }
+                    }
+                </Typography>
             </Modal>
             <div className={classes.contentHead}>
                 <Title level={2} className={classes.tit}>
                     {intl.get('travelReimburse') + ' ' + intl.get('approve')}&nbsp;&nbsp;
-                    <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
-                            onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
+                    <RenderGetDataSourceButton/>
                 </Title>
                 <Form name="search" layout="inline" onFinish={onFinish}>
                     <Form.Item name="search">
@@ -276,17 +325,30 @@ export default function Travel() {
                 </Form>
             </div>
             <div className={classes.skeletonLoading} style={{display: loading ? 'block' : 'none'}}>
-                <div className={classes.skeletonThead}/>
-                <div className={classes.skeletonTbody}>
-                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
-                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
-                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
-                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
-                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
-                </div>
+                <RenderVirtualTableSkeleton/>
             </div>
-            <VirtualTable columns={columns} dataSource={showData}
-                          scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}/>
+            {
+                isEmpty ? (
+                    <Result
+                        icon={<FolderOpenOutlined/>}
+                        title={intl.get('noData')}
+                        extra={<RenderGetDataSourceButton/>}
+                    />
+                ) : (
+                    <VirtualTable columns={columns} dataSource={showData}
+                                  scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}/>
+                )
+            }
         </div>
     )
 };
+
+const TravelApproval = () => {
+    return (
+        <App>
+            <MyApp/>
+        </App>
+    )
+}
+
+export default TravelApproval;

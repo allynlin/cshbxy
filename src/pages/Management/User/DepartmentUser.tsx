@@ -1,20 +1,20 @@
 import React, {useEffect, useState} from 'react';
 import VirtualTable from "../../../component/VirtualTable";
-import {Button, Form, Input, message, Modal, Skeleton, Typography} from 'antd';
+import {Button, Form, Input, message, Modal, Skeleton, Typography, App, Result} from 'antd';
 import {findUserByDepartment} from "../../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
-import {SearchOutlined} from "@ant-design/icons";
+import {FolderOpenOutlined, SearchOutlined} from "@ant-design/icons";
 import {RenderUserStatusTag} from "../../../component/Tag/RenderUserStatusTag";
-import {RenderUserStatusColor} from "../../../component/Tag/RenderUserStatusColor";
 import ChangeUserName from "./ChangeUserName";
 import ChangeUserInfo from "./ChangeUserInfo";
 import ChangePassword from "./ChangePassword";
 import ChangeUserStatus from "./ChangeUserStatus";
 import {useSelector} from "react-redux";
 import {useStyles} from "../../../styles/webStyle";
+import {RenderVirtualTableSkeleton} from "../../../component/RenderVirtualTableSkeleton";
 
-const {Title} = Typography;
+const {Title, Paragraph} = Typography;
 
 interface DataType {
     key: React.Key;
@@ -22,9 +22,11 @@ interface DataType {
     align: 'left' | 'right' | 'center';
 }
 
-export default function DepartmentUser() {
+const MyApp = () => {
 
     const classes = useStyles();
+
+    const {message} = App.useApp();
 
     // 全局数据防抖
     const [isQuery, setIsQuery] = useState<boolean>(false);
@@ -39,6 +41,8 @@ export default function DepartmentUser() {
     const [showContent, setShowContent] = useState<boolean>(true);
     // 详情弹窗
     const [showModal, setShowModal] = useState<boolean>(false);
+    // 是否为空数据
+    const [isEmpty, setIsEmpty] = useState<boolean>(false);
 
     const tableSize = useSelector((state: any) => state.tableSize.value);
     const userInfo = useSelector((state: any) => state.userInfo.value);
@@ -69,17 +73,6 @@ export default function DepartmentUser() {
         }
     }
 
-    const RenderUserOperateButton = (status: number) => {
-        switch (status) {
-            case 0:
-                return RenderUserStatusColor(intl.get('normal'))
-            case -1:
-                return RenderUserStatusColor(intl.get('disabled'))
-            default:
-                return RenderUserStatusColor(intl.get('unKnow'))
-        }
-    }
-
     useEffect(() => {
         getDataSource();
     }, [])
@@ -92,35 +85,41 @@ export default function DepartmentUser() {
         setIsQuery(true)
         setWaitTime(10)
         findUserByDepartment(userInfo.uid).then(res => {
-            if (res.code === 200) {
-                const newDataSource = res.body.map((item: any, index: number) => {
-                    return {
-                        ...item,
-                        id: index + 1,
-                        key: item.uid,
-                        tag: RenderUserStatus(item.status),
-                        operation: <Button
-                            type="primary"
-                            onClick={() => {
-                                setShowInfo({
-                                    ...item,
-                                    id: index + 1,
-                                    key: item.uid,
-                                    tag: RenderUserStatus(item.status),
-                                });
-                                setShowModal(true);
-                                setShowContent(false);
-                            }}>
-                            {intl.get('check')}
-                        </Button>
-                    }
-                });
-                setDataSource(newDataSource);
-                setShowData(newDataSource);
-            } else {
-                message.warning(res.msg);
+            if (res.code === 300) {
+                setIsEmpty(true)
                 setDataSource([])
+                setShowData([])
+                return
             }
+            if (res.code !== 200) {
+                message.error(res.msg)
+                setIsEmpty(true)
+                return
+            }
+            const newDataSource = res.body.map((item: any, index: number) => {
+                return {
+                    ...item,
+                    id: index + 1,
+                    key: item.uid,
+                    tag: RenderUserStatus(item.status),
+                    operation: <Button
+                        type="primary"
+                        onClick={() => {
+                            setShowInfo({
+                                ...item,
+                                id: index + 1,
+                                key: item.uid,
+                                tag: RenderUserStatus(item.status),
+                            });
+                            setShowModal(true);
+                            setShowContent(false);
+                        }}>
+                        {intl.get('check')}
+                    </Button>
+                }
+            });
+            setDataSource(newDataSource);
+            setShowData(newDataSource);
         }).finally(() => {
             setLoading(false)
         })
@@ -161,6 +160,13 @@ export default function DepartmentUser() {
         align: 'center',
     }];
 
+    const RenderGetDataSourceButton = () => {
+        return (
+            <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
+                    onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
+        )
+    }
+
     return (
         <div className={classes.contentBody}>
             <Modal
@@ -178,21 +184,22 @@ export default function DepartmentUser() {
                 ]}
             >
                 {showContent ? (<Skeleton paragraph={{rows: 18}} active/>) : (
-                    <>
+                    <Typography>
                         <Title level={3}>{intl.get('baseInfo')}</Title>
-                        <p>UID：{showInfo.uid}</p>
-                        {showInfo.departmentUid ? (<p>{intl.get('department')}：{showInfo.departmentUid}</p>) : null}
-                        <p>{intl.get('username')}：{showInfo.username}</p>
-                        <p>{intl.get('realName')}：{showInfo.realeName}</p>
-                        <p>{intl.get('gender')}：{showInfo.gender}</p>
-                        <p>{intl.get('email')}：{showInfo.email}</p>
-                        <p>{intl.get('tel')}：{showInfo.tel}</p>
-                        <p>{intl.get('createTime')}：{showInfo.create_time}</p>
-                        <p>{intl.get('updateTime')}：{showInfo.update_time}</p>
-                        <p>{intl.get('status')}：{showInfo.tag}</p>
+                        <Paragraph>UID：{showInfo.uid}</Paragraph>
+                        {showInfo.departmentUid ? (
+                            <Paragraph>{intl.get('department')}：{showInfo.departmentUid}</Paragraph>) : null}
+                        <Paragraph>{intl.get('username')}：{showInfo.username}</Paragraph>
+                        <Paragraph>{intl.get('realName')}：{showInfo.realeName}</Paragraph>
+                        <Paragraph>{intl.get('gender')}：{showInfo.gender}</Paragraph>
+                        <Paragraph>{intl.get('email')}：{showInfo.email}</Paragraph>
+                        <Paragraph>{intl.get('tel')}：{showInfo.tel}</Paragraph>
+                        <Paragraph>{intl.get('createTime')}：{showInfo.create_time}</Paragraph>
+                        <Paragraph>{intl.get('updateTime')}：{showInfo.update_time}</Paragraph>
+                        <Paragraph>{intl.get('status')}：{showInfo.tag}</Paragraph>
                         <Title level={3}>{intl.get('userOperation')}</Title>
-                        <p>{<ChangePassword uid={showInfo.uid}/>}</p>
-                        <p>
+                        <Paragraph>{<ChangePassword uid={showInfo.uid}/>}</Paragraph>
+                        <Paragraph>
                             {<ChangeUserName info={showInfo} getChange={(newUsername: string) => {
                                 // 修改 showInfo 中的 username
                                 setShowInfo({
@@ -246,8 +253,8 @@ export default function DepartmentUser() {
                                 })
                                 setShowData(newShowData)
                             }}/>}
-                        </p>
-                        <p>
+                        </Paragraph>
+                        <Paragraph>
                             {<ChangeUserInfo info={showInfo} getChange={(newContent: any) => {
                                 setShowInfo({...showInfo, ...newContent})
                                 const newDateSource = dataSource.map((item: any) => {
@@ -295,8 +302,8 @@ export default function DepartmentUser() {
                                 })
                                 setShowData(newShowData)
                             }}/>}
-                        </p>
-                        <p>
+                        </Paragraph>
+                        <Paragraph>
                             {<ChangeUserStatus info={showInfo} getChange={(newStatus: number) => {
                                 setShowInfo({
                                     ...showInfo,
@@ -352,15 +359,14 @@ export default function DepartmentUser() {
                                 })
                                 setShowData(newShowData)
                             }}/>}
-                        </p>
-                    </>
+                        </Paragraph>
+                    </Typography>
                 )}
             </Modal>
             <div className={classes.contentHead}>
                 <Title level={2} className={classes.tit}>
                     {intl.get('departmentUser')}&nbsp;&nbsp;
-                    <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
-                            onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
+                    <RenderGetDataSourceButton/>
                 </Title>
                 <Form name="search" layout="inline" onFinish={onFinish}>
                     <Form.Item name="search">
@@ -373,17 +379,30 @@ export default function DepartmentUser() {
                 </Form>
             </div>
             <div className={classes.skeletonLoading} style={{display: loading ? 'block' : 'none'}}>
-                <div className={classes.skeletonThead}/>
-                <div className={classes.skeletonTbody}>
-                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
-                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
-                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
-                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
-                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
-                </div>
+                <RenderVirtualTableSkeleton/>
             </div>
-            <VirtualTable columns={columns} dataSource={showData}
-                          scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}/>
+            {
+                isEmpty ? (
+                    <Result
+                        icon={<FolderOpenOutlined/>}
+                        title={intl.get('noData')}
+                        extra={<RenderGetDataSourceButton/>}
+                    />
+                ) : (
+                    <VirtualTable columns={columns} dataSource={showData}
+                                  scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}/>
+                )
+            }
         </div>
     )
 };
+
+const DepartmentUser = () => {
+    return (
+        <App>
+            <MyApp/>
+        </App>
+    )
+}
+
+export default DepartmentUser;

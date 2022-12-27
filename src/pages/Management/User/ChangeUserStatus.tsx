@@ -14,7 +14,6 @@ export default function ChangeUserStatus(props: propsCheck) {
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [userStatus, setUserStatus] = useState<string>('');
 
-    console.log(props.info.status)
     useEffect(() => {
         switch (props.info.status) {
             case 0:

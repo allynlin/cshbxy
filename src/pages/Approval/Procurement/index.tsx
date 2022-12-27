@@ -1,15 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import VirtualTable from "../../../component/VirtualTable";
-import {Button, Form, Input, message, Modal, Skeleton, Typography} from 'antd';
+import {Button, Form, Input, message, Modal, Skeleton, Typography, App, Result} from 'antd';
 import {findProcurementWaitApprovalList, resolveProcurement} from "../../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
-import {ExclamationCircleOutlined, SearchOutlined} from "@ant-design/icons";
+import {ExclamationCircleOutlined, FolderOpenOutlined, SearchOutlined} from "@ant-design/icons";
 import {useSelector} from "react-redux";
 import Reject from "./Reject";
 import {useStyles} from "../../../styles/webStyle";
+import {RenderVirtualTableSkeleton} from "../../../component/RenderVirtualTableSkeleton";
 
-const {Title} = Typography;
+const {Title, Paragraph} = Typography;
 
 interface DataType {
     key: React.Key;
@@ -17,9 +18,11 @@ interface DataType {
     align: 'left' | 'right' | 'center';
 }
 
-export default function Procurement() {
+const MyApp = () => {
 
     const classes = useStyles();
+
+    const {message} = App.useApp();
 
     // 全局数据防抖
     const [isQuery, setIsQuery] = useState<boolean>(false);
@@ -35,6 +38,8 @@ export default function Procurement() {
     const [showModal, setShowModal] = useState<boolean>(false);
     // 锁定按钮状态
     const [lock, setLock] = useState<boolean>(false);
+    // 是否为空数据
+    const [isEmpty, setIsEmpty] = useState<boolean>(false);
 
     const tableSize = useSelector((state: any) => state.tableSize.value)
     const userToken = useSelector((state: any) => state.userToken.value)
@@ -66,29 +71,35 @@ export default function Procurement() {
         setIsQuery(true)
         setWaitTime(10)
         findProcurementWaitApprovalList().then((res: any) => {
-            if (res.code === 200) {
-                const newDataSource = res.body.map((item: any, index: number) => {
-                    return {
-                        ...item,
-                        id: index + 1,
-                        key: item.uid,
-                        operation: <Button
-                            type="primary"
-                            onClick={() => {
-                                setShowInfo({...item, id: index + 1});
-                                setShowModal(true);
-                            }}>
-                            {intl.get('check')}
-                        </Button>
-
-                    }
-                });
-                setDataSource(newDataSource);
-                setShowData(newDataSource);
-            } else {
-                message.warning(res.msg);
+            if (res.code === 300) {
+                setIsEmpty(true)
                 setDataSource([])
+                setShowData([])
+                return
             }
+            if (res.code !== 200) {
+                message.error(res.msg)
+                setIsEmpty(true)
+                return
+            }
+            const newDataSource = res.body.map((item: any, index: number) => {
+                return {
+                    ...item,
+                    id: index + 1,
+                    key: item.uid,
+                    operation: <Button
+                        type="primary"
+                        onClick={() => {
+                            setShowInfo({...item, id: index + 1});
+                            setShowModal(true);
+                        }}>
+                        {intl.get('check')}
+                    </Button>
+
+                }
+            });
+            setDataSource(newDataSource);
+            setShowData(newDataSource);
         }).finally(() => {
             setLoading(false)
         })
@@ -125,13 +136,16 @@ export default function Procurement() {
 
     const changeData = () => {
         const newDataSource = dataSource.filter((item: any) => item.uid !== showInfo.uid);
+        if (newDataSource.length === 0) {
+            setIsEmpty(true)
+            setDataSource([])
+            setShowData([])
+            return
+        }
         setDataSource(newDataSource);
         const newShowData = showData.filter((item: any) => item.uid !== showInfo.uid);
         setShowData(newShowData);
         setShowInfo({});
-        if (newDataSource.length === 0) {
-            message.warning(intl.get('noRecord'));
-        }
     }
 
     const onFinish = (values: any) => {
@@ -168,6 +182,13 @@ export default function Procurement() {
         dataIndex: 'operation',
         align: 'center',
     }];
+
+    const RenderGetDataSourceButton = () => {
+        return (
+            <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
+                    onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
+        )
+    }
 
     return (
         <div className={classes.contentBody}>
@@ -215,8 +236,7 @@ export default function Procurement() {
             <div className={classes.contentHead}>
                 <Title level={2} className={classes.tit}>
                     {intl.get('procurement') + ' ' + intl.get('approve')}&nbsp;&nbsp;
-                    <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
-                            onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
+                    <RenderGetDataSourceButton/>
                 </Title>
                 <Form name="search" layout="inline" onFinish={onFinish}>
                     <Form.Item name="search">
@@ -229,17 +249,30 @@ export default function Procurement() {
                 </Form>
             </div>
             <div className={classes.skeletonLoading} style={{display: loading ? 'block' : 'none'}}>
-                <div className={classes.skeletonThead}/>
-                <div className={classes.skeletonTbody}>
-                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
-                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
-                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
-                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
-                    <Skeleton.Button block active className={classes.skeletonTbodyTr}/>
-                </div>
+                <RenderVirtualTableSkeleton/>
             </div>
-            <VirtualTable columns={columns} dataSource={showData}
-                          scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}/>
+            {
+                isEmpty ? (
+                    <Result
+                        icon={<FolderOpenOutlined/>}
+                        title={intl.get('noData')}
+                        extra={<RenderGetDataSourceButton/>}
+                    />
+                ) : (
+                    <VirtualTable columns={columns} dataSource={showData}
+                                  scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}/>
+                )
+            }
         </div>
     )
 };
+
+const ProcurementApproval = () => {
+    return (
+        <App>
+            <MyApp/>
+        </App>
+    )
+}
+
+export default ProcurementApproval;
