@@ -159,7 +159,6 @@ export const HeaderMenu: React.FC = () => {
     return (
         <Menu
             selectedKeys={[activeKey]}
-            theme="light"
             mode="horizontal"
             items={items}
         />

@@ -24,3 +24,4 @@ yarn-error.log*
 /.idea/workspace.xml
 /.idea/inspectionProfiles/Project_Default.xml
 /.idea/vcs.xml
+/.idea/git_toolbox_prj.xml

@@ -57,10 +57,7 @@ export default function TokenSetting() {
 
     return (
         <Typography>
-            <Title level={3} style={{
-                display: 'flex',
-                alignItems: 'center'
-            }}>
+            <Title level={3}>
                 {intl.get('tokenSetting')}&nbsp;
                 <Tooltip title={intl.get('themeWarning')}>
                     <ExperimentTwoTone/>
