@@ -278,5 +278,11 @@
   "tryingAgain": "Trying again...",
   "noData": "No Data",
   "refreshing": "Refreshing...",
-  "refreshingFailed": "Refreshing failed"
+  "refreshingFailed": "Refreshing failed",
+  "uploading": "Uploading...",
+  "uploadFailed": "Upload failed",
+  "uploadCanceled": "Upload canceled",
+  "waitApproval": "Wait Approval",
+  "approvaling": "Approvaling...",
+  "approvalPass": "Approval Pass"
 }

@@ -3,11 +3,12 @@ import {Layout, theme, Typography} from 'antd';
 import {useDispatch, useSelector} from "react-redux";
 import {Outlet} from "react-router-dom";
 
-import RenderMenu from "./RenderMenu";
+import {SliderMenu, HeaderMenu} from "./RenderMenu";
 import {version} from "../../baseInfo";
 import RenderLogOut from "./RenderLogOut";
 import {setTableSize} from "../../component/redux/tableSizeSlice";
 import {useStyles} from "../../styles/webStyle";
+import {LStorage} from "../../component/localStrong";
 
 const {Header, Content, Footer, Sider} = Layout;
 const {Title} = Typography;
@@ -16,12 +17,11 @@ const App: React.FC = () => {
 
     const classes = useStyles();
 
-    const [collapsed, setCollapsed] = useState(false);
-
     const dispatch = useDispatch();
 
     const userLanguage = useSelector((state: any) => state.userLanguage.value);
 
+    const [collapsed, setCollapsed] = useState(LStorage.get('collapsed'));
     // 内容区的宽度和高度
     const [width, setWidth] = useState<number>(0);
     const [height, setHeight] = useState<number>(0);
@@ -57,6 +57,7 @@ const App: React.FC = () => {
         <Layout>
             <Header className={classes.webHeader} style={{background: colorBgContainer}}>
                 <Title level={3} className={'tit'}>长沙星辰软件有限公司 OA 系统</Title>
+                <HeaderMenu/>
                 <RenderLogOut/>
             </Header>
             <Layout>
@@ -64,8 +65,11 @@ const App: React.FC = () => {
                     collapsible
                     collapsed={collapsed}
                     theme={'light'}
-                    onCollapse={(value) => setCollapsed(value)}>
-                    <RenderMenu/>
+                    onCollapse={(value) => {
+                        setCollapsed(value)
+                        LStorage.set('collapsed', value)
+                    }}>
+                    <SliderMenu/>
                 </Sider>
                 <Layout style={{padding: '0 24px 24px'}}>
                     <Content
@@ -78,10 +82,17 @@ const App: React.FC = () => {
                     >
                         <Outlet/>
                     </Content>
-                    <Footer style={{textAlign: 'center', margin: 0, padding: 16}}>长沙星辰软件有限公司
+                    <Footer
+                        style={{
+                            textAlign: 'center',
+                            margin: 0,
+                            padding: 16
+                        }}>
+                        长沙星辰软件有限公司
                         OA &copy; 2022-2023 Created by
                         allynlin
-                        Version：{version}</Footer>
+                        Version：{version}
+                    </Footer>
                 </Layout>
             </Layout>
         </Layout>

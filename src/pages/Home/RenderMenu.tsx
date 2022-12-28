@@ -3,7 +3,6 @@ import {
     BarChartOutlined,
     EditOutlined,
     FormOutlined,
-    HomeOutlined,
     Loading3QuartersOutlined,
     LoginOutlined,
     ProjectOutlined,
@@ -33,10 +32,9 @@ function getItem(
     } as MenuItem;
 }
 
-const RenderMenu = () => {
+export const SliderMenu: React.FC = () => {
 
     const [activeKey, setActiveKey] = useState<string>('');
-    const [menuList, setMenuList] = useState<MenuItem[]>([]);
 
     const location = useLocation()
 
@@ -45,8 +43,6 @@ const RenderMenu = () => {
     }, [location.pathname])
 
     const employee: MenuProps['items'] = [
-        getItem((<Link to={'/home'}>{intl.get('home')}</Link>), '/home',
-            <HomeOutlined/>),
         getItem(intl.get('apply'), 'apply', <EditOutlined/>, [
             getItem((
                 <Link
@@ -73,21 +69,15 @@ const RenderMenu = () => {
             getItem((<Link
                 to={'/workReport-record'}>{intl.get('workReport')}</Link>), '/workReport-record'),
         ]),
-        getItem((<Link to={'/setting'}>{intl.get('setting')}</Link>), '/setting',
-            <FormOutlined/>)
     ];
     const department: MenuProps['items'] = [
-        getItem((<Link to={'/home'}>{intl.get('home')}</Link>), '/home', <HomeOutlined/>),
         getItem((<Link to={'/departmentRegister'}>{intl.get('register')}</Link>), '/departmentRegister',
             <FormOutlined/>),
         getItem(<Link
                 to={'/departmentUser-management'}>{intl.get('departmentUser')}</Link>, '/departmentUser-management',
             <TeamOutlined/>),
-        getItem((<Link to={'/setting'}>{intl.get('setting')}</Link>), '/setting',
-            <FormOutlined/>)
     ];
     const leader: MenuProps['items'] = [
-        getItem((<Link to={'/home'}>{intl.get('home')}</Link>), '/home', <HomeOutlined/>),
         getItem(intl.get('approve'), 'approve', <ProjectOutlined/>, [
             getItem(<Link
                 to={'/departmentChange-approval'}>{intl.get('departmentChange')}</Link>, '/departmentChange-approval'),
@@ -98,25 +88,17 @@ const RenderMenu = () => {
             getItem(<Link
                 to={'/workReport-approval'}>{intl.get('workReport')}</Link>, '/workReport-approval'),
         ]),
-        getItem((<Link to={'/setting'}>{intl.get('setting')}</Link>), '/setting',
-            <FormOutlined/>)
     ];
     const adminMenu: MenuProps['items'] = [
-        getItem((<Link to={'/home'}>{intl.get('home')}</Link>), '/home', <HomeOutlined/>),
         getItem(<Link
             to={'/user-management'}>{intl.get('userManagement')}</Link>, '/user-management', <TeamOutlined/>),
         getItem((<Link to={'/register'}>{intl.get('register')}</Link>), '/register', <FormOutlined/>),
         getItem(<Link
                 to={'/process-management'}>{intl.get('processManagement')}</Link>, '/process-management',
             <Loading3QuartersOutlined/>),
-        getItem((<Link to={'/setting'}>{intl.get('setting')}</Link>), '/setting',
-            <FormOutlined/>)
     ];
     const errorMenu: MenuProps['items'] = [
-        getItem((<Link to={'/home'}>{intl.get('home')}</Link>), '/home', <HomeOutlined/>),
-        getItem((<Link to={'/login'}>{intl.get('login')}</Link>), '/login', <LoginOutlined/>),
-        getItem((<Link to={'/setting'}>{intl.get('setting')}</Link>), '/setting',
-            <FormOutlined/>)
+        getItem((<Link to={'/login'}>{intl.get('login')}</Link>), '/login', <LoginOutlined/>)
     ];
 
     const userType = useSelector((state: any) => state.userType.value)
@@ -124,30 +106,6 @@ const RenderMenu = () => {
     const userInfo = useSelector((state: any) => state.userInfo.value);
     const userLanguage = useSelector((state: any) => state.userLanguage.value);
     const isLogin = useSelector((state: any) => state.isLogin.value)
-
-    useEffect(() => {
-        if (!isLogin) {
-            setMenuList(errorMenu)
-            return;
-        }
-        if (userInfo.username === 'admin') {
-            setMenuList(adminMenu);
-            return
-        }
-        switch (userType) {
-            case 'Employee':
-                setMenuList(employee)
-                break;
-            case 'Department':
-                setMenuList(department)
-                break;
-            case 'Leader':
-                setMenuList(leader)
-                break;
-            default:
-                setMenuList(errorMenu)
-        }
-    }, [userLanguage])
 
     const getMenu = () => {
         if (!isLogin) {
@@ -183,4 +141,28 @@ const RenderMenu = () => {
     )
 }
 
-export default RenderMenu;
+export const HeaderMenu: React.FC = () => {
+
+    const [activeKey, setActiveKey] = useState<string>('');
+
+    const location = useLocation()
+
+    useEffect(() => {
+        setActiveKey(location.pathname)
+    }, [location.pathname])
+
+    const items: MenuProps['items'] = [
+        getItem((<Link to={'/home'}>{intl.get('home')}</Link>), '/home'),
+        getItem((<Link to={'/setting'}>{intl.get('setting')}</Link>), '/setting')
+    ];
+
+    return (
+        <Menu
+            selectedKeys={[activeKey]}
+            theme="light"
+            mode="horizontal"
+            items={items}
+        />
+    )
+
+}

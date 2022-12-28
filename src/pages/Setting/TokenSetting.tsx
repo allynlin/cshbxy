@@ -1,9 +1,10 @@
 import React, {useState} from "react";
-import {Typography, Tag, Segmented, Alert} from "antd";
+import {Typography, Tag, Segmented, Alert, Tooltip} from "antd";
 import {useDispatch} from "react-redux";
 import intl from "react-intl-universal";
 import {setToken} from "../../component/redux/userTokenSlice";
 import TokenThemeSetting from "./TokenThemeSetting";
+import {ExperimentTwoTone} from "@ant-design/icons";
 
 const {Title, Paragraph} = Typography;
 
@@ -56,7 +57,15 @@ export default function TokenSetting() {
 
     return (
         <Typography>
-            <Title level={3}>{intl.get('tokenSetting')} <Tag color={"warning"}>{intl.get('themeWarning')}</Tag></Title>
+            <Title level={3} style={{
+                display: 'flex',
+                alignItems: 'center'
+            }}>
+                {intl.get('tokenSetting')}&nbsp;
+                <Tooltip title={intl.get('themeWarning')}>
+                    <ExperimentTwoTone/>
+                </Tooltip>
+            </Title>
             <Paragraph>{intl.get('token-1')}</Paragraph>
             <Paragraph>{intl.get('token-2')}</Paragraph>
             <Paragraph>{intl.get('token-3')}</Paragraph>

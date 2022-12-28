@@ -278,5 +278,11 @@
   "tryingAgain": "正在重试中",
   "noData": "暂无数据",
   "refreshing": "正在刷新中",
-  "refreshingFailed": "刷新失败"
+  "refreshingFailed": "刷新失败",
+  "uploading": "正在上传中",
+  "uploadFailed": "上传失败",
+  "uploadCanceled": "上传已取消",
+  "waitApproval": "等待审批",
+  "approvaling": "审批中",
+  "approvalPass": "审批通过"
 }

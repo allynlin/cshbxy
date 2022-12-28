@@ -454,7 +454,7 @@ const MyApp: React.FC = () => {
                                     <Paragraph>{intl.get('updateTime')}：{showInfo.update_time}</Paragraph>
                                     <Paragraph>{intl.get('approveProcess')}：</Paragraph>
                                     {processLoading ? (
-                                            <Space style={{flexDirection: 'column', marginTop: 16}}>
+                                            <Space style={{flexDirection: 'column'}}>
                                                 <Skeleton.Input active={true} block={false}/>
                                                 <Skeleton.Input active={true} block={false}/>
                                                 <Skeleton.Input active={true} block={false}/>

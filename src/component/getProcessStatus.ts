@@ -1,7 +1,7 @@
 export const getProcessStatus = (status: number) => {
     switch (status) {
         case 0:
-            return "wait"
+            return "process";
         case 1:
             return "finish"
         default:

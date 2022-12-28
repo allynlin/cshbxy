@@ -1,30 +1,40 @@
-import {Progress, Tag} from "antd";
-import {CheckCircleOutlined, CloseCircleOutlined, ExclamationCircleOutlined, SyncOutlined} from "@ant-design/icons";
+import {Steps, Tag} from "antd";
+import {CheckCircleOutlined, CloseCircleOutlined, ExclamationCircleOutlined} from "@ant-design/icons";
 import React from "react";
 import intl from "react-intl-universal";
 
 export const RenderStatusTag = (item: any) => {
 
-    const getProcess = () => {
-        // 将 item.process 中的字符串按照 || 分割成数组
-        const process = item.process.split('||');
-        // 获取数组中有多少个元素
-        const processLength = process.length;
-        // 将元素 / item.count 的值返回
-        return item.count / processLength * 100;
-    }
+    const getItems = (count: number) => {
 
-    const getSteps = () => {
+        const getTitle = (index: number) => {
+            if (index > count) {
+                return intl.get('waitApproval')
+            }
+            if (index === count) {
+                return intl.get('approvaling')
+            }
+            return intl.get('approvalPass')
+        }
         // 将 item.process 中的字符串按照 || 分割成数组
-        const process = item.process.split('||');
-        // 返回数组中有多少个元素
-        return process.length;
+        return item.process.split('||').map((item: any, index: number) => {
+            return {
+                title: getTitle(index),
+                description: getTitle(index)
+            }
+        });
     }
 
     switch (item.status) {
         case 0:
             return (
-                <Progress percent={getProcess()} steps={getSteps()}/>
+                <Steps
+                    style={{marginTop: 8}}
+                    type="inline"
+                    current={item.count}
+                    status={"process"}
+                    items={getItems(item.count)}
+                />
             )
         case 1:
             return (

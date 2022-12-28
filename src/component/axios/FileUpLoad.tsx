@@ -18,6 +18,7 @@ interface FileUpLoadProps {
 
 const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
     const [fileList, setFileList] = useState<any>([]);
+
     const [api, contextHolder] = message.useMessage();
 
     const apiToken = Cookie.get('cshbxy-oa-token');
@@ -53,50 +54,81 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
         onChange(info) {
             const {status} = info.file;
             setFileList([...info.fileList]);
+            if (status === "uploading") {
+                api.open({
+                    key: info.file.uid,
+                    type: "loading",
+                    content: `${info.file.name} ${intl.get('uploading')} ${info.file.percent?.toFixed(2)}%`,
+                    duration: 0,
+                })
+            }
             if (status !== 'uploading') {
                 // console.log(info.file, info.fileList);
                 // 如果 fileList 为空，就传递一个空数组
-                if (info.file.response !== undefined) {
-                    switch (info.file.response.code) {
-                        case 401:
-                        case 403:
-                            info.file.status = 'error';
-                            api.error(intl.get('noPermission'));
-                            break;
-                        case 500:
-                            info.file.status = 'error';
-                            api.error(intl.get('sysError'));
-                            break;
-                        default:
-                            // 传递参数给父组件, 用于更新父组件的 fileList，如果 info.fileList 为空，就传递一个空数组
-                            props.getList(info.fileList.length === 0 ? [] : fileList)
-                    }
-                } else {
-                    // 传递参数给父组件, 用于更新父组件的 fileList，如果 info.fileList 为空，就传递一个空数组
+                if (info.file.response === undefined) {
                     props.getList(info.fileList.length === 0 ? [] : fileList)
+                    return;
+                }
+                switch (info.file.response.code) {
+                    case 401:
+                    case 403:
+                        info.file.status = 'error';
+                        api.error(intl.get('noPermission'));
+                        break;
+                    case 500:
+                        info.file.status = 'error';
+                        api.error(intl.get('sysError'));
+                        break;
+                    default:
+                        // 传递参数给父组件, 用于更新父组件的 fileList，如果 info.fileList 为空，就传递一个空数组
+                        props.getList(info.fileList.length === 0 ? [] : fileList)
                 }
             }
             if (status === 'done') {
-                if (info.file.response.code === 200) {
-                    api.success(info.file.response.msg);
-                    // 找到对应的文件，将它的 uid 修改为 response.body
-                    const newFileList = fileList.map((item: any) => {
-                        if (item.uid === info.file.uid) {
-                            item.url = `${DownLoadURL}/downloadFile?filename=${info.file.response.body}`;
-                            item.status = 'done';
-                            item.uid = info.file.response.body;
-                        }
-                        return item;
+                if (info.file.response.code !== 200) {
+                    api.open({
+                        key: info.file.uid,
+                        type: 'error',
+                        content: `${info.file.name} ${info.file.response.msg}`,
                     })
-                    setFileList(newFileList);
-                } else {
-                    api.error(info.file.response.msg);
+                    return
                 }
-            } else if (status === 'error') {
-                api.error(`${info.file.name} ${intl.get('uploadFailed')}`);
+                api.open({
+                    key: info.file.uid,
+                    type: 'success',
+                    content: `${info.file.name} ${info.file.response.msg}`,
+                })
+                // 找到对应的文件，将它的 uid 修改为 response.body
+                const newFileList = fileList.map((item: any) => {
+                    if (item.uid === info.file.uid) {
+                        item.url = `${DownLoadURL}/downloadFile?filename=${info.file.response.body}`;
+                        item.status = 'done';
+                        item.uid = info.file.response.body;
+                    }
+                    return item;
+                })
+                setFileList(newFileList);
+                props.getList(info.fileList.length === 0 ? [] : newFileList)
+            }
+            if (status === 'error') {
+                api.open({
+                    key: info.file.uid,
+                    type: 'error',
+                    content: `${info.file.name} ${intl.get('uploadFailed')}`,
+                })
+                info.file.status = 'error';
+                const newFileList = fileList.map((item: any) => {
+                    if (item.uid === info.file.uid) {
+                        item.status = 'error';
+                    }
+                    return item;
+                })
+                setFileList(newFileList);
+                props.getList(info.fileList.length === 0 ? [] : newFileList)
             }
         },
         onRemove(info: any) {
+            console.log(info);
             const status = info.status;
             if (status === 'done') {
                 // 获取需要删除的文件的 uid
@@ -104,7 +136,16 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
                 deleteFile(uid).then(res => {
                     api.success(res.msg);
                 })
+                return
             }
+            api.open({
+                key: info.uid,
+                type: 'error',
+                content: `${info.name} ${intl.get('uploadCanceled')}`,
+            })
+            info.status = 'removed';
+            const newFileList = fileList.filter((item: any) => item.uid !== info.uid);
+            setFileList(newFileList);
         },
         onPreview(file: any) {
             // 当前页面重定向
@@ -133,6 +174,5 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
         </Upload.Dragger>
     )
 }
-
 
 export default RenderUpLoadFiles;
