@@ -1,20 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import VirtualTable from "../../component/VirtualTable";
-import {
-    Button,
-    Card,
-    Form,
-    Input,
-    Modal,
-    Popconfirm,
-    Result,
-    Skeleton,
-    Space,
-    Steps,
-    Tag,
-    Typography,
-    App
-} from 'antd';
+import {App, Button, Card, Form, Input, Modal, Popconfirm, Result, Skeleton, Space, Steps, Tag, Typography} from 'antd';
 import {
     checkTeacherChangeDepartmentRecord,
     deleteChangeDepartmentByTeacher,
@@ -31,6 +17,7 @@ import {useSelector} from "react-redux";
 import {useStyles} from "../../styles/webStyle";
 import {getProcessStatus} from "../../component/getProcessStatus";
 import {RenderVirtualTableSkeleton} from "../../component/RenderVirtualTableSkeleton";
+import {useGaussianBlurStyles} from "../../styles/gaussianBlurStyle";
 
 const {Title, Paragraph} = Typography;
 
@@ -44,6 +31,7 @@ interface DataType {
 const MyApp: React.FC = () => {
 
     const classes = useStyles();
+    const gaussianBlurClasses = useGaussianBlurStyles();
 
     const {message} = App.useApp();
 
@@ -81,6 +69,7 @@ const MyApp: React.FC = () => {
 
     const tableSize = useSelector((state: any) => state.tableSize.value)
     const userToken = useSelector((state: any) => state.userToken.value)
+    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value)
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -346,6 +335,8 @@ const MyApp: React.FC = () => {
                 title={intl.get('details')}
                 onCancel={() => setShowModal(false)}
                 open={showModal}
+                className={gaussianBlur ? gaussianBlurClasses.gaussianBlurModal : ''}
+                mask={!gaussianBlur}
                 footer={[
                     showInfo.status === 0 ?
                         <Popconfirm

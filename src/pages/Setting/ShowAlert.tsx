@@ -1,5 +1,5 @@
 import React from "react";
-import {Radio, RadioChangeEvent, message} from "antd";
+import {message, Radio, RadioChangeEvent} from "antd";
 import intl from "react-intl-universal";
 import {LStorage} from "../../component/localStrong";
 

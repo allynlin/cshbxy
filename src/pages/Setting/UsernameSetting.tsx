@@ -1,4 +1,4 @@
-import {Button, Form, Input, Modal, message} from 'antd';
+import {App, Button, Form, Input, Modal} from 'antd';
 import React, {useState} from 'react';
 import intl from "react-intl-universal";
 import {checkUsername, updateUserName} from "../../component/axios/api";
@@ -7,6 +7,7 @@ import {logout} from "../../component/redux/isLoginSlice";
 import {all} from "../../component/redux/userTypeSlice";
 import Cookie from "js-cookie";
 import {useNavigate} from "react-router-dom";
+import {useGaussianBlurStyles} from "../../styles/gaussianBlurStyle";
 
 interface Values {
     title: string;
@@ -20,12 +21,19 @@ interface CollectionCreateFormProps {
     onCancel: () => void;
 }
 
-const UserInfoSetting: React.FC = () => {
+const key = "updateUsername"
+
+const UserInfo: React.FC = () => {
+
+    const {message} = App.useApp();
+
     const [open, setOpen] = useState(false);
-    const [usernameUse, setUsernameUse] = useState<boolean>(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    const gaussianBlurClasses = useGaussianBlurStyles();
+
+    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value)
     const userInfo = useSelector((state: { userInfo: { value: any } }) => state.userInfo.value);
     const userType = useSelector((state: { userType: { value: any } }) => state.userType.value);
 
@@ -35,39 +43,28 @@ const UserInfoSetting: React.FC = () => {
                                                                            onCancel,
                                                                        }) => {
         const [form] = Form.useForm();
-        let timeOut: any;
-
-        const checkUserName = (e: any) => {
-            // 防抖
-            clearTimeout(timeOut);
-            timeOut = setTimeout(() => {
-                checkUsername(e.target.value, userType).then(() => {
-                    setUsernameUse(true)
-                }).catch(() => {
-                    setUsernameUse(false)
-                })
-            }, 500)
-        }
 
         return (
             <Modal
                 open={open}
+                className={gaussianBlur ? gaussianBlurClasses.gaussianBlurModal : ''}
+                mask={!gaussianBlur}
                 title={intl.get("changeUsername")}
                 okText={intl.get('ok')}
                 cancelText={intl.get('cancel')}
                 onCancel={onCancel}
                 onOk={() => {
-                    if (!usernameUse) {
-                        message.error(intl.get("usernameIsExist"))
-                        return
-                    }
                     form
                         .validateFields()
                         .then(values => {
                             form.resetFields();
                             onCreate(values);
                         })
-                        .catch(() => message.error(intl.get("pleaseInputAllInfo")));
+                        .catch(() => message.open({
+                            key,
+                            type: "error",
+                            content: intl.get('pleaseInputAllInfo')
+                        }));
                 }}
             >
                 <Form
@@ -89,9 +86,7 @@ const UserInfoSetting: React.FC = () => {
                             },
                         ]}
                     >
-                        <Input showCount maxLength={20} allowClear={true} onChange={e => {
-                            checkUserName(e)
-                        }}/>
+                        <Input showCount maxLength={20} allowClear={true}/>
                     </Form.Item>
                 </Form>
             </Modal>
@@ -99,18 +94,62 @@ const UserInfoSetting: React.FC = () => {
     };
 
     const onCreate = (values: any) => {
+        message.open({
+            key,
+            type: 'loading',
+            content: intl.get('checkUserNameing'),
+            duration: 0,
+        });
+        checkUserName(values)
+    };
+
+    const checkUserName = (values: any) => {
+        checkUsername(values.username, userType).then(res => {
+            if (res.code !== 200) {
+                message.open({
+                    key,
+                    type: 'error',
+                    content: intl.get('usernameIsExist'),
+                    duration: 3,
+                });
+                return;
+            }
+            updateUsername(values)
+        }).catch(() => {
+            message.open({
+                key,
+                type: 'error',
+                content: intl.get('tryingAgain'),
+                duration: 3,
+            });
+            checkUserName(values)
+        })
+    }
+
+    const updateUsername = (values: any) => {
         updateUserName(userInfo.uid, values.username).then(res => {
-            if (res.code === 200) {
-                message.success(intl.get("changeSuccessNotice"));
+            if (res.code !== 200) {
+                message.open({
+                    key,
+                    type: 'error',
+                    content: res.msg,
+                });
+                return
+            }
+            message.open({
+                key,
+                type: "success",
+                content: res.msg,
+                duration: 0.5,
+            }).then(() => {
                 dispatch(logout())
                 dispatch(all())
                 Cookie.remove('token');
                 Cookie.remove('username');
                 navigate('/login', {replace: true})
-            }
+            })
         })
-        setOpen(false);
-    };
+    }
 
     return (
         <div>
@@ -118,7 +157,11 @@ const UserInfoSetting: React.FC = () => {
                 type="primary"
                 onClick={() => {
                     setOpen(true);
-                    message.warning(intl.get("changeUsernameNotice"))
+                    message.open({
+                        key,
+                        type: "warning",
+                        content: intl.get('changeUsernameNotice')
+                    })
                 }}
             >
                 {intl.get('changeUsername')}
@@ -133,5 +176,13 @@ const UserInfoSetting: React.FC = () => {
         </div>
     );
 };
+
+const UserInfoSetting = () => {
+    return (
+        <App>
+            <UserInfo/>
+        </App>
+    )
+}
 
 export default UserInfoSetting;

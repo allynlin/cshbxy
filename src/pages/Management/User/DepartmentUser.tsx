@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import VirtualTable from "../../../component/VirtualTable";
-import {Button, Form, Input, message, Modal, Skeleton, Typography, App, Result} from 'antd';
+import {App, Button, Form, Input, Modal, Result, Skeleton, Typography} from 'antd';
 import {findUserByDepartment} from "../../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
@@ -13,6 +13,7 @@ import ChangeUserStatus from "./ChangeUserStatus";
 import {useSelector} from "react-redux";
 import {useStyles} from "../../../styles/webStyle";
 import {RenderVirtualTableSkeleton} from "../../../component/RenderVirtualTableSkeleton";
+import {useGaussianBlurStyles} from "../../../styles/gaussianBlurStyle";
 
 const {Title, Paragraph} = Typography;
 
@@ -25,6 +26,7 @@ interface DataType {
 const MyApp = () => {
 
     const classes = useStyles();
+    const gaussianBlurClasses = useGaussianBlurStyles();
 
     const {message} = App.useApp();
 
@@ -46,6 +48,7 @@ const MyApp = () => {
 
     const tableSize = useSelector((state: any) => state.tableSize.value);
     const userInfo = useSelector((state: any) => state.userInfo.value);
+    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -173,6 +176,8 @@ const MyApp = () => {
                 title={intl.get('userInfo')}
                 onCancel={() => setShowModal(false)}
                 open={showModal}
+                className={gaussianBlur ? gaussianBlurClasses.gaussianBlurModal : ''}
+                mask={!gaussianBlur}
                 footer={[
                     <Button
                         key="link"

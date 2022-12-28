@@ -3,6 +3,8 @@ import React, {useState} from 'react';
 import {deleteUser} from "../../../component/axios/api";
 import intl from "react-intl-universal";
 import {ExclamationCircleOutlined} from '@ant-design/icons';
+import {useGaussianBlurStyles} from "../../../styles/gaussianBlurStyle";
+import {useSelector} from "react-redux";
 
 interface propsCheck {
     content: any;
@@ -10,6 +12,10 @@ interface propsCheck {
 }
 
 export default function DeleteUser(props: propsCheck) {
+
+    const gaussianBlurClasses = useGaussianBlurStyles();
+
+    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value);
 
     const [loading, setLoading] = useState(false);
     const [modal, contextHolder] = Modal.useModal();
@@ -19,6 +25,8 @@ export default function DeleteUser(props: propsCheck) {
             title: intl.get('confirmDeleteUserAgain'),
             icon: <ExclamationCircleOutlined/>,
             content: intl.get('confirmDeleteUserNotice'),
+            className: gaussianBlur ? gaussianBlurClasses.gaussianBlurModalMethod : '',
+            mask: !gaussianBlur,
             onOk() {
                 setLoading(true);
                 deleteUser(props.content.uid).then(() => {
@@ -31,7 +39,11 @@ export default function DeleteUser(props: propsCheck) {
     }
 
     return (
-        <Popconfirm title={intl.get('confirmDeleteUser')} onConfirm={showConfirm}>
+        <Popconfirm
+            title={intl.get('confirmDeleteUser')}
+            onConfirm={showConfirm}
+            overlayClassName={gaussianBlur ? gaussianBlurClasses.gaussianBlurPopconfirm : ''}
+        >
             {contextHolder}
             <Button
                 disabled={loading}

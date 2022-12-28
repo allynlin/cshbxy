@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Button, Form, Input, Radio, Switch, App} from 'antd';
+import {App, Button, Form, Input, Radio, Switch} from 'antd';
 import Cookie from 'js-cookie';
 import setCookie from "../../component/setCookie";
 import {userLogin} from "../../component/axios/api";

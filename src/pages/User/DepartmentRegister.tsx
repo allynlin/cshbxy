@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Button, Form, Input, Radio, App} from 'antd';
+import {App, Button, Form, Input, Radio} from 'antd';
 import intl from "react-intl-universal";
 import {useSelector} from "react-redux";
 

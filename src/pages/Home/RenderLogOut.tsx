@@ -1,4 +1,4 @@
-import {Button, App} from 'antd'
+import {App, Button} from 'antd'
 import {useNavigate} from "react-router-dom";
 import {logout} from "../../component/redux/isLoginSlice";
 import {all} from "../../component/redux/userTypeSlice";
@@ -7,16 +7,21 @@ import Cookie from "js-cookie";
 import React from "react";
 import intl from "react-intl-universal";
 import {ExclamationCircleOutlined, LoginOutlined, PoweroffOutlined} from "@ant-design/icons";
+import {useGaussianBlurStyles} from "../../styles/gaussianBlurStyle";
+
 
 const RenderLogOut = () => {
 
     const {message, modal} = App.useApp();
+
+    const classes = useGaussianBlurStyles();
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const isLogin = useSelector((state: any) => state.isLogin.value)
     const userToken = useSelector((state: any) => state.userToken.value)
+    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value)
 
     const logOut = () => {
         dispatch(logout())
@@ -34,6 +39,8 @@ const RenderLogOut = () => {
             content: intl.get('afterLogOutNeedLoginAgain'),
             okText: intl.get('ok'),
             okType: 'primary',
+            mask: !gaussianBlur,
+            className: gaussianBlur ? classes.gaussianBlurModalMethod : '',
             okButtonProps: {
                 danger: true,
                 style: {

@@ -3,6 +3,8 @@ import React, {useEffect, useState} from 'react';
 import {updateUserStatus} from "../../../component/axios/api";
 import intl from "react-intl-universal";
 import {RenderUserStatusColor} from "../../../component/Tag/RenderUserStatusColor";
+import {useGaussianBlurStyles} from "../../../styles/gaussianBlurStyle";
+import {useSelector} from "react-redux";
 
 interface propsCheck {
     info: any;
@@ -10,6 +12,11 @@ interface propsCheck {
 }
 
 export default function ChangeUserStatus(props: propsCheck) {
+
+    const gaussianBlurClasses = useGaussianBlurStyles();
+
+    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value);
+
     const [open, setOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [userStatus, setUserStatus] = useState<string>('');
@@ -64,6 +71,7 @@ export default function ChangeUserStatus(props: propsCheck) {
 
     return (
         <Popconfirm
+            overlayClassName={gaussianBlur ? gaussianBlurClasses.gaussianBlurPopconfirm : ''}
             title={intl.get('confirmChangeUserStatus', {status: userStatus})}
             open={open}
             onConfirm={handleOk}

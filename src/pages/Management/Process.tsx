@@ -6,6 +6,7 @@ import {findAllProcess, findProcessUser, updateProcess} from "../../component/ax
 import {useSelector} from "react-redux";
 
 import {useStyles} from "../../styles/webStyle";
+import {useGaussianBlurStyles} from "../../styles/gaussianBlurStyle";
 
 const {Title} = Typography;
 
@@ -19,6 +20,7 @@ interface RecordType {
 const ProcessManagement = () => {
 
     const classes = useStyles();
+    const gaussianBlurClasses = useGaussianBlurStyles();
 
     const [isQuery, setIsQuery] = useState<boolean>(false);
     const [waitTime, setWaitTime] = useState<number>(0);
@@ -28,6 +30,7 @@ const ProcessManagement = () => {
     const [open, setOpen] = useState(false);
 
     const tableSize = useSelector((state: any) => state.tableSize.value);
+    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value);
 
     useEffect(() => {
         getProcessPerson();
@@ -133,6 +136,8 @@ const ProcessManagement = () => {
                 okText={intl.get('ok')}
                 cancelText={intl.get('cancel')}
                 onCancel={() => setOpen(false)}
+                className={gaussianBlur ? gaussianBlurClasses.gaussianBlurModal : ''}
+                mask={!gaussianBlur}
                 onOk={() => {
                     console.log(targetKeys)
                     // 将 targetKeys 拼接成字符串,以 || 分割

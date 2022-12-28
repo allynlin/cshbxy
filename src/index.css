@@ -1,7 +1,7 @@
 ::-webkit-scrollbar {
     width: 4px;
     height: 6px;
-    background-color: #ffffff;
+    background-color: rgba(240, 240, 240, 1);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -34,4 +34,14 @@ body {
 
 a {
     color: #1677ff;
+}
+
+[data-gaussianBlur="true"][data-scheme="light"] .ant-message-notice-content {
+    background-color: rgba(240, 240, 240, 0.4);
+    backdrop-filter: blur(20px) saturate(180%);
+}
+
+[data-gaussianBlur="true"][data-scheme="dark"] .ant-message-notice-content {
+    background-color: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(20px) saturate(180%);
 }

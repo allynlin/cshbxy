@@ -1,10 +1,11 @@
 import React, {useState} from "react";
-import {Typography, Tag, Segmented, Alert, Tooltip} from "antd";
-import {useDispatch} from "react-redux";
+import {Alert, Segmented, Tooltip, Typography} from "antd";
+import {useDispatch, useSelector} from "react-redux";
 import intl from "react-intl-universal";
 import {setToken} from "../../component/redux/userTokenSlice";
 import TokenThemeSetting from "./TokenThemeSetting";
 import {ExperimentTwoTone} from "@ant-design/icons";
+import {useGaussianBlurStyles} from "../../styles/gaussianBlurStyle";
 
 const {Title, Paragraph} = Typography;
 
@@ -34,9 +35,13 @@ const pinkTheme: TokenSettingProps = {
 
 export default function TokenSetting() {
 
+    const gaussianBlurClasses = useGaussianBlurStyles();
+
     const [value, setValue] = useState<string | number>('');
 
     const dispatch = useDispatch();
+
+    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value)
 
     const handleChange = (value: string) => {
         setValue(value);
@@ -59,7 +64,8 @@ export default function TokenSetting() {
         <Typography>
             <Title level={3}>
                 {intl.get('tokenSetting')}&nbsp;
-                <Tooltip title={intl.get('themeWarning')}>
+                <Tooltip title={intl.get('themeWarning')}
+                         overlayClassName={gaussianBlur ? gaussianBlurClasses.gaussianBlurTooltip : ''}>
                     <ExperimentTwoTone/>
                 </Tooltip>
             </Title>

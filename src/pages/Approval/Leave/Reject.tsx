@@ -2,6 +2,8 @@ import {Button, Form, Input, message, Modal} from 'antd';
 import React, {useState} from 'react';
 import {rejectLeave} from "../../../component/axios/api";
 import intl from "react-intl-universal";
+import {useGaussianBlurStyles} from "../../../styles/gaussianBlurStyle";
+import {useSelector} from "react-redux";
 
 interface Values {
     title: string;
@@ -23,9 +25,16 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
                                                                        onCancel,
                                                                    }) => {
     const [form] = Form.useForm();
+
+    const gaussianBlurClasses = useGaussianBlurStyles();
+
+    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value)
+
     return (
         <Modal
             open={open}
+            className={gaussianBlur ? gaussianBlurClasses.gaussianBlurModal : ''}
+            mask={!gaussianBlur}
             title={intl.get('confirm')}
             okText={intl.get('reject')}
             okType="danger"

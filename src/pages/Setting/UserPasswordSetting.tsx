@@ -1,4 +1,4 @@
-import {Button, Form, Input, message, Modal} from 'antd';
+import {App, Button, Form, Input, Modal} from 'antd';
 import React, {useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import intl from "react-intl-universal";
@@ -7,6 +7,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {logout} from "../../component/redux/isLoginSlice";
 import {all} from "../../component/redux/userTypeSlice";
 import Cookie from "js-cookie";
+import {useGaussianBlurStyles} from "../../styles/gaussianBlurStyle";
 
 interface Values {
     title: string;
@@ -20,12 +21,19 @@ interface CollectionCreateFormProps {
     onCancel: () => void;
 }
 
-const UserPasswordSetting: React.FC = () => {
+const key = "updatePassword"
+
+const UserPassword: React.FC = () => {
     const [open, setOpen] = useState(false);
+
+    const {message} = App.useApp();
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    const gaussianBlurClasses = useGaussianBlurStyles();
+
+    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value)
     const userInfo = useSelector((state: { userInfo: { value: any } }) => state.userInfo.value);
 
     const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
@@ -37,6 +45,8 @@ const UserPasswordSetting: React.FC = () => {
         return (
             <Modal
                 open={open}
+                className={gaussianBlur ? gaussianBlurClasses.gaussianBlurModal : ''}
+                mask={!gaussianBlur}
                 title={intl.get("changePassword")}
                 okText={intl.get('ok')}
                 cancelText={intl.get('cancel')}
@@ -49,7 +59,11 @@ const UserPasswordSetting: React.FC = () => {
                             onCreate(values);
                         })
                         .catch(() => {
-                            message.error(intl.get("pleaseInputAllInfo"))
+                            message.open({
+                                key,
+                                type: "error",
+                                content: intl.get('pleaseInputAllInfo')
+                            })
                         });
                 }}
             >
@@ -79,12 +93,20 @@ const UserPasswordSetting: React.FC = () => {
 
     const onCreate = (values: any) => {
         if (values.password !== values.repeatPassword) {
-            message.error(intl.get('twoPasswordIsNotSame'));
+            message.open({
+                key,
+                type: "error",
+                content: intl.get('twoPasswordIsNotSame')
+            })
             return
         }
         updatePassword(userInfo.uid, values.password).then(res => {
             if (res.code === 200) {
-                message.success(intl.get('changeSuccessNotice'));
+                message.open({
+                    key,
+                    type: "success",
+                    content: intl.get('changeSuccessNotice')
+                })
                 dispatch(logout())
                 dispatch(all())
                 Cookie.remove('token');
@@ -101,7 +123,11 @@ const UserPasswordSetting: React.FC = () => {
                 type="primary"
                 onClick={() => {
                     setOpen(true);
-                    message.warning(intl.get('changePasswordNotice'))
+                    message.open({
+                        key,
+                        type: "warning",
+                        content: intl.get('changePasswordNotice')
+                    })
                 }}
             >
                 {intl.get('changePassword')}
@@ -116,5 +142,13 @@ const UserPasswordSetting: React.FC = () => {
         </div>
     );
 };
+
+const UserPasswordSetting = () => {
+    return (
+        <App>
+            <UserPassword/>
+        </App>
+    )
+}
 
 export default UserPasswordSetting;

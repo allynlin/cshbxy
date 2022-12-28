@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {Button, Form, Input, Modal, Result, Select, Typography, App} from 'antd';
+import {App, Button, Form, Input, Modal, Result, Select, Typography} from 'antd';
 import {LoadingOutlined} from "@ant-design/icons";
 import intl from "react-intl-universal";
 

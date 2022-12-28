@@ -284,5 +284,12 @@
   "uploadCanceled": "上传已取消",
   "waitApproval": "等待审批",
   "approvaling": "审批中",
-  "approvalPass": "审批通过"
+  "approvalPass": "审批通过",
+  "gaussianBlur": "高斯模糊",
+  "solidColor": "纯色",
+  "gaussianBlurNotice": "实验性功能，高斯模糊效果有出色的外观和视觉效果，但对电脑性能要求较高，如您的电脑性能不足，请关闭高斯模糊改为纯色模式展示，如启用后存在卡顿/显示异常等错误，请切换回纯色模式",
+  "getGaussianBlurMessage": "您已启用高斯模糊效果，如果卡顿，请还原纯色模式",
+  "enableGaussianBlur": "启用高斯模糊",
+  "enableSolidColor": "启用纯色模式",
+  "getSolidColorMessage": "您已启用纯色模式"
 }

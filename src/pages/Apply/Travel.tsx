@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Form, Input, InputNumber, Modal, Select, Typography, App} from 'antd';
+import {App, Button, Form, Input, InputNumber, Modal, Select, Typography} from 'antd';
 import {useNavigate} from 'react-router-dom';
 import intl from "react-intl-universal";
 

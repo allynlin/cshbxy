@@ -5,7 +5,7 @@ import {unstable_HistoryRouter as HistoryRouter} from 'react-router-dom'
 import {createBrowserHistory} from 'history'
 import RouterWaiter from "react-router-waiter"
 import {useDispatch, useSelector} from "react-redux";
-import {ConfigProvider, App as AntdApp} from "antd";
+import {App as AntdApp, ConfigProvider} from "antd";
 
 import Spin from "./component/LoadingSkleton";
 import {checkUser} from "./component/axios/api";
@@ -19,6 +19,7 @@ import {Chinese, English} from "./component/redux/userLanguageSlice";
 import {setUser} from "./component/redux/userInfoSlice";
 import ChangeSystem from "./component/ChangeSystem";
 import {setToken} from "./component/redux/userTokenSlice";
+import {close, open} from "./component/redux/gaussianBlurSlice";
 
 import enUS from "antd/es/locale/en_US";
 import zhCN from "antd/es/locale/zh_CN";
@@ -96,6 +97,8 @@ const MyApp = () => {
         Cookie.get('cshbxy-oa-language') === "en_US" ? dispatch(English()) : dispatch(Chinese())
         // 从 LocalStrong 中获取菜单模式，用于刷新页面上展示的菜单模式
         LStorage.get('cshbxy-oa-menuMode') === 'vertical' ? dispatch(vertical()) : dispatch(inline())
+        // 从 LocalStrong 中获取是否开启高斯模糊，用于刷新页面上展示的高斯模糊
+        LStorage.get('cshbxy-oa-gaussianBlur') === false ? dispatch(close()) : dispatch(open())
     }
 
     const getThemeToken = () => {

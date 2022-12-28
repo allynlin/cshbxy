@@ -3,7 +3,7 @@ import {Layout, theme, Typography} from 'antd';
 import {useDispatch, useSelector} from "react-redux";
 import {Outlet} from "react-router-dom";
 
-import {SliderMenu, HeaderMenu} from "./RenderMenu";
+import {HeaderMenu, SliderMenu} from "./RenderMenu";
 import {version} from "../../baseInfo";
 import RenderLogOut from "./RenderLogOut";
 import {setTableSize} from "../../component/redux/tableSizeSlice";

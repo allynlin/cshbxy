@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import VirtualTable from "../../../component/VirtualTable";
-import {Button, Form, Input, message, Modal, Skeleton, Typography, App, Result} from 'antd';
+import {App, Button, Form, Input, Modal, Result, Typography} from 'antd';
 import {findProcurementWaitApprovalList, resolveProcurement} from "../../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
@@ -9,8 +9,9 @@ import {useSelector} from "react-redux";
 import Reject from "./Reject";
 import {useStyles} from "../../../styles/webStyle";
 import {RenderVirtualTableSkeleton} from "../../../component/RenderVirtualTableSkeleton";
+import {useGaussianBlurStyles} from "../../../styles/gaussianBlurStyle";
 
-const {Title, Paragraph} = Typography;
+const {Title} = Typography;
 
 interface DataType {
     key: React.Key;
@@ -21,6 +22,7 @@ interface DataType {
 const MyApp = () => {
 
     const classes = useStyles();
+    const gaussianBlurClasses = useGaussianBlurStyles();
 
     const {message} = App.useApp();
 
@@ -43,6 +45,7 @@ const MyApp = () => {
 
     const tableSize = useSelector((state: any) => state.tableSize.value)
     const userToken = useSelector((state: any) => state.userToken.value)
+    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value)
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -111,6 +114,8 @@ const MyApp = () => {
             icon: <ExclamationCircleOutlined/>,
             content: intl.get('afterPassCannotChange'),
             okText: intl.get('ok'),
+            mask: !gaussianBlur,
+            className: gaussianBlur ? gaussianBlurClasses.gaussianBlurModalMethod : '',
             okButtonProps: {
                 style: {
                     backgroundColor: userToken.colorSuccess,
@@ -196,6 +201,8 @@ const MyApp = () => {
                 title={intl.get('details')}
                 onCancel={() => setShowModal(false)}
                 open={showModal}
+                className={gaussianBlur ? gaussianBlurClasses.gaussianBlurModal : ''}
+                mask={!gaussianBlur}
                 footer={[
                     <Reject key="reject" state={showInfo} getNewContent={(isReject: boolean) => {
                         if (isReject) {

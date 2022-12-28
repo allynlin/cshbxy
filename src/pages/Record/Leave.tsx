@@ -1,21 +1,21 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import domtoimage from 'dom-to-image';
 import VirtualTable from "../../component/VirtualTable";
 import {
-    Card,
+    App,
     Button,
+    Card,
     Form,
     Input,
     Modal,
     Popconfirm,
+    Result,
     Skeleton,
     Space,
     Steps,
     Tag,
     Typography,
-    Watermark,
-    App,
-    Result
+    Watermark
 } from 'antd';
 import {deleteLeave, findLeaveList, findLeaveProcess, refreshLeave} from "../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
@@ -27,6 +27,7 @@ import {RenderWatermarkColor} from "../../component/Tag/RenderWatermarkColor";
 import {useStyles} from "../../styles/webStyle";
 import {getProcessStatus} from '../../component/getProcessStatus';
 import {RenderVirtualTableSkeleton} from "../../component/RenderVirtualTableSkeleton";
+import {useGaussianBlurStyles} from "../../styles/gaussianBlurStyle";
 
 const {Title, Paragraph} = Typography;
 const {Meta} = Card;
@@ -40,6 +41,7 @@ interface DataType {
 const MyApp: React.FC = () => {
 
     const classes = useStyles();
+    const gaussianBlurClasses = useGaussianBlurStyles();
 
     const {message} = App.useApp();
 
@@ -76,6 +78,7 @@ const MyApp: React.FC = () => {
     const tableSize = useSelector((state: any) => state.tableSize.value)
     const userToken = useSelector((state: any) => state.userToken.value)
     const userInfo = useSelector((state: any) => state.userInfo.value)
+    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value)
 
     const key = "refresh"
 
@@ -332,6 +335,8 @@ const MyApp: React.FC = () => {
                 title={intl.get('details')}
                 onCancel={() => setShowModal(false)}
                 open={showModal}
+                className={gaussianBlur ? gaussianBlurClasses.gaussianBlurModal : ''}
+                mask={!gaussianBlur}
                 footer={[
                     showInfo.status === 0 ?
                         <Popconfirm

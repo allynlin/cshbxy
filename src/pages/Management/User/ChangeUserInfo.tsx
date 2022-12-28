@@ -2,6 +2,8 @@ import React, {useEffect, useState} from "react";
 import {Button, Form, Input, message, Modal, Radio} from "antd";
 import intl from "react-intl-universal";
 import {updateUserInfo} from "../../../component/axios/api";
+import {useGaussianBlurStyles} from "../../../styles/gaussianBlurStyle";
+import {useSelector} from "react-redux";
 
 interface propsCheck {
     info: any;
@@ -9,6 +11,10 @@ interface propsCheck {
 }
 
 export default function ChangeUserInfo(props: propsCheck) {
+
+    const gaussianBlurClasses = useGaussianBlurStyles();
+
+    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value);
 
     // 打开修改弹窗
     const [open, setOpen] = useState(false);
@@ -59,6 +65,8 @@ export default function ChangeUserInfo(props: propsCheck) {
             </Button>
             <Modal
                 open={open}
+                className={gaussianBlur ? gaussianBlurClasses.gaussianBlurModal : ''}
+                mask={!gaussianBlur}
                 title={intl.get("changeUsername")}
                 okText={intl.get('ok')}
                 confirmLoading={loading}

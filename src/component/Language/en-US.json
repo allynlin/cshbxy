@@ -284,5 +284,12 @@
   "uploadCanceled": "Upload canceled",
   "waitApproval": "Wait Approval",
   "approvaling": "Approvaling...",
-  "approvalPass": "Approval Pass"
+  "approvalPass": "Approval Pass",
+  "gaussianBlur": "Gaussian Blur",
+  "solidColor": "Solid Color",
+  "gaussianBlurNotice": "Experimental function, Gaussian blur effect has excellent appearance and visual effects, but it requires high computer performance. If your computer performance is insufficient, please turn off Gaussian blur and change to solid color mode for display. Error, please switch back to solid color mode.",
+  "getGaussianBlurMessage": "You have enabled the Gaussian vague effect. If you are stuck, please restore the solid color mode",
+  "enableGaussianBlur": "Enable Gaussian Blur",
+  "enableSolidColor": "Enable Solid Color",
+  "getSolidColorMessage": "You have enabled the solid color mode"
 }

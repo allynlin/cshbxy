@@ -8,6 +8,7 @@ import userInfoSlice from "./userInfoSlice";
 import userLanguageSlice from "./userLanguageSlice";
 import userTokenSlice from "./userTokenSlice";
 import tableSizeSlice from "./tableSizeSlice";
+import gaussianBlurSlice from "./gaussianBlurSlice";
 
 export default configureStore({
     reducer: {
@@ -19,6 +20,7 @@ export default configureStore({
         userInfo: userInfoSlice,
         userLanguage: userLanguageSlice,
         userToken: userTokenSlice,
-        tableSize: tableSizeSlice
+        tableSize: tableSizeSlice,
+        gaussianBlur: gaussianBlurSlice,
     },
 })

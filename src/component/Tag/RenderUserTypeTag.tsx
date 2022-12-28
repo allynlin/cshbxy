@@ -1,4 +1,3 @@
-
 import intl from "react-intl-universal";
 import {Tag} from "antd";
 import React from "react";

@@ -4,7 +4,7 @@ import {
     findUploadFilesByUid,
     resolveDepartmentChange
 } from '../../../component/axios/api';
-import {DownLoadURL,tableName} from "../../../baseInfo";
+import {DownLoadURL, tableName} from "../../../baseInfo";
 import {PullStatus} from "antd-mobile/es/components/pull-to-refresh";
 import {Card, Dialog, DotLoading, List, PullToRefresh, Result, Toast} from "antd-mobile";
 import {AutoSizer, List as VirtualizedList} from "react-virtualized";

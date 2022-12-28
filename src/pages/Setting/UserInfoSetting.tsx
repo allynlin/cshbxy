@@ -1,9 +1,10 @@
-import {Button, Form, Input, Modal, message, Radio} from 'antd';
+import {App, Button, Form, Input, Modal, Radio} from 'antd';
 import React, {useState} from 'react';
 import intl from "react-intl-universal";
 import {updateUserInfo} from "../../component/axios/api";
 import {useDispatch, useSelector} from "react-redux";
 import {setUser} from "../../component/redux/userInfoSlice";
+import {useGaussianBlurStyles} from "../../styles/gaussianBlurStyle";
 
 interface Values {
     title: string;
@@ -17,10 +18,18 @@ interface CollectionCreateFormProps {
     onCancel: () => void;
 }
 
-const UserInfoSetting: React.FC = () => {
+const key = "updateUserInfo"
+
+const UserInfo: React.FC = () => {
+
+    const {message} = App.useApp();
+
     const [open, setOpen] = useState(false);
     const dispatch = useDispatch();
 
+    const gaussianBlurClasses = useGaussianBlurStyles();
+
+    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value)
     const userInfo = useSelector((state: { userInfo: { value: any } }) => state.userInfo.value);
 
     const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
@@ -32,6 +41,8 @@ const UserInfoSetting: React.FC = () => {
         return (
             <Modal
                 open={open}
+                className={gaussianBlur ? gaussianBlurClasses.gaussianBlurModal : ''}
+                mask={!gaussianBlur}
                 title={intl.get("changeUserInfo")}
                 okText={intl.get('ok')}
                 cancelText={intl.get('cancel')}
@@ -43,7 +54,11 @@ const UserInfoSetting: React.FC = () => {
                             form.resetFields();
                             onCreate(values);
                         })
-                        .catch(() => message.error(intl.get("pleaseInputAllInfo")));
+                        .catch(() => message.open({
+                            key,
+                            type: "error",
+                            content: intl.get('pleaseInputAllInfo')
+                        }));
                 }}
             >
                 <Form
@@ -122,7 +137,11 @@ const UserInfoSetting: React.FC = () => {
     const onCreate = (values: any) => {
         updateUserInfo(userInfo.uid, values.realeName, values.gender, values.tel, values.email).then(res => {
             if (res.code === 200) {
-                message.success(intl.get('changeSuccess'));
+                message.open({
+                    key,
+                    type: "success",
+                    content: intl.get('changeSuccess')
+                })
                 const newUserInfo = {
                     ...userInfo,
                     realeName: values.realeName,
@@ -156,5 +175,13 @@ const UserInfoSetting: React.FC = () => {
         </div>
     );
 };
+
+const UserInfoSetting = () => {
+    return (
+        <App>
+            <UserInfo/>
+        </App>
+    )
+}
 
 export default UserInfoSetting;
