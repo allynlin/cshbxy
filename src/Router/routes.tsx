@@ -3,11 +3,7 @@ import record from "./record";
 import approval from "./approval";
 import management from "./management";
 import {Error403, Error404, Error500, Success} from "../pages/Result/Result";
-import {
-    Error404 as MobileError404,
-    Error403 as MobileError403,
-    Error500 as MobileError500,
-} from "../pages/Result/MobileResult";
+import {Error404 as MobileError404,} from "../pages/Result/MobileResult";
 import Home from "../pages/Home/Web";
 import Mobile from "../pages/Home/Mobile";
 import mobileRecord from "./mobileRecord";
@@ -96,13 +92,6 @@ const routes = [{
             titleCN: '登录'
         }
     }, {
-        path: 'register',
-        component: () => import('../pages/User/MobileRegister'),
-        meta: {
-            title: 'Register',
-            titleCN: '注册'
-        }
-    }, {
         path: 'setting',
         component: () => import('../pages/Setting/MobileSetting'),
         meta: {
@@ -121,25 +110,13 @@ const routes = [{
         component: () => import('../pages/Management/UserManagement'),
         meta: {
             title: '用户管理',
-            Auth: 'Leader'
+            Auth: 'Department'
         }
     }, {
         path: '404',
         element: <MobileError404/>,
         meta: {
             title: '404',
-        }
-    }, {
-        path: '403',
-        element: <MobileError403/>,
-        meta: {
-            title: '403',
-        }
-    }, {
-        path: '500',
-        element: <MobileError500/>,
-        meta: {
-            title: '500',
         }
     }, {
         path: '*',

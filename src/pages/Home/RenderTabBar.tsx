@@ -68,10 +68,6 @@ const Home = () => {
             title: '首页',
             icon: <AppOutline/>,
         }, {
-            key: 'approval',
-            title: '审批',
-            icon: <FillinOutline/>,
-        }, {
             key: 'departmentUser',
             title: '部门用户',
             icon: <TeamOutline/>,

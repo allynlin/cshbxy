@@ -1,10 +1,13 @@
 import React from 'react';
 import {useNavigate} from "react-router-dom";
-import {Button, NoticeBar} from "antd-mobile";
+import {Button, NoticeBar, Result} from "antd-mobile";
 import {LStorage} from "../../component/localStrong";
 import HomeDescriptions from "./HomeDescriptions";
+import {useSelector} from "react-redux";
 
 const Index: React.FC = () => {
+
+    const isLogin = useSelector((state: any) => state.isLogin.value)
 
     const navigate = useNavigate();
 
@@ -26,7 +29,11 @@ const Index: React.FC = () => {
                     </Button>
                 </>
             }
-            <HomeDescriptions/>
+            {isLogin ? <HomeDescriptions/> : <Result
+                status='info'
+                title='请先登录'
+                description='登录后即可查看用户信息'
+            />}
         </>
     )
 };

@@ -81,7 +81,7 @@ const StudentForm = () => {
                 layout='horizontal'
                 footer={
                     <>
-                        <Button type="submit" color="success" block>登录</Button>
+                        <Button type="submit" color="success" block>登录</Button>&nbsp;
                         <Button type="reset" onClick={() => onReset()} block>重置</Button>
                     </>
                 }
