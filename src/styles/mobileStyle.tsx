@@ -1,6 +1,9 @@
 import {createUseStyles} from "react-jss";
 
 export const useStyles = createUseStyles({
+    mobileIndex: {
+        padding: 16
+    },
     mobileHomeBody: {
         width: "100%",
         height: "100%",
@@ -12,14 +15,6 @@ export const useStyles = createUseStyles({
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
-        "::-webkit-scrollbar": {
-            width: 4,
-            height: 6,
-            backgroundColor: "#fff",
-        },
-        "::-webkit-scrollbar-thumb": {
-            backgroundColor: "#bfbfbf",
-        }
     },
     outlet: {
         width: "100%",

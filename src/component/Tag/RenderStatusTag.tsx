@@ -16,6 +16,7 @@ export const RenderStatusTag = (item: any) => {
             }
             return intl.get('approvalPass')
         }
+
         // 将 item.process 中的字符串按照 || 分割成数组
         return item.process.split('||').map((item: any, index: number) => {
             return {
@@ -25,16 +26,24 @@ export const RenderStatusTag = (item: any) => {
         });
     }
 
+    const style = {
+        overflow: "auto",
+        width: "100%",
+        height: "100%",
+    }
+
     switch (item.status) {
         case 0:
             return (
-                <Steps
-                    style={{marginTop: 8}}
-                    type="inline"
-                    current={item.count}
-                    status={"process"}
-                    items={getItems(item.count)}
-                />
+                <div style={style}>
+                    <Steps
+                        style={{marginTop: 8}}
+                        type="inline"
+                        current={item.count}
+                        status={"process"}
+                        items={getItems(item.count)}
+                    />
+                </div>
             )
         case 1:
             return (

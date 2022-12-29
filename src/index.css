@@ -16,11 +16,7 @@
 
 body {
     width: 100%;
-    min-width: 1000px;
     height: 100%;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
     background-color: #ffffff;
     color: #000000;
 }
@@ -37,6 +33,15 @@ a {
 [data-gaussianBlur="true"][data-scheme="light"] .ant-message-notice-content {
     background-color: rgba(240, 240, 240, 0.4);
     backdrop-filter: blur(20px) saturate(180%);
+}
+
+/* 适配深色模式下 messgae 没有跟随深色模式的 BUG */
+[data-scheme="dark"] .ant-message-notice-content {
+    background-color: rgba(31, 31, 31, 1);
+}
+
+[data-scheme="dark"] .ant-message-notice-content span:last-child {
+    color: #ffffff;
 }
 
 [data-gaussianBlur="true"][data-scheme="dark"] .ant-message-notice-content {

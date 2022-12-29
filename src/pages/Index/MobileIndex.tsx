@@ -4,15 +4,18 @@ import {Button, NoticeBar, Result} from "antd-mobile";
 import {LStorage} from "../../component/localStrong";
 import HomeDescriptions from "./HomeDescriptions";
 import {useSelector} from "react-redux";
+import {useStyles} from "../../styles/mobileStyle";
 
 const Index: React.FC = () => {
+
+    const classes = useStyles();
 
     const isLogin = useSelector((state: any) => state.isLogin.value)
 
     const navigate = useNavigate();
 
     return (
-        <>
+        <div className={classes.mobileIndex}>
             {
                 LStorage.get('cshbxy-oa-mobileHomeAlert') === false ? null : <>
                     <NoticeBar content='移动端部分功能受限无法使用，如您需要使用全部功能，请前往 Web 端' color='info'/>
@@ -34,7 +37,7 @@ const Index: React.FC = () => {
                 title='请先登录'
                 description='登录后即可查看用户信息'
             />}
-        </>
+        </div>
     )
 };
 
