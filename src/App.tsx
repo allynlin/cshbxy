@@ -198,7 +198,7 @@ const MyApp = () => {
                 key,
                 type: 'error',
                 content: intl.get('tryingAgain'),
-                duration: 3,
+                duration: 0,
             });
             checkUserInfo()
         })

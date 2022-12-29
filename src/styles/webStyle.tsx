@@ -7,17 +7,15 @@ export const useStyles = createUseStyles({
     },
     webHeader: {
         width: '100%',
+        minWidth: 800,
         height: '100%',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
         borderBottom: '1px solid #e8e8e8',
-        tit: {
-            display: 'flex',
-            alignItems: 'center',
-            height: '100%',
-            lineHeight: 54
-        }
+    },
+    headerTit: {
+        marginTop: '1em'
     },
     webLayoutContent: {
         padding: 24,
@@ -25,6 +23,9 @@ export const useStyles = createUseStyles({
         minHeight: 600,
         borderRadius: 6,
         overflow: 'auto',
+    },
+    webLayoutFooter: {
+        textAlign: 'center',
     },
     contentBody: {
         width: '100%',

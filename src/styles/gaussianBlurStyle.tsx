@@ -55,5 +55,25 @@ export const useGaussianBlurStyles = createUseStyles({
         "& .ant-modal-header": {
             backgroundColor: "transparent !important"
         }
+    },
+    gaussianBlurMenu: {
+        backdropFilter: "blur(20px) saturate(180%) !important",
+        "[data-prefers-color-scheme='light'] &": {
+            background: "rgba(240,240,240,0.4) !important",
+        },
+        "[data-prefers-color-scheme='dark'] &": {
+            background: "rgba(20,20,20,0.2) !important",
+        },
+        "& ul.ant-menu-vertical": {
+            "[data-prefers-color-scheme='light'] &": {
+                background: "rgba(240,240,240,0.4) !important",
+            },
+            "[data-prefers-color-scheme='dark'] &": {
+                background: "rgba(20,20,20,0.2) !important",
+            },
+        }
+    },
+    testOrange: {
+        backgroundColor: "orange !important"
     }
 })

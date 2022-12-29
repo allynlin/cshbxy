@@ -11,7 +11,7 @@ import {useStyles} from "../../styles/webStyle";
 import {LStorage} from "../../component/localStrong";
 
 const {Header, Content, Footer, Sider} = Layout;
-const {Title} = Typography;
+const {Title, Paragraph} = Typography;
 
 const App: React.FC = () => {
 
@@ -34,7 +34,7 @@ const App: React.FC = () => {
         // 内容区域宽度计算：页面宽度 - 左侧导航栏宽度（200/80）- padding（40）
         const contentWidth = collapsed ? width - 80 - 40 : width - 200 - 40;
         // 内容区域高度计算：页面高度 - 页面顶部（54） - 页面底部（40） - padding（65）
-        const contentHeight = height - 54 - 40 - 65;
+        const contentHeight = height - 54 - 40 - 71;
         // 虚拟列表的宽度计算：页面宽度 - 左侧导航栏宽度（200）- 右侧边距（20） - 表格左右边距（20）
         const tableWidth = collapsed ? width - 80 - 40 : width - 200 - 40;
         // 虚拟列表高度计算：页面高度 - 页面顶部（54） - 页面底部（40） - padding（65）
@@ -56,7 +56,9 @@ const App: React.FC = () => {
     return (
         <Layout>
             <Header className={classes.webHeader} style={{background: colorBgContainer}}>
-                <Title level={3} className={'tit'}>长沙星辰软件有限公司 OA 系统</Title>
+                <Paragraph ellipsis>
+                    <Title level={3} className={classes.headerTit}>长沙星辰软件有限公司 OA 系统</Title>
+                </Paragraph>
                 <HeaderMenu/>
                 <RenderLogOut/>
             </Header>
@@ -71,7 +73,7 @@ const App: React.FC = () => {
                     }}>
                     <SliderMenu/>
                 </Sider>
-                <Layout style={{padding: '0 24px 24px'}}>
+                <Layout style={{padding: '0 24px'}}>
                     <Content
                         className={classes.webLayoutContent}
                         style={{
@@ -82,16 +84,13 @@ const App: React.FC = () => {
                     >
                         <Outlet/>
                     </Content>
-                    <Footer
-                        style={{
-                            textAlign: 'center',
-                            margin: 0,
-                            padding: 16
-                        }}>
-                        长沙星辰软件有限公司
-                        OA &copy; 2022-2023 Created by
-                        allynlin
-                        Version：{version}
+                    <Footer className={classes.webLayoutFooter}>
+                        <Paragraph ellipsis>
+                            长沙星辰软件有限公司
+                            OA &copy; 2022-2023 Created by
+                            allynlin
+                            Version：{version}
+                        </Paragraph>
                     </Footer>
                 </Layout>
             </Layout>
