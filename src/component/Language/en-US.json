@@ -291,5 +291,8 @@
   "getGaussianBlurMessage": "You have enabled the Gaussian vague effect. If you are stuck, please restore the solid color mode",
   "enableGaussianBlur": "Enable Gaussian Blur",
   "enableSolidColor": "Enable Solid Color",
-  "getSolidColorMessage": "You have enabled the solid color mode"
+  "getSolidColorMessage": "You have enabled the solid color mode",
+  "cancelGaussianBlurMessage": "You have disabled the Gaussian vague effect",
+  "changeToGaussianBluring": "Changing to Gaussian blur...",
+  "changeToGaussianBlurNotice": "We are calculating your computer performance in order to provide you with the best experience, this process is expected to take 3-10 seconds, please be patient, if you do not want to wait, you can click the cancel button, switch to solid color mode."
 }

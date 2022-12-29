@@ -74,7 +74,6 @@ const MyApp: React.FC = () => {
     useEffect(() => {
         const timer = setTimeout(() => {
             if (waitTime > 1) {
-                setIsQuery(true)
                 setWaitTime(e => e - 1)
                 setIsQuery(true)
             } else {

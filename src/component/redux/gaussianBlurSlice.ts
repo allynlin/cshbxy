@@ -2,7 +2,7 @@ import {createSlice} from '@reduxjs/toolkit'
 import {LStorage} from "../localStrong";
 
 const initialState: { value: boolean } = {
-    value: true,
+    value: false,
 }
 
 export const gaussianBlurSlice = createSlice({

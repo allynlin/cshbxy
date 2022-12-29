@@ -1,10 +1,10 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {App, Button, Form, Input, Radio, Switch} from 'antd';
 import Cookie from 'js-cookie';
 import setCookie from "../../component/setCookie";
 import {userLogin} from "../../component/axios/api";
 import {useNavigate} from "react-router-dom";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {login} from "../../component/redux/isLoginSlice";
 import {Department, Employee, Leader} from "../../component/redux/userTypeSlice";
 import {setUser} from "../../component/redux/userInfoSlice";
@@ -18,6 +18,8 @@ const LoginForm = () => {
 
     const [loading, setLoading] = useState<boolean>(false);
 
+    const isLogin = useSelector((state: any) => state.isLogin.value)
+
     const dispatch = useDispatch();
     const [form] = Form.useForm();
     const username = Form.useWatch('username', form);
@@ -25,6 +27,12 @@ const LoginForm = () => {
     const userType = Form.useWatch('userType', form);
     const rememberme = Form.useWatch('rememberme', form);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (isLogin) {
+            navigate('/home', {replace: true})
+        }
+    }, [isLogin])
 
     const onFinish = () => {
         message.open({

@@ -98,7 +98,7 @@ const MyApp = () => {
         // 从 LocalStrong 中获取菜单模式，用于刷新页面上展示的菜单模式
         LStorage.get('cshbxy-oa-menuMode') === 'vertical' ? dispatch(vertical()) : dispatch(inline())
         // 从 LocalStrong 中获取是否开启高斯模糊，用于刷新页面上展示的高斯模糊
-        LStorage.get('cshbxy-oa-gaussianBlur') === false ? dispatch(close()) : dispatch(open())
+        LStorage.get('cshbxy-oa-gaussianBlur') === true ? dispatch(open()) : dispatch(close())
     }
 
     const getThemeToken = () => {

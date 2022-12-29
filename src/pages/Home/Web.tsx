@@ -59,7 +59,9 @@ const App: React.FC = () => {
                 <Paragraph ellipsis>
                     <Title level={3} className={classes.headerTit}>长沙星辰软件有限公司 OA 系统</Title>
                 </Paragraph>
-                <HeaderMenu/>
+                <div style={{width: 200}}>
+                    <HeaderMenu/>
+                </div>
                 <RenderLogOut/>
             </Header>
             <Layout>

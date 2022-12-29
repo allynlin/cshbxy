@@ -291,5 +291,8 @@
   "getGaussianBlurMessage": "您已启用高斯模糊效果，如果卡顿，请还原纯色模式",
   "enableGaussianBlur": "启用高斯模糊",
   "enableSolidColor": "启用纯色模式",
-  "getSolidColorMessage": "您已启用纯色模式"
+  "getSolidColorMessage": "您已启用纯色模式",
+  "cancelGaussianBlurMessage": "您已取消高斯模糊效果",
+  "changeToGaussianBluring": "正在切换至高斯模糊效果",
+  "changeToGaussianBlurNotice": "我们正在计算您的电脑性能，以便为您提供最佳的体验，这个过程预计需要 3-10 秒，请您耐心等待，如您不愿意等待，您可以点击取消按钮，切换至纯色模式"
 }
