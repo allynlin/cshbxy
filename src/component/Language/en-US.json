@@ -294,5 +294,5 @@
   "getSolidColorMessage": "You have enabled the solid color mode",
   "cancelGaussianBlurMessage": "You have disabled the Gaussian vague effect",
   "changeToGaussianBluring": "Changing to Gaussian blur...",
-  "changeToGaussianBlurNotice": "We are calculating your computer performance in order to provide you with the best experience, this process is expected to take 3-10 seconds, please be patient, if you do not want to wait, you can click the cancel button, switch to solid color mode."
+  "changeToGaussianBlurNotice": "We are calculating your device performance in order to provide you with the best experience. This process is expected to take 3-10 seconds. Please wait patiently. If you do not want to wait, you can click the cancel button to switch to solid color mode."
 }
