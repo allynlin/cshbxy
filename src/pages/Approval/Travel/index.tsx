@@ -288,7 +288,9 @@ const MyApp = () => {
                     <Paragraph>{intl.get('submitPerson')}：{showInfo.releaseUid}</Paragraph>
                     <Paragraph>{intl.get('destination')}：{showInfo.destination}</Paragraph>
                     <Paragraph>{intl.get('cost')}：{showInfo.expenses}</Paragraph>
-                    <Paragraph>{intl.get('reason')}：{showInfo.reason}</Paragraph>
+                    <Paragraph>{intl.get('reason')}：</Paragraph>
+                    <div className={classes.outPutHtml}
+                         dangerouslySetInnerHTML={{__html: showInfo.reason}}/>
                     <Paragraph>{intl.get('createTime')}：{showInfo.create_time}</Paragraph>
                     <Paragraph>{intl.get('updateTime')}：{showInfo.update_time}</Paragraph>
                     <Paragraph>{intl.get('file')}：</Paragraph>

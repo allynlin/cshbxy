@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {App, Button, Form, Input, Modal, Result, Select, Typography} from 'antd';
+import {App, Button, Form, Modal, Result, Select, Typography} from 'antd';
+import BraftEditor from 'braft-editor';
 import {LoadingOutlined} from "@ant-design/icons";
 import intl from "react-intl-universal";
 
@@ -42,6 +43,8 @@ const ChangeForm = () => {
     const [form] = Form.useForm();
     const departmentUid = Form.useWatch('departmentUid', form);
     const changeReason = Form.useWatch('changeReason', form);
+
+    const controls = ['bold', 'italic', 'underline', 'text-color', 'separator', 'link'];
 
     useEffect(() => {
         checkDepartmentChange();
@@ -95,7 +98,7 @@ const ChangeForm = () => {
 
     // 表单提交
     const submitForm = () => {
-        ChangeDepartment(departmentUid, changeReason).then(res => {
+        ChangeDepartment(departmentUid, changeReason.toHTML()).then(res => {
             if (res.code !== 200) {
                 message.error(res.msg)
                 return
@@ -181,19 +184,20 @@ const ChangeForm = () => {
             >
                 <Typography>
                     <Paragraph>{intl.get('departmentChange') + ': '}{departmentUid}</Paragraph>
-                    <Paragraph>{intl.get('reason') + ': '}{changeReason}</Paragraph>
+                    <Paragraph>{intl.get('reason') + ': '}</Paragraph>
+                    <div className={classes.outPutHtml} dangerouslySetInnerHTML={{__html: changeReason?.toHTML()}}/>
                     <Paragraph>{intl.get('file') + ': '}{
                         fileList.filter((item: any) => item.status === 'done').map((item: any) => item.name).join('、')
                     }</Paragraph>
                 </Typography>
             </Modal>
-            <Title level={2} className={classes.flexCenter}>{intl.get('departmentChangeApply')}</Title>
+            <Title level={2}>{intl.get('departmentChangeApply')}</Title>
             <Form
                 form={form}
                 name="basic"
-                labelCol={{span: 6}}
-                wrapperCol={{span: 12}}
                 onFinish={onFinish}
+                layout="vertical"
+                requiredMark="optional"
                 initialValues={{
                     file: fileList
                 }}
@@ -223,13 +227,14 @@ const ChangeForm = () => {
                         message: intl.get('pleaseInputReason')
                     }]}
                 >
-                    <Input.TextArea rows={4}
-                                    placeholder={intl.get('textarea-enter-placeholder', {
-                                        name: intl.get('Reason'),
-                                        max: 1000
-                                    })}
-                                    showCount={true}
-                                    maxLength={1000}/>
+                    <BraftEditor
+                        // @ts-ignore
+                        controls={controls}
+                        placeholder={intl.get('textarea-enter-placeholder', {
+                            name: intl.get('Reason'),
+                            max: 1000
+                        })}
+                    />
                 </Form.Item>
 
                 <Form.Item
@@ -255,7 +260,7 @@ const ChangeForm = () => {
                     />
                 </Form.Item>
 
-                <Form.Item wrapperCol={{offset: 6, span: 12}} style={{textAlign: "center"}}>
+                <Form.Item>
                     <Button type="primary" htmlType="submit">
                         {intl.get('submit')}
                     </Button>

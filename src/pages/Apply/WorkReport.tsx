@@ -139,12 +139,12 @@ const ChangeForm = () => {
             }
         />) : (
         <div className={classes.cshbxy100Per}>
-            <Title level={2} className={classes.flexCenter}>{intl.get('workReport')}</Title>
+            <Title level={2}>{intl.get('workReport')}</Title>
             <Form
                 form={form}
                 name="basic"
-                labelCol={{span: 6}}
-                wrapperCol={{span: 12}}
+                layout="vertical"
+                requiredMark="optional"
                 onFinish={onFinish}
                 initialValues={{
                     file: fileList
@@ -173,7 +173,7 @@ const ChangeForm = () => {
                     />
                 </Form.Item>
 
-                <Form.Item wrapperCol={{offset: 6, span: 12}} style={{textAlign: "center"}}>
+                <Form.Item>
                     <Button type="primary" htmlType="submit">
                         {intl.get('submit')}
                     </Button>

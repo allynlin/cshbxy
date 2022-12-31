@@ -405,7 +405,9 @@ const MyApp: React.FC = () => {
                                             <p>UID：{showInfo.uid}</p>
                                             <p>{intl.get('startTime')}：{showInfo.start_time}</p>
                                             <p>{intl.get('endTime')}：{showInfo.end_time}</p>
-                                            <p>{intl.get('reason')}：{showInfo.reason}</p>
+                                            <p>{intl.get('reason')}：</p>
+                                            <div className={classes.outPutHtml}
+                                                 dangerouslySetInnerHTML={{__html: showInfo.reason}}/>
                                             {showInfo.reject_reason ?
                                                 <p>
                                                     {intl.get('rejectReason')}：
@@ -449,7 +451,9 @@ const MyApp: React.FC = () => {
                                 <Typography>
                                     <Paragraph>{intl.get('startTime')}：{showInfo.start_time}</Paragraph>
                                     <Paragraph>{intl.get('endTime')}：{showInfo.end_time}</Paragraph>
-                                    <Paragraph>{intl.get('reason')}：{showInfo.reason}</Paragraph>
+                                    <Paragraph>{intl.get('reason')}：</Paragraph>
+                                    <div className={classes.outPutHtml}
+                                         dangerouslySetInnerHTML={{__html: showInfo.reason}}/>
                                     {showInfo.reject_reason ?
                                         <Paragraph>
                                             {intl.get('rejectReason')}：

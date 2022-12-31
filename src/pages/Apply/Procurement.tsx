@@ -5,6 +5,7 @@ import intl from "react-intl-universal";
 
 import {addProcurement} from "../../component/axios/api";
 import {useStyles} from "../../styles/webStyle";
+import BraftEditor from "braft-editor";
 
 const {Title, Paragraph} = Typography;
 
@@ -24,10 +25,11 @@ const ProcurementForm = () => {
     const price = Form.useWatch('price', form);
     const reason = Form.useWatch('reason', form);
 
+    const controls = ['bold', 'italic', 'underline', 'text-color', 'separator', 'link'];
 
     // 表单提交
     const submitForm = () => {
-        addProcurement(items, price, reason).then(res => {
+        addProcurement(items.toHTML(), price, reason.toHTML()).then(res => {
             if (res.code !== 200) {
                 message.error(res.msg)
                 return
@@ -75,17 +77,19 @@ const ProcurementForm = () => {
                 onCancel={handleCancel}
             >
                 <Typography>
-                    <Paragraph>{intl.get('procurementItem')}：{items}</Paragraph>
+                    <Paragraph>{intl.get('procurementItem')}：</Paragraph>
+                    <div className={classes.outPutHtml} dangerouslySetInnerHTML={{__html: items?.toHTML()}}/>
                     <Paragraph>{intl.get('procurementPrice')}：{price}</Paragraph>
-                    <Paragraph>{intl.get('reason')}：{reason}</Paragraph>
+                    <Paragraph>{intl.get('reason')}：</Paragraph>
+                    <div className={classes.outPutHtml} dangerouslySetInnerHTML={{__html: reason?.toHTML()}}/>
                 </Typography>
             </Modal>
-            <Title level={2} className={classes.flexCenter}>{intl.get('procurementApply')}</Title>
+            <Title level={2}>{intl.get('procurementApply')}</Title>
             <Form
                 form={form}
                 name="basic"
-                labelCol={{span: 6}}
-                wrapperCol={{span: 12}}
+                layout="vertical"
+                requiredMark="optional"
                 onFinish={onFinish}
             >
                 <Form.Item
@@ -93,8 +97,11 @@ const ProcurementForm = () => {
                     name="items"
                     rules={[{required: true, message: intl.get('pleaseInputProcurementItem')}]}
                 >
-                    <Input.TextArea rows={4} placeholder={intl.get('pleaseInputProcurementItem')} showCount={true}
-                                    maxLength={1000}/>
+                    <BraftEditor
+                        // @ts-ignore
+                        controls={controls}
+                        placeholder={intl.get('pleaseInputProcurementItem')}
+                    />
                 </Form.Item>
 
                 <Form.Item
@@ -110,11 +117,14 @@ const ProcurementForm = () => {
                     name="reason"
                     rules={[{required: true, message: intl.get('pleaseInputReason')}]}
                 >
-                    <Input.TextArea rows={4} placeholder={intl.get('pleaseInputReason')} showCount={true}
-                                    maxLength={1000}/>
+                    <BraftEditor
+                        // @ts-ignore
+                        controls={controls}
+                        placeholder={intl.get('pleaseInputReason')}
+                    />
                 </Form.Item>
 
-                <Form.Item wrapperCol={{offset: 6, span: 12}} style={{textAlign: "center"}}>
+                <Form.Item>
                     <Button type="primary" htmlType="submit">
                         {intl.get('submit')}
                     </Button>

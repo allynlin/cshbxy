@@ -8,6 +8,7 @@ import {BaseInfo, tableName} from "../../baseInfo";
 import Spin from "../../component/LoadingSkleton";
 import FileUpLoad from "../../component/axios/FileUpLoad";
 import {useStyles} from "../../styles/webStyle";
+import BraftEditor from "braft-editor";
 
 const {Title, Paragraph} = Typography;
 const {Option} = Select;
@@ -37,6 +38,8 @@ const LeaveForm = () => {
     const expenses = Form.useWatch('expenses', form);
     const reason = Form.useWatch('reason', form);
 
+    const controls = ['bold', 'italic', 'underline', 'text-color', 'separator', 'link'];
+
     useEffect(() => {
         checkUploadFilesList();
     }, [])
@@ -60,7 +63,7 @@ const LeaveForm = () => {
 
     // 表单提交
     const submitForm = () => {
-        addTravelReimbursement(destination, (expenses + moneyType), reason, tableName.travel).then(res => {
+        addTravelReimbursement(destination, (expenses + moneyType), reason.toHTML(), tableName.travel).then(res => {
             if (res.code !== 200) {
                 message.error(res.msg);
                 return
@@ -108,20 +111,21 @@ const LeaveForm = () => {
                     onCancel={handleCancel}
                 >
                     <Typography>
-                        <Paragraph>{intl.get('destination')}{destination}</Paragraph>
-                        <Paragraph>{intl.get('cost')}{expenses} {moneyType}</Paragraph>
-                        <Paragraph>{intl.get('reason')}{reason}</Paragraph>
+                        <Paragraph>{intl.get('destination')}：{destination}</Paragraph>
+                        <Paragraph>{intl.get('cost')}：{expenses} {moneyType}</Paragraph>
+                        <Paragraph>{intl.get('reason')}：</Paragraph>
+                        <div className={classes.outPutHtml} dangerouslySetInnerHTML={{__html: reason?.toHTML()}}/>
                         <Paragraph>{intl.get('file') + ': '}{
                             fileList.filter((item: any) => item.status === 'done').map((item: any) => item.name).join('、')
                         }</Paragraph>
                     </Typography>
                 </Modal>
-                <Title level={2} className={classes.flexCenter}>{intl.get('travelReimburseApply')}</Title>
+                <Title level={2}>{intl.get('travelReimburseApply')}</Title>
                 <Form
                     form={form}
                     name="basic"
-                    labelCol={{span: 6}}
-                    wrapperCol={{span: 12}}
+                    layout="vertical"
+                    requiredMark="optional"
                     onFinish={onFinish}
                     initialValues={{
                         file: fileList
@@ -163,10 +167,11 @@ const LeaveForm = () => {
                         name="reason"
                         rules={[{required: true, message: intl.get('pleaseInputReason')}]}
                     >
-                        <Input.TextArea rows={4}
-                                        placeholder={intl.get('pleaseInputReason')}
-                                        showCount={true}
-                                        maxLength={1000}/>
+                        <BraftEditor
+                            // @ts-ignore
+                            controls={controls}
+                            placeholder={intl.get('pleaseInputReason')}
+                        />
                     </Form.Item>
 
                     <Form.Item
@@ -186,7 +191,7 @@ const LeaveForm = () => {
                         />
                     </Form.Item>
 
-                    <Form.Item wrapperCol={{offset: 6, span: 12}} style={{textAlign: "center"}}>
+                    <Form.Item>
                         <Button type="primary" htmlType="submit">
                             {intl.get('submit')}
                         </Button>

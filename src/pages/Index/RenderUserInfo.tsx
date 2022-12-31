@@ -1,4 +1,4 @@
-import {Alert, Button, notification, Typography} from 'antd';
+import {Alert, Button, Typography, App} from 'antd';
 import React from 'react';
 import {useNavigate} from "react-router-dom";
 import intl from "react-intl-universal";
@@ -8,17 +8,16 @@ import {useStyles} from "../../styles/webStyle";
 
 const {Paragraph} = Typography;
 
-const Employee: React.FC = () => {
+const Index: React.FC = () => {
 
     const classes = useStyles();
 
-    const [api, contextHolder] = notification.useNotification();
+    const {message} = App.useApp();
 
     const navigate = useNavigate();
 
     return (
         <div className={classes.webHomeBody}>
-            {contextHolder}
             {
                 LStorage.get('cshbxy-oa-isShowAlert') === false ? null :
                     <Alert
@@ -41,9 +40,7 @@ const Employee: React.FC = () => {
                         type="info"
                         closable
                         onClose={() => {
-                            api.info({
-                                message: intl.get('tips-7'),
-                            })
+                            message.info(intl.get('tips-7'));
                             LStorage.set('cshbxy-oa-isShowAlert', false)
                         }}
                     />
@@ -53,4 +50,12 @@ const Employee: React.FC = () => {
     )
 };
 
-export default Employee;
+const RenderUserInfo = () => {
+    return (
+        <App>
+            <Index/>
+        </App>
+    )
+}
+
+export default RenderUserInfo;

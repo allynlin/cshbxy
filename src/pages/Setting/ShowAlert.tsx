@@ -1,11 +1,16 @@
 import React from "react";
-import {message, Radio, RadioChangeEvent} from "antd";
+import {useNavigate} from "react-router-dom";
+import {message, Radio, RadioChangeEvent, App} from "antd";
 import intl from "react-intl-universal";
 import {LStorage} from "../../component/localStrong";
 
-const showAlert: React.FC = () => {
+const ShowAlert: React.FC = () => {
 
-    const [api, contextHolder] = message.useMessage();
+    const navigate = useNavigate();
+
+    const {message} = App.useApp();
+
+    const key = "showAlertSetting"
 
     const onChange = (e: RadioChangeEvent) => {
         switch (e.target.value) {
@@ -13,26 +18,47 @@ const showAlert: React.FC = () => {
                 LStorage.delete('cshbxy-oa-isShowAlert')
                 LStorage.delete('cshbxy-oa-isShowTour')
                 LStorage.delete('cshbxy-oa-settingAlert')
-                api.success(intl.get('showAlertMessage'));
+                message.open({
+                    key,
+                    type: "success",
+                    content: intl.get('showAlertMessage'),
+                })
+                navigate('/setting')
                 break;
             case 'off':
                 LStorage.set('cshbxy-oa-isShowAlert', false)
                 LStorage.set('cshbxy-oa-isShowTour', false)
                 LStorage.set('cshbxy-oa-settingAlert', false)
-                api.success(intl.get('hideAlertMessage'));
+                message.open({
+                    key,
+                    type: "success",
+                    content: intl.get('hideAlertMessage'),
+                })
+                navigate('/setting')
                 break;
             default:
-                api.warning(intl.get('alertMessageStatusError'))
+                message.open({
+                    key,
+                    type: "warning",
+                    content: intl.get('alertMessageStatusError'),
+                })
         }
     }
 
     return (
         <Radio.Group onChange={onChange} buttonStyle="solid">
-            {contextHolder}
             <Radio.Button value={"on"}>{intl.get('showAlert')}</Radio.Button>
             <Radio.Button value={"off"}>{intl.get('hideAlert')}</Radio.Button>
         </Radio.Group>
     )
 }
 
-export default showAlert;
+const AlertSetting = () => {
+    return (
+        <App>
+            <ShowAlert/>
+        </App>
+    )
+}
+
+export default AlertSetting;

@@ -30,7 +30,6 @@ const Setting = () => {
                         onConfirm: () => {
                             dispatch(logout())
                             dispatch(all())
-                            Cookie.remove('cshbxy-oa-password');
                             Cookie.remove('cshbxy-oa-token');
                             navigate('/m/login')
                             Toast.show({

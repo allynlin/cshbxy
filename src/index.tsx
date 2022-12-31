@@ -7,6 +7,7 @@ import Token from "./Token";
 import store from "./component/redux/store";
 
 import 'antd/dist/reset.css';
+import 'braft-editor/dist/index.css'
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement

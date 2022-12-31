@@ -1,4 +1,4 @@
-import {Alert, App, Button, DatePicker, Form, Input, Modal, Typography} from 'antd';
+import {Alert, App, Button, DatePicker, Form, Modal, Typography} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import Marquee from 'react-fast-marquee';
@@ -9,6 +9,7 @@ import dayjs from 'dayjs';
 
 import {addLeave, checkLastTimeLeave,} from "../../component/axios/api";
 import {useStyles} from "../../styles/webStyle";
+import BraftEditor from "braft-editor";
 
 const {Title, Paragraph} = Typography;
 
@@ -19,9 +20,6 @@ const LeaveForm = () => {
     const {message} = App.useApp();
 
     const navigate = useNavigate();
-    // 防止反复查询变更记录
-    const [isQuery, setIsQuery] = useState<boolean>(false);
-    const [waitTime, setWaitTime] = useState<number>(0);
     // 确认框状态
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
@@ -35,19 +33,7 @@ const LeaveForm = () => {
     const reason = Form.useWatch('reason', form);
     const leaveTime = Form.useWatch('leaveTime', form);
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            if (waitTime > 1) {
-                setWaitTime(e => e - 1)
-                setIsQuery(true)
-            } else {
-                setIsQuery(false)
-            }
-        }, 1000)
-        return () => {
-            clearTimeout(timer)
-        }
-    }, [waitTime])
+    const controls = ['bold', 'italic', 'underline', 'text-color', 'separator', 'link'];
 
     useEffect(() => {
         checkLastTimeLeave().then(res => {
@@ -86,7 +72,7 @@ const LeaveForm = () => {
 
     // 表单提交
     const submitForm = () => {
-        addLeave(reason, leaveTime[0].format('YYYY-MM-DD HH:mm:ss'), leaveTime[1].format('YYYY-MM-DD HH:mm:ss')).then(res => {
+        addLeave(reason.toHTML(), leaveTime[0].format('YYYY-MM-DD HH:mm:ss'), leaveTime[1].format('YYYY-MM-DD HH:mm:ss')).then(res => {
             if (res.code !== 200) {
                 message.error(res.msg)
                 return
@@ -176,15 +162,16 @@ const LeaveForm = () => {
                 <Typography>
                     <Paragraph>{intl.get('startTime')}：{leaveTime ? leaveTime[0].format('YYYY-MM-DD HH:mm:ss') : intl.get('notChooseStartTime')}</Paragraph>
                     <Paragraph>{intl.get('endTime')}：{leaveTime ? leaveTime[1].format('YYYY-MM-DD HH:mm:ss') : intl.get('notChooseEndTime')}</Paragraph>
-                    <Paragraph>{intl.get('reason')}：{reason}</Paragraph>
+                    <Paragraph>{intl.get('reason')}：</Paragraph>
+                    <div className={classes.outPutHtml} dangerouslySetInnerHTML={{__html: reason?.toHTML()}}/>
                 </Typography>
             </Modal>
-            <Title level={2} className={classes.flexCenter}>{intl.get('leaveApply')}</Title>
+            <Title level={2}>{intl.get('leaveApply')}</Title>
             <Form
                 form={form}
                 name="basic"
-                labelCol={{span: 6}}
-                wrapperCol={{span: 12}}
+                layout="vertical"
+                requiredMark="optional"
                 onFinish={onFinish}
             >
 
@@ -208,11 +195,14 @@ const LeaveForm = () => {
                     name="reason"
                     rules={[{required: true, message: intl.get('pleaseInputReason')}]}
                 >
-                    <Input.TextArea rows={4} placeholder={intl.get('pleaseInputReason')} showCount={true}
-                                    maxLength={500}/>
+                    <BraftEditor
+                        // @ts-ignore
+                        controls={controls}
+                        placeholder={intl.get('pleaseInputReason')}
+                    />
                 </Form.Item>
 
-                <Form.Item wrapperCol={{offset: 6, span: 12}} style={{textAlign: "center"}}>
+                <Form.Item>
                     <Button type="primary" htmlType="submit">
                         {intl.get('submit')}
                     </Button>

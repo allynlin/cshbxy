@@ -175,10 +175,6 @@ const MyApp = () => {
         dataIndex: 'releaseUid',
         align: 'center',
     }, {
-        title: intl.get('procurementItem'),
-        dataIndex: 'items',
-        align: 'center',
-    }, {
         title: intl.get('procurementPrice'),
         dataIndex: 'price',
         align: 'center',
@@ -234,9 +230,13 @@ const MyApp = () => {
                 ]}
             >
                 <p>{intl.get('submitPerson')}：{showInfo.releaseUid}</p>
-                <p>{intl.get('procurementItem')}：{showInfo.items}</p>
+                <p>{intl.get('procurementItem')}：</p>
+                <div className={classes.outPutHtml}
+                     dangerouslySetInnerHTML={{__html: showInfo.items}}/>
                 <p>{intl.get('procurementPrice')}：{showInfo.price}</p>
-                <p>{intl.get('reason')}：{showInfo.reason}</p>
+                <p>{intl.get('reason')}：</p>
+                <div className={classes.outPutHtml}
+                     dangerouslySetInnerHTML={{__html: showInfo.reason}}/>
                 <p>{intl.get('createTime')}：{showInfo.create_time}</p>
                 <p>{intl.get('updateTime')}：{showInfo.update_time}</p>
             </Modal>

@@ -373,7 +373,9 @@ const MyApp: React.FC = () => {
                     <Typography>
                         <Paragraph>{intl.get('destination')}：{showInfo.destination}</Paragraph>
                         <Paragraph>{intl.get('cost')}：{showInfo.expenses}</Paragraph>
-                        <Paragraph>{intl.get('reason')}：{showInfo.reason}</Paragraph>
+                        <Paragraph>{intl.get('reason')}：</Paragraph>
+                        <div className={classes.outPutHtml}
+                             dangerouslySetInnerHTML={{__html: showInfo.reason}}/>
                         {showInfo.reject_reason ?
                             <Paragraph>
                                 {intl.get('rejectReason')}：

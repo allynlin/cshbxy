@@ -257,10 +257,6 @@ const MyApp: React.FC = () => {
         dataIndex: 'id',
         align: 'center',
     }, {
-        title: intl.get('procurementItem'),
-        dataIndex: 'items',
-        align: 'center',
-    }, {
         title: intl.get('procurementPrice'),
         dataIndex: 'price',
         align: 'center',
@@ -324,9 +320,13 @@ const MyApp: React.FC = () => {
             >
                 {showContent ? (<Skeleton active/>) : (
                     <Typography>
-                        <Paragraph>{intl.get('procurementItem')}：{showInfo.items}</Paragraph>
+                        <Paragraph>{intl.get('procurementItem')}：</Paragraph>
+                        <div className={classes.outPutHtml}
+                             dangerouslySetInnerHTML={{__html: showInfo.items}}/>
                         <Paragraph>{intl.get('procurementPrice')}：{showInfo.price} ￥</Paragraph>
-                        <Paragraph>{intl.get('reason')}：{showInfo.reason}</Paragraph>
+                        <Paragraph>{intl.get('reason')}：</Paragraph>
+                        <div className={classes.outPutHtml}
+                             dangerouslySetInnerHTML={{__html: showInfo.reason}}/>
                         {showInfo.reject_reason ?
                             <Paragraph>
                                 {intl.get('rejectReason')}：

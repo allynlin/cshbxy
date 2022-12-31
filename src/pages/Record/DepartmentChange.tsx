@@ -308,10 +308,6 @@ const MyApp: React.FC = () => {
         dataIndex: 'departmentUid',
         align: 'center',
     }, {
-        title: intl.get('reason'),
-        dataIndex: 'changeReason',
-        align: 'center',
-    }, {
         title: intl.get('status'),
         dataIndex: 'tag',
         align: 'center',
@@ -373,7 +369,8 @@ const MyApp: React.FC = () => {
                 {showContent ? (<Skeleton active/>) : (
                     <Typography>
                         <Paragraph>{intl.get('departmentChange')}：{showInfo.departmentUid}</Paragraph>
-                        <Paragraph>{intl.get('reason')}：{showInfo.changeReason}</Paragraph>
+                        <Paragraph>{intl.get('reason')}：</Paragraph>
+                        <div className={classes.outPutHtml} dangerouslySetInnerHTML={{__html: showInfo.changeReason}}/>
                         {showInfo.reject_reason ?
                             <Paragraph>
                                 {intl.get('rejectReason')}：

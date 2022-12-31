@@ -288,7 +288,8 @@ const MyApp = () => {
                 <Typography>
                     <Paragraph>{intl.get('submitPerson')}：{showInfo.releaseUid}</Paragraph>
                     <Paragraph>{intl.get('departmentChange')}：{showInfo.departmentUid}</Paragraph>
-                    <Paragraph>{intl.get('reason')}：{showInfo.changeReason}</Paragraph>
+                    <Paragraph>{intl.get('reason')}：</Paragraph>
+                    <div className={classes.outPutHtml} dangerouslySetInnerHTML={{__html: showInfo.changeReason}}/>
                     <Paragraph>{intl.get('createTime')}：{showInfo.create_time}</Paragraph>
                     <Paragraph>{intl.get('updateTime')}：{showInfo.update_time}</Paragraph>
                     <Paragraph>{intl.get('file')}：</Paragraph>
