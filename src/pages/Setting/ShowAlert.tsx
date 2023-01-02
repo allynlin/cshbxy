@@ -1,6 +1,6 @@
 import React from "react";
 import {useNavigate} from "react-router-dom";
-import {message, Radio, RadioChangeEvent, App} from "antd";
+import {App, Radio, RadioChangeEvent} from "antd";
 import intl from "react-intl-universal";
 import {LStorage} from "../../component/localStrong";
 

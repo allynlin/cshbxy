@@ -1,4 +1,4 @@
-import {Alert, Button, Typography, App} from 'antd';
+import {Alert, App, Button, Typography} from 'antd';
 import React from 'react';
 import {useNavigate} from "react-router-dom";
 import intl from "react-intl-universal";

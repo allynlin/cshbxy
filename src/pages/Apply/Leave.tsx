@@ -6,10 +6,11 @@ import moment from "moment";
 import intl from "react-intl-universal";
 import type {Dayjs} from 'dayjs';
 import dayjs from 'dayjs';
+import BraftEditor from "braft-editor";
 
 import {addLeave, checkLastTimeLeave,} from "../../component/axios/api";
 import {useStyles} from "../../styles/webStyle";
-import BraftEditor from "braft-editor";
+import {controls} from "../../baseInfo";
 
 const {Title, Paragraph} = Typography;
 
@@ -32,8 +33,6 @@ const LeaveForm = () => {
     const [form] = Form.useForm();
     const reason = Form.useWatch('reason', form);
     const leaveTime = Form.useWatch('leaveTime', form);
-
-    const controls = ['bold', 'italic', 'underline', 'text-color', 'separator', 'link'];
 
     useEffect(() => {
         checkLastTimeLeave().then(res => {

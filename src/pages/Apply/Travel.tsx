@@ -2,13 +2,13 @@ import React, {useEffect, useState} from 'react';
 import {App, Button, Form, Input, InputNumber, Modal, Select, Typography} from 'antd';
 import {useNavigate} from 'react-router-dom';
 import intl from "react-intl-universal";
+import BraftEditor from "braft-editor";
 
 import {addTravelReimbursement, checkLastTimeUploadFiles} from "../../component/axios/api";
-import {BaseInfo, tableName} from "../../baseInfo";
+import {BaseInfo, controls, tableName} from "../../baseInfo";
 import Spin from "../../component/LoadingSkleton";
 import FileUpLoad from "../../component/axios/FileUpLoad";
 import {useStyles} from "../../styles/webStyle";
-import BraftEditor from "braft-editor";
 
 const {Title, Paragraph} = Typography;
 const {Option} = Select;
@@ -37,8 +37,6 @@ const LeaveForm = () => {
     const destination = Form.useWatch('destination', form);
     const expenses = Form.useWatch('expenses', form);
     const reason = Form.useWatch('reason', form);
-
-    const controls = ['bold', 'italic', 'underline', 'text-color', 'separator', 'link'];
 
     useEffect(() => {
         checkUploadFilesList();

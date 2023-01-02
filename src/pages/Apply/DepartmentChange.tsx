@@ -11,7 +11,7 @@ import {
     checkTeacherChangeDepartment,
     findUserType
 } from "../../component/axios/api";
-import {DownLoadURL, tableName} from "../../baseInfo";
+import {controls, DownLoadURL, tableName} from "../../baseInfo";
 import FileUpLoad from "../../component/axios/FileUpLoad";
 import {useStyles} from "../../styles/webStyle";
 
@@ -43,8 +43,6 @@ const ChangeForm = () => {
     const [form] = Form.useForm();
     const departmentUid = Form.useWatch('departmentUid', form);
     const changeReason = Form.useWatch('changeReason', form);
-
-    const controls = ['bold', 'italic', 'underline', 'text-color', 'separator', 'link'];
 
     useEffect(() => {
         checkDepartmentChange();

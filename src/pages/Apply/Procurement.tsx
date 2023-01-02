@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
-import {App, Button, Form, Input, InputNumber, Modal, Typography} from 'antd';
+import {App, Button, Form, InputNumber, Modal, Typography} from 'antd';
 import {useNavigate} from 'react-router-dom';
 import intl from "react-intl-universal";
+import BraftEditor from "braft-editor";
 
 import {addProcurement} from "../../component/axios/api";
 import {useStyles} from "../../styles/webStyle";
-import BraftEditor from "braft-editor";
+import {controls} from "../../baseInfo";
 
 const {Title, Paragraph} = Typography;
 
@@ -24,8 +25,6 @@ const ProcurementForm = () => {
     const items = Form.useWatch('items', form);
     const price = Form.useWatch('price', form);
     const reason = Form.useWatch('reason', form);
-
-    const controls = ['bold', 'italic', 'underline', 'text-color', 'separator', 'link'];
 
     // 表单提交
     const submitForm = () => {

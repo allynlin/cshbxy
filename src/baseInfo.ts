@@ -12,3 +12,5 @@ export const tableName = {
     departmentChange: 'ChangeDepartment',
     travel: 'Travel'
 }
+
+export const controls = ['undo', 'redo', 'separator', 'font-family', 'font-size', 'line-height', 'letter-spacing', 'separator', 'text-color', 'bold', 'italic', 'underline', 'strike-through', 'separator', 'superscript', 'subscript', 'remove-styles', 'emoji', 'separator', 'text-indent', 'text-align', 'separator', 'headings', 'list-ol', 'list-ul', 'blockquote', 'code', 'separator', 'link', 'hr', 'separator', 'clear', 'fullscreen'];

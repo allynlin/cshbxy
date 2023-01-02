@@ -1,12 +1,7 @@
 import React from 'react';
 import {useLocation, useNavigate} from "react-router-dom";
 import {FloatButton} from 'antd';
-import {
-    LaptopOutlined,
-    MobileOutlined,
-    SettingOutlined,
-    TranslationOutlined
-} from '@ant-design/icons';
+import {LaptopOutlined, MobileOutlined, SettingOutlined, TranslationOutlined} from '@ant-design/icons';
 import {useDispatch, useSelector} from "react-redux";
 import intl from "react-intl-universal";
 import {IconSun} from "@arco-design/web-react/icon";
