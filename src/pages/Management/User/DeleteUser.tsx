@@ -31,8 +31,9 @@ export default function DeleteUser(props: propsCheck) {
                 setLoading(true);
                 deleteUser(props.content.uid).then(() => {
                     message.success(intl.get('deleteUserSuccess'));
-                    setLoading(false);
                     props.getChange('yes');
+                }).finally(() => {
+                    setLoading(false);
                 })
             }
         });

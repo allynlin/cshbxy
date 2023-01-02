@@ -38,7 +38,7 @@ const App: React.FC = () => {
         // 虚拟列表的宽度计算：页面宽度 - 左侧导航栏宽度（200）- 右侧边距（20） - 表格左右边距（20）
         const tableWidth = collapsed ? width - 80 - 40 : width - 200 - 40;
         // 虚拟列表高度计算：页面高度 - 页面顶部（54） - 页面底部（40） - padding（65）
-        const tableHeight = height - 54 - 40 - 220;
+        const tableHeight = height - 54 - 40 - 230;
         const wait = setTimeout(() => {
             dispatch(setTableSize({tableWidth, tableHeight}));
             setWidth(contentWidth);
