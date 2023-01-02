@@ -218,7 +218,7 @@
   "confirmDeleteUserNotice": "删除用户后不可恢复，请谨慎操作",
   "confirmDeleteUserAgain": "最后一次确认删除用户吗？",
   "deleteUserSuccess": "删除用户成功",
-  "departmentUser": "部门用户管理",
+  "departmentUser": "用户管理",
   "processManagement": "流程管理",
   "changeProcess": "修改流程",
   "confirmChangeProcess": "确认修改流程吗？",
@@ -294,5 +294,11 @@
   "getSolidColorMessage": "您已启用纯色模式",
   "cancelGaussianBlurMessage": "您已取消高斯模糊效果",
   "changeToGaussianBluring": "正在切换至高斯模糊效果",
-  "changeToGaussianBlurNotice": "我们正在计算您的设备性能，以便为您提供最佳的体验，这个过程预计需要 3-10 秒，请您耐心等待，如您不愿意等待，您可以点击取消按钮，切换至纯色模式"
+  "changeToGaussianBlurNotice": "我们正在计算您的设备性能，以便为您提供最佳的体验，这个过程预计需要 3-10 秒，请您耐心等待，如您不愿意等待，您可以点击取消按钮，切换至纯色模式",
+  "directLeadership": "直属领导",
+  "addDepartment": "添加部门",
+  "settingDirectLeadership": "设置直属领导",
+  "confirmSettingDirectLeadership": "确认设置直属领导",
+  "settingDirectLeadershipNotice": "您正在设置当前部门直属领导，您只能设置一个直属领导，如您已设置直属领导，再次设置将会覆盖之前的设置",
+  "settingSuccess": "设置成功"
 }

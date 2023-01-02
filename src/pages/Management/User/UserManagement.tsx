@@ -112,7 +112,7 @@ const MyApp = () => {
                     id: index + 1,
                     key: item.uid,
                     tag: RenderUserStatus(item.status),
-                    showUserType: RenderUserTypeTag(item.userType),
+                    showUserType: RenderUserTypeTag(item),
                     operation: <Button
                         type="primary"
                         onClick={() => {
@@ -121,7 +121,7 @@ const MyApp = () => {
                                 id: index + 1,
                                 key: item.uid,
                                 tag: RenderUserStatus(item.status),
-                                showUserType: RenderUserTypeTag(item.userType),
+                                showUserType: RenderUserTypeTag(item),
                             });
                             setShowModal(true);
                             setShowContent(false);

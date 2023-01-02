@@ -15,6 +15,8 @@ import {useStyles} from "../../../styles/webStyle";
 import {RenderVirtualTableSkeleton} from "../../../component/RenderVirtualTableSkeleton";
 import {useGaussianBlurStyles} from "../../../styles/gaussianBlurStyle";
 import Draggable, {DraggableData, DraggableEvent} from "react-draggable";
+import {RenderUserTypeTag} from "../../../component/Tag/RenderUserTypeTag";
+import ChangeDirectLeadership from "./ChangeDirectLeadership";
 
 const {Title, Paragraph} = Typography;
 
@@ -110,6 +112,7 @@ const MyApp = () => {
                     id: index + 1,
                     key: item.uid,
                     tag: RenderUserStatus(item.status),
+                    showUserType: RenderUserTypeTag(item),
                     operation: <Button
                         type="primary"
                         onClick={() => {
@@ -118,6 +121,7 @@ const MyApp = () => {
                                 id: index + 1,
                                 key: item.uid,
                                 tag: RenderUserStatus(item.status),
+                                showUserType: RenderUserTypeTag(item),
                             });
                             setShowModal(true);
                             setShowContent(false);
@@ -161,6 +165,10 @@ const MyApp = () => {
     }, {
         title: intl.get('status'),
         dataIndex: 'tag',
+        align: 'center',
+    }, {
+        title: intl.get('userType'),
+        dataIndex: 'showUserType',
         align: 'center',
     }, {
         title: intl.get('operate'),
@@ -247,6 +255,7 @@ const MyApp = () => {
                         <Paragraph>{intl.get('createTime')}：{showInfo.create_time}</Paragraph>
                         <Paragraph>{intl.get('updateTime')}：{showInfo.update_time}</Paragraph>
                         <Paragraph>{intl.get('status')}：{showInfo.tag}</Paragraph>
+                        <Paragraph>{intl.get('userType')}：{showInfo.showUserType}</Paragraph>
                         <Title level={3}>{intl.get('userOperation')}</Title>
                         <Paragraph>{<ChangePassword uid={showInfo.uid}/>}</Paragraph>
                         <Paragraph>
@@ -410,12 +419,20 @@ const MyApp = () => {
                                 setShowData(newShowData)
                             }}/>}
                         </Paragraph>
+                        <Paragraph>
+                            {<ChangeDirectLeadership content={showInfo} getChange={(newContent: string) => {
+                                if (newContent === 'yes') {
+                                    getDataSource()
+                                    setShowModal(false)
+                                }
+                            }}/>}
+                        </Paragraph>
                     </Typography>
                 )}
             </Modal>
             <div className={classes.contentHead}>
                 <Title level={2} className={classes.tit}>
-                    {intl.get('departmentUser')}&nbsp;&nbsp;
+                    {userInfo.realeName} {intl.get('departmentUser')}&nbsp;&nbsp;
                     <RenderGetDataSourceButton/>
                 </Title>
                 <Form name="search" layout="inline" onFinish={onFinish}>

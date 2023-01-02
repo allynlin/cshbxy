@@ -4,7 +4,6 @@ import React from "react";
 import intl from "react-intl-universal";
 
 export const RenderUserStatusTag = (status: string) => {
-
     switch (status) {
         case 'Normal':
         case '正常':

@@ -21,6 +21,7 @@ const AddUserByDepartment = () => {
     const gender = Form.useWatch('gender', form);
     const tel = Form.useWatch('tel', form);
     const email = Form.useWatch('email', form);
+    const userType = Form.useWatch('userType', form);
 
     const userInfo = useSelector((state: any) => state.userInfo.value);
 
@@ -37,7 +38,7 @@ const AddUserByDepartment = () => {
     };
 
     const checkUserName = () => {
-        checkUsername(username, "Employee").then(res => {
+        checkUsername(username, userType).then(res => {
             if (res.code !== 200) {
                 message.open({
                     key,
@@ -71,7 +72,7 @@ const AddUserByDepartment = () => {
     }
 
     const register = () => {
-        userRegister(username, password, realeName, gender, tel, email, userInfo.uid, "Employee").then(res => {
+        userRegister(username, password, realeName, gender, tel, email, userInfo.uid, userType).then(res => {
             setLoading(false);
             if (res.code !== 200) {
                 message.open({
@@ -112,6 +113,7 @@ const AddUserByDepartment = () => {
             onFinish={onFinish}
             initialValues={{
                 gender: "男",
+                userType: "Employee"
             }}
         >
             <Form.Item
@@ -211,6 +213,22 @@ const AddUserByDepartment = () => {
                 ]}
             >
                 <Input type={"email"} showCount maxLength={30} allowClear={true}/>
+            </Form.Item>
+
+            <Form.Item
+                label={intl.get('userType')}
+                name="userType"
+                rules={[
+                    {
+                        required: true,
+                        message: intl.get('pleaseChooseUserType'),
+                    },
+                ]}
+            >
+                <Radio.Group buttonStyle="solid">
+                    <Radio.Button value="Employee">{intl.get('employee')}</Radio.Button>
+                    <Radio.Button value="Leader">{intl.get('leader')}</Radio.Button>
+                </Radio.Group>
             </Form.Item>
 
             <Form.Item>

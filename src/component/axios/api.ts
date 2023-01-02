@@ -414,3 +414,18 @@ export const updateProcess = async (uid: string, process: string) => {
         process
     });
 }
+
+// 获取部门下的所有领导
+export const findAllLeaderByDepartmentUid = async (departmentUid: string) => {
+    return promise.Request('/api/user/findAllLeaderByDepartmentUid', MethodType.POST, {
+        departmentUid
+    });
+}
+
+// 修改部门直属领导
+export const updateDepartmentLeader = async (departmentUid: string, uid: string) => {
+    return promise.Request('/api/user/updateDepartmentLeader', MethodType.POST, {
+        departmentUid,
+        uid
+    });
+}

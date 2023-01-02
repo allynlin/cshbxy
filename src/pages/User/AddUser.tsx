@@ -3,7 +3,6 @@ import {App, Button, Form, Input, Radio} from 'antd';
 import intl from "react-intl-universal";
 
 import {checkUsername, userRegister} from "../../component/axios/api";
-import {Employee} from "../../component/redux/userTypeSlice";
 
 
 const AddUserByAdmin = () => {
@@ -21,7 +20,6 @@ const AddUserByAdmin = () => {
     const tel = Form.useWatch('tel', form);
     const email = Form.useWatch('email', form);
     const departmentUid = Form.useWatch('departmentUid', form);
-    const userType = Form.useWatch('userType', form);
 
     const key = 'register'
 
@@ -36,7 +34,7 @@ const AddUserByAdmin = () => {
     };
 
     const checkUserName = () => {
-        checkUsername(username, userType).then(res => {
+        checkUsername(username, "Department").then(res => {
             if (res.code !== 200) {
                 message.open({
                     key,
@@ -70,7 +68,7 @@ const AddUserByAdmin = () => {
     }
 
     const register = () => {
-        userRegister(username, password, realeName, gender, tel, email, departmentUid, userType).then(res => {
+        userRegister(username, password, realeName, gender, tel, email, departmentUid, "Department").then(res => {
             setLoading(false)
             if (res.code !== 200) {
                 message.open({
@@ -111,7 +109,6 @@ const AddUserByAdmin = () => {
             onFinish={onFinish}
             initialValues={{
                 gender: "男",
-                userType: "Employee",
             }}
         >
             <Form.Item
@@ -213,27 +210,9 @@ const AddUserByAdmin = () => {
                 <Input type={"email"} showCount maxLength={30} allowClear={true}/>
             </Form.Item>
 
-            <Form.Item
-                label={intl.get('userType')}
-                name="userType"
-                rules={[
-                    {
-                        required: true,
-                        message: intl.get('pleaseChooseUserType'),
-                    },
-                ]}
-            >
-                <Radio.Group buttonStyle="solid">
-                    <Radio.Button value="Employee">{intl.get('employee')}</Radio.Button>
-                    <Radio.Button value="Leader">{intl.get('leader')}</Radio.Button>
-                    <Radio.Button value="Department">{intl.get('department')}</Radio.Button>
-                </Radio.Group>
-            </Form.Item>
-
-
             <Form.Item>
                 <Button type="primary" htmlType="submit" loading={loading} disabled={loading}>
-                    {intl.get('register')}
+                    {intl.get('addDepartment')}
                 </Button>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <Button htmlType="button" disabled={loading} onClick={onReset}>

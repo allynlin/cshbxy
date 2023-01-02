@@ -51,6 +51,12 @@ const ProcessManagement = () => {
                     chosen: false
                 }
             })
+            data.push({
+                key: 'nowDepartment',
+                title: '当前部门直属领导',
+                description: '当前部门直属领导',
+                chosen: false
+            })
             setMockData(data)
         })
     }
@@ -99,8 +105,18 @@ const ProcessManagement = () => {
 
         // 将 process 按照 || 分割成数组
         const processArray: string[] = process.split('||');
+        console.log(processArray)
 
-        const newArray = processArray.map((item, index) => {
+        // 过滤 processArray，将其中的 nowDepartment 改为当前部门直属领导
+        const processArrayFilter = processArray.map((item: string) => {
+            if (item === 'nowDepartment') {
+                return intl.get('directLeadership')
+            } else {
+                return item
+            }
+        })
+
+        const newArray = processArrayFilter.map((item) => {
             return {
                 title: item,
             }

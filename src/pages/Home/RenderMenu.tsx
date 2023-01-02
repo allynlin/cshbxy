@@ -110,7 +110,7 @@ export const SliderMenu: React.FC = () => {
                 to={'/user-management'}>{intl.get('userManagement')}</Link>, '/user-management', gaussianBlur ? gaussianBlurStyles.gaussianBlurMenu : '',
             <TeamOutlined/>),
         getItem((<Link
-                to={'/register'}>{intl.get('register')}</Link>), '/register', gaussianBlur ? gaussianBlurStyles.gaussianBlurMenu : '',
+                to={'/register'}>{intl.get('addDepartment')}</Link>), '/register', gaussianBlur ? gaussianBlurStyles.gaussianBlurMenu : '',
             <FormOutlined/>),
         getItem(<Link
                 to={'/process-management'}>{intl.get('processManagement')}</Link>, '/process-management', gaussianBlur ? gaussianBlurStyles.gaussianBlurMenu : '',
