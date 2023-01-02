@@ -1,9 +1,10 @@
 import {Button, List, Modal, Skeleton, Steps, Tag, Transfer, Typography} from 'antd';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import intl from "react-intl-universal";
 import {ExclamationCircleOutlined, SearchOutlined} from "@ant-design/icons";
 import {findAllProcess, findProcessUser, updateProcess} from "../../component/axios/api";
 import {useSelector} from "react-redux";
+import Draggable, {DraggableData, DraggableEvent} from "react-draggable";
 
 import {useStyles} from "../../styles/webStyle";
 import {useGaussianBlurStyles} from "../../styles/gaussianBlurStyle";
@@ -28,6 +29,10 @@ const ProcessManagement = () => {
     const [dataSource, setDataSource] = useState<any>([]);
     const [content, setContent] = useState<any>(null);
     const [open, setOpen] = useState(false);
+    // 可移动 modal
+    const [disabled, setDisabled] = useState(false);
+    const [bounds, setBounds] = useState({left: 0, top: 0, bottom: 0, right: 0});
+    const draggleRef = useRef<HTMLDivElement>(null);
 
     const tableSize = useSelector((state: any) => state.tableSize.value);
     const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value);
@@ -121,6 +126,20 @@ const ProcessManagement = () => {
         setTargetKeys(newTargetKeys);
     };
 
+    const onStart = (_event: DraggableEvent, uiData: DraggableData) => {
+        const {clientWidth, clientHeight} = window.document.documentElement;
+        const targetRect = draggleRef.current?.getBoundingClientRect();
+        if (!targetRect) {
+            return;
+        }
+        setBounds({
+            left: -targetRect.left + uiData.x,
+            right: clientWidth - (targetRect.right - uiData.x),
+            top: -targetRect.top + uiData.y,
+            bottom: clientHeight - (targetRect.bottom - uiData.y),
+        });
+    };
+
     return (
         <div className={classes.contentBody}>
             <div className={classes.contentHead}>
@@ -132,12 +151,38 @@ const ProcessManagement = () => {
             </div>
             <Modal
                 open={open}
-                title={intl.get("changeProcess")}
+                title={
+                    <div
+                        style={{
+                            width: '100%',
+                            cursor: 'move',
+                        }}
+                        onMouseOver={() => {
+                            if (disabled) {
+                                setDisabled(false);
+                            }
+                        }}
+                        onMouseOut={() => {
+                            setDisabled(true);
+                        }}
+                    >
+                        {intl.get('changeProcess')}
+                    </div>
+                }
                 okText={intl.get('ok')}
                 cancelText={intl.get('cancel')}
                 onCancel={() => setOpen(false)}
                 className={gaussianBlur ? gaussianBlurClasses.gaussianBlurModal : ''}
                 mask={!gaussianBlur}
+                modalRender={(modal) => (
+                    <Draggable
+                        disabled={disabled}
+                        bounds={bounds}
+                        onStart={(event: any, uiData: any) => onStart(event, uiData)}
+                    >
+                        <div ref={draggleRef}>{modal}</div>
+                    </Draggable>
+                )}
                 onOk={() => {
                     console.log(targetKeys)
                     // 将 targetKeys 拼接成字符串,以 || 分割

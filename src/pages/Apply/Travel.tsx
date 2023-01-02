@@ -125,7 +125,6 @@ const LeaveForm = () => {
                     form={form}
                     name="basic"
                     layout="vertical"
-                    requiredMark="optional"
                     onFinish={onFinish}
                     initialValues={{
                         file: fileList

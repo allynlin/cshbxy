@@ -107,8 +107,7 @@ const AddUserByAdmin = () => {
         <Form
             form={form}
             name="login"
-            labelCol={{span: 8}}
-            wrapperCol={{span: 8}}
+            layout="vertical"
             onFinish={onFinish}
             initialValues={{
                 gender: "男",
@@ -232,7 +231,7 @@ const AddUserByAdmin = () => {
             </Form.Item>
 
 
-            <Form.Item wrapperCol={{offset: 8, span: 16}}>
+            <Form.Item>
                 <Button type="primary" htmlType="submit" loading={loading} disabled={loading}>
                     {intl.get('register')}
                 </Button>

@@ -100,11 +100,11 @@ export const useStyles = createUseStyles({
         overflowY: 'hidden',
         display: 'flex',
         alignItems: 'center',
-        backgroundColor: 'rgba(236, 236, 236, 1)',
+        backgroundColor: 'rgba(236, 236, 236, 0.5)',
         borderRadius: 3,
         marginBottom: 16,
         "[data-scheme='dark'] &": {
-            backgroundColor: 'rgba(50, 49, 48, 1)',
+            backgroundColor: 'rgba(50, 49, 48, 0.5)',
         }
     },
     fileItem: {
@@ -124,13 +124,16 @@ export const useStyles = createUseStyles({
         alignItems: 'center',
     },
     outPutHtml: {
-        backgroundColor: "rgba(120,122,128,0.5)",
+        backgroundColor: "rgba(236, 236, 236,0.5)",
         borderRadius: 6,
         marginBottom: '1em',
         width: "100%",
         padding: 10,
         "&>p": {
             margin: 0,
+        },
+        "[data-scheme='dark'] &": {
+            backgroundColor: "rgba(50, 49, 48,0.5)",
         }
     }
 })

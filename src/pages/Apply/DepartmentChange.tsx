@@ -197,7 +197,6 @@ const ChangeForm = () => {
                 name="basic"
                 onFinish={onFinish}
                 layout="vertical"
-                requiredMark="optional"
                 initialValues={{
                     file: fileList
                 }}
