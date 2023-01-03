@@ -11,12 +11,17 @@ import BraftEditor from "braft-editor";
 import {addLeave, checkLastTimeLeave,} from "../../component/axios/api";
 import {useStyles} from "../../styles/webStyle";
 import {controls} from "../../baseInfo";
+import {useGaussianBlurStyles} from "../../styles/gaussianBlurStyle";
+import {useSelector} from "react-redux";
 
 const {Title, Paragraph} = Typography;
 
 const LeaveForm = () => {
 
     const classes = useStyles();
+    const gaussianBlurClasses = useGaussianBlurStyles();
+
+    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value)
 
     const {message} = App.useApp();
 
@@ -157,6 +162,8 @@ const LeaveForm = () => {
                 onOk={handleOk}
                 confirmLoading={confirmLoading}
                 onCancel={handleCancel}
+                className={gaussianBlur ? gaussianBlurClasses.gaussianBlurModal : ''}
+                mask={!gaussianBlur}
             >
                 <Typography>
                     <Paragraph>{intl.get('startTime')}：{leaveTime ? leaveTime[0].format('YYYY-MM-DD HH:mm:ss') : intl.get('notChooseStartTime')}</Paragraph>
@@ -185,6 +192,7 @@ const LeaveForm = () => {
                         showTime={true}
                         format={"YYYY-MM-DD HH:mm:s"}
                         presets={rangePresets}
+                        popupClassName={gaussianBlur ? gaussianBlurClasses.datePicker : ''}
                     />
                 </Form.Item>
 

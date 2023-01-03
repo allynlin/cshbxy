@@ -9,6 +9,8 @@ import {BaseInfo, controls, tableName} from "../../baseInfo";
 import Spin from "../../component/LoadingSkleton";
 import FileUpLoad from "../../component/axios/FileUpLoad";
 import {useStyles} from "../../styles/webStyle";
+import {useGaussianBlurStyles} from "../../styles/gaussianBlurStyle";
+import {useSelector} from "react-redux";
 
 const {Title, Paragraph} = Typography;
 const {Option} = Select;
@@ -18,6 +20,9 @@ const URL = `${BaseInfo}/api`;
 const LeaveForm = () => {
 
     const classes = useStyles();
+    const gaussianBlurClasses = useGaussianBlurStyles();
+
+    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value)
 
     const {message} = App.useApp();
 
@@ -107,6 +112,8 @@ const LeaveForm = () => {
                     onOk={handleOk}
                     confirmLoading={confirmLoading}
                     onCancel={handleCancel}
+                    className={gaussianBlur ? gaussianBlurClasses.gaussianBlurModal : ''}
+                    mask={!gaussianBlur}
                 >
                     <Typography>
                         <Paragraph>{intl.get('destination')}：{destination}</Paragraph>

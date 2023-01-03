@@ -73,7 +73,16 @@ export const useGaussianBlurStyles = createUseStyles({
             },
         }
     },
-    testOrange: {
-        backgroundColor: "orange !important"
+    datePicker: {
+        boxSizing: 'border-box !important',
+        "& .ant-picker-panel-container": {
+            backdropFilter: "blur(20px) saturate(180%) !important",
+            "[data-prefers-color-scheme='light'] &": {
+                background: "rgba(240,240,240,0.4) !important",
+            },
+            "[data-prefers-color-scheme='dark'] &": {
+                background: "rgba(20,20,20,0.2) !important",
+            }
+        }
     }
 })

@@ -7,12 +7,17 @@ import BraftEditor from "braft-editor";
 import {addProcurement} from "../../component/axios/api";
 import {useStyles} from "../../styles/webStyle";
 import {controls} from "../../baseInfo";
+import {useGaussianBlurStyles} from "../../styles/gaussianBlurStyle";
+import {useSelector} from "react-redux";
 
 const {Title, Paragraph} = Typography;
 
 const ProcurementForm = () => {
 
     const classes = useStyles();
+    const gaussianBlurClasses = useGaussianBlurStyles();
+
+    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value)
 
     const {message} = App.useApp();
 
@@ -74,6 +79,8 @@ const ProcurementForm = () => {
                 onOk={handleOk}
                 confirmLoading={confirmLoading}
                 onCancel={handleCancel}
+                className={gaussianBlur ? gaussianBlurClasses.gaussianBlurModal : ''}
+                mask={!gaussianBlur}
             >
                 <Typography>
                     <Paragraph>{intl.get('procurementItem')}：</Paragraph>

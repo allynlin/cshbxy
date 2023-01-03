@@ -14,6 +14,8 @@ import {
 import {controls, DownLoadURL, tableName} from "../../baseInfo";
 import FileUpLoad from "../../component/axios/FileUpLoad";
 import {useStyles} from "../../styles/webStyle";
+import {useGaussianBlurStyles} from "../../styles/gaussianBlurStyle";
+import {useSelector} from "react-redux";
 
 
 const {Title, Paragraph} = Typography;
@@ -21,6 +23,9 @@ const {Title, Paragraph} = Typography;
 const ChangeForm = () => {
 
     const classes = useStyles();
+    const gaussianBlurClasses = useGaussianBlurStyles();
+
+    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value)
 
     const {message} = App.useApp();
 
@@ -179,6 +184,8 @@ const ChangeForm = () => {
                 onOk={handleOk}
                 confirmLoading={confirmLoading}
                 onCancel={handleCancel}
+                className={gaussianBlur ? gaussianBlurClasses.gaussianBlurModal : ''}
+                mask={!gaussianBlur}
             >
                 <Typography>
                     <Paragraph>{intl.get('departmentChange') + ': '}{departmentUid}</Paragraph>

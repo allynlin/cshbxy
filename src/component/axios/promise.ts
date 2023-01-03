@@ -1,6 +1,5 @@
 import axios from 'axios';
 import qs from 'qs';
-import {message} from "antd";
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css'
 import Cookie from "js-cookie";
@@ -43,13 +42,13 @@ export const Request = (api: String, method = MethodType.GET, params = {}, confi
     };
 
     return new Promise((resolve, reject) => {
+        NProgress.done(true);
         NProgress.inc();
         axios(axiosConfig).then(res => {
             if (res.data.token !== null && res.data.token !== undefined)
                 setCookie({name: "cshbxy-oa-token", value: res.data.token})
             resolve(res.data);
         }).catch(error => {
-            message.error(error.message);
             reject(error);
         }).finally(() => {
             NProgress.done(true);
