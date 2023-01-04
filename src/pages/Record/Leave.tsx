@@ -20,7 +20,7 @@ import {
 import {deleteLeave, findLeaveList, findLeaveProcess, refreshLeave} from "../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
-import {RenderStatusTag} from "../../component/Tag/RenderStatusTag";
+import {RenderStatus} from "../../component/Tag/RenderStatus";
 import {FolderOpenOutlined, SearchOutlined} from "@ant-design/icons";
 import {useSelector} from "react-redux";
 import {RenderWatermarkColor} from "../../component/Tag/RenderWatermarkColor";
@@ -29,6 +29,7 @@ import {getProcessStatus} from '../../component/getProcessStatus';
 import {RenderVirtualTableSkeleton} from "../../component/RenderVirtualTableSkeleton";
 import {useGaussianBlurStyles} from "../../styles/gaussianBlurStyle";
 import Draggable, {DraggableData, DraggableEvent} from "react-draggable";
+import {RenderStatusTag} from "../../component/Tag/RenderStatusTag";
 
 const {Title, Paragraph} = Typography;
 const {Meta} = Card;
@@ -135,11 +136,12 @@ const MyApp: React.FC = () => {
             let newContent = {
                 key: res.body.uid,
                 id: showInfo.id,
-                tag: RenderStatusTag(res.body),
+                tag: RenderStatus(res.body),
+                statusTag: RenderStatusTag(res.body),
                 operation: <Button
                     type="primary"
                     onClick={() => {
-                        setShowInfo({...res.body, id: showInfo.id})
+                        setShowInfo({...res.body, id: showInfo.id, statusTag: RenderStatusTag(res.body)})
                         getProcess(res.body.uid);
                         setShowModal(true);
                         setShowContent(false);
@@ -216,11 +218,12 @@ const MyApp: React.FC = () => {
                     ...item,
                     id: index + 1,
                     key: item.uid,
-                    tag: RenderStatusTag(item),
+                    tag: RenderStatus(item),
+                    statusTag: RenderStatusTag(item),
                     operation: <Button
                         type="primary"
                         onClick={() => {
-                            setShowInfo({...item, id: index + 1});
+                            setShowInfo({...item, id: index + 1, statusTag: RenderStatusTag(item)});
                             getProcess(item.uid);
                             setShowModal(true);
                             setShowContent(false);
@@ -448,19 +451,20 @@ const MyApp: React.FC = () => {
                                     </Title>
                                     {showContent ? (<Skeleton active/>) : (
                                         <>
-                                            <p>UID：{showInfo.uid}</p>
-                                            <p>{intl.get('startTime')}：{showInfo.start_time}</p>
-                                            <p>{intl.get('endTime')}：{showInfo.end_time}</p>
-                                            <p>{intl.get('reason')}：</p>
+                                            <Paragraph>{intl.get('status')}：{showInfo.statusTag}</Paragraph>
+                                            <Paragraph>UID：{showInfo.uid}</Paragraph>
+                                            <Paragraph>{intl.get('startTime')}：{showInfo.start_time}</Paragraph>
+                                            <Paragraph>{intl.get('endTime')}：{showInfo.end_time}</Paragraph>
+                                            <Paragraph>{intl.get('reason')}：</Paragraph>
                                             <div className={classes.outPutHtml}
                                                  dangerouslySetInnerHTML={{__html: showInfo.reason}}/>
                                             {showInfo.reject_reason ?
-                                                <p>
+                                                <Paragraph>
                                                     {intl.get('rejectReason')}：
                                                     <Tag color={userToken.colorError}>{showInfo.reject_reason}</Tag>
-                                                </p> : null}
-                                            <p>{intl.get('createTime')}：{showInfo.create_time}</p>
-                                            <p>{intl.get('updateTime')}：{showInfo.update_time}</p>
+                                                </Paragraph> : null}
+                                            <Paragraph>{intl.get('createTime')}：{showInfo.create_time}</Paragraph>
+                                            <Paragraph>{intl.get('updateTime')}：{showInfo.update_time}</Paragraph>
                                             <div>{intl.get('approveProcess')}：</div>
                                             {processLoading ? (
                                                     <Space style={{flexDirection: 'column', marginTop: 16}}>
@@ -495,6 +499,7 @@ const MyApp: React.FC = () => {
                         <>
                             {showContent ? (<Skeleton active/>) : (
                                 <Typography>
+                                    <Paragraph>{intl.get('status')}：{showInfo.statusTag}</Paragraph>
                                     <Paragraph>{intl.get('startTime')}：{showInfo.start_time}</Paragraph>
                                     <Paragraph>{intl.get('endTime')}：{showInfo.end_time}</Paragraph>
                                     <Paragraph>{intl.get('reason')}：</Paragraph>

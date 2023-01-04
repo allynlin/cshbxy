@@ -10,7 +10,7 @@ import {
 } from "../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
-import {RenderStatusTag} from "../../component/Tag/RenderStatusTag";
+import {RenderStatus} from "../../component/Tag/RenderStatus";
 import {FileTextOutlined, FolderOpenOutlined, SearchOutlined} from "@ant-design/icons";
 import {DownLoadURL, tableName} from "../../baseInfo";
 import {useSelector} from "react-redux";
@@ -19,6 +19,7 @@ import {getProcessStatus} from '../../component/getProcessStatus';
 import {RenderVirtualTableSkeleton} from "../../component/RenderVirtualTableSkeleton";
 import {useGaussianBlurStyles} from "../../styles/gaussianBlurStyle";
 import Draggable, {DraggableData, DraggableEvent} from "react-draggable";
+import {RenderStatusTag} from "../../component/Tag/RenderStatusTag";
 
 const {Title, Paragraph} = Typography;
 
@@ -123,11 +124,12 @@ const MyApp: React.FC = () => {
             let newContent = {
                 key: res.body.uid,
                 id: showInfo.id,
-                tag: RenderStatusTag(res.body),
+                tag: RenderStatus(res.body),
+                statusTag: RenderStatusTag(res.body),
                 operation: <Button
                     type="primary"
                     onClick={() => {
-                        setShowInfo({...res.body, id: showInfo.id});
+                        setShowInfo({...res.body, id: showInfo.id, statusTag: RenderStatusTag(res.body)});
                         getProcess(res.body.uid);
                         getFiles(res.body.uid);
                         setShowModal(true);
@@ -243,11 +245,12 @@ const MyApp: React.FC = () => {
                     ...item,
                     id: index + 1,
                     key: item.uid,
-                    tag: RenderStatusTag(item),
+                    tag: RenderStatus(item),
+                    statusTag: RenderStatusTag(item),
                     operation: <Button
                         type="primary"
                         onClick={() => {
-                            setShowInfo({...item, id: index + 1});
+                            setShowInfo({...item, id: index + 1, statusTag: RenderStatusTag(item)});
                             getProcess(item.uid);
                             getFiles(item.uid);
                             setShowModal(true);
@@ -416,6 +419,7 @@ const MyApp: React.FC = () => {
             >
                 {showContent ? (<Skeleton active/>) : (
                     <Typography>
+                        <Paragraph>{intl.get('status')}：{showInfo.statusTag}</Paragraph>
                         <Paragraph>{intl.get('destination')}：{showInfo.destination}</Paragraph>
                         <Paragraph>{intl.get('cost')}：{showInfo.expenses}</Paragraph>
                         <Paragraph>{intl.get('reason')}：</Paragraph>
