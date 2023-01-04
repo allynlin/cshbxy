@@ -50,7 +50,7 @@ export default function ChangePassword(props: propsCheck) {
                 open={open}
                 className={gaussianBlur ? gaussianBlurClasses.gaussianBlurModal : ''}
                 mask={!gaussianBlur}
-                title={intl.get("changeUsername")}
+                title={intl.get("changePassword")}
                 okText={intl.get('ok')}
                 cancelText={intl.get('cancel')}
                 confirmLoading={loading}
