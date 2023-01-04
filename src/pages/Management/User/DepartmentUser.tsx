@@ -419,14 +419,14 @@ const MyApp = () => {
                                 setShowData(newShowData)
                             }}/>}
                         </Paragraph>
-                        <Paragraph>
+                        {showInfo.userType === "Leader" ? <Paragraph>
                             {<ChangeDirectLeadership content={showInfo} getChange={(newContent: string) => {
                                 if (newContent === 'yes') {
                                     getDataSource()
                                     setShowModal(false)
                                 }
                             }}/>}
-                        </Paragraph>
+                        </Paragraph> : null}
                     </Typography>
                 )}
             </Modal>
