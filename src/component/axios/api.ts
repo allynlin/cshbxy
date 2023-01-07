@@ -30,6 +30,13 @@ export const checkUser = async () => {
     return promise.Request('/api/user/checkUser', MethodType.POST);
 }
 
+// 获取用户登录记录
+export const findLoginRecord = async (userUid: string) => {
+    return promise.Request('/api/user/findLoginRecord', MethodType.POST, {
+        userUid
+    });
+}
+
 // 获取用户上级列表
 export const findUserType = async () => {
     return promise.Request('/api/user/findUserType', MethodType.GET);

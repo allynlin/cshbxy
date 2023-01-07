@@ -300,5 +300,14 @@
   "settingDirectLeadership": "设置直属领导",
   "confirmSettingDirectLeadership": "确认设置直属领导",
   "settingDirectLeadershipNotice": "您正在设置当前部门直属领导，您只能设置一个直属领导，如您已设置直属领导，再次设置将会覆盖之前的设置",
-  "settingSuccess": "设置成功"
+  "settingSuccess": "设置成功",
+  "getLoginRecording": "获取登录记录中",
+  "getLoginRecordingSuccess": "获取登录记录成功",
+  "unknown": "未知",
+  "browser": "浏览器",
+  "ipAddress": "IP 地址",
+  "osName": "操作系统",
+  "loginTime": "登录时间",
+  "loginRecordErrorTips": "请先登录后查询登录历史",
+  "loginRecord": "登录记录"
 }

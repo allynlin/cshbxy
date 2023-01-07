@@ -38,6 +38,13 @@ const record = [{
         titleCN: '采购记录',
         Auth: 'Employee'
     }
+},{
+    path: 'login-record',
+    component: () => import('../pages/Index/LoginRecord'),
+    meta: {
+        title: 'Login Record',
+        titleCN: '登录记录',
+    }
 }]
 
 export default record;

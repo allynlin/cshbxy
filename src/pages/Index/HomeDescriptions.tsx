@@ -1,17 +1,24 @@
 import React from "react";
 import intl from "react-intl-universal";
-import {Descriptions, Typography} from "antd";
+import {Descriptions, Typography, Button} from "antd";
 import {useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
 
 const {Title} = Typography;
 
 const HomeDescriptions: React.FC = () => {
 
+    const navigate = useNavigate();
+
     const userInfo = useSelector((state: { userInfo: { value: any } }) => state.userInfo.value)
 
     return (
         <Descriptions
-            title={<Title level={3}>{intl.get('hello') + ',' + userInfo.realeName}</Title>}
+            title={<div style={{display: "flex"}}>
+                <Title level={3}>{intl.get('hello') + ',' + userInfo.realeName}</Title>
+                &nbsp;&nbsp;
+                <Button type="primary" onClick={() => navigate('/login-record')}>{intl.get('loginRecord')}</Button>
+            </div>}
             bordered
             layout="vertical"
         >
