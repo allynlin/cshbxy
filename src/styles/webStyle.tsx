@@ -135,5 +135,30 @@ export const useStyles = createUseStyles({
         "[data-scheme='dark'] &": {
             backgroundColor: "rgba(50, 49, 48,0.5)",
         }
+    },
+    settingGaussianBlurShowDiv: {
+        width: '100%',
+        height: '100px',
+        marginBottom: 16,
+        position: 'relative',
+    },
+    settingGaussianBlurImg: {
+        width: '100%',
+        height: '100px',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        objectFit: 'cover',
+        objectPosition: 'center',
+    },
+    settingGaussianBlurCard: {
+        width: '90%',
+        height: '80%',
+        borderRadius: 10,
+        border: '1px solid #e8e8e8',
+        position: 'absolute',
+        top: '10%',
+        left: '5%',
+        zIndex: 1000,
     }
 })

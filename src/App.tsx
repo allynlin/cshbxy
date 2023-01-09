@@ -109,8 +109,10 @@ const MyApp = () => {
                 colorPrimary: userThemeToken.colorPrimary,
                 borderRadius: userThemeToken.borderRadius,
                 // 错误颜色暂不支持自定义
-                colorError: '#f32401'
+                colorError: '#f32401',
+                gaussianBlur: userThemeToken.gaussianBlur,
             }))
+            rootNavigate('/')
         }
     }
 

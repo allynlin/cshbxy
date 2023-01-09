@@ -1,22 +1,32 @@
 import React from 'react';
-import {Button, ConfigProvider, Form, InputNumber} from 'antd';
+import {Button, ConfigProvider, Form, Slider} from 'antd';
 import {SketchPicker} from 'react-color';
 import intl from "react-intl-universal";
 import {setToken} from "../../component/redux/userTokenSlice";
 import {useDispatch} from "react-redux";
+import {useNavigate} from "react-router-dom";
+import {useStyles} from "../../styles/webStyle";
+import bg from './bg.jpg'
 
 type ThemeData = {
     borderRadius: number;
     colorPrimary: string;
     colorError: string;
+    gaussianBlur: number;
 };
 
 const defaultData: ThemeData = {
     borderRadius: 6,
     colorPrimary: '#1677ff',
-    colorError: '#f32401'
+    colorError: '#f32401',
+    gaussianBlur: 40,
 };
-export default () => {
+
+const TokenThemeSetting = () => {
+
+    const navigate = useNavigate();
+
+    const classes = useStyles();
 
     const [form] = Form.useForm();
 
@@ -27,8 +37,13 @@ export default () => {
     const onFinish = (values: any) => {
         dispatch(setToken({
             borderRadius: values.borderRadius,
-            colorPrimary: values.colorPrimary.hex
+            colorPrimary: values.colorPrimary.hex,
+            gaussianBlur: values.gaussianBlur,
         }))
+        navigate('/')
+        setTimeout(() => {
+            navigate('/setting')
+        }, 0)
     }
 
     return (
@@ -47,21 +62,31 @@ export default () => {
                     });
                 }}
                 name="theme"
+                layout="vertical"
                 onFinish={onFinish}
                 initialValues={defaultData}
-                labelCol={{span: 4}}
-                wrapperCol={{span: 20}}
             >
                 <Form.Item valuePropName="color" name="colorPrimary" label={intl.get('primaryColor')}>
                     <SketchPicker/>
                 </Form.Item>
                 <Form.Item name="borderRadius" label={intl.get('borderRadius')}>
-                    <InputNumber/>
+                    <Slider min={0} max={16}/>
                 </Form.Item>
-                <Form.Item name="submit" wrapperCol={{offset: 4, span: 20}}>
+                <div className={classes.settingGaussianBlurShowDiv}>
+                    <img src={bg} alt="示例图片" className={classes.settingGaussianBlurImg}/>
+                    <div className={classes.settingGaussianBlurCard} style={{
+                        backdropFilter: `blur(${data.gaussianBlur}px) saturate(180%)`,
+                    }}/>
+                </div>
+                <Form.Item name="gaussianBlur" label={intl.get('gaussianBlurNumber')}>
+                    <Slider min={0} max={100}/>
+                </Form.Item>
+                <Form.Item name="submit">
                     <Button htmlType={"submit"} type="primary">{intl.get('submit')}</Button>
                 </Form.Item>
             </Form>
         </ConfigProvider>
     );
 };
+
+export default TokenThemeSetting;

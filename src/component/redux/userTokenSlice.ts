@@ -2,7 +2,12 @@ import {createSlice} from '@reduxjs/toolkit'
 import {LStorage} from "../localStrong";
 
 interface Interface {
-    value: object
+    value: {
+        colorPrimary: string,
+        borderRadius: number,
+        colorError: string,
+        gaussianBlur: number
+    }
 }
 
 const initialState: Interface = {
@@ -10,6 +15,7 @@ const initialState: Interface = {
         colorPrimary: '#1677ff',
         borderRadius: 6,
         colorError: '#f32401',
+        gaussianBlur: 40,
     },
 }
 

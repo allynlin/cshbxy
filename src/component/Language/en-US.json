@@ -309,5 +309,6 @@
   "osName": "OS Name",
   "loginTime": "Login Time",
   "loginRecordErrorTips": "Please log in first and then check the login history.",
-  "loginRecord": "Login Record"
+  "loginRecord": "Login Record",
+  "gaussianBlurNumber": "Gaussian Blur Number"
 }

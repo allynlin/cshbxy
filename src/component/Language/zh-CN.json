@@ -309,5 +309,6 @@
   "osName": "操作系统",
   "loginTime": "登录时间",
   "loginRecordErrorTips": "请先登录后查询登录历史",
-  "loginRecord": "登录记录"
+  "loginRecord": "登录记录",
+  "gaussianBlurNumber": "高斯模糊数值"
 }
