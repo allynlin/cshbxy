@@ -32,7 +32,7 @@ a {
 
 [data-gaussianBlur="true"][data-scheme="light"] .ant-message-notice-content {
     background-color: rgba(240, 240, 240, 0.4);
-    backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(40px) saturate(180%);
 }
 
 /* 适配深色模式下 messgae 没有跟随深色模式的 BUG */
@@ -46,5 +46,5 @@ a {
 
 [data-gaussianBlur="true"][data-scheme="dark"] .ant-message-notice-content {
     background-color: rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(40px) saturate(180%);
 }

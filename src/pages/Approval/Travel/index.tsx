@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import VirtualTable from "../../../component/VirtualTable";
 import {App, Button, Card, Form, Input, Modal, Result, Skeleton, Typography} from 'antd';
 import {findTravelWaitApprovalList, findUploadFilesByUid, resolveTravel} from "../../../component/axios/api";
@@ -11,7 +11,7 @@ import Reject from "./Reject";
 import {useStyles} from "../../../styles/webStyle";
 import {RenderVirtualTableSkeleton} from "../../../component/RenderVirtualTableSkeleton";
 import {useGaussianBlurStyles} from "../../../styles/gaussianBlurStyle";
-import Draggable, {DraggableData, DraggableEvent} from "react-draggable";
+import MoveModal from '../../../component/MoveModal';
 
 const {Title, Paragraph} = Typography;
 
@@ -47,10 +47,6 @@ const MyApp = () => {
     const [fileList, setFileList] = useState<any>([]);
     // 是否为空数据
     const [isEmpty, setIsEmpty] = useState<boolean>(false);
-    // 可移动 modal
-    const [disabled, setDisabled] = useState(false);
-    const [bounds, setBounds] = useState({left: 0, top: 0, bottom: 0, right: 0});
-    const draggleRef = useRef<HTMLDivElement>(null);
 
     const getFile = "getFile"
 
@@ -245,54 +241,12 @@ const MyApp = () => {
         )
     }
 
-    const onStart = (_event: DraggableEvent, uiData: DraggableData) => {
-        const {clientWidth, clientHeight} = window.document.documentElement;
-        const targetRect = draggleRef.current?.getBoundingClientRect();
-        if (!targetRect) {
-            return;
-        }
-        setBounds({
-            left: -targetRect.left + uiData.x,
-            right: clientWidth - (targetRect.right - uiData.x),
-            top: -targetRect.top + uiData.y,
-            bottom: clientHeight - (targetRect.bottom - uiData.y),
-        });
-    };
-
     return (
         <div className={classes.contentBody}>
-            <Modal
-                title={
-                    <div
-                        style={{
-                            width: '100%',
-                            cursor: 'move',
-                        }}
-                        onMouseOver={() => {
-                            if (disabled) {
-                                setDisabled(false);
-                            }
-                        }}
-                        onMouseOut={() => {
-                            setDisabled(true);
-                        }}
-                    >
-                        {intl.get('details')}
-                    </div>
-                }
-                onCancel={() => setShowModal(false)}
-                open={showModal}
-                className={gaussianBlur ? gaussianBlurClasses.gaussianBlurModal : ''}
-                mask={!gaussianBlur}
-                modalRender={(modal) => (
-                    <Draggable
-                        disabled={disabled}
-                        bounds={bounds}
-                        onStart={(event: any, uiData: any) => onStart(event, uiData)}
-                    >
-                        <div ref={draggleRef}>{modal}</div>
-                    </Draggable>
-                )}
+            <MoveModal
+                title={intl.get('details')}
+                showModal={showModal}
+                getModalStatus={(e) => setShowModal(e)}
                 footer={[
                     <Button
                         key="refresh"
@@ -362,7 +316,7 @@ const MyApp = () => {
                         </div>
                     }
                 </Typography>
-            </Modal>
+            </MoveModal>
             <div className={classes.contentHead}>
                 <Title level={2} className={classes.tit}>
                     {intl.get('travelReimburse') + ' ' + intl.get('approve')}&nbsp;&nbsp;
