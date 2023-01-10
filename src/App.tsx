@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import intl from 'react-intl-universal';
-import {unstable_HistoryRouter as HistoryRouter} from 'react-router-dom'
-import {createBrowserHistory} from 'history'
+import {BrowserRouter} from 'react-router-dom'
 import RouterWaiter from "react-router-waiter"
 import {useDispatch, useSelector} from "react-redux";
 import {App as AntdApp, ConfigProvider} from "antd";
@@ -21,17 +20,6 @@ const locales = {
     'English': require('./component/Language/en-US.json'),
     'Chinese': require('./component/Language/zh-CN.json')
 }
-
-// 定义历史路由，用于 hooks 外路由跳转
-const history = createBrowserHistory({window});
-
-/**
- *  历史路由，用于 hooks 外路由跳转，比如在 hooks 外使用 rootNavigate.push('/login')
- * @param to 跳转路径
- */
-export const rootNavigate = (to: string) => {
-    history.push(`${process.env.PUBLIC_URL}${to}`)
-};
 
 const MyApp = () => {
     const [language, setLanguage] = useState<any>(zhCN);
@@ -114,11 +102,10 @@ const MyApp = () => {
 
     return (
         <ConfigProvider locale={language}>
-            {/*// @ts-ignore*/}
-            <HistoryRouter basename={process.env.PUBLIC_URL} history={history}>
+            <BrowserRouter basename={process.env.PUBLIC_URL}>
                 <ChangeSystem/>
                 <RouterWaiter routes={routes} loading={<Spin/>} onRouteBefore={onRouteBefore}/>
-            </HistoryRouter>
+            </BrowserRouter>
         </ConfigProvider>
     );
 }
