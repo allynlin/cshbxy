@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import Cookie from 'js-cookie';
 import intl from 'react-intl-universal';
 import {unstable_HistoryRouter as HistoryRouter} from 'react-router-dom'
 import {createBrowserHistory} from 'history'
@@ -8,18 +7,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {App as AntdApp, ConfigProvider} from "antd";
 
 import Spin from "./component/LoadingSkleton";
-import {checkUser} from "./component/axios/api";
-import {login} from "./component/redux/isLoginSlice";
-import {Department, Employee, Leader} from "./component/redux/userTypeSlice";
-import {darkTheme, lightTheme, sysTheme} from "./component/redux/sysColorSlice";
 import {dark, light} from "./component/redux/themeSlice";
-import {LStorage} from "./component/localStrong";
-import {inline, vertical} from "./component/redux/menuModeSlice";
-import {Chinese, English} from "./component/redux/userLanguageSlice";
-import {setUser} from "./component/redux/userInfoSlice";
 import ChangeSystem from "./component/ChangeSystem";
-import {setToken} from "./component/redux/userTokenSlice";
-import {close, open} from "./component/redux/gaussianBlurSlice";
 
 import enUS from "antd/es/locale/en_US";
 import zhCN from "antd/es/locale/zh_CN";
@@ -46,7 +35,6 @@ export const rootNavigate = (to: string) => {
 
 const MyApp = () => {
     const [language, setLanguage] = useState<any>(zhCN);
-    const [authCheck, setAuthCheck] = useState<boolean>(false);
 
     const {message} = AntdApp.useApp();
 
@@ -57,15 +45,10 @@ const MyApp = () => {
     const isLogin = useSelector((state: any) => state.isLogin.value)
     const userType = useSelector((state: any) => state.userType.value)
 
-    const key = 'checkUser';
-
     useEffect(() => {
-        getBrowserInfo()
-        getSysColorSetting()
-        getSysSetting()
-        getThemeToken()
-        getToken()
+        getBrowserInfo();
     }, [])
+
 
     useEffect(() => {
         changeLanguage(userLanguage)
@@ -75,59 +58,6 @@ const MyApp = () => {
     useEffect(() => {
         changeThemeColor()
     }, [sysColor])
-
-    const getSysColorSetting = () => {
-        // 如果在 localStrong 中有颜色设置就使用 localStrong 中的颜色设置
-        const sysColor = LStorage.get('cshbxy-oa-sysColor');
-        switch (sysColor) {
-            case 'light':
-                dispatch(lightTheme());
-                break;
-            case 'dark':
-                dispatch(darkTheme());
-                break;
-            case 'sys':
-                dispatch(sysTheme());
-                break;
-        }
-    }
-
-    const getSysSetting = () => {
-        // 从 Cookie 获取语言设置，用于刷新页面上展示的语言
-        Cookie.get('cshbxy-oa-language') === "en_US" ? dispatch(English()) : dispatch(Chinese())
-        // 从 LocalStrong 中获取菜单模式，用于刷新页面上展示的菜单模式
-        LStorage.get('cshbxy-oa-menuMode') === 'vertical' ? dispatch(vertical()) : dispatch(inline())
-        // 从 LocalStrong 中获取是否开启高斯模糊，用于刷新页面上展示的高斯模糊
-        LStorage.get('cshbxy-oa-gaussianBlur') === true ? dispatch(open()) : dispatch(close())
-    }
-
-    const getThemeToken = () => {
-        // 从 LocalStrong 中获取主题颜色，用于页面整体自定义主题，如果没有就使用默认主题
-        const userThemeToken = LStorage.get('cshbxy-oa-userToken')
-        if (userThemeToken) {
-            dispatch(setToken({
-                colorPrimary: userThemeToken.colorPrimary,
-                borderRadius: userThemeToken.borderRadius,
-                // 错误颜色暂不支持自定义
-                colorError: '#f32401',
-                gaussianBlur: userThemeToken.gaussianBlur,
-            }))
-            rootNavigate('/')
-        }
-    }
-
-    const getToken = () => {
-        // 从 Cookie 中获取 token，如果获取到就向后端发送请求验证 token 是否有效，如果有效就继续，否之跳转用户登录页面
-        const token = Cookie.get('cshbxy-oa-token');
-        if (token) {
-            message.open({
-                key,
-                type: 'loading',
-                content: intl.get('checkUser'),
-            });
-            checkUserInfo();
-        }
-    }
 
     const changeLanguage = (lang = "Chinese") => {
         // 默认语言为中文，同时支持英文
@@ -160,52 +90,6 @@ const MyApp = () => {
         }
     }
 
-    // 校验用户
-    const checkUserInfo = () => {
-        checkUser().then(res => {
-            setAuthCheck(true)
-            // 如果校验失败，则提示用户 token 失效，跳转到登录页面
-            if (res.code !== 200) {
-                message.error(res.msg)
-                message.open({
-                    key,
-                    type: 'error',
-                    content: intl.get('checkUserFailed'),
-                    duration: 3,
-                });
-                rootNavigate('/login')
-                return
-            }
-            message.open({
-                key,
-                type: 'success',
-                content: intl.get('checkUserSuccess'),
-                duration: 3,
-            });
-            dispatch(setUser(res.body))
-            dispatch(login())
-            switch (res.body.userType) {
-                case 'Employee':
-                    dispatch(Employee())
-                    break
-                case 'Department':
-                    dispatch(Department())
-                    break
-                case 'Leader':
-                    dispatch(Leader())
-                    break
-            }
-        }).catch(() => {
-            message.open({
-                key,
-                type: 'error',
-                content: intl.get('tryingAgain'),
-                duration: 0,
-            });
-            checkUserInfo()
-        })
-    }
-
     // 路由跳转鉴权
     const onRouteBefore = ({pathname, meta}: any) => {
         if (meta.title) {
@@ -217,9 +101,6 @@ const MyApp = () => {
             }
         }
         if (meta.Auth) {
-            // 用户鉴权，如果用户 token 未校验或者校验中，暂时不可以跳转任何需要权限的页面
-            if (!authCheck)
-                return
             if (userType === meta.Auth)
                 return pathname
             if (!isLogin) {

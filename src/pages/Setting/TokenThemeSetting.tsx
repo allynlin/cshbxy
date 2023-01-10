@@ -7,6 +7,7 @@ import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {useStyles} from "../../styles/webStyle";
 import bg from './bg.jpg'
+import {noRender, render} from "../../component/redux/isRenderWebSlice";
 
 type ThemeData = {
     borderRadius: number;
@@ -35,15 +36,19 @@ const TokenThemeSetting = () => {
     const dispatch = useDispatch();
 
     const onFinish = (values: any) => {
+        dispatch(noRender())
         dispatch(setToken({
             borderRadius: values.borderRadius,
             colorPrimary: values.colorPrimary.hex,
             gaussianBlur: values.gaussianBlur,
         }))
-        navigate('/')
         setTimeout(() => {
-            navigate('/setting')
-        }, 0)
+            setTokenSuccess()
+        }, 1000)
+    }
+
+    const setTokenSuccess = () => {
+        dispatch(render())
     }
 
     return (

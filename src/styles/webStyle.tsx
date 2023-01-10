@@ -160,5 +160,16 @@ export const useStyles = createUseStyles({
         top: '10%',
         left: '5%',
         zIndex: 1000,
+    },
+    webWaiting: {
+        width: '100%',
+        height: '100%',
+        flexDirection: 'column',
+    },
+    webWaitingImg: {
+        width: 100,
+    },
+    webWaitingProgress: {
+        width:'50%'
     }
 })

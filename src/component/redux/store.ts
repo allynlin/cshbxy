@@ -9,6 +9,7 @@ import userLanguageSlice from "./userLanguageSlice";
 import userTokenSlice from "./userTokenSlice";
 import tableSizeSlice from "./tableSizeSlice";
 import gaussianBlurSlice from "./gaussianBlurSlice";
+import isRenderWebSlice from "./isRenderWebSlice";
 
 export default configureStore({
     reducer: {
@@ -22,5 +23,6 @@ export default configureStore({
         userToken: userTokenSlice,
         tableSize: tableSizeSlice,
         gaussianBlur: gaussianBlurSlice,
+        isRenderWeb: isRenderWebSlice
     },
 })

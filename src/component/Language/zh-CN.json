@@ -310,5 +310,15 @@
   "loginTime": "登录时间",
   "loginRecordErrorTips": "请先登录后查询登录历史",
   "loginRecord": "登录记录",
-  "gaussianBlurNumber": "高斯模糊数值"
+  "gaussianBlurNumber": "高斯模糊数值",
+  "autoLoginIng": "自动登录中",
+  "autoLoginSuccess": "自动登录成功",
+  "autoLoginFailed": "自动登录失败",
+  "autoLoginTryAgain": "自动登录失败，正在重试中",
+  "getSysThemeIng": "获取系统主题中",
+  "getThemeTokenIng": "获取主题 Token 中",
+  "getGaussianBlurSettingIng": "获取高斯模糊设置中",
+  "getMenuModeSettingIng": "获取菜单模式设置中",
+  "getLanguageSettingIng": "获取语言设置中",
+  "useSettingIng": "应用设置中"
 }

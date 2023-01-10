@@ -310,5 +310,14 @@
   "loginTime": "Login Time",
   "loginRecordErrorTips": "Please log in first and then check the login history.",
   "loginRecord": "Login Record",
-  "gaussianBlurNumber": "Gaussian Blur Number"
+  "gaussianBlurNumber": "Gaussian Blur Number",
+  "autoLoginIng": "Auto Login...",
+  "autoLoginSuccess": "Auto Login Success",
+  "autoLoginFailed": "Auto Login Failed",
+  "autoLoginTryAgain": "Auto Login Try Again",
+  "getSysThemeIng": "Get System Theme...",
+  "getThemeTokenIng": "Get Theme Token...",
+  "getGaussianBlurSettingIng": "Get Gaussian Blur Setting...",
+  "getMenuModeSettingIng": "Get Menu Mode Setting...",
+  "getLanguageSettingIng": "Get Language Setting..."
 }
