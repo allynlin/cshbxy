@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Result, Progress} from 'antd';
 import {useStyles} from "../../styles/webStyle";
-import logo from './logo.png'
+import logo from '../../images/logo.png';
 import {LStorage} from "../../component/localStrong";
 import {darkTheme, lightTheme, sysTheme} from "../../component/redux/sysColorSlice";
 import {useDispatch} from "react-redux";

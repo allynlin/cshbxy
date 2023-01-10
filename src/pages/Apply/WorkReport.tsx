@@ -6,16 +6,22 @@ import intl from "react-intl-universal";
 import {checkLastTimeUploadFiles, checkLastWeekWorkReport, submitWorkReport} from "../../component/axios/api";
 import {DownLoadURL, tableName} from "../../baseInfo";
 import FileUpLoad from "../../component/axios/FileUpLoad";
-import {ExclamationCircleOutlined, LoadingOutlined} from "@ant-design/icons";
+import {ExclamationCircleOutlined} from "@ant-design/icons";
 import {useStyles} from "../../styles/webStyle";
+import logo from "../../images/logo.png";
+import {useGaussianBlurStyles} from "../../styles/gaussianBlurStyle";
+import {useSelector} from "react-redux";
 
 const {Title} = Typography;
 
 const ChangeForm = () => {
 
     const classes = useStyles();
+    const gaussianBlurClasses = useGaussianBlurStyles();
 
     const {message} = App.useApp();
+
+    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value);
 
     const navigate = useNavigate();
     // 防止反复查询变更记录
@@ -25,7 +31,6 @@ const ChangeForm = () => {
     const [fileList, setFileList] = useState<[]>([]);
     const [isRenderResult, setIsRenderResult] = useState<boolean>(true);
     const [RenderResultTitle, setRenderResultTitle] = useState<String>(intl.get('obtainLastTimeUploadWorkReport'));
-    const [isRenderInfo, setIsRenderInfo] = useState<boolean>(false);
     // 监听表单数据
     const [form] = Form.useForm();
 
@@ -55,7 +60,6 @@ const ChangeForm = () => {
         checkLastWeekWorkReport().then(res => {
             if (res.code !== 200) {
                 setRenderResultTitle(res.msg)
-                setIsRenderInfo(true)
             }
             setRenderResultTitle(intl.get('obtainLastTimeUploadFiles'))
             checkUploadFilesList();
@@ -104,6 +108,8 @@ const ChangeForm = () => {
         Modal.confirm({
             title: intl.get('confirm'),
             icon: <ExclamationCircleOutlined/>,
+            className: gaussianBlur ? gaussianBlurClasses.gaussianBlurModal : '',
+            mask: !gaussianBlur,
             onOk() {
                 submitForm();
             }
@@ -121,14 +127,7 @@ const ChangeForm = () => {
     return isRenderResult ? (
         <Result
             status="info"
-            icon={
-                isRenderInfo ? '' : <LoadingOutlined
-                    style={{
-                        fontSize: 40,
-                    }}
-                    spin
-                />
-            }
+            icon={<img src={logo} alt="logo" className={classes.webWaitingImg}/>}
             title={RenderResultTitle}
             extra={
                 <Button disabled={isQuery} type="primary" onClick={() => {

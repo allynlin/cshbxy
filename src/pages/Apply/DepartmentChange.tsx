@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {App, Button, Form, Modal, Result, Select, Typography} from 'antd';
 import BraftEditor from 'braft-editor';
-import {LoadingOutlined} from "@ant-design/icons";
 import intl from "react-intl-universal";
 
 import {
@@ -16,6 +15,7 @@ import FileUpLoad from "../../component/axios/FileUpLoad";
 import {useStyles} from "../../styles/webStyle";
 import {useGaussianBlurStyles} from "../../styles/gaussianBlurStyle";
 import {useSelector} from "react-redux";
+import logo from "../../images/logo.png";
 
 
 const {Title, Paragraph} = Typography;
@@ -160,14 +160,7 @@ const ChangeForm = () => {
     return isRenderResult ? (
         <Result
             status="info"
-            icon={
-                isRenderInfo ? '' : <LoadingOutlined
-                    style={{
-                        fontSize: 40,
-                    }}
-                    spin
-                />
-            }
+            icon={<img src={logo} alt="logo" className={classes.webWaitingImg}/>}
             title={RenderResultTitle}
             extra={
                 <Button disabled={isQuery} type="primary" onClick={() => {
