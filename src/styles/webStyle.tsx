@@ -7,7 +7,6 @@ export const useStyles = createUseStyles({
     },
     webHeader: {
         width: '100%',
-        minWidth: 800,
         height: '100%',
         display: 'flex',
         justifyContent: 'space-between',
@@ -170,6 +169,6 @@ export const useStyles = createUseStyles({
         width: 100,
     },
     webWaitingProgress: {
-        width:'50%'
+        width: '50%'
     }
 })

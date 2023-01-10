@@ -31,23 +31,19 @@ const RenderResult: React.FC = () => {
         autoCheck();
     }, [])
 
-    const autoCheck = async () => {
-        // 依次执行下面的函数
-        await Promise.all([
-            getLanguageSetting(),
-            getSysColorSetting(),
-            getToken(),
-            getGaussianBlurSetting(),
-            getThemeToken(),
-            getMenuModeSetting()
-        ])
+    const autoCheck = () => {
+        getLanguageSetting()
+        getSysColorSetting()
+        getToken()
+        getGaussianBlurSetting()
+        getThemeToken()
+        getMenuModeSetting()
     }
 
     const getLanguageSetting = () => {
         setTitle(intl.get('getLanguageSettingIng'))
         Cookie.get('cshbxy-oa-language') === "en_US" ? dispatch(English()) : dispatch(Chinese())
         setPercent(10)
-        return Promise.resolve();
     }
 
     const getSysColorSetting = () => {
@@ -66,7 +62,6 @@ const RenderResult: React.FC = () => {
                 break;
         }
         setPercent(30)
-        return Promise.resolve();
     }
 
     const getToken = () => {
@@ -77,7 +72,6 @@ const RenderResult: React.FC = () => {
             setPercent(50)
             checkUserInfo();
         }
-        return Promise.resolve();
     }
 
     const checkUserInfo = () => {
@@ -113,7 +107,6 @@ const RenderResult: React.FC = () => {
         setTitle(intl.get('getGaussianBlurSettingIng'))
         LStorage.get('cshbxy-oa-gaussianBlur') === true ? dispatch(open()) : dispatch(close())
         setPercent(80)
-        return Promise.resolve();
     }
 
     const getThemeToken = () => {
@@ -130,7 +123,6 @@ const RenderResult: React.FC = () => {
             }))
         }
         setPercent(90)
-        return Promise.resolve();
     }
 
     const getMenuModeSetting = () => {
@@ -138,7 +130,6 @@ const RenderResult: React.FC = () => {
         LStorage.get('cshbxy-oa-menuMode') === 'vertical' ? dispatch(vertical()) : dispatch(inline())
         dispatch(render())
         setPercent(0)
-        return Promise.resolve();
     }
 
     return (
