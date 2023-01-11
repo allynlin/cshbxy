@@ -20,21 +20,21 @@ const defaultTheme: TokenSettingProps = {
     colorPrimary: '#1677ff',
     borderRadius: 6,
     colorError: '#f32401',
-    gaussianBlur: 20
+    gaussianBlur: 40
 }
 
 const greenTheme: TokenSettingProps = {
     colorPrimary: '#00b96b',
     borderRadius: 6,
     colorError: '#f32401',
-    gaussianBlur: 20
+    gaussianBlur: 40
 }
 
 const pinkTheme: TokenSettingProps = {
     colorPrimary: '#ed4192',
     borderRadius: 10,
     colorError: '#f32401',
-    gaussianBlur: 20
+    gaussianBlur: 40
 }
 
 export default function TokenSetting() {

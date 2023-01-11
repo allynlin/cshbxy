@@ -3,6 +3,7 @@ import {findProcurementWaitApprovalList, resolveProcurement} from '../../../comp
 import {PullStatus} from "antd-mobile/es/components/pull-to-refresh";
 import {Dialog, DotLoading, List, PullToRefresh, Result, Toast} from "antd-mobile";
 import {AutoSizer, List as VirtualizedList} from "react-virtualized";
+import {useStyles} from "../../../styles/mobileStyle";
 
 
 const statusRecord: Record<PullStatus, string> = {
@@ -16,6 +17,8 @@ const red = 'rgba(243,36,1,1)';
 const green = 'rgba(0,108,1,1)';
 
 const Procurement: React.FC = () => {
+
+    const classes = useStyles();
 
     const [isRenderList, setIsRenderList] = useState<boolean>(false);
     const [listHeight, setListHeight] = useState<number>(0);
@@ -105,11 +108,13 @@ const Procurement: React.FC = () => {
         return (
             <div style={style}>
                 <p>申请人：{item.releaseUid}</p>
-                <p>物品：{item.items}</p>
+                <p>物品：</p>
+                <div className={classes.outPutHtml} dangerouslySetInnerHTML={{__html: item.items}}/>
                 <p>价格：{item.price}</p>
                 <p>提交时间：{item.create_time}</p>
                 <p>更新时间：{item.update_time}</p>
-                <p>原因：{item.reason}</p>
+                <p>原因：</p>
+                <div className={classes.outPutHtml} dangerouslySetInnerHTML={{__html: item.reason}}/>
             </div>
         )
     }

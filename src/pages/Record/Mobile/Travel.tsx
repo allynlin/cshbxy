@@ -9,6 +9,7 @@ import {Card, Dialog, DotLoading, List, PullToRefresh, Result, Tag, Toast} from 
 import {AutoSizer, List as VirtualizedList} from 'react-virtualized'
 import {PullStatus} from "antd-mobile/es/components/pull-to-refresh";
 import {DownLoadURL, tableName} from "../../../baseInfo";
+import {useStyles} from "../../../styles/mobileStyle";
 
 const statusRecord: Record<PullStatus, string> = {
     pulling: '下拉获取最新记录',
@@ -18,6 +19,8 @@ const statusRecord: Record<PullStatus, string> = {
 }
 
 const Travel: React.FC = () => {
+
+    const classes = useStyles();
 
     const [isRenderList, setIsRenderList] = useState<boolean>(false);
     const [listHeight, setListHeight] = useState<number>(0);
@@ -88,15 +91,6 @@ const Travel: React.FC = () => {
         })
     }
 
-    const RenderReason = (content: string) => {
-        // 判断 content 的长度，如果超过 10 个字，就截取前 10 个字，然后加上 ...
-        if (content.length > 10) {
-            return content.slice(0, 10) + '...'
-        } else {
-            return content
-        }
-    }
-
     const style = {
         width: '100%',
         height: '100%',
@@ -114,7 +108,8 @@ const Travel: React.FC = () => {
                     <p>驳回原因：<Tag color='rgba(243, 36, 1,0.8)'>{item.reject_reason}</Tag></p> : null}
                 <p>提交时间：{item.create_time}</p>
                 <p>更新时间：{item.update_time}</p>
-                <p>原因：{item.reason}</p>
+                <p>原因：</p>
+                <div className={classes.outPutHtml} dangerouslySetInnerHTML={{__html: item.reason}}/>
             </div>
         )
     }
@@ -131,7 +126,7 @@ const Travel: React.FC = () => {
             <List.Item
                 key={item.uid}
                 style={style}
-                description={RenderReason(item.reason)}
+                description={item.create_time}
                 extra={RenderStatusTag(item.status)}
                 onClick={() => {
                     Dialog.show({

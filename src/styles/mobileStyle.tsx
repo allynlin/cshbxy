@@ -78,5 +78,18 @@ export const useStyles = createUseStyles({
     },
     errorBlock: {
         padding: 20
+    },
+    outPutHtml: {
+        backgroundColor: "rgba(236, 236, 236,0.5)",
+        borderRadius: 6,
+        marginBottom: '1em',
+        width: "100%",
+        padding: 10,
+        "&>p": {
+            margin: 0,
+        },
+        "[data-scheme='dark'] &": {
+            backgroundColor: "rgba(50, 49, 48,0.5)",
+        }
     }
 })
