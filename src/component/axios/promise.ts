@@ -38,7 +38,6 @@ export const Request = (api: String, method = MethodType.GET, params = {}, confi
         method,
         [data]: qs.stringify(params),
         headers,
-        timeout: 600000
     };
 
     return new Promise((resolve, reject) => {
