@@ -73,7 +73,7 @@ const MyApp = () => {
         }
         setDataSource([]);
         setIsQuery(true)
-        setWaitTime(10)
+        setWaitTime(60)
         message.open({
             key,
             type: "loading",
