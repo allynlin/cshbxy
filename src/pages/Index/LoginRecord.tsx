@@ -1,21 +1,24 @@
-import React, {useState, useEffect} from "react";
-import {App, Button, Result, Typography} from 'antd';
-import {useSelector} from "react-redux";
-import {findLoginRecord} from "../../component/axios/api";
+import React, { useState, useEffect } from "react";
+import { App, Button, Result, Typography, Spin } from 'antd';
+import { useSelector } from "react-redux";
+import { findLoginRecord } from "../../component/axios/api";
 import intl from "react-intl-universal";
 import VirtualTable from "../../component/VirtualTable";
-import {ColumnsType} from "antd/es/table";
-import {useNavigate} from "react-router-dom";
-import {useStyles} from "../../styles/webStyle";
-import {SearchOutlined} from "@ant-design/icons";
+import { ColumnsType } from "antd/es/table";
+import { useNavigate } from "react-router-dom";
+import { useStyles } from "../../styles/webStyle";
+import { SearchOutlined, LoadingOutlined } from "@ant-design/icons";
+import { LStorage } from "../../component/localStrong";
 
-const {Title} = Typography;
+const { Title } = Typography;
 
 interface DataType {
     key: React.Key;
     dataIndex: string;
     align: 'left' | 'right' | 'center';
 }
+
+const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 
 const MyApp = () => {
@@ -24,7 +27,7 @@ const MyApp = () => {
 
     const navigate = useNavigate();
 
-    const {message} = App.useApp();
+    const { message } = App.useApp();
 
     // 全局数据防抖
     const [isQuery, setIsQuery] = useState<boolean>(false);
@@ -42,9 +45,11 @@ const MyApp = () => {
         const timer = setTimeout(() => {
             if (waitTime > 1) {
                 setWaitTime(e => e - 1)
+                LStorage.set('findLoginRecord', waitTime - 1)
                 setIsQuery(true)
             } else {
                 setIsQuery(false)
+                LStorage.delete('findLoginRecord')
             }
         }, 1000)
         return () => {
@@ -68,12 +73,18 @@ const MyApp = () => {
     }, [])
 
     const getDataSource = () => {
-        if (!isLogin) {
+        if (!isLogin)
+            return
+        const waitTime = LStorage.get('findLoginRecord')
+        if (waitTime) {
+            setIsQuery(true)
+            setWaitTime(waitTime)
             return
         }
         setDataSource([]);
         setIsQuery(true)
         setWaitTime(60)
+        LStorage.set('findLoginRecord', 60)
         message.open({
             key,
             type: "loading",
@@ -95,14 +106,7 @@ const MyApp = () => {
                 }
             })
             setDataSource(newDataSoucre)
-        }).catch(() => {
-            message.open({
-                key,
-                type: 'error',
-                content: intl.get('tryingAgain'),
-                duration: 0,
-            });
-            getDataSource()
+            setIsQuery(false)
         })
     }
 
@@ -130,8 +134,8 @@ const MyApp = () => {
 
     const RenderGetDataSourceButton = () => {
         return (
-            <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
-                    onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
+            <Button type="primary" disabled={isQuery} icon={<SearchOutlined />}
+                onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
         )
     }
 
@@ -141,13 +145,15 @@ const MyApp = () => {
                 <Title level={2} className={classes.tit}>
                     {userInfo.realeName + ' ' + intl.get('loginRecord')}
                     &nbsp;&nbsp;
-                    <RenderGetDataSourceButton/>
+                    <RenderGetDataSourceButton />
                     &nbsp;&nbsp;
                     <Button type="primary" onClick={() => navigate('/home')}>{intl.get('backToHome')}</Button>
                 </Title>
             </div>
-            <VirtualTable columns={columns} dataSource={dataSource}
-                          scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}/>
+            <Spin spinning={isQuery} tip={intl.get('loading')} indicator={antIcon}>
+                <VirtualTable columns={columns} dataSource={dataSource}
+                    scroll={{ y: tableSize.tableHeight, x: tableSize.tableWidth }} />
+            </Spin>
         </> : <Result
             status="warning"
             title={intl.get('loginRecordErrorTips')}
@@ -163,7 +169,7 @@ const MyApp = () => {
 const LoginRecord = () => {
     return (
         <App>
-            <MyApp/>
+            <MyApp />
         </App>
     )
 }

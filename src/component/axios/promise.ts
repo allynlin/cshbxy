@@ -1,10 +1,8 @@
 import axios from 'axios';
 import qs from 'qs';
-import NProgress from 'nprogress';
-import 'nprogress/nprogress.css'
 import Cookie from "js-cookie";
 import setCookie from "../setCookie";
-import {BaseInfo, version} from "../../baseInfo";
+import { BaseInfo, version } from "../../baseInfo";
 
 export const MethodType = {
     GET: 'GET',
@@ -14,7 +12,7 @@ export const MethodType = {
 /**
  * 模块说明:有api_token的请求
  */
-export const Request = (api: String, method = MethodType.GET, params = {}, config = {headers: {}}) => {
+export const Request = (api: String, method = MethodType.GET, params = {}, config = { headers: {} }) => {
     const apiToken = Cookie.get('cshbxy-oa-token');
     const language = Cookie.get('cshbxy-oa-language') || 'en_US';
     const baseURL = BaseInfo;
@@ -41,16 +39,12 @@ export const Request = (api: String, method = MethodType.GET, params = {}, confi
     };
 
     return new Promise((resolve, reject) => {
-        NProgress.done(true);
-        NProgress.inc();
         axios(axiosConfig).then(res => {
             if (res.data.token !== null && res.data.token !== undefined)
-                setCookie({name: "cshbxy-oa-token", value: res.data.token})
+                setCookie({ name: "cshbxy-oa-token", value: res.data.token })
             resolve(res.data);
         }).catch(error => {
             reject(error);
-        }).finally(() => {
-            NProgress.done(true);
         })
     });
 };
