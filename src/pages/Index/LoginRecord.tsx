@@ -32,6 +32,7 @@ const MyApp = () => {
     // 全局数据防抖
     const [isQuery, setIsQuery] = useState<boolean>(false);
     const [waitTime, setWaitTime] = useState<number>(0);
+    const [loading, setLoading] = useState<boolean>(false);
     // 全局数据
     const [dataSource, setDataSource] = useState<any>([]);
 
@@ -83,6 +84,7 @@ const MyApp = () => {
         }
         setDataSource([]);
         setIsQuery(true)
+        setLoading(true)
         setWaitTime(60)
         LStorage.set('findLoginRecord', 60)
         message.open({
@@ -106,7 +108,8 @@ const MyApp = () => {
                 }
             })
             setDataSource(newDataSoucre)
-            setIsQuery(false)
+        }).finally(() => {
+            setLoading(false)
         })
     }
 
@@ -150,7 +153,7 @@ const MyApp = () => {
                     <Button type="primary" onClick={() => navigate('/home')}>{intl.get('backToHome')}</Button>
                 </Title>
             </div>
-            <Spin spinning={isQuery} tip={intl.get('loading')} indicator={antIcon}>
+            <Spin spinning={loading} tip={intl.get('loading')} indicator={antIcon}>
                 <VirtualTable columns={columns} dataSource={dataSource}
                     scroll={{ y: tableSize.tableHeight, x: tableSize.tableWidth }} />
             </Spin>

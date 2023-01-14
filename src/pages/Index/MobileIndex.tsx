@@ -1,10 +1,10 @@
 import React from 'react';
-import {useNavigate} from "react-router-dom";
-import {Button, NoticeBar, Result} from "antd-mobile";
-import {LStorage} from "../../component/localStrong";
-import HomeDescriptions from "./HomeDescriptions";
-import {useSelector} from "react-redux";
-import {useStyles} from "../../styles/mobileStyle";
+import { useNavigate } from "react-router-dom";
+import { Button, NoticeBar, Result } from "antd-mobile";
+import { LStorage } from "../../component/localStrong";
+import MobileHomeDescriptions from "./MobileHomeDescriptions";
+import { useSelector } from "react-redux";
+import { useStyles } from "../../styles/mobileStyle";
 
 const Index: React.FC = () => {
 
@@ -18,9 +18,9 @@ const Index: React.FC = () => {
         <div className={classes.mobileIndex}>
             {
                 LStorage.get('cshbxy-oa-mobileHomeAlert') === false ? null : <>
-                    <NoticeBar content='移动端部分功能受限无法使用，如您需要使用全部功能，请前往 Web 端' color='info'/>
+                    <NoticeBar content='移动端部分功能受限无法使用，如您需要使用全部功能，请前往 Web 端' color='info' />
                     <Button
-                        style={{marginTop: 16}}
+                        style={{ marginTop: 16 }}
                         block
                         color='primary'
                         onClick={() => {
@@ -32,7 +32,7 @@ const Index: React.FC = () => {
                     </Button>
                 </>
             }
-            {isLogin ? <HomeDescriptions/> : <Result
+            {isLogin ? <MobileHomeDescriptions /> : <Result
                 status='info'
                 title='请先登录'
                 description='登录后即可查看用户信息'

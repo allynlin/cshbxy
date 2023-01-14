@@ -2,8 +2,8 @@ import apply from './apply'
 import record from "./record";
 import approval from "./approval";
 import management from "./management";
-import {Error403, Error404, Error500, Success} from "../pages/Result/Result";
-import {Error404 as MobileError404,} from "../pages/Result/MobileResult";
+import { Error403, Error404, Error500, Success } from "../pages/Result/Result";
+import { Error404 as MobileError404, } from "../pages/Result/MobileResult";
 import Home from "../pages/Home/Web";
 import Mobile from "../pages/Home/Mobile";
 import mobileRecord from "./mobileRecord";
@@ -14,7 +14,7 @@ const routes = [{
     redirect: '/home'
 }, {
     path: '/',
-    element: <Home/>,
+    element: <Home />,
     meta: {
         title: 'Home',
         titleCN: '首页'
@@ -59,20 +59,20 @@ const routes = [{
         }
     }, {
         path: 'success',
-        element: <Success/>,
+        element: <Success />,
         meta: {
             title: 'Success',
             titleCN: '成功',
         }
     },
-        ...apply,
-        ...record,
-        ...approval,
-        ...management
+    ...apply,
+    ...record,
+    ...approval,
+    ...management
     ]
 }, {
     path: '/m',
-    element: <Mobile/>,
+    element: <Mobile />,
     meta: {
         title: 'Home',
         titleCN: '首页'
@@ -83,6 +83,13 @@ const routes = [{
         meta: {
             title: 'Home',
             titleCN: '首页'
+        }
+    }, {
+        path: 'login-Record',
+        component: () => import('../pages/Index/MobileLoginRecord'),
+        meta: {
+            title: 'Login Record',
+            titleCN: '登录记录'
         }
     }, {
         path: 'login',
@@ -114,7 +121,7 @@ const routes = [{
         }
     }, {
         path: '404',
-        element: <MobileError404/>,
+        element: <MobileError404 />,
         meta: {
             title: '404',
         }
@@ -122,24 +129,24 @@ const routes = [{
         path: '*',
         redirect: '/m/404'
     },
-        ...mobileRecord,
-        ...mobileApproval
+    ...mobileRecord,
+    ...mobileApproval
     ]
 }, {
     path: '/403',
-    element: <Error403/>,
+    element: <Error403 />,
     meta: {
         title: '403'
     }
 }, {
     path: '/404',
-    element: <Error404/>,
+    element: <Error404 />,
     meta: {
         title: '404'
     }
 }, {
     path: '/500',
-    element: <Error500/>,
+    element: <Error500 />,
     meta: {
         title: '500'
     }
