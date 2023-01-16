@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import VirtualTable from "../../component/VirtualTable";
-import {App, Button, Card, Form, Input, Popconfirm, Result, Skeleton, Space, Steps, Tag, Typography} from 'antd';
+import { App, Button, Card, Form, Input, Popconfirm, Result, Skeleton, Space, Spin, Steps, Tag, Typography } from 'antd';
 import {
     deleteWorkReport,
     findUploadFilesByUid,
@@ -8,19 +8,18 @@ import {
     findWorkReportList,
     refreshWorkReport
 } from "../../component/axios/api";
-import {ColumnsType} from "antd/es/table";
+import { ColumnsType } from "antd/es/table";
 import intl from "react-intl-universal";
-import {RenderStatus} from "../../component/Tag/RenderStatus";
-import {FileTextOutlined, FolderOpenOutlined, SearchOutlined} from "@ant-design/icons";
-import {DownLoadURL, tableName} from "../../baseInfo";
-import {useSelector} from "react-redux";
-import {useStyles} from "../../styles/webStyle";
-import {RenderVirtualTableSkeleton} from "../../component/RenderVirtualTableSkeleton";
-import {getProcessStatus} from "../../component/getProcessStatus";
-import {RenderStatusTag} from "../../component/Tag/RenderStatusTag";
+import { RenderStatus } from "../../component/Tag/RenderStatus";
+import { FileTextOutlined, FolderOpenOutlined, SearchOutlined } from "@ant-design/icons";
+import { DownLoadURL, tableName } from "../../baseInfo";
+import { useSelector } from "react-redux";
+import { useStyles } from "../../styles/webStyle";
+import { getProcessStatus } from "../../component/getProcessStatus";
+import { RenderStatusTag } from "../../component/Tag/RenderStatusTag";
 import MoveModal from "../../component/MoveModal";
 
-const {Title, Paragraph} = Typography;
+const { Title, Paragraph } = Typography;
 
 interface DataType {
     key: React.Key;
@@ -32,7 +31,7 @@ const MyApp: React.FC = () => {
 
     const classes = useStyles();
 
-    const {message} = App.useApp();
+    const { message } = App.useApp();
 
     // 全局数据防抖
     const [isQuery, setIsQuery] = useState<boolean>(false);
@@ -122,7 +121,7 @@ const MyApp: React.FC = () => {
                 operation: <Button
                     type="primary"
                     onClick={() => {
-                        setShowInfo({...res.body, id: showInfo.id, statusTag: RenderStatusTag(res.body)});
+                        setShowInfo({ ...res.body, id: showInfo.id, statusTag: RenderStatusTag(res.body) });
                         getProcess(res.body.uid);
                         getFiles(res.body.uid);
                         setShowModal(true);
@@ -244,7 +243,7 @@ const MyApp: React.FC = () => {
                     operation: <Button
                         type="primary"
                         onClick={() => {
-                            setShowInfo({...item, id: index + 1, statusTag: RenderStatusTag(item)});
+                            setShowInfo({ ...item, id: index + 1, statusTag: RenderStatusTag(item) });
                             getProcess(item.uid);
                             getFiles(item.uid);
                             setShowModal(true);
@@ -323,8 +322,8 @@ const MyApp: React.FC = () => {
 
     const RenderGetDataSourceButton = () => {
         return (
-            <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
-                    onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
+            <Button type="primary" disabled={isQuery} icon={<SearchOutlined />}
+                onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
         )
     }
 
@@ -341,7 +340,7 @@ const MyApp: React.FC = () => {
                             onCancel={() => setOpen(false)}
                         >
                             <Button loading={confirmLoading} type="primary" danger key="delete"
-                                    onClick={() => setOpen(true)}>
+                                onClick={() => setOpen(true)}>
                                 {intl.get('delete')}
                             </Button>
                         </Popconfirm> : null,
@@ -368,7 +367,7 @@ const MyApp: React.FC = () => {
                 showModal={showModal}
                 getModalStatus={(e) => setShowModal(e)}
             >
-                {showContent ? (<Skeleton active/>) : (
+                {showContent ? (<Skeleton active />) : (
                     <Typography>
                         <Paragraph>{intl.get('status')}：{showInfo.statusTag}</Paragraph>
                         {showInfo.reject_reason ?
@@ -381,12 +380,12 @@ const MyApp: React.FC = () => {
                         <Paragraph>{intl.get('file')}：</Paragraph>
                         {
                             fileLoading ? (
-                                    <div className={classes.skeletonFile}>
-                                        <Skeleton.Node active>
-                                            <FileTextOutlined className={classes.skeletonFiles}/>
-                                        </Skeleton.Node>
-                                    </div>
-                                ) :
+                                <div className={classes.skeletonFile}>
+                                    <Skeleton.Node active>
+                                        <FileTextOutlined className={classes.skeletonFiles} />
+                                    </Skeleton.Node>
+                                </div>
+                            ) :
                                 // 如果 fileList 不为空则渲染
                                 fileList.length > 0 ? (
                                     <>
@@ -394,12 +393,12 @@ const MyApp: React.FC = () => {
                                             {fileList.map((item: any, index: number) => {
                                                 return (
                                                     <Card size="small" className={classes.fileItem} hoverable
-                                                          key={index}
-                                                          title={intl.get('file') + (index + 1)}
-                                                          bordered={false}>
+                                                        key={index}
+                                                        title={intl.get('file') + (index + 1)}
+                                                        bordered={false}>
                                                         <Typography.Paragraph ellipsis>
                                                             <a href={`${DownLoadURL}/downloadFile?filename=${item.fileName}`}
-                                                               target="_self">{item.oldFileName}</a>
+                                                                target="_self">{item.oldFileName}</a>
                                                         </Typography.Paragraph>
                                                     </Card>
                                                 )
@@ -411,13 +410,13 @@ const MyApp: React.FC = () => {
                         <Paragraph>{intl.get('approveProcess')}：</Paragraph>
                         {
                             processLoading ? (
-                                    <Space style={{flexDirection: 'column', marginTop: 16}}>
-                                        <Skeleton.Input active={true} block={false}/>
-                                        <Skeleton.Input active={true} block={false}/>
-                                        <Skeleton.Input active={true} block={false}/>
-                                        <Skeleton.Input active={true} block={false}/>
-                                    </Space>) :
-                                <div style={{marginTop: 16}}>
+                                <Space style={{ flexDirection: 'column', marginTop: 16 }}>
+                                    <Skeleton.Input active={true} block={false} />
+                                    <Skeleton.Input active={true} block={false} />
+                                    <Skeleton.Input active={true} block={false} />
+                                    <Skeleton.Input active={true} block={false} />
+                                </Space>) :
+                                <div style={{ marginTop: 16 }}>
                                     <Steps
                                         direction="vertical"
                                         progressDot
@@ -434,32 +433,30 @@ const MyApp: React.FC = () => {
             <div className={classes.contentHead}>
                 <Title level={2} className={classes.tit}>
                     {intl.get('workReport') + ' ' + intl.get('record')}&nbsp;&nbsp;
-                    <RenderGetDataSourceButton/>
+                    <RenderGetDataSourceButton />
                 </Title>
                 <Form name="search" layout="inline" onFinish={onFinish}>
                     <Form.Item name="search">
-                        <Input prefix={<SearchOutlined className="site-form-item-icon"/>}
-                               placeholder={intl.get('search') + ' ' + intl.get('createTime')}/>
+                        <Input prefix={<SearchOutlined className="site-form-item-icon" />}
+                            placeholder={intl.get('search') + ' ' + intl.get('createTime')} />
                     </Form.Item>
                     <Form.Item>
                         <Button type="primary" htmlType="submit">Search</Button>
                     </Form.Item>
                 </Form>
             </div>
-            <div className={classes.skeletonLoading} style={{display: loading ? 'block' : 'none'}}>
-                <RenderVirtualTableSkeleton/>
-            </div>
             {
-                isEmpty ? (
-                    <Result
-                        icon={<FolderOpenOutlined/>}
-                        title={intl.get('noData')}
-                        extra={<RenderGetDataSourceButton/>}
-                    />
-                ) : (
-                    <VirtualTable columns={columns} dataSource={showData}
-                                  scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}/>
-                )
+                loading ? <Skeleton active /> :
+                    isEmpty ? (
+                        <Result
+                            icon={<FolderOpenOutlined />}
+                            title={intl.get('noData')}
+                            extra={<RenderGetDataSourceButton />}
+                        />
+                    ) : (
+                        <VirtualTable columns={columns} dataSource={showData}
+                            scroll={{ y: tableSize.tableHeight, x: tableSize.tableWidth }} />
+                    )
             }
         </div>
     )
@@ -468,7 +465,7 @@ const MyApp: React.FC = () => {
 const WorkReportRecord = () => {
     return (
         <App>
-            <MyApp/>
+            <MyApp />
         </App>
     )
 }

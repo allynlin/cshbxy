@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import domtoimage from 'dom-to-image';
 import VirtualTable from "../../component/VirtualTable";
 import {
@@ -11,26 +11,26 @@ import {
     Result,
     Skeleton,
     Space,
+    Spin,
     Steps,
     Tag,
     Typography,
     Watermark
 } from 'antd';
-import {deleteLeave, findLeaveList, findLeaveProcess, refreshLeave} from "../../component/axios/api";
-import {ColumnsType} from "antd/es/table";
+import { deleteLeave, findLeaveList, findLeaveProcess, refreshLeave } from "../../component/axios/api";
+import { ColumnsType } from "antd/es/table";
 import intl from "react-intl-universal";
-import {RenderStatus} from "../../component/Tag/RenderStatus";
-import {FolderOpenOutlined, SearchOutlined} from "@ant-design/icons";
-import {useSelector} from "react-redux";
-import {RenderWatermarkColor} from "../../component/Tag/RenderWatermarkColor";
-import {useStyles} from "../../styles/webStyle";
-import {getProcessStatus} from '../../component/getProcessStatus';
-import {RenderVirtualTableSkeleton} from "../../component/RenderVirtualTableSkeleton";
-import {RenderStatusTag} from "../../component/Tag/RenderStatusTag";
+import { RenderStatus } from "../../component/Tag/RenderStatus";
+import { FolderOpenOutlined, SearchOutlined } from "@ant-design/icons";
+import { useSelector } from "react-redux";
+import { RenderWatermarkColor } from "../../component/Tag/RenderWatermarkColor";
+import { useStyles } from "../../styles/webStyle";
+import { getProcessStatus } from '../../component/getProcessStatus';
+import { RenderStatusTag } from "../../component/Tag/RenderStatusTag";
 import MoveModal from "../../component/MoveModal";
 
-const {Title, Paragraph} = Typography;
-const {Meta} = Card;
+const { Title, Paragraph } = Typography;
+const { Meta } = Card;
 
 interface DataType {
     key: React.Key;
@@ -42,7 +42,7 @@ const MyApp: React.FC = () => {
 
     const classes = useStyles();
 
-    const {message} = App.useApp();
+    const { message } = App.useApp();
 
     const ref = useRef<any>(null);
 
@@ -133,7 +133,7 @@ const MyApp: React.FC = () => {
                 operation: <Button
                     type="primary"
                     onClick={() => {
-                        setShowInfo({...res.body, id: showInfo.id, statusTag: RenderStatusTag(res.body)})
+                        setShowInfo({ ...res.body, id: showInfo.id, statusTag: RenderStatusTag(res.body) })
                         getProcess(res.body.uid);
                         setShowModal(true);
                         setShowContent(false);
@@ -215,7 +215,7 @@ const MyApp: React.FC = () => {
                     operation: <Button
                         type="primary"
                         onClick={() => {
-                            setShowInfo({...item, id: index + 1, statusTag: RenderStatusTag(item)});
+                            setShowInfo({ ...item, id: index + 1, statusTag: RenderStatusTag(item) });
                             getProcess(item.uid);
                             setShowModal(true);
                             setShowContent(false);
@@ -325,8 +325,8 @@ const MyApp: React.FC = () => {
 
     const RenderGetDataSourceButton = () => {
         return (
-            <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
-                    onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
+            <Button type="primary" disabled={isQuery} icon={<SearchOutlined />}
+                onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
         )
     }
 
@@ -343,7 +343,7 @@ const MyApp: React.FC = () => {
                             onCancel={() => setOpen(false)}
                         >
                             <Button loading={confirmLoading} type="primary" danger key="delete"
-                                    onClick={() => setOpen(true)}>
+                                onClick={() => setOpen(true)}>
                                 {intl.get('delete')}
                             </Button>
                         </Popconfirm> : null,
@@ -399,7 +399,7 @@ const MyApp: React.FC = () => {
                                     <Title level={2} className={classes.tit}>
                                         {intl.get('leave') + ' ' + intl.get('record')}
                                     </Title>
-                                    {showContent ? (<Skeleton active/>) : (
+                                    {showContent ? (<Skeleton active />) : (
                                         <>
                                             <Paragraph>{intl.get('status')}：{showInfo.statusTag}</Paragraph>
                                             <Paragraph>UID：{showInfo.uid}</Paragraph>
@@ -407,7 +407,7 @@ const MyApp: React.FC = () => {
                                             <Paragraph>{intl.get('endTime')}：{showInfo.end_time}</Paragraph>
                                             <Paragraph>{intl.get('reason')}：</Paragraph>
                                             <div className={classes.outPutHtml}
-                                                 dangerouslySetInnerHTML={{__html: showInfo.reason}}/>
+                                                dangerouslySetInnerHTML={{ __html: showInfo.reason }} />
                                             {showInfo.reject_reason ?
                                                 <Paragraph>
                                                     {intl.get('rejectReason')}：
@@ -417,13 +417,13 @@ const MyApp: React.FC = () => {
                                             <Paragraph>{intl.get('updateTime')}：{showInfo.update_time}</Paragraph>
                                             <div>{intl.get('approveProcess')}：</div>
                                             {processLoading ? (
-                                                    <Space style={{flexDirection: 'column', marginTop: 16}}>
-                                                        <Skeleton.Input active={true} block={false}/>
-                                                        <Skeleton.Input active={true} block={false}/>
-                                                        <Skeleton.Input active={true} block={false}/>
-                                                        <Skeleton.Input active={true} block={false}/>
-                                                    </Space>) :
-                                                <div style={{marginTop: 16}}>
+                                                <Space style={{ flexDirection: 'column', marginTop: 16 }}>
+                                                    <Skeleton.Input active={true} block={false} />
+                                                    <Skeleton.Input active={true} block={false} />
+                                                    <Skeleton.Input active={true} block={false} />
+                                                    <Skeleton.Input active={true} block={false} />
+                                                </Space>) :
+                                                <div style={{ marginTop: 16 }}>
                                                     <Steps
                                                         direction="vertical"
                                                         progressDot
@@ -443,18 +443,18 @@ const MyApp: React.FC = () => {
                                         <Tag>{userInfo.email}</Tag>
                                         <Tag>{userInfo.tel}</Tag>
                                     </>
-                                }/>
+                                } />
                             </Card>
                         </div> :
                         <>
-                            {showContent ? (<Skeleton active/>) : (
+                            {showContent ? (<Skeleton active />) : (
                                 <Typography>
                                     <Paragraph>{intl.get('status')}：{showInfo.statusTag}</Paragraph>
                                     <Paragraph>{intl.get('startTime')}：{showInfo.start_time}</Paragraph>
                                     <Paragraph>{intl.get('endTime')}：{showInfo.end_time}</Paragraph>
                                     <Paragraph>{intl.get('reason')}：</Paragraph>
                                     <div className={classes.outPutHtml}
-                                         dangerouslySetInnerHTML={{__html: showInfo.reason}}/>
+                                        dangerouslySetInnerHTML={{ __html: showInfo.reason }} />
                                     {showInfo.reject_reason ?
                                         <Paragraph>
                                             {intl.get('rejectReason')}：
@@ -464,13 +464,13 @@ const MyApp: React.FC = () => {
                                     <Paragraph>{intl.get('updateTime')}：{showInfo.update_time}</Paragraph>
                                     <Paragraph>{intl.get('approveProcess')}：</Paragraph>
                                     {processLoading ? (
-                                            <Space style={{flexDirection: 'column'}}>
-                                                <Skeleton.Input active={true} block={false}/>
-                                                <Skeleton.Input active={true} block={false}/>
-                                                <Skeleton.Input active={true} block={false}/>
-                                                <Skeleton.Input active={true} block={false}/>
-                                            </Space>) :
-                                        <div style={{marginTop: 16}}>
+                                        <Space style={{ flexDirection: 'column' }}>
+                                            <Skeleton.Input active={true} block={false} />
+                                            <Skeleton.Input active={true} block={false} />
+                                            <Skeleton.Input active={true} block={false} />
+                                            <Skeleton.Input active={true} block={false} />
+                                        </Space>) :
+                                        <div style={{ marginTop: 16 }}>
                                             <Steps
                                                 direction="vertical"
                                                 progressDot
@@ -488,32 +488,30 @@ const MyApp: React.FC = () => {
             <div className={classes.contentHead}>
                 <Title level={2} className={classes.tit}>
                     {intl.get('leave') + ' ' + intl.get('record')}&nbsp;&nbsp;
-                    <RenderGetDataSourceButton/>
+                    <RenderGetDataSourceButton />
                 </Title>
                 <Form name="search" layout="inline" onFinish={onFinish}>
                     <Form.Item name="search">
-                        <Input prefix={<SearchOutlined className="site-form-item-icon"/>}
-                               placeholder={intl.get('search') + ' ' + intl.get('reason')}/>
+                        <Input prefix={<SearchOutlined className="site-form-item-icon" />}
+                            placeholder={intl.get('search') + ' ' + intl.get('reason')} />
                     </Form.Item>
                     <Form.Item>
                         <Button disabled={isEmpty} type="primary" htmlType="submit">Search</Button>
                     </Form.Item>
                 </Form>
             </div>
-            <div className={classes.skeletonLoading} style={{display: loading ? 'block' : 'none'}}>
-                <RenderVirtualTableSkeleton/>
-            </div>
             {
-                isEmpty ? (
-                    <Result
-                        icon={<FolderOpenOutlined/>}
-                        title={intl.get('noData')}
-                        extra={<RenderGetDataSourceButton/>}
-                    />
-                ) : (
-                    <VirtualTable columns={columns} dataSource={showData}
-                                  scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}/>
-                )
+                loading ? <Skeleton active /> :
+                    isEmpty ? (
+                        <Result
+                            icon={<FolderOpenOutlined />}
+                            title={intl.get('noData')}
+                            extra={<RenderGetDataSourceButton />}
+                        />
+                    ) : (
+                        <VirtualTable columns={columns} dataSource={showData}
+                            scroll={{ y: tableSize.tableHeight, x: tableSize.tableWidth }} />
+                    )
             }
         </div>
     )
@@ -522,7 +520,7 @@ const MyApp: React.FC = () => {
 const LeaveRecord = () => {
     return (
         <App>
-            <MyApp/>
+            <MyApp />
         </App>
     )
 }

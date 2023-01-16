@@ -8,7 +8,6 @@ import { ColumnsType } from "antd/es/table";
 import { useNavigate } from "react-router-dom";
 import { useStyles } from "../../styles/webStyle";
 import { SearchOutlined, LoadingOutlined } from "@ant-design/icons";
-import { LStorage } from "../../component/localStrong";
 
 const { Title } = Typography;
 
@@ -46,11 +45,9 @@ const MyApp = () => {
         const timer = setTimeout(() => {
             if (waitTime > 1) {
                 setWaitTime(e => e - 1)
-                LStorage.set('findLoginRecord', waitTime - 1)
                 setIsQuery(true)
             } else {
                 setIsQuery(false)
-                LStorage.delete('findLoginRecord')
             }
         }, 1000)
         return () => {
@@ -76,17 +73,10 @@ const MyApp = () => {
     const getDataSource = () => {
         if (!isLogin)
             return
-        const waitTime = LStorage.get('findLoginRecord')
-        if (waitTime) {
-            setIsQuery(true)
-            setWaitTime(waitTime)
-            return
-        }
         setDataSource([]);
         setIsQuery(true)
         setLoading(true)
-        setWaitTime(60)
-        LStorage.set('findLoginRecord', 60)
+        setWaitTime(10)
         message.open({
             key,
             type: "loading",

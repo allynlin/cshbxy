@@ -28,10 +28,6 @@ const RenderResult: React.FC = () => {
     const [title, setTitle] = useState<string>(intl.get('useSettingIng'));
 
     useEffect(() => {
-        autoCheck();
-    }, [])
-
-    const autoCheck = () => {
         Promise.all([
             getLanguageSetting(),
             getSysColorSetting(),
@@ -39,8 +35,11 @@ const RenderResult: React.FC = () => {
             getGaussianBlurSetting(),
             getThemeToken(),
             getMenuModeSetting(),
-        ])
-    }
+        ]).then(() => {
+            dispatch(render())
+            setPercent(0)
+        })
+    }, [])
 
     const getLanguageSetting = () => {
         setTitle(intl.get('getLanguageSettingIng'))
@@ -128,8 +127,6 @@ const RenderResult: React.FC = () => {
     const getMenuModeSetting = () => {
         setTitle(intl.get('getMenuModeSettingIng'))
         LStorage.get('cshbxy-oa-menuMode') === 'vertical' ? dispatch(vertical()) : dispatch(inline())
-        dispatch(render())
-        setPercent(0)
         return Promise.resolve()
     }
 
