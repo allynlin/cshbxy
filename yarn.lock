@@ -22,6 +22,13 @@
   dependencies:
     "@ctrl/tinycolor" "^3.4.0"
 
+"@ant-design/colors@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.npmmirror.com/@ant-design/colors/-/colors-7.0.0.tgz#eb7eecead124c3533aea05d61254f0a17f2b61b3"
+  integrity sha512-iVm/9PfGCbC0dSMBrz7oiEXZaaGH7ceU40OJEfKmyuzR9R5CRimJYPlRiFtMQGQcbNMea/ePcoIebi4ASGYXtg==
+  dependencies:
+    "@ctrl/tinycolor" "^3.4.0"
+
 "@ant-design/cssinjs@^1.4.0":
   version "1.4.0"
   resolved "https://registry.npmmirror.com/@ant-design/cssinjs/-/cssinjs-1.4.0.tgz#c66aa468322d6fdec7f43c8ebd0f3171630d2711"
@@ -46,6 +53,17 @@
   integrity sha512-T89P2jG2vM7OJ0IfGx2+9FC5sQjtTzRSz+mCHTXkFn/ELZc2YpfStmYHmqzq2Jx55J0F7+O6i5/ZKFSVNWCKNg==
   dependencies:
     "@ant-design/colors" "^6.0.0"
+    "@ant-design/icons-svg" "^4.2.1"
+    "@babel/runtime" "^7.11.2"
+    classnames "^2.2.6"
+    rc-util "^5.9.4"
+
+"@ant-design/icons@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.npmmirror.com/@ant-design/icons/-/icons-5.0.0.tgz#15e7fb055b91abd71e49273aa25aaf5efe51f499"
+  integrity sha512-dPUlZtsIffBrDyFwM+tuO4PWi1DPgGgd10ASistPhLpr1WyssadfhChWs/mICVkCm5PaRm/foMkE1x3xw4OPZw==
+  dependencies:
+    "@ant-design/colors" "^7.0.0"
     "@ant-design/icons-svg" "^4.2.1"
     "@babel/runtime" "^7.11.2"
     classnames "^2.2.6"
@@ -1737,6 +1755,15 @@
   dependencies:
     "@babel/runtime" "^7.18.0"
 
+"@rc-component/mutate-observer@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.npmmirror.com/@rc-component/mutate-observer/-/mutate-observer-1.0.0.tgz#ce99af3239ed9c74ee3e7302f1c67098de920b46"
+  integrity sha512-okqRJSfNisXdI6CUeOLZC5ukBW/8kir2Ii4PJiKpUt+3+uS7dxwJUMxsUZquxA1rQuL8YcEmKVp/TCnR+yUdZA==
+  dependencies:
+    "@babel/runtime" "^7.18.0"
+    classnames "^2.3.2"
+    rc-util "^5.24.4"
+
 "@rc-component/portal@^1.0.0-6", "@rc-component/portal@^1.0.0-8", "@rc-component/portal@^1.0.0-9", "@rc-component/portal@^1.0.2":
   version "1.0.3"
   resolved "https://registry.npmmirror.com/@rc-component/portal/-/portal-1.0.3.tgz#3aa2c229a7a20ac2412d864e8977e6377973416e"
@@ -2271,11 +2298,6 @@
   version "16.18.8"
   resolved "https://registry.npmmirror.com/@types/node/-/node-16.18.8.tgz#ffb2a4efa4eb4384811081776c52b054481cca54"
   integrity sha512-TrpoNiaPvBH5h8rQQenMtVsJXtGsVBRJrcp2Ik6oEt99jHfGvDLh20VTTq3ixTbjYujukYz1IlY4N8a8yfY0jA==
-
-"@types/nprogress@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.npmmirror.com/@types/nprogress/-/nprogress-0.2.0.tgz#86c593682d4199212a0509cc3c4d562bbbd6e45f"
-  integrity sha512-1cYJrqq9GezNFPsWTZpFut/d4CjpZqA0vhqDUPFWYKF1oIyBz5qnoYMzR+0C/T96t3ebLAC1SSnwrVOm5/j74A==
 
 "@types/parse-json@^4.0.0":
   version "4.0.0"
@@ -2894,17 +2916,18 @@ antd-mobile@^5.27.0:
     tslib "^2.4.1"
     use-sync-external-store "^1.2.0"
 
-antd@5.1.4:
-  version "5.1.4"
-  resolved "https://registry.npmmirror.com/antd/-/antd-5.1.4.tgz#d754473669f0cfe706f20ba72c041cf416b09e0f"
-  integrity sha512-74j1+8jRYDglCSvNgx7DGvBH6gerHvtV6k6DylIVQLuViza5YPYH0MVUQwrw6a65iTfuRUY59Oo3EfqerGk8Uw==
+antd@5.1.5:
+  version "5.1.5"
+  resolved "https://registry.npmmirror.com/antd/-/antd-5.1.5.tgz#792440a2ffbce965ef45670d020f272e541e8686"
+  integrity sha512-f1gfmDG8CApTu1h6gtM7i/krMTP6WH55w7pUPAMHlp9jsviKR+ElPqSQeLZV3UjuxVNn0DWvGwWEJ0Rv/kbeEQ==
   dependencies:
-    "@ant-design/colors" "^6.0.0"
+    "@ant-design/colors" "^7.0.0"
     "@ant-design/cssinjs" "^1.4.0"
-    "@ant-design/icons" "^4.7.0"
+    "@ant-design/icons" "^5.0.0"
     "@ant-design/react-slick" "~1.0.0"
     "@babel/runtime" "^7.18.3"
     "@ctrl/tinycolor" "^3.4.0"
+    "@rc-component/mutate-observer" "^1.0.0"
     "@rc-component/tour" "~1.1.0"
     classnames "^2.2.6"
     copy-to-clipboard "^3.2.0"
@@ -2940,7 +2963,7 @@ antd@5.1.4:
     rc-tooltip "~5.2.0"
     rc-tree "~5.7.0"
     rc-tree-select "~5.6.0"
-    rc-trigger "^5.2.10"
+    rc-trigger "^5.3.4"
     rc-upload "~4.3.0"
     rc-util "^5.27.0"
     scroll-into-view-if-needed "^3.0.3"
@@ -7393,11 +7416,6 @@ npm-run-path@^4.0.1:
   dependencies:
     path-key "^3.0.0"
 
-nprogress@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.npmmirror.com/nprogress/-/nprogress-0.2.0.tgz#cb8f34c53213d895723fcbab907e9422adbcafb1"
-  integrity sha512-I19aIingLgR1fmhftnbWWO3dXc0hSxqHQHQb3H8m+K3TnEn/iSeTZZOyvKXWqQESMwuUVnatlCnZdLBZZt2VSA==
-
 nth-check@^1.0.2:
   version "1.0.2"
   resolved "https://registry.npmmirror.com/nth-check/-/nth-check-1.0.2.tgz#b2bd295c37e3dd58a3bf0700376663ba4d9cf05c"
@@ -8807,7 +8825,7 @@ rc-tree@~5.7.0:
     rc-util "^5.16.1"
     rc-virtual-list "^3.4.8"
 
-rc-trigger@^5.0.0, rc-trigger@^5.0.4, rc-trigger@^5.1.2, rc-trigger@^5.2.10, rc-trigger@^5.3.1, rc-trigger@^5.3.4:
+rc-trigger@^5.0.0, rc-trigger@^5.0.4, rc-trigger@^5.1.2, rc-trigger@^5.3.1, rc-trigger@^5.3.4:
   version "5.3.4"
   resolved "https://registry.npmmirror.com/rc-trigger/-/rc-trigger-5.3.4.tgz#6b4b26e32825677c837d1eb4d7085035eecf9a61"
   integrity sha512-mQv+vas0TwKcjAO2izNPkqR4j86OemLRmvL2nOzdP9OWNWA1ivoTt5hzFqYNW9zACwmTezRiN8bttrC7cZzYSw==

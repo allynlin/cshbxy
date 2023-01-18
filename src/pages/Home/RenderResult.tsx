@@ -17,6 +17,7 @@ import { login } from "../../component/redux/isLoginSlice";
 import { Department, Employee, Leader } from "../../component/redux/userTypeSlice";
 import { useNavigate } from "react-router-dom";
 import { render } from "../../component/redux/isRenderWebSlice";
+import { SStorage } from '../../component/localStrong';
 
 const RenderResult: React.FC = () => {
 
@@ -28,24 +29,27 @@ const RenderResult: React.FC = () => {
     const [title, setTitle] = useState<string>(intl.get('useSettingIng'));
 
     useEffect(() => {
-        Promise.all([
-            getLanguageSetting(),
-            getSysColorSetting(),
-            getToken(),
-            getGaussianBlurSetting(),
-            getThemeToken(),
-            getMenuModeSetting(),
-        ]).then(() => {
-            dispatch(render())
-            setPercent(0)
-        })
+        getLanguageSetting()
+        getSysColorSetting()
+        getToken()
+        getGaussianBlurSetting()
+        getThemeToken()
+        getMenuModeSetting()
     }, [])
+
+    const setState = (newPercent: number) => {
+        setPercent(newPercent)
+        if (newPercent === 0)
+            dispatch(render())
+    }
 
     const getLanguageSetting = () => {
         setTitle(intl.get('getLanguageSettingIng'))
         Cookie.get('cshbxy-oa-language') === "en_US" ? dispatch(English()) : dispatch(Chinese())
         setPercent(10)
-        return Promise.resolve()
+        setTimeout(() => {
+            setState(10)
+        }, 500);
     }
 
     const getSysColorSetting = () => {
@@ -63,8 +67,9 @@ const RenderResult: React.FC = () => {
                 dispatch(sysTheme());
                 break;
         }
-        setPercent(30)
-        return Promise.resolve()
+        setTimeout(() => {
+            setState(30)
+        }, 1000);
     }
 
     const getToken = () => {
@@ -72,7 +77,9 @@ const RenderResult: React.FC = () => {
         const token = Cookie.get('cshbxy-oa-token');
         if (token) {
             setTitle(intl.get('autoLoginIng'))
-            setPercent(50)
+            setTimeout(() => {
+                setState(50)
+            }, 1500);
             checkUser().then(res => {
                 // 如果校验失败，则提示用户 token 失效，跳转到登录页面
                 if (res.code !== 200) {
@@ -97,14 +104,14 @@ const RenderResult: React.FC = () => {
                 }
             })
         }
-        return Promise.resolve()
     }
 
     const getGaussianBlurSetting = () => {
         setTitle(intl.get('getGaussianBlurSettingIng'))
         LStorage.get('cshbxy-oa-gaussianBlur') === true ? dispatch(open()) : dispatch(close())
-        setPercent(80)
-        return Promise.resolve()
+        setTimeout(() => {
+            setState(80)
+        }, 2000);
     }
 
     const getThemeToken = () => {
@@ -120,14 +127,17 @@ const RenderResult: React.FC = () => {
                 gaussianBlur: userThemeToken.gaussianBlur,
             }))
         }
-        setPercent(90)
-        return Promise.resolve()
+        setTimeout(() => {
+            setState(90)
+        }, 2500);
     }
 
     const getMenuModeSetting = () => {
         setTitle(intl.get('getMenuModeSettingIng'))
         LStorage.get('cshbxy-oa-menuMode') === 'vertical' ? dispatch(vertical()) : dispatch(inline())
-        return Promise.resolve()
+        setTimeout(() => {
+            setState(0)
+        }, 3000);
     }
 
     return (
