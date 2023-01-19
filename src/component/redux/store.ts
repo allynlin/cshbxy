@@ -1,4 +1,4 @@
-import {configureStore} from '@reduxjs/toolkit'
+import { configureStore } from '@reduxjs/toolkit'
 import isLoginSlice from './isLoginSlice'
 import userTypeSlice from './userTypeSlice'
 import themeSlice from "./themeSlice";
@@ -9,7 +9,6 @@ import userLanguageSlice from "./userLanguageSlice";
 import userTokenSlice from "./userTokenSlice";
 import tableSizeSlice from "./tableSizeSlice";
 import gaussianBlurSlice from "./gaussianBlurSlice";
-import isRenderWebSlice from "./isRenderWebSlice";
 
 export default configureStore({
     reducer: {
@@ -22,7 +21,6 @@ export default configureStore({
         userLanguage: userLanguageSlice,
         userToken: userTokenSlice,
         tableSize: tableSizeSlice,
-        gaussianBlur: gaussianBlurSlice,
-        isRenderWeb: isRenderWebSlice
+        gaussianBlur: gaussianBlurSlice
     },
 })
