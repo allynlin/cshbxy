@@ -11,7 +11,7 @@ import {useGaussianBlurStyles} from "../../styles/gaussianBlurStyle";
 
 const RenderLogOut = () => {
 
-    const { message, modal } = App.useApp();
+    const {message, modal} = App.useApp();
 
     const classes = useGaussianBlurStyles();
 
@@ -27,17 +27,17 @@ const RenderLogOut = () => {
         dispatch(all())
         Cookie.remove('cshbxy-oa-token');
         message.success(intl.get('logOutSuccess'))
-        navigate('/login', { replace: true })
+        navigate('/login', {replace: true})
     }
 
     const navigateToLogin = () => {
-        navigate('/login', { replace: true })
+        navigate('/login', {replace: true})
     }
 
     const showLogOutConfirm = () => {
         modal.confirm({
             title: intl.get('confirmLogOut'),
-            icon: <ExclamationCircleOutlined />,
+            icon: <ExclamationCircleOutlined/>,
             content: intl.get('afterLogOutNeedLoginAgain'),
             okText: intl.get('ok'),
             okType: 'primary',
@@ -58,10 +58,10 @@ const RenderLogOut = () => {
     }
 
     return (
-        isLogin ? <Avatar shape="square" size="large" icon={<UserOutlined />} onClick={showLogOutConfirm} /> :
+        isLogin ? <Avatar shape="square" size="large" icon={<UserOutlined/>} onClick={showLogOutConfirm}/> :
             <Button
                 type="primary"
-                icon={<LoginOutlined />}
+                icon={<LoginOutlined/>}
                 onClick={navigateToLogin}>
                 {intl.get('login')}
             </Button>
@@ -71,7 +71,7 @@ const RenderLogOut = () => {
 const MyApp = () => {
     return (
         <App>
-            <RenderLogOut />
+            <RenderLogOut/>
         </App>
     )
 }

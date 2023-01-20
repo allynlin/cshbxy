@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {useNavigate, useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {Progress, Result} from 'antd';
 import {LoadingOutlined} from "@ant-design/icons";
 import intl from "react-intl-universal";

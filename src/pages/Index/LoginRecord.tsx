@@ -9,7 +9,7 @@ import {useNavigate} from "react-router-dom";
 import {useStyles} from "../../styles/webStyle";
 import {LoadingOutlined, SearchOutlined} from "@ant-design/icons";
 
-const { Title } = Typography;
+const {Title} = Typography;
 
 interface DataType {
     key: React.Key;
@@ -17,7 +17,7 @@ interface DataType {
     align: 'left' | 'right' | 'center';
 }
 
-const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+const antIcon = <LoadingOutlined style={{fontSize: 24}} spin/>;
 
 
 const MyApp = () => {
@@ -26,7 +26,7 @@ const MyApp = () => {
 
     const navigate = useNavigate();
 
-    const { message } = App.useApp();
+    const {message} = App.useApp();
 
     // 全局数据防抖
     const [isQuery, setIsQuery] = useState<boolean>(false);
@@ -127,8 +127,8 @@ const MyApp = () => {
 
     const RenderGetDataSourceButton = () => {
         return (
-            <Button type="primary" disabled={isQuery} icon={<SearchOutlined />}
-                onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
+            <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
+                    onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
         )
     }
 
@@ -138,14 +138,14 @@ const MyApp = () => {
                 <Title level={2} className={classes.tit}>
                     {userInfo.realeName + ' ' + intl.get('loginRecord')}
                     &nbsp;&nbsp;
-                    <RenderGetDataSourceButton />
+                    <RenderGetDataSourceButton/>
                     &nbsp;&nbsp;
                     <Button type="primary" onClick={() => navigate('/home')}>{intl.get('backToHome')}</Button>
                 </Title>
             </div>
             <Spin spinning={loading} tip={intl.get('loading')} indicator={antIcon}>
                 <VirtualTable columns={columns} dataSource={dataSource}
-                    scroll={{ y: tableSize.tableHeight, x: tableSize.tableWidth }} />
+                              scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}/>
             </Spin>
         </> : <Result
             status="warning"
@@ -162,7 +162,7 @@ const MyApp = () => {
 const LoginRecord = () => {
     return (
         <App>
-            <MyApp />
+            <MyApp/>
         </App>
     )
 }

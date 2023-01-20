@@ -38,7 +38,7 @@ const record = [{
         titleCN: '采购记录',
         Auth: 'Employee'
     }
-},{
+}, {
     path: 'login-record',
     component: () => import('../pages/Index/LoginRecord'),
     meta: {

@@ -4,7 +4,7 @@ import {App, Button, Form, Input, Result, Skeleton, Spin, Table, Typography} fro
 import {findUserByDepartment} from "../../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
-import {FolderOpenOutlined, SearchOutlined, LoadingOutlined} from "@ant-design/icons";
+import {FolderOpenOutlined, LoadingOutlined, SearchOutlined} from "@ant-design/icons";
 import {RenderUserStatusTag} from "../../../component/Tag/RenderUserStatusTag";
 import ChangeUserName from "./ChangeUserName";
 import ChangeUserInfo from "./ChangeUserInfo";

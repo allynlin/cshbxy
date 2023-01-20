@@ -142,19 +142,19 @@ const App: React.FC = () => {
 
     return (
         percent === 100 ? (<div className={classes.flexCenter + ' ' + classes.webWaiting}>
-            <Result
-                icon={<img src={logo} alt="logo" className={classes.webWaitingImg} />}
-                title={title}
-            />
-            <Progress className={classes.webWaitingProgress} percent={percent} status="active"
-                strokeColor={{ from: '#108ee9', to: '#87d068' }} />
-        </div>) :
+                <Result
+                    icon={<img src={logo} alt="logo" className={classes.webWaitingImg}/>}
+                    title={title}
+                />
+                <Progress className={classes.webWaitingProgress} percent={percent} status="active"
+                          strokeColor={{from: '#108ee9', to: '#87d068'}}/>
+            </div>) :
             <WebComponent
                 title="长沙星辰软件有限公司 OA 系统"
                 copy={`长沙星辰软件有限公司 OA &copy; 2022-2023 Created by allynlin Version：${version}`}
-                menu={<SliderMenu />}
-                headMenu={<HeaderMenu />}
-                logOut={<RenderLogOut />}
+                menu={<SliderMenu/>}
+                headMenu={<HeaderMenu/>}
+                logOut={<RenderLogOut/>}
             />
     );
 };

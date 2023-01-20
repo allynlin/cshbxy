@@ -1,4 +1,4 @@
-import {Radio, Segmented} from 'antd';
+import {Segmented} from 'antd';
 import React, {memo} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {Chinese, English} from "../../../component/redux/userLanguageSlice";

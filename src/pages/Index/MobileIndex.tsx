@@ -18,9 +18,9 @@ const Index: React.FC = () => {
         <div className={classes.mobileIndex}>
             {
                 LStorage.get('cshbxy-oa-mobileHomeAlert') === false ? null : <>
-                    <NoticeBar content='移动端部分功能受限无法使用，如您需要使用全部功能，请前往 Web 端' color='info' />
+                    <NoticeBar content='移动端部分功能受限无法使用，如您需要使用全部功能，请前往 Web 端' color='info'/>
                     <Button
-                        style={{ marginTop: 16 }}
+                        style={{marginTop: 16}}
                         block
                         color='primary'
                         onClick={() => {
@@ -32,7 +32,7 @@ const Index: React.FC = () => {
                     </Button>
                 </>
             }
-            {isLogin ? <MobileHomeDescriptions /> : <Result
+            {isLogin ? <MobileHomeDescriptions/> : <Result
                 status='info'
                 title='请先登录'
                 description='登录后即可查看用户信息'

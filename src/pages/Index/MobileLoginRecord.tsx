@@ -20,7 +20,7 @@ const Index: React.FC = () => {
 
     const [isRenderList, setIsRenderList] = useState<boolean>(false);
     const [listHeight, setListHeight] = useState<number>(0);
-    const [resultTitle, setResultTitle] = useState<JSX.Element>(<span>正在获取登录记录<DotLoading /></span>);
+    const [resultTitle, setResultTitle] = useState<JSX.Element>(<span>正在获取登录记录<DotLoading/></span>);
     const [resultType, setResultType] = useState<"waiting" | "success" | "error" | "info" | "warning">('waiting');
     const [dataSource, setDataSource] = useState<any>([]);
 
@@ -89,9 +89,9 @@ const Index: React.FC = () => {
     }
 
     function rowRenderer({
-        index,
-        style,
-    }: {
+                             index,
+                             style,
+                         }: {
         index: number
         style: CSSProperties
     }) {
@@ -145,7 +145,7 @@ const Index: React.FC = () => {
                     <List header="登录记录">
                         {/*// @ts-ignore*/}
                         <AutoSizer disableHeight>
-                            {({ width }: { width: number }) => (
+                            {({width}: { width: number }) => (
                                 // @ts-ignore
                                 <VirtualizedList
                                     rowCount={dataSource.length}

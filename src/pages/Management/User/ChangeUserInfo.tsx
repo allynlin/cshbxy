@@ -98,7 +98,7 @@ export default function ChangeUserInfo(props: propsCheck) {
                             },
                         ]}
                     >
-                        <Input showCount maxLength={10} allowClear={true} />
+                        <Input showCount maxLength={10} allowClear={true}/>
                     </Form.Item>
 
                     <Form.Item
@@ -111,7 +111,7 @@ export default function ChangeUserInfo(props: propsCheck) {
                             },
                         ]}
                     >
-                        <Radio.Group buttonStyle="solid" style={{ display: "flex" }}>
+                        <Radio.Group buttonStyle="solid" style={{display: "flex"}}>
                             <Radio.Button value="男">{intl.get('male')}</Radio.Button>
                             <Radio.Button value="女">{intl.get('female')}</Radio.Button>
                         </Radio.Group>
@@ -128,7 +128,7 @@ export default function ChangeUserInfo(props: propsCheck) {
                             },
                         ]}
                     >
-                        <Input type={"tel"} showCount maxLength={11} allowClear={true} />
+                        <Input type={"tel"} showCount maxLength={11} allowClear={true}/>
                     </Form.Item>
 
                     <Form.Item
@@ -142,7 +142,7 @@ export default function ChangeUserInfo(props: propsCheck) {
                             },
                         ]}
                     >
-                        <Input type={"email"} showCount maxLength={30} allowClear={true} />
+                        <Input type={"email"} showCount maxLength={30} allowClear={true}/>
                     </Form.Item>
                 </Form>
             </Modal>

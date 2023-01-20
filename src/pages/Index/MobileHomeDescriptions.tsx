@@ -4,7 +4,7 @@ import {Button, Descriptions, Typography} from "antd";
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 
-const { Title } = Typography;
+const {Title} = Typography;
 
 const MobileHomeDescriptions: React.FC = () => {
 
@@ -14,7 +14,7 @@ const MobileHomeDescriptions: React.FC = () => {
 
     return (
         <Descriptions
-            title={<div style={{ display: "flex" }}>
+            title={<div style={{display: "flex"}}>
                 <Title level={3}>你好，{userInfo.realeName}</Title>
                 &nbsp;&nbsp;
                 <Button type="primary" onClick={() => navigate('/m/login-record')}>登录记录</Button>

@@ -12,7 +12,7 @@ export const MethodType = {
 /**
  * 模块说明:有api_token的请求
  */
-export const Request = (api: String, method = MethodType.GET, params = {}, config = { headers: {} }) => {
+export const Request = (api: String, method = MethodType.GET, params = {}, config = {headers: {}}) => {
     const apiToken = Cookie.get('cshbxy-oa-token');
     const language = Cookie.get('cshbxy-oa-language') || 'en_US';
     const baseURL = BaseInfo;
@@ -41,7 +41,7 @@ export const Request = (api: String, method = MethodType.GET, params = {}, confi
     return new Promise((resolve, reject) => {
         axios(axiosConfig).then(res => {
             if (res.data.token !== null && res.data.token !== undefined)
-                setCookie({ name: "cshbxy-oa-token", value: res.data.token })
+                setCookie({name: "cshbxy-oa-token", value: res.data.token})
             resolve(res.data);
         }).catch(error => {
             reject(error);

@@ -1,4 +1,4 @@
-import React, {useRef, useState, useEffect} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Modal} from 'antd';
 import {useSelector} from "react-redux";
 import {useGaussianBlurStyles} from "../styles/gaussianBlurStyle";

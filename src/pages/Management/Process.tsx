@@ -1,4 +1,4 @@
-import {Button, List, Modal, Skeleton, Spin, Steps, Tag, Transfer, Typography} from 'antd';
+import {Button, List, Modal, Spin, Steps, Tag, Transfer, Typography} from 'antd';
 import React, {useEffect, useState} from 'react';
 import intl from "react-intl-universal";
 import {ExclamationCircleOutlined, LoadingOutlined, SearchOutlined} from "@ant-design/icons";
