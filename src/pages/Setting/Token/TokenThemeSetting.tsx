@@ -3,7 +3,7 @@ import {Button, ConfigProvider, Form, Slider} from 'antd';
 import {SketchPicker} from 'react-color';
 import intl from "react-intl-universal";
 import {setToken} from "../../../component/redux/userTokenSlice";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {useStyles} from "../../../styles/webStyle";
 import bg from '../bg.jpg'
@@ -29,6 +29,8 @@ const TokenThemeSetting = () => {
     const classes = useStyles();
 
     const [form] = Form.useForm();
+
+    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value)
 
     const [data, setData] = React.useState<ThemeData>(defaultData);
 
@@ -76,7 +78,7 @@ const TokenThemeSetting = () => {
                     }}/>
                 </div>
                 <Form.Item name="gaussianBlur" label={intl.get('gaussianBlurNumber')}>
-                    <Slider min={0} max={100}/>
+                    <Slider min={0} max={100} disabled={!gaussianBlur}/>
                 </Form.Item>
                 <Form.Item name="submit">
                     <Button htmlType={"submit"} type="primary">{intl.get('submit')}</Button>

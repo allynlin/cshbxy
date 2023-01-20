@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import VirtualTable from "../../../component/VirtualTable";
+import VirtualTable from "../../../component/Table/VirtualTable";
 import {App, Button, Form, Input, Modal, Result, Spin, Table, Typography} from 'antd';
 import {findProcurementWaitApprovalList, resolveProcurement} from "../../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
@@ -9,16 +9,11 @@ import {useSelector} from "react-redux";
 import {useStyles} from "../../../styles/webStyle";
 import {useGaussianBlurStyles} from "../../../styles/gaussianBlurStyle";
 import MoveModal from '../../../component/MoveModal';
+import NormalTable from "../../../component/Table/NormalTable";
+import type {DataType} from "../../../component/Table";
+import {LoadingIcon} from "../../../component/Icon";
 
 const {Title} = Typography;
-
-interface DataType {
-    key: React.Key;
-    dataIndex: string;
-    align: 'left' | 'right' | 'center';
-}
-
-const antIcon = <LoadingOutlined style={{fontSize: 24}} spin/>;
 
 const MyApp = () => {
 
@@ -194,7 +189,7 @@ const MyApp = () => {
     }
 
     return (
-        <Spin tip={RenderGetDataSourceButton()} delay={1000} indicator={antIcon} size="large" spinning={loading}>
+        <Spin tip={RenderGetDataSourceButton()} delay={1000} indicator={<LoadingIcon/>} size="large" spinning={loading}>
             <div className={classes.contentBody}>
                 <MoveModal
                     title={intl.get('details')}
@@ -259,24 +254,7 @@ const MyApp = () => {
                         userTable.tableType === "virtual" ?
                             <VirtualTable columns={columns} dataSource={showData}
                                           scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}/> :
-                            <Table
-                                columns={columns}
-                                dataSource={showData}
-                                scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}
-                                // @ts-ignore
-                                pagination={
-                                    userTable.tableType === "normal" ? {
-                                        position: ["none"]
-                                    } : {
-                                        // 是否展示 pageSize 切换器
-                                        showSizeChanger: true,
-                                        // 默认的每页条数
-                                        defaultPageSize: userTable.defaultPageSize,
-                                        // 指定每页可以显示多少条
-                                        pageSizeOptions: ['10', '20', '30', '40', '50', '100', '200', '500', '1000'],
-                                    }
-                                }
-                            />
+                            <NormalTable columns={columns} dataSource={showData}/>
                     )
                 }
             </div>

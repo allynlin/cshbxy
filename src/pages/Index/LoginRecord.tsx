@@ -3,22 +3,16 @@ import {App, Button, Result, Spin, Table, Typography} from 'antd';
 import {useSelector} from "react-redux";
 import {findLoginRecord} from "../../component/axios/api";
 import intl from "react-intl-universal";
-import VirtualTable from "../../component/VirtualTable";
+import VirtualTable from "../../component/Table/VirtualTable";
 import {ColumnsType} from "antd/es/table";
 import {useNavigate} from "react-router-dom";
 import {useStyles} from "../../styles/webStyle";
 import {LoadingOutlined, SearchOutlined} from "@ant-design/icons";
+import NormalTable from "../../component/Table/NormalTable";
+import type {DataType} from "../../component/Table";
+import {LoadingIcon} from "../../component/Icon";
 
 const {Title} = Typography;
-
-interface DataType {
-    key: React.Key;
-    dataIndex: string;
-    align: 'left' | 'right' | 'center';
-}
-
-const antIcon = <LoadingOutlined style={{fontSize: 24}} spin/>;
-
 
 const MyApp = () => {
 
@@ -135,7 +129,8 @@ const MyApp = () => {
 
     return (
         isLogin ?
-            <Spin size="large" spinning={loading} tip={RenderGetDataSourceButton()} delay={1000} indicator={antIcon}>
+            <Spin size="large" spinning={loading} tip={RenderGetDataSourceButton()} delay={1000}
+                  indicator={<LoadingIcon/>}>
                 <div className={classes.contentHead}>
                     <Title level={2} className={classes.tit}>
                         {userInfo.realeName + ' ' + intl.get('loginRecord')}
@@ -146,31 +141,18 @@ const MyApp = () => {
                     </Title>
                 </div>
                 {
-                    userTable.tableType === "virtual" ? (
+                    userTable.tableType === "virtual" ?
                         <VirtualTable
                             columns={columns}
                             dataSource={dataSource}
                             scroll={{
                                 y: tableSize.tableHeight,
                                 x: tableSize.tableWidth
-                            }}/>) : <Table
-                        columns={columns}
-                        dataSource={dataSource}
-                        scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}
-                        // @ts-ignore
-                        pagination={
-                            userTable.tableType === "normal" ? {
-                                position: ["none"]
-                            } : {
-                                // 是否展示 pageSize 切换器
-                                showSizeChanger: true,
-                                // 默认的每页条数
-                                defaultPageSize: userTable.defaultPageSize,
-                                // 指定每页可以显示多少条
-                                pageSizeOptions: ['10', '20', '30', '40', '50', '100', '200', '500', '1000'],
-                            }
-                        }
-                    />
+                            }}/> :
+                        <NormalTable
+                            columns={columns}
+                            dataSource={dataSource}
+                        />
                 }
             </Spin> : <Result
                 status="warning"

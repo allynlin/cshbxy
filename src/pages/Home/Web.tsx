@@ -17,9 +17,11 @@ import {checkUser} from "../../component/axios/api";
 import {setUser} from "../../component/redux/userInfoSlice";
 import {login} from "../../component/redux/isLoginSlice";
 import {Department, Employee, Leader} from "../../component/redux/userTypeSlice";
-import {useStyles} from "../../styles/webStyle";
+import {useStyles} from "./style";
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
+import {setTable} from "../../component/redux/userTableSlice";
+import {hide, show} from "../../component/redux/isShowFloatButtonSlice";
 
 const App: React.FC = () => {
 
@@ -127,6 +129,13 @@ const App: React.FC = () => {
                 gaussianBlur: userThemeToken.gaussianBlur,
             }))
         }
+        const userTableToken = LStorage.get('cshbxy-oa-userTable');
+        if (userTableToken) {
+            dispatch(setTable({
+                tableType: userTableToken.tableType,
+                defaultPageSize: userTableToken.defaultPageSize,
+            }))
+        }
         setTimeout(() => {
             setState(90)
         }, 2500);
@@ -135,6 +144,7 @@ const App: React.FC = () => {
     const getMenuModeSetting = () => {
         setTitle(intl.get('getMenuModeSettingIng'))
         LStorage.get('cshbxy-oa-menuMode') === 'vertical' ? dispatch(vertical()) : dispatch(inline())
+        LStorage.get('cshbxy-oa-isShowFloatButton') ? dispatch(show()) : dispatch(hide())
         setTimeout(() => {
             setState(0)
         }, 3000);

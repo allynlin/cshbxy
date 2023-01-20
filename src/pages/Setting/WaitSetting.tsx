@@ -28,7 +28,7 @@ const WaitSetting: React.FC = () => {
             } else {
                 navigate(-1);
             }
-        }, 500)
+        }, 100)
         return () => {
             clearTimeout(timer)
         }

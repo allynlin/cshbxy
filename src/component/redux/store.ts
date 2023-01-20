@@ -10,6 +10,7 @@ import userTokenSlice from "./userTokenSlice";
 import tableSizeSlice from "./tableSizeSlice";
 import gaussianBlurSlice from "./gaussianBlurSlice";
 import userTableSlice from "./userTableSlice";
+import isShowFloatButtonSlice from './isShowFloatButtonSlice'
 
 export default configureStore({
     reducer: {
@@ -23,6 +24,7 @@ export default configureStore({
         userToken: userTokenSlice,
         tableSize: tableSizeSlice,
         gaussianBlur: gaussianBlurSlice,
-        userTable: userTableSlice
+        userTable: userTableSlice,
+        isShowFloatButton: isShowFloatButtonSlice
     },
 })

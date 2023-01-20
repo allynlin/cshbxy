@@ -14,11 +14,11 @@ const GaussianBlurSetting: React.FC = () => {
 
     const handleChange = (value: string) => {
         switch (value) {
-            case "是":
+            case "开启":
                 dispatch(open())
                 navigate('/loading', {state: 3})
                 break;
-            case "否":
+            case "关闭":
                 dispatch(close())
                 break;
             default:
@@ -28,8 +28,8 @@ const GaussianBlurSetting: React.FC = () => {
 
     return (
         <Segmented
-            defaultValue={gaussianBlur ? "是" : "否"}
-            options={['是', '否']}
+            defaultValue={gaussianBlur ? "开启" : "关闭"}
+            options={['开启', '关闭']}
             onChange={(e: any) => handleChange(e)}
         />
     );

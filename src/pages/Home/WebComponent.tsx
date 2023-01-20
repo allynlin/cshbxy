@@ -3,7 +3,7 @@ import {Layout, theme, Typography} from 'antd';
 import {useDispatch, useSelector} from "react-redux";
 import {Outlet} from "react-router-dom";
 import {setTableSize} from "../../component/redux/tableSizeSlice";
-import {useStyles} from "../../styles/webStyle";
+import {useStyles} from "./style";
 import {LStorage} from "../../component/localStrong";
 
 const {Header, Content, Footer, Sider} = Layout;

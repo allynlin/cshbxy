@@ -12,6 +12,7 @@ import {LStorage} from "../../component/localStrong";
 import {useSelector} from "react-redux";
 import GaussianBlurSetting from "./SettingItem/GaussianBlurSetting";
 import {useGaussianBlurStyles} from "../../styles/gaussianBlurStyle";
+import ShowFloatButtonSetting from "./SettingItem/ShowFloatButtonSetting";
 
 const {Title, Text} = Typography;
 
@@ -64,6 +65,11 @@ const Setting = () => {
                             <Text>{intl.get('gaussianBlur')}</Text>
                         </Tooltip>
                         <GaussianBlurSetting/>
+                    </Space>
+                    <br/><br/>
+                    <Space size={"middle"} align={"center"}>
+                        <Text>{intl.get('floatButton')}</Text>
+                        <ShowFloatButtonSetting/>
                     </Space>
                 </div>
                 <div>

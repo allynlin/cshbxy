@@ -32,6 +32,7 @@ const MyApp = () => {
     const sysColor = useSelector((state: any) => state.sysColor.value)
     const isLogin = useSelector((state: any) => state.isLogin.value)
     const userType = useSelector((state: any) => state.userType.value)
+    const isShowFloatButton = useSelector((state: any) => state.isShowFloatButton.value);
 
     useEffect(() => {
         getBrowserInfo();
@@ -103,7 +104,7 @@ const MyApp = () => {
     return (
         <ConfigProvider locale={language}>
             <BrowserRouter basename={process.env.PUBLIC_URL}>
-                <ChangeSystem/>
+                {isShowFloatButton ? <ChangeSystem/> : null}
                 <RouterWaiter routes={routes} loading={<Spin/>} onRouteBefore={onRouteBefore}/>
             </BrowserRouter>
         </ConfigProvider>

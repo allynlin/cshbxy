@@ -17,6 +17,7 @@ const userTableDefaultSetting: userTableInterfaceProps = {
 const MyApp: React.FC = () => {
 
     const [form] = Form.useForm();
+    const tableType = Form.useWatch('tableType', form);
 
     const dispatch = useDispatch();
 
@@ -63,7 +64,7 @@ const MyApp: React.FC = () => {
             </Form.Item>
             {/* 每页条数 */}
             <Form.Item name="defaultPageSize" label={intl.get('pageSize')}>
-                <Slider min={1} max={1000}/>
+                <Slider min={1} max={1000} disabled={tableType === "虚拟列表"}/>
             </Form.Item>
             <Form.Item>
                 <Button htmlType={"submit"} type="primary">{intl.get('submit')}</Button>
