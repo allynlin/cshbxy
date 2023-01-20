@@ -163,8 +163,13 @@ export const HeaderMenu: React.FC = () => {
     const items: MenuProps['items'] = [
         getItem((<Link
             to={'/home'}>{intl.get('home')}</Link>), '/home'),
-        getItem((<Link
-            to={'/setting'}>{intl.get('setting')}</Link>), '/setting')
+        getItem(intl.get('setting'), 'setting', '', '', [
+            getItem((<Link
+                to={'/setting'}>{intl.get('setting')}</Link>), '/setting'),
+            getItem((<Link
+                to={'/token'}>{intl.get('tokenSetting')}</Link>), '/token')
+        ]),
+
     ];
 
     return (

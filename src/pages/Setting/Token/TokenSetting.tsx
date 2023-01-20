@@ -1,11 +1,12 @@
-import React, {useState} from "react";
-import {Alert, Segmented, Tooltip, Typography} from "antd";
+import React from "react";
+import {Alert, Radio, Tooltip, Typography} from "antd";
 import {useDispatch, useSelector} from "react-redux";
 import intl from "react-intl-universal";
-import {setToken} from "../../component/redux/userTokenSlice";
+import {setToken} from "../../../component/redux/userTokenSlice";
 import TokenThemeSetting from "./TokenThemeSetting";
 import {ExperimentTwoTone} from "@ant-design/icons";
-import {useGaussianBlurStyles} from "../../styles/gaussianBlurStyle";
+import {useGaussianBlurStyles} from "../../../styles/gaussianBlurStyle";
+import TableSetting from "./TableSetting";
 
 const {Title, Paragraph} = Typography;
 
@@ -41,24 +42,21 @@ export default function TokenSetting() {
 
     const gaussianBlurClasses = useGaussianBlurStyles();
 
-    const [value, setValue] = useState<string | number>('');
-
     const dispatch = useDispatch();
 
     const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value)
 
-    const handleChange = (value: string) => {
-        setValue(value);
-        switch (value) {
-            case '默认':
+    const changeDefaultTheme = (e: any) => {
+        switch (e.target.value) {
+            case "default":
                 dispatch(setToken(defaultTheme))
-                break;
-            case '知识协作':
+                break
+            case "green":
                 dispatch(setToken(greenTheme))
-                break;
-            case '桃花缘':
+                break
+            case "pink":
                 dispatch(setToken(pinkTheme))
-                break;
+                break
             default:
                 dispatch(setToken(defaultTheme))
         }
@@ -66,7 +64,7 @@ export default function TokenSetting() {
 
     return (
         <Typography>
-            <Title level={3}>
+            <Title level={2}>
                 {intl.get('tokenSetting')}&nbsp;
                 <Tooltip title={intl.get('themeWarning')}
                          overlayClassName={gaussianBlur ? gaussianBlurClasses.gaussianBlurTooltip : ''}>
@@ -77,10 +75,21 @@ export default function TokenSetting() {
             <Paragraph>{intl.get('token-2')}</Paragraph>
             <Paragraph>{intl.get('token-3')}</Paragraph>
             <Alert message={intl.get('token-4')} type="warning"/>
-            <Segmented style={{marginTop: 16}} value={value} block options={['默认', '知识协作', '桃花缘']}
-                       onChange={(e: any) => handleChange(e)}/>
+            <Radio.Group defaultValue="default" buttonStyle="solid" onChange={changeDefaultTheme}
+                         style={{marginTop: 16}}>
+                <Radio.Button value="default">默认</Radio.Button>
+                <Radio.Button value="green">知识协作</Radio.Button>
+                <Radio.Button value="pink">桃花缘</Radio.Button>
+            </Radio.Group>
+            <Title level={3}>{intl.get('themeSetting')}</Title>
+            <Paragraph>{intl.get('theme-1')}</Paragraph>
             <div style={{padding: 16}}>
                 <TokenThemeSetting/>
+            </div>
+            <Title level={3}>{intl.get('tableSetting')}</Title>
+            <Paragraph>{intl.get('table-1')}</Paragraph>
+            <div style={{padding: 16}}>
+                <TableSetting/>
             </div>
         </Typography>
     );

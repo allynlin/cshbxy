@@ -2,7 +2,7 @@ import axios from 'axios';
 import qs from 'qs';
 import Cookie from "js-cookie";
 import setCookie from "../setCookie";
-import { BaseInfo, version } from "../../baseInfo";
+import {BaseInfo, version} from "../../baseInfo";
 
 export const MethodType = {
     GET: 'GET',

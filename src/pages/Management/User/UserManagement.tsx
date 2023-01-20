@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import VirtualTable from "../../../component/VirtualTable";
-import {App, Button, Form, Input, Result, Skeleton, Typography} from 'antd';
+import {App, Button, Form, Input, Result, Skeleton, Spin, Table, Typography} from 'antd';
 import {findAllUser} from "../../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
-import {FolderOpenOutlined, SearchOutlined} from "@ant-design/icons";
+import {FolderOpenOutlined, LoadingOutlined, SearchOutlined} from "@ant-design/icons";
 import {RenderUserStatusTag} from "../../../component/Tag/RenderUserStatusTag";
 import {RenderUserTypeTag} from "../../../component/Tag/RenderUserTypeTag";
 import ChangeUserName from "./ChangeUserName";
@@ -15,7 +15,6 @@ import DeleteUser from "./DeleteUser";
 import {useSelector} from "react-redux";
 
 import {useStyles} from "../../../styles/webStyle";
-import {RenderVirtualTableSkeleton} from "../../../component/RenderVirtualTableSkeleton";
 import MoveModal from "../../../component/MoveModal";
 
 const {Title, Paragraph} = Typography;
@@ -25,6 +24,8 @@ interface DataType {
     dataIndex: string;
     align: 'left' | 'right' | 'center';
 }
+
+const antIcon = <LoadingOutlined style={{fontSize: 24}} spin/>;
 
 const MyApp = () => {
 
@@ -49,6 +50,7 @@ const MyApp = () => {
     const [isEmpty, setIsEmpty] = useState<boolean>(false);
 
     const tableSize = useSelector((state: any) => state.tableSize.value);
+    const userTable = useSelector((state: any) => state.userTable.value);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -177,257 +179,275 @@ const MyApp = () => {
     }
 
     return (
-        <div className={classes.contentBody}>
-            <MoveModal
-                title={intl.get('userInfo')}
-                showModal={showModal}
-                getModalStatus={(e) => setShowModal(e)}
-                onCancel={() => setShowModal(false)}
-                footer={[
-                    <Button
-                        key="link"
-                        loading={loading}
-                        onClick={() => setShowModal(false)}
-                    >
-                        {intl.get('close')}
-                    </Button>,
-                ]}
-            >
-                {showContent ? (<Skeleton paragraph={{rows: 18}} active/>) : (
-                    <Typography>
-                        <Title level={3}>{intl.get('baseInfo')}</Title>
-                        <Paragraph>UID：{showInfo.uid}</Paragraph>
-                        {showInfo.departmentUid ? (
-                            <Paragraph>{intl.get('department')}：{showInfo.departmentUid}</Paragraph>) : null}
-                        <Paragraph>{intl.get('username')}：{showInfo.username}</Paragraph>
-                        <Paragraph>{intl.get('realName')}：{showInfo.realeName}</Paragraph>
-                        <Paragraph>{intl.get('gender')}：{showInfo.gender}</Paragraph>
-                        <Paragraph>{intl.get('email')}：{showInfo.email}</Paragraph>
-                        <Paragraph>{intl.get('tel')}：{showInfo.tel}</Paragraph>
-                        <Paragraph>{intl.get('createTime')}：{showInfo.create_time}</Paragraph>
-                        <Paragraph>{intl.get('updateTime')}：{showInfo.update_time}</Paragraph>
-                        <Paragraph>{intl.get('status')}：{showInfo.tag}</Paragraph>
-                        <Paragraph>{intl.get('userType')}：{showInfo.showUserType}</Paragraph>
-                        <Title level={3}>{intl.get('userOperation')}</Title>
-                        <Paragraph>{<ChangePassword uid={showInfo.uid}/>}</Paragraph>
-                        <Paragraph>
-                            {<ChangeUserName info={showInfo} getChange={(newUsername: string) => {
-                                // 修改 showInfo 中的 username
-                                setShowInfo({
-                                    ...showInfo,
-                                    username: newUsername
-                                })
-                                // 修改 dataSource 中的 username
-                                const newDataSource = dataSource.map((item: any) => {
-                                    if (item.uid === showInfo.uid) {
-                                        return {
-                                            ...item,
-                                            username: newUsername,
-                                            operation: <Button
-                                                type="primary"
-                                                onClick={() => {
-                                                    setShowInfo({
-                                                        ...showInfo,
-                                                        username: newUsername
-                                                    });
-                                                    setShowModal(true);
-                                                    setShowContent(false);
-                                                }}>
-                                                {intl.get('management')}
-                                            </Button>
-                                        }
-                                    }
-                                    return item
-                                })
-                                setDataSource(newDataSource)
-                                // 修改 showData 中的 username
-                                const newShowData = showData.map((item: any) => {
-                                    if (item.uid === showInfo.uid) {
-                                        return {
-                                            ...item,
-                                            username: newUsername,
-                                            operation: <Button
-                                                type="primary"
-                                                onClick={() => {
-                                                    setShowInfo({
-                                                        ...showInfo,
-                                                        username: newUsername
-                                                    });
-                                                    setShowModal(true);
-                                                    setShowContent(false);
-                                                }}>
-                                                {intl.get('management')}
-                                            </Button>
-                                        }
-                                    }
-                                    return item
-                                })
-                                setShowData(newShowData)
-                            }}/>}
-                        </Paragraph>
-                        <Paragraph>
-                            {<ChangeUserInfo info={showInfo} getChange={(newContent: any) => {
-                                setShowInfo({...showInfo, ...newContent})
-                                const newDateSource = dataSource.map((item: any) => {
-                                    if (item.uid === showInfo.uid) {
-                                        return {
-                                            ...showInfo,
-                                            ...newContent,
-                                            operation: <Button
-                                                type="primary"
-                                                onClick={() => {
-                                                    setShowInfo({
-                                                        ...showInfo,
-                                                        ...newContent
-                                                    });
-                                                    setShowModal(true);
-                                                    setShowContent(false);
-                                                }}>
-                                                {intl.get('management')}
-                                            </Button>
-                                        }
-                                    }
-                                    return item
-                                })
-                                setDataSource(newDateSource)
-                                const newShowData = showData.map((item: any) => {
-                                    if (item.uid === showInfo.uid) {
-                                        return {
-                                            ...showInfo,
-                                            ...newContent,
-                                            operation: <Button
-                                                type="primary"
-                                                onClick={() => {
-                                                    setShowInfo({
-                                                        ...showInfo,
-                                                        ...newContent
-                                                    });
-                                                    setShowModal(true);
-                                                    setShowContent(false);
-                                                }}>
-                                                {intl.get('management')}
-                                            </Button>
-                                        }
-                                    }
-                                    return item
-                                })
-                                setShowData(newShowData)
-                            }}/>}
-                        </Paragraph>
-                        <Paragraph>
-                            {<ChangeUserStatus info={showInfo} getChange={(newStatus: number) => {
-                                setShowInfo({
-                                    ...showInfo,
-                                    tag: RenderUserStatus(newStatus),
-                                    status: newStatus,
-                                })
-                                const newDateSource = dataSource.map((item: any) => {
-                                    if (item.uid === showInfo.uid) {
-                                        return {
-                                            ...item,
-                                            tag: RenderUserStatus(newStatus),
-                                            status: newStatus,
-                                            operation: <Button
-                                                type="primary"
-                                                onClick={() => {
-                                                    setShowInfo({
-                                                        ...showInfo,
-                                                        status: newStatus,
-                                                        tag: RenderUserStatus(newStatus),
-                                                    });
-                                                    setShowModal(true);
-                                                    setShowContent(false);
-                                                }}>
-                                                {intl.get('management')}
-                                            </Button>
-                                        }
-                                    }
-                                    return item
-                                })
-                                setDataSource(newDateSource)
-                                const newShowData = showData.map((item: any) => {
-                                    if (item.uid === showInfo.uid) {
-                                        return {
-                                            ...item,
-                                            tag: RenderUserStatus(newStatus),
-                                            status: newStatus,
-                                            operation: <Button
-                                                type="primary"
-                                                onClick={() => {
-                                                    setShowInfo({
-                                                        ...showInfo,
-                                                        status: newStatus,
-                                                        tag: RenderUserStatus(newStatus),
-                                                    });
-                                                    setShowModal(true);
-                                                    setShowContent(false);
-                                                }}>
-                                                {intl.get('management')}
-                                            </Button>
-                                        }
-                                    }
-                                    return item
-                                })
-                                setShowData(newShowData)
-                            }}/>}
-                        </Paragraph>
-                        <Title level={3}>{intl.get('advancedFeatures')}</Title>
-                        <Paragraph>
-                            {<DeleteUser content={showInfo} getChange={(newContent: string) => {
-                                if (newContent === 'yes') {
-                                    setShowModal(false)
-                                    const newDateSource: any = dataSource.filter((item: any) => {
-                                        return item.uid !== showInfo.uid;
+        <Spin tip={RenderGetDataSourceButton()} delay={1000} indicator={antIcon} size="large" spinning={loading}>
+            <div className={classes.contentBody}>
+                <MoveModal
+                    title={intl.get('userInfo')}
+                    showModal={showModal}
+                    getModalStatus={(e) => setShowModal(e)}
+                    onCancel={() => setShowModal(false)}
+                    footer={[
+                        <Button
+                            key="link"
+                            loading={loading}
+                            onClick={() => setShowModal(false)}
+                        >
+                            {intl.get('close')}
+                        </Button>,
+                    ]}
+                >
+                    {showContent ? (<Skeleton paragraph={{rows: 18}} active/>) : (
+                        <Typography>
+                            <Title level={3}>{intl.get('baseInfo')}</Title>
+                            <Paragraph>UID：{showInfo.uid}</Paragraph>
+                            {showInfo.departmentUid ? (
+                                <Paragraph>{intl.get('department')}：{showInfo.departmentUid}</Paragraph>) : null}
+                            <Paragraph>{intl.get('username')}：{showInfo.username}</Paragraph>
+                            <Paragraph>{intl.get('realName')}：{showInfo.realeName}</Paragraph>
+                            <Paragraph>{intl.get('gender')}：{showInfo.gender}</Paragraph>
+                            <Paragraph>{intl.get('email')}：{showInfo.email}</Paragraph>
+                            <Paragraph>{intl.get('tel')}：{showInfo.tel}</Paragraph>
+                            <Paragraph>{intl.get('createTime')}：{showInfo.create_time}</Paragraph>
+                            <Paragraph>{intl.get('updateTime')}：{showInfo.update_time}</Paragraph>
+                            <Paragraph>{intl.get('status')}：{showInfo.tag}</Paragraph>
+                            <Paragraph>{intl.get('userType')}：{showInfo.showUserType}</Paragraph>
+                            <Title level={3}>{intl.get('userOperation')}</Title>
+                            <Paragraph>{<ChangePassword uid={showInfo.uid}/>}</Paragraph>
+                            <Paragraph>
+                                {<ChangeUserName info={showInfo} getChange={(newUsername: string) => {
+                                    // 修改 showInfo 中的 username
+                                    setShowInfo({
+                                        ...showInfo,
+                                        username: newUsername
                                     })
-                                    if (newDateSource.length === 0) {
-                                        setDataSource([])
-                                        setShowData([])
-                                        setIsEmpty(true)
-                                        return
-                                    }
-                                    setDataSource(newDateSource)
-                                    const newShowData: any = showData.filter((item: any) => {
-                                        return item.uid !== showInfo.uid;
+                                    // 修改 dataSource 中的 username
+                                    const newDataSource = dataSource.map((item: any) => {
+                                        if (item.uid === showInfo.uid) {
+                                            return {
+                                                ...item,
+                                                username: newUsername,
+                                                operation: <Button
+                                                    type="primary"
+                                                    onClick={() => {
+                                                        setShowInfo({
+                                                            ...showInfo,
+                                                            username: newUsername
+                                                        });
+                                                        setShowModal(true);
+                                                        setShowContent(false);
+                                                    }}>
+                                                    {intl.get('management')}
+                                                </Button>
+                                            }
+                                        }
+                                        return item
+                                    })
+                                    setDataSource(newDataSource)
+                                    // 修改 showData 中的 username
+                                    const newShowData = showData.map((item: any) => {
+                                        if (item.uid === showInfo.uid) {
+                                            return {
+                                                ...item,
+                                                username: newUsername,
+                                                operation: <Button
+                                                    type="primary"
+                                                    onClick={() => {
+                                                        setShowInfo({
+                                                            ...showInfo,
+                                                            username: newUsername
+                                                        });
+                                                        setShowModal(true);
+                                                        setShowContent(false);
+                                                    }}>
+                                                    {intl.get('management')}
+                                                </Button>
+                                            }
+                                        }
+                                        return item
                                     })
                                     setShowData(newShowData)
-                                    setShowInfo({})
+                                }}/>}
+                            </Paragraph>
+                            <Paragraph>
+                                {<ChangeUserInfo info={showInfo} getChange={(newContent: any) => {
+                                    setShowInfo({...showInfo, ...newContent})
+                                    const newDateSource = dataSource.map((item: any) => {
+                                        if (item.uid === showInfo.uid) {
+                                            return {
+                                                ...showInfo,
+                                                ...newContent,
+                                                operation: <Button
+                                                    type="primary"
+                                                    onClick={() => {
+                                                        setShowInfo({
+                                                            ...showInfo,
+                                                            ...newContent
+                                                        });
+                                                        setShowModal(true);
+                                                        setShowContent(false);
+                                                    }}>
+                                                    {intl.get('management')}
+                                                </Button>
+                                            }
+                                        }
+                                        return item
+                                    })
+                                    setDataSource(newDateSource)
+                                    const newShowData = showData.map((item: any) => {
+                                        if (item.uid === showInfo.uid) {
+                                            return {
+                                                ...showInfo,
+                                                ...newContent,
+                                                operation: <Button
+                                                    type="primary"
+                                                    onClick={() => {
+                                                        setShowInfo({
+                                                            ...showInfo,
+                                                            ...newContent
+                                                        });
+                                                        setShowModal(true);
+                                                        setShowContent(false);
+                                                    }}>
+                                                    {intl.get('management')}
+                                                </Button>
+                                            }
+                                        }
+                                        return item
+                                    })
+                                    setShowData(newShowData)
+                                }}/>}
+                            </Paragraph>
+                            <Paragraph>
+                                {<ChangeUserStatus info={showInfo} getChange={(newStatus: number) => {
+                                    setShowInfo({
+                                        ...showInfo,
+                                        tag: RenderUserStatus(newStatus),
+                                        status: newStatus,
+                                    })
+                                    const newDateSource = dataSource.map((item: any) => {
+                                        if (item.uid === showInfo.uid) {
+                                            return {
+                                                ...item,
+                                                tag: RenderUserStatus(newStatus),
+                                                status: newStatus,
+                                                operation: <Button
+                                                    type="primary"
+                                                    onClick={() => {
+                                                        setShowInfo({
+                                                            ...showInfo,
+                                                            status: newStatus,
+                                                            tag: RenderUserStatus(newStatus),
+                                                        });
+                                                        setShowModal(true);
+                                                        setShowContent(false);
+                                                    }}>
+                                                    {intl.get('management')}
+                                                </Button>
+                                            }
+                                        }
+                                        return item
+                                    })
+                                    setDataSource(newDateSource)
+                                    const newShowData = showData.map((item: any) => {
+                                        if (item.uid === showInfo.uid) {
+                                            return {
+                                                ...item,
+                                                tag: RenderUserStatus(newStatus),
+                                                status: newStatus,
+                                                operation: <Button
+                                                    type="primary"
+                                                    onClick={() => {
+                                                        setShowInfo({
+                                                            ...showInfo,
+                                                            status: newStatus,
+                                                            tag: RenderUserStatus(newStatus),
+                                                        });
+                                                        setShowModal(true);
+                                                        setShowContent(false);
+                                                    }}>
+                                                    {intl.get('management')}
+                                                </Button>
+                                            }
+                                        }
+                                        return item
+                                    })
+                                    setShowData(newShowData)
+                                }}/>}
+                            </Paragraph>
+                            <Title level={3}>{intl.get('advancedFeatures')}</Title>
+                            <Paragraph>
+                                {<DeleteUser content={showInfo} getChange={(newContent: string) => {
+                                    if (newContent === 'yes') {
+                                        setShowModal(false)
+                                        const newDateSource: any = dataSource.filter((item: any) => {
+                                            return item.uid !== showInfo.uid;
+                                        })
+                                        if (newDateSource.length === 0) {
+                                            setDataSource([])
+                                            setShowData([])
+                                            setIsEmpty(true)
+                                            return
+                                        }
+                                        setDataSource(newDateSource)
+                                        const newShowData: any = showData.filter((item: any) => {
+                                            return item.uid !== showInfo.uid;
+                                        })
+                                        setShowData(newShowData)
+                                        setShowInfo({})
+                                    }
+                                }}/>}
+                            </Paragraph>
+                        </Typography>
+                    )}
+                </MoveModal>
+                <div className={classes.contentHead}>
+                    <Title level={2} className={classes.tit}>
+                        {intl.get('userManagement')}&nbsp;&nbsp;
+                        <RenderGetDataSourceButton/>
+                    </Title>
+                    <Form name="search" layout="inline" onFinish={onFinish}>
+                        <Form.Item name="search">
+                            <Input prefix={<SearchOutlined className="site-form-item-icon"/>}
+                                   placeholder={intl.get('search') + ' ' + intl.get('username')}/>
+                        </Form.Item>
+                        <Form.Item>
+                            <Button type="primary" htmlType="submit">Search</Button>
+                        </Form.Item>
+                    </Form>
+                </div>
+                {
+                    isEmpty ? (
+                        <Result
+                            icon={<FolderOpenOutlined/>}
+                            title={intl.get('noData')}
+                            extra={<RenderGetDataSourceButton/>}
+                        />
+                    ) : (
+                        userTable.tableType === "virtual" ?
+                            <VirtualTable columns={columns} dataSource={showData}
+                                          scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}/> :
+                            <Table
+                                columns={columns}
+                                dataSource={showData}
+                                scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}
+                                // @ts-ignore
+                                pagination={
+                                    userTable.tableType === "normal" ? {
+                                        position: ["none"]
+                                    } : {
+                                        // 是否展示 pageSize 切换器
+                                        showSizeChanger: true,
+                                        // 默认的每页条数
+                                        defaultPageSize: userTable.defaultPageSize,
+                                        // 指定每页可以显示多少条
+                                        pageSizeOptions: ['10', '20', '30', '40', '50', '100', '200', '500', '1000'],
+                                    }
                                 }
-                            }}/>}
-                        </Paragraph>
-                    </Typography>
-                )}
-            </MoveModal>
-            <div className={classes.contentHead}>
-                <Title level={2} className={classes.tit}>
-                    {intl.get('userManagement')}&nbsp;&nbsp;
-                    <RenderGetDataSourceButton/>
-                </Title>
-                <Form name="search" layout="inline" onFinish={onFinish}>
-                    <Form.Item name="search">
-                        <Input prefix={<SearchOutlined className="site-form-item-icon"/>}
-                               placeholder={intl.get('search') + ' ' + intl.get('username')}/>
-                    </Form.Item>
-                    <Form.Item>
-                        <Button type="primary" htmlType="submit">Search</Button>
-                    </Form.Item>
-                </Form>
+                            />
+                    )
+                }
             </div>
-            <div className={classes.skeletonLoading} style={{display: loading ? 'block' : 'none'}}>
-                <RenderVirtualTableSkeleton/>
-            </div>
-            {
-                isEmpty ? (
-                    <Result
-                        icon={<FolderOpenOutlined/>}
-                        title={intl.get('noData')}
-                        extra={<RenderGetDataSourceButton/>}
-                    />
-                ) : (
-                    <VirtualTable columns={columns} dataSource={showData}
-                                  scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}/>
-                )
-            }
-        </div>
+        </Spin>
     )
 };
 

@@ -1,7 +1,7 @@
-import {Radio} from 'antd';
+import {Radio, Segmented} from 'antd';
 import React, {memo} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {Chinese, English} from "../../component/redux/userLanguageSlice";
+import {Chinese, English} from "../../../component/redux/userLanguageSlice";
 
 const ThemeSetting = memo(() => {
 
@@ -9,12 +9,12 @@ const ThemeSetting = memo(() => {
 
     const userLanguage = useSelector((state: any) => state.userLanguage.value)
 
-    const handleChange = (value: string) => {
+    const handleChange = (value: any) => {
         switch (value) {
             case "English":
                 dispatch(English())
                 break;
-            case "Chinese":
+            case "简体中文（Simple Chinses）":
                 dispatch(Chinese())
                 break;
             default:
@@ -23,10 +23,11 @@ const ThemeSetting = memo(() => {
     }
 
     return (
-        <Radio.Group onChange={(e: any) => handleChange(e.target.value)} value={userLanguage} buttonStyle="solid">
-            <Radio.Button value={"Chinese"}>简体中文（Simple Chinses）</Radio.Button>
-            <Radio.Button value={"English"}>English</Radio.Button>
-        </Radio.Group>
+        <Segmented
+            defaultValue={userLanguage === 'Chinese' ? "简体中文（Simple Chinses）" : "English"}
+            options={['简体中文（Simple Chinses）', 'English']}
+            onChange={(e: any) => handleChange(e)}
+        />
     );
 });
 

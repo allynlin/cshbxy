@@ -1,10 +1,10 @@
 import {App, Button, Form, Input, Modal, Radio} from 'antd';
 import React, {useState} from 'react';
 import intl from "react-intl-universal";
-import {updateUserInfo} from "../../component/axios/api";
+import {updateUserInfo} from "../../../component/axios/api";
 import {useDispatch, useSelector} from "react-redux";
-import {setUser} from "../../component/redux/userInfoSlice";
-import {useGaussianBlurStyles} from "../../styles/gaussianBlurStyle";
+import {setUser} from "../../../component/redux/userInfoSlice";
+import {useGaussianBlurStyles} from "../../../styles/gaussianBlurStyle";
 
 interface Values {
     title: string;

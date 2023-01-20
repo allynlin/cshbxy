@@ -1,10 +1,9 @@
-import React, { CSSProperties, useEffect, useState } from 'react';
-import { findLoginRecord } from "../../component/axios/api";
-import { useSelector } from "react-redux";
-import { Dialog, DotLoading, List, PullToRefresh, Result } from "antd-mobile";
-import { AutoSizer, List as VirtualizedList } from "react-virtualized";
-import { PullStatus } from "antd-mobile/es/components/pull-to-refresh";
-import { log } from 'console';
+import React, {CSSProperties, useEffect, useState} from 'react';
+import {findLoginRecord} from "../../component/axios/api";
+import {useSelector} from "react-redux";
+import {Dialog, DotLoading, List, PullToRefresh, Result} from "antd-mobile";
+import {AutoSizer, List as VirtualizedList} from "react-virtualized";
+import {PullStatus} from "antd-mobile/es/components/pull-to-refresh";
 
 const statusRecord: Record<PullStatus, string> = {
     pulling: '下拉获取登录记录',

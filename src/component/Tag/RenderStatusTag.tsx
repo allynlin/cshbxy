@@ -1,5 +1,5 @@
 import {Tag} from "antd";
-import {SyncOutlined,CheckCircleOutlined, CloseCircleOutlined, ExclamationCircleOutlined} from "@ant-design/icons";
+import {CheckCircleOutlined, CloseCircleOutlined, ExclamationCircleOutlined, SyncOutlined} from "@ant-design/icons";
 import React from "react";
 import intl from "react-intl-universal";
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import domtoimage from 'dom-to-image';
 import VirtualTable from "../../component/VirtualTable";
 import {
@@ -13,24 +13,25 @@ import {
     Space,
     Spin,
     Steps,
+    Table,
     Tag,
     Typography,
     Watermark
 } from 'antd';
-import { deleteLeave, findLeaveList, findLeaveProcess, refreshLeave } from "../../component/axios/api";
-import { ColumnsType } from "antd/es/table";
+import {deleteLeave, findLeaveList, findLeaveProcess, refreshLeave} from "../../component/axios/api";
+import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
-import { RenderStatus } from "../../component/Tag/RenderStatus";
-import { FolderOpenOutlined, SearchOutlined } from "@ant-design/icons";
-import { useSelector } from "react-redux";
-import { RenderWatermarkColor } from "../../component/Tag/RenderWatermarkColor";
-import { useStyles } from "../../styles/webStyle";
-import { getProcessStatus } from '../../component/getProcessStatus';
-import { RenderStatusTag } from "../../component/Tag/RenderStatusTag";
+import {RenderStatus} from "../../component/Tag/RenderStatus";
+import {FolderOpenOutlined, LoadingOutlined, SearchOutlined} from "@ant-design/icons";
+import {useSelector} from "react-redux";
+import {RenderWatermarkColor} from "../../component/Tag/RenderWatermarkColor";
+import {useStyles} from "../../styles/webStyle";
+import {getProcessStatus} from '../../component/getProcessStatus';
+import {RenderStatusTag} from "../../component/Tag/RenderStatusTag";
 import MoveModal from "../../component/MoveModal";
 
-const { Title, Paragraph } = Typography;
-const { Meta } = Card;
+const {Title, Paragraph} = Typography;
+const {Meta} = Card;
 
 interface DataType {
     key: React.Key;
@@ -38,11 +39,13 @@ interface DataType {
     align: 'left' | 'right' | 'center';
 }
 
+const antIcon = <LoadingOutlined style={{fontSize: 24}} spin/>;
+
 const MyApp: React.FC = () => {
 
     const classes = useStyles();
 
-    const { message } = App.useApp();
+    const {message} = App.useApp();
 
     const ref = useRef<any>(null);
 
@@ -77,6 +80,7 @@ const MyApp: React.FC = () => {
     const tableSize = useSelector((state: any) => state.tableSize.value)
     const userToken = useSelector((state: any) => state.userToken.value)
     const userInfo = useSelector((state: any) => state.userInfo.value)
+    const userTable = useSelector((state: any) => state.userTable.value)
 
     const key = "refresh"
 
@@ -133,7 +137,7 @@ const MyApp: React.FC = () => {
                 operation: <Button
                     type="primary"
                     onClick={() => {
-                        setShowInfo({ ...res.body, id: showInfo.id, statusTag: RenderStatusTag(res.body) })
+                        setShowInfo({...res.body, id: showInfo.id, statusTag: RenderStatusTag(res.body)})
                         getProcess(res.body.uid);
                         setShowModal(true);
                         setShowContent(false);
@@ -215,7 +219,7 @@ const MyApp: React.FC = () => {
                     operation: <Button
                         type="primary"
                         onClick={() => {
-                            setShowInfo({ ...item, id: index + 1, statusTag: RenderStatusTag(item) });
+                            setShowInfo({...item, id: index + 1, statusTag: RenderStatusTag(item)});
                             getProcess(item.uid);
                             setShowModal(true);
                             setShowContent(false);
@@ -325,202 +329,222 @@ const MyApp: React.FC = () => {
 
     const RenderGetDataSourceButton = () => {
         return (
-            <Button type="primary" disabled={isQuery} icon={<SearchOutlined />}
-                onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
+            <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
+                    onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
         )
     }
 
     return (
-        <div className={classes.contentBody}>
-            <MoveModal
-                title={intl.get('details')}
-                footer={[
-                    showInfo.status === 0 ?
-                        <Popconfirm
-                            title={intl.get('deleteConfirm')}
-                            open={open}
-                            onConfirm={() => deleteItem(showInfo.uid)}
-                            onCancel={() => setOpen(false)}
+        <Spin tip={RenderGetDataSourceButton()} delay={1000} indicator={antIcon} size="large" spinning={loading}>
+            <div className={classes.contentBody}>
+                <MoveModal
+                    title={intl.get('details')}
+                    footer={[
+                        showInfo.status === 0 ?
+                            <Popconfirm
+                                title={intl.get('deleteConfirm')}
+                                open={open}
+                                onConfirm={() => deleteItem(showInfo.uid)}
+                                onCancel={() => setOpen(false)}
+                            >
+                                <Button loading={confirmLoading} type="primary" danger key="delete"
+                                        onClick={() => setOpen(true)}>
+                                    {intl.get('delete')}
+                                </Button>
+                            </Popconfirm> : null,
+                        <Button
+                            key="refresh"
+                            type="primary"
+                            loading={isRefresh}
+                            onClick={() => {
+                                getProcess(showInfo.uid)
+                                refresh(showInfo.uid)
+                            }}
+                            disabled={isRefresh}>
+                            {isRefresh ? `${intl.get('refreshProcessList')}(${isRefreshWaitTime})` : intl.get('refreshProcessList')}
+                        </Button>,
+                        <Button
+                            key="save"
+                            type="primary"
+                            loading={loading}
+                            onClick={() => {
+                                setLoading(true)
+                                setIsRefresh(true)
+                                setShowImage(true)
+                                savePic()
+                            }}
                         >
-                            <Button loading={confirmLoading} type="primary" danger key="delete"
-                                onClick={() => setOpen(true)}>
-                                {intl.get('delete')}
-                            </Button>
-                        </Popconfirm> : null,
-                    <Button
-                        key="refresh"
-                        type="primary"
-                        loading={isRefresh}
-                        onClick={() => {
-                            getProcess(showInfo.uid)
-                            refresh(showInfo.uid)
-                        }}
-                        disabled={isRefresh}>
-                        {isRefresh ? `${intl.get('refreshProcessList')}(${isRefreshWaitTime})` : intl.get('refreshProcessList')}
-                    </Button>,
-                    <Button
-                        key="save"
-                        type="primary"
-                        loading={loading}
-                        onClick={() => {
-                            setLoading(true)
-                            setIsRefresh(true)
-                            setShowImage(true)
-                            savePic()
-                        }}
-                    >
-                        {intl.get('savePicture')}
-                    </Button>,
-                    <Button
-                        key="link"
-                        loading={loading}
-                        onClick={() => setShowModal(false)}
-                    >
-                        {intl.get('close')}
-                    </Button>
-                ]}
-                showModal={showModal}
-                getModalStatus={(e) => setShowModal(e)}
-            >
-                {
+                            {intl.get('savePicture')}
+                        </Button>,
+                        <Button
+                            key="link"
+                            loading={loading}
+                            onClick={() => setShowModal(false)}
+                        >
+                            {intl.get('close')}
+                        </Button>
+                    ]}
+                    showModal={showModal}
+                    getModalStatus={(e) => setShowModal(e)}
+                >
+                    {
 
-                    showImage ?
-                        <div ref={ref} style={{
-                            padding: showImage ? 16 : 0
-                        }}>
-                            <Card>
-                                <Watermark
-                                    content={["OA", userInfo.realeName, getStatus(showInfo.status)]}
-                                    gap={[70, 70]}
-                                    font={{
-                                        color: RenderWatermarkColor(showInfo.status),
-                                    }}
-                                >
-                                    <Title level={2} className={classes.tit}>
-                                        {intl.get('leave') + ' ' + intl.get('record')}
-                                    </Title>
-                                    {showContent ? (<Skeleton active />) : (
+                        showImage ?
+                            <div ref={ref} style={{
+                                padding: showImage ? 16 : 0
+                            }}>
+                                <Card>
+                                    <Watermark
+                                        content={["OA", userInfo.realeName, getStatus(showInfo.status)]}
+                                        gap={[70, 70]}
+                                        font={{
+                                            color: RenderWatermarkColor(showInfo.status),
+                                        }}
+                                    >
+                                        <Title level={2} className={classes.tit}>
+                                            {intl.get('leave') + ' ' + intl.get('record')}
+                                        </Title>
+                                        {showContent ? (<Skeleton active/>) : (
+                                            <>
+                                                <Paragraph>{intl.get('status')}：{showInfo.statusTag}</Paragraph>
+                                                <Paragraph>UID：{showInfo.uid}</Paragraph>
+                                                <Paragraph>{intl.get('startTime')}：{showInfo.start_time}</Paragraph>
+                                                <Paragraph>{intl.get('endTime')}：{showInfo.end_time}</Paragraph>
+                                                <Paragraph>{intl.get('reason')}：</Paragraph>
+                                                <div className={classes.outPutHtml}
+                                                     dangerouslySetInnerHTML={{__html: showInfo.reason}}/>
+                                                {showInfo.reject_reason ?
+                                                    <Paragraph>
+                                                        {intl.get('rejectReason')}：
+                                                        <Tag color={userToken.colorError}>{showInfo.reject_reason}</Tag>
+                                                    </Paragraph> : null}
+                                                <Paragraph>{intl.get('createTime')}：{showInfo.create_time}</Paragraph>
+                                                <Paragraph>{intl.get('updateTime')}：{showInfo.update_time}</Paragraph>
+                                                <div>{intl.get('approveProcess')}：</div>
+                                                {processLoading ? (
+                                                        <Space style={{flexDirection: 'column', marginTop: 16}}>
+                                                            <Skeleton.Input active={true} block={false}/>
+                                                            <Skeleton.Input active={true} block={false}/>
+                                                            <Skeleton.Input active={true} block={false}/>
+                                                            <Skeleton.Input active={true} block={false}/>
+                                                        </Space>) :
+                                                    <div style={{marginTop: 16}}>
+                                                        <Steps
+                                                            direction="vertical"
+                                                            progressDot
+                                                            current={showInfo.count}
+                                                            status={getProcessStatus(showInfo.status)}
+                                                            size="small"
+                                                            items={processList}
+                                                        />
+                                                    </div>}
+                                            </>
+                                        )}
+                                    </Watermark>
+                                    <Meta title={userInfo.realeName + ' ' + userInfo.uid} description={
                                         <>
-                                            <Paragraph>{intl.get('status')}：{showInfo.statusTag}</Paragraph>
-                                            <Paragraph>UID：{showInfo.uid}</Paragraph>
-                                            <Paragraph>{intl.get('startTime')}：{showInfo.start_time}</Paragraph>
-                                            <Paragraph>{intl.get('endTime')}：{showInfo.end_time}</Paragraph>
-                                            <Paragraph>{intl.get('reason')}：</Paragraph>
-                                            <div className={classes.outPutHtml}
-                                                dangerouslySetInnerHTML={{ __html: showInfo.reason }} />
-                                            {showInfo.reject_reason ?
-                                                <Paragraph>
-                                                    {intl.get('rejectReason')}：
-                                                    <Tag color={userToken.colorError}>{showInfo.reject_reason}</Tag>
-                                                </Paragraph> : null}
-                                            <Paragraph>{intl.get('createTime')}：{showInfo.create_time}</Paragraph>
-                                            <Paragraph>{intl.get('updateTime')}：{showInfo.update_time}</Paragraph>
-                                            <div>{intl.get('approveProcess')}：</div>
-                                            {processLoading ? (
-                                                <Space style={{ flexDirection: 'column', marginTop: 16 }}>
-                                                    <Skeleton.Input active={true} block={false} />
-                                                    <Skeleton.Input active={true} block={false} />
-                                                    <Skeleton.Input active={true} block={false} />
-                                                    <Skeleton.Input active={true} block={false} />
-                                                </Space>) :
-                                                <div style={{ marginTop: 16 }}>
-                                                    <Steps
-                                                        direction="vertical"
-                                                        progressDot
-                                                        current={showInfo.count}
-                                                        status={getProcessStatus(showInfo.status)}
-                                                        size="small"
-                                                        items={processList}
-                                                    />
-                                                </div>}
+                                            <Tag>{userInfo.departmentUid}</Tag>
+                                            <Tag>{userInfo.gender}</Tag>
+                                            <Tag>{userInfo.email}</Tag>
+                                            <Tag>{userInfo.tel}</Tag>
                                         </>
-                                    )}
-                                </Watermark>
-                                <Meta title={userInfo.realeName + ' ' + userInfo.uid} description={
-                                    <>
-                                        <Tag>{userInfo.departmentUid}</Tag>
-                                        <Tag>{userInfo.gender}</Tag>
-                                        <Tag>{userInfo.email}</Tag>
-                                        <Tag>{userInfo.tel}</Tag>
-                                    </>
-                                } />
-                            </Card>
-                        </div> :
-                        <>
-                            {showContent ? (<Skeleton active />) : (
-                                <Typography>
-                                    <Paragraph>{intl.get('status')}：{showInfo.statusTag}</Paragraph>
-                                    <Paragraph>{intl.get('startTime')}：{showInfo.start_time}</Paragraph>
-                                    <Paragraph>{intl.get('endTime')}：{showInfo.end_time}</Paragraph>
-                                    <Paragraph>{intl.get('reason')}：</Paragraph>
-                                    <div className={classes.outPutHtml}
-                                        dangerouslySetInnerHTML={{ __html: showInfo.reason }} />
-                                    {showInfo.reject_reason ?
-                                        <Paragraph>
-                                            {intl.get('rejectReason')}：
-                                            <Tag color={userToken.colorError}>{showInfo.reject_reason}</Tag>
-                                        </Paragraph> : null}
-                                    <Paragraph>{intl.get('createTime')}：{showInfo.create_time}</Paragraph>
-                                    <Paragraph>{intl.get('updateTime')}：{showInfo.update_time}</Paragraph>
-                                    <Paragraph>{intl.get('approveProcess')}：</Paragraph>
-                                    {processLoading ? (
-                                        <Space style={{ flexDirection: 'column' }}>
-                                            <Skeleton.Input active={true} block={false} />
-                                            <Skeleton.Input active={true} block={false} />
-                                            <Skeleton.Input active={true} block={false} />
-                                            <Skeleton.Input active={true} block={false} />
-                                        </Space>) :
-                                        <div style={{ marginTop: 16 }}>
-                                            <Steps
-                                                direction="vertical"
-                                                progressDot
-                                                current={showInfo.count}
-                                                status={getProcessStatus(showInfo.status)}
-                                                size="small"
-                                                items={processList}
-                                            />
-                                        </div>}
-                                </Typography>
-                            )}
-                        </>
-                }
-            </MoveModal>
-            <div className={classes.contentHead}>
-                <Title level={2} className={classes.tit}>
-                    {intl.get('leave') + ' ' + intl.get('record')}&nbsp;&nbsp;
-                    <RenderGetDataSourceButton />
-                </Title>
-                <Form name="search" layout="inline" onFinish={onFinish}>
-                    <Form.Item name="search">
-                        <Input prefix={<SearchOutlined className="site-form-item-icon" />}
-                            placeholder={intl.get('search') + ' ' + intl.get('reason')} />
-                    </Form.Item>
-                    <Form.Item>
-                        <Button disabled={isEmpty} type="primary" htmlType="submit">Search</Button>
-                    </Form.Item>
-                </Form>
-            </div>
-            {
-                loading ? <Skeleton active /> :
+                                    }/>
+                                </Card>
+                            </div> :
+                            <>
+                                {showContent ? (<Skeleton active/>) : (
+                                    <Typography>
+                                        <Paragraph>{intl.get('status')}：{showInfo.statusTag}</Paragraph>
+                                        <Paragraph>{intl.get('startTime')}：{showInfo.start_time}</Paragraph>
+                                        <Paragraph>{intl.get('endTime')}：{showInfo.end_time}</Paragraph>
+                                        <Paragraph>{intl.get('reason')}：</Paragraph>
+                                        <div className={classes.outPutHtml}
+                                             dangerouslySetInnerHTML={{__html: showInfo.reason}}/>
+                                        {showInfo.reject_reason ?
+                                            <Paragraph>
+                                                {intl.get('rejectReason')}：
+                                                <Tag color={userToken.colorError}>{showInfo.reject_reason}</Tag>
+                                            </Paragraph> : null}
+                                        <Paragraph>{intl.get('createTime')}：{showInfo.create_time}</Paragraph>
+                                        <Paragraph>{intl.get('updateTime')}：{showInfo.update_time}</Paragraph>
+                                        <Paragraph>{intl.get('approveProcess')}：</Paragraph>
+                                        {processLoading ? (
+                                                <Space style={{flexDirection: 'column'}}>
+                                                    <Skeleton.Input active={true} block={false}/>
+                                                    <Skeleton.Input active={true} block={false}/>
+                                                    <Skeleton.Input active={true} block={false}/>
+                                                    <Skeleton.Input active={true} block={false}/>
+                                                </Space>) :
+                                            <div style={{marginTop: 16}}>
+                                                <Steps
+                                                    direction="vertical"
+                                                    progressDot
+                                                    current={showInfo.count}
+                                                    status={getProcessStatus(showInfo.status)}
+                                                    size="small"
+                                                    items={processList}
+                                                />
+                                            </div>}
+                                    </Typography>
+                                )}
+                            </>
+                    }
+                </MoveModal>
+                <div className={classes.contentHead}>
+                    <Title level={2} className={classes.tit}>
+                        {intl.get('leave') + ' ' + intl.get('record')}&nbsp;&nbsp;
+                        <RenderGetDataSourceButton/>
+                    </Title>
+                    <Form name="search" layout="inline" onFinish={onFinish}>
+                        <Form.Item name="search">
+                            <Input prefix={<SearchOutlined className="site-form-item-icon"/>}
+                                   placeholder={intl.get('search') + ' ' + intl.get('reason')}/>
+                        </Form.Item>
+                        <Form.Item>
+                            <Button disabled={isEmpty} type="primary" htmlType="submit">Search</Button>
+                        </Form.Item>
+                    </Form>
+                </div>
+                {
                     isEmpty ? (
                         <Result
-                            icon={<FolderOpenOutlined />}
+                            icon={<FolderOpenOutlined/>}
                             title={intl.get('noData')}
-                            extra={<RenderGetDataSourceButton />}
+                            extra={<RenderGetDataSourceButton/>}
                         />
                     ) : (
-                        <VirtualTable columns={columns} dataSource={showData}
-                            scroll={{ y: tableSize.tableHeight, x: tableSize.tableWidth }} />
+                        userTable.tableType === "virtual" ?
+                            <VirtualTable columns={columns} dataSource={showData}
+                                          scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}/> :
+                            <Table
+                                columns={columns}
+                                dataSource={showData}
+                                scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}
+                                // @ts-ignore
+                                pagination={
+                                    userTable.tableType === "normal" ? {
+                                        position: ["none"]
+                                    } : {
+                                        // 是否展示 pageSize 切换器
+                                        showSizeChanger: true,
+                                        // 默认的每页条数
+                                        defaultPageSize: userTable.defaultPageSize,
+                                        // 指定每页可以显示多少条
+                                        pageSizeOptions: ['10', '20', '30', '40', '50', '100', '200', '500', '1000'],
+                                    }
+                                }
+                            />
                     )
-            }
-        </div>
+                }
+            </div>
+        </Spin>
     )
 };
 
 const LeaveRecord = () => {
     return (
         <App>
-            <MyApp />
+            <MyApp/>
         </App>
     )
 }

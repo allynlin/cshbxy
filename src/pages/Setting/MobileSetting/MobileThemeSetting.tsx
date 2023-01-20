@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {darkTheme, lightTheme, sysTheme} from "../../component/redux/sysColorSlice";
+import {darkTheme, lightTheme, sysTheme} from "../../../component/redux/sysColorSlice";
 import {ActionSheet, List} from "antd-mobile";
 import type {Action} from 'antd-mobile/es/components/action-sheet'
 

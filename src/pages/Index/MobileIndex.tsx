@@ -1,10 +1,10 @@
 import React from 'react';
-import { useNavigate } from "react-router-dom";
-import { Button, NoticeBar, Result } from "antd-mobile";
-import { LStorage } from "../../component/localStrong";
+import {useNavigate} from "react-router-dom";
+import {Button, NoticeBar, Result} from "antd-mobile";
+import {LStorage} from "../../component/localStrong";
 import MobileHomeDescriptions from "./MobileHomeDescriptions";
-import { useSelector } from "react-redux";
-import { useStyles } from "../../styles/mobileStyle";
+import {useSelector} from "react-redux";
+import {useStyles} from "../../styles/mobileStyle";
 
 const Index: React.FC = () => {
 

@@ -1,25 +1,25 @@
-import { HeaderMenu, SliderMenu } from "./RenderMenu";
-import { version } from "../../baseInfo";
+import {HeaderMenu, SliderMenu} from "./RenderMenu";
+import {version} from "../../baseInfo";
 import RenderLogOut from "./RenderLogOut";
 import WebComponent from "./WebComponent";
-import React, { useState, useEffect } from 'react';
-import { Result, Progress } from 'antd';
+import React, {useEffect, useState} from 'react';
+import {Progress, Result} from 'antd';
 import logo from '../../images/logo.png';
-import { LStorage } from "../../component/localStrong";
-import { darkTheme, lightTheme, sysTheme } from "../../component/redux/sysColorSlice";
+import {LStorage} from "../../component/localStrong";
+import {darkTheme, lightTheme, sysTheme} from "../../component/redux/sysColorSlice";
 import Cookie from "js-cookie";
-import { Chinese, English } from "../../component/redux/userLanguageSlice";
-import { inline, vertical } from "../../component/redux/menuModeSlice";
-import { close, open } from "../../component/redux/gaussianBlurSlice";
-import { setToken } from "../../component/redux/userTokenSlice";
+import {Chinese, English} from "../../component/redux/userLanguageSlice";
+import {inline, vertical} from "../../component/redux/menuModeSlice";
+import {close, open} from "../../component/redux/gaussianBlurSlice";
+import {setToken} from "../../component/redux/userTokenSlice";
 import intl from "react-intl-universal";
-import { checkUser } from "../../component/axios/api";
-import { setUser } from "../../component/redux/userInfoSlice";
-import { login } from "../../component/redux/isLoginSlice";
-import { Department, Employee, Leader } from "../../component/redux/userTypeSlice";
-import { useStyles } from "../../styles/webStyle";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import {checkUser} from "../../component/axios/api";
+import {setUser} from "../../component/redux/userInfoSlice";
+import {login} from "../../component/redux/isLoginSlice";
+import {Department, Employee, Leader} from "../../component/redux/userTypeSlice";
+import {useStyles} from "../../styles/webStyle";
+import {useNavigate} from "react-router-dom";
+import {useDispatch} from "react-redux";
 
 const App: React.FC = () => {
 

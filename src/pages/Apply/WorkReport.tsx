@@ -6,13 +6,15 @@ import intl from "react-intl-universal";
 import {checkLastTimeUploadFiles, checkLastWeekWorkReport, submitWorkReport} from "../../component/axios/api";
 import {DownLoadURL, tableName} from "../../baseInfo";
 import FileUpLoad from "../../component/axios/FileUpLoad";
-import {ExclamationCircleOutlined} from "@ant-design/icons";
+import {ExclamationCircleOutlined, LoadingOutlined} from "@ant-design/icons";
 import {useStyles} from "../../styles/webStyle";
 import logo from "../../images/logo.png";
 import {useGaussianBlurStyles} from "../../styles/gaussianBlurStyle";
 import {useSelector} from "react-redux";
 
 const {Title} = Typography;
+
+const antIcon = <LoadingOutlined style={{fontSize: 24}} spin/>;
 
 const ChangeForm = () => {
 

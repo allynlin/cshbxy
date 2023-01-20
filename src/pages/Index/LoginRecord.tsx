@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { App, Button, Result, Typography, Spin } from 'antd';
-import { useSelector } from "react-redux";
-import { findLoginRecord } from "../../component/axios/api";
+import React, {useEffect, useState} from "react";
+import {App, Button, Result, Spin, Typography} from 'antd';
+import {useSelector} from "react-redux";
+import {findLoginRecord} from "../../component/axios/api";
 import intl from "react-intl-universal";
 import VirtualTable from "../../component/VirtualTable";
-import { ColumnsType } from "antd/es/table";
-import { useNavigate } from "react-router-dom";
-import { useStyles } from "../../styles/webStyle";
-import { SearchOutlined, LoadingOutlined } from "@ant-design/icons";
+import {ColumnsType} from "antd/es/table";
+import {useNavigate} from "react-router-dom";
+import {useStyles} from "../../styles/webStyle";
+import {LoadingOutlined, SearchOutlined} from "@ant-design/icons";
 
 const { Title } = Typography;
 

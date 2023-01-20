@@ -1,8 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {useSelector} from "react-redux";
-import {App, Button, Card, Form, Input, Modal, Result, Skeleton, Typography} from 'antd';
+import {App, Button, Card, Form, Input, Modal, Result, Skeleton, Spin, Table, Typography} from 'antd';
 import {ColumnsType} from "antd/es/table";
-import {ExclamationCircleOutlined, FileTextOutlined, FolderOpenOutlined, SearchOutlined} from "@ant-design/icons";
+import {
+    ExclamationCircleOutlined,
+    FileTextOutlined,
+    FolderOpenOutlined,
+    LoadingOutlined,
+    SearchOutlined
+} from "@ant-design/icons";
 import intl from "react-intl-universal";
 
 import VirtualTable from "../../../component/VirtualTable";
@@ -14,7 +20,6 @@ import {
 import {DownLoadURL, tableName} from "../../../baseInfo";
 import Reject from "./Reject";
 import {useStyles} from "../../../styles/webStyle";
-import {RenderVirtualTableSkeleton} from "../../../component/RenderVirtualTableSkeleton";
 import {useGaussianBlurStyles} from "../../../styles/gaussianBlurStyle";
 import MoveModal from "../../../component/MoveModal";
 
@@ -25,6 +30,8 @@ interface DataType {
     dataIndex: string;
     align: 'left' | 'right' | 'center';
 }
+
+const antIcon = <LoadingOutlined style={{fontSize: 24}} spin/>;
 
 const MyApp = () => {
 
@@ -58,6 +65,7 @@ const MyApp = () => {
     const tableSize = useSelector((state: any) => state.tableSize.value)
     const userToken = useSelector((state: any) => state.userToken.value)
     const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value)
+    const userTable = useSelector((state: any) => state.userTable.value)
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -243,110 +251,128 @@ const MyApp = () => {
     }
 
     return (
-        <div className={classes.contentBody}>
-            <MoveModal
-                title={intl.get('details')}
-                showModal={showModal}
-                getModalStatus={(e) => setShowModal(e)}
-                footer={[
-                    <Button
-                        key="refresh"
-                        type="primary"
-                        loading={fileLoading}
-                        onClick={() => getFiles(showInfo.uid)}
-                        disabled={fileLoading}>
-                        {fileLoading ? intl.get('gettingFileList') : intl.get('refreshFileList')}
-                    </Button>,
-                    <Reject key="reject" state={showInfo} getNewContent={(isReject: boolean) => {
-                        if (isReject) {
-                            setShowModal(false);
-                            changeData();
-                        }
-                    }}/>,
-                    <Button
-                        key="pass"
-                        type="primary"
-                        disabled={lock}
-                        loading={lock}
-                        style={{
-                            backgroundColor: userToken.colorSuccess,
-                            borderColor: userToken.colorSuccess
-                        }}
-                        onClick={() => showResolveConfirm(showInfo.uid)}
-                    >{intl.get('pass')}</Button>,
-                    <Button
-                        key="link"
-                        disabled={lock}
-                        loading={loading}
-                        onClick={() => setShowModal(false)}
-                    >
-                        {intl.get('close')}
-                    </Button>,
-                ]}
-            >
-                <Typography>
-                    <Paragraph>{intl.get('submitPerson')}：{showInfo.releaseUid}</Paragraph>
-                    <Paragraph>{intl.get('departmentChange')}：{showInfo.departmentUid}</Paragraph>
-                    <Paragraph>{intl.get('reason')}：</Paragraph>
-                    <div className={classes.outPutHtml} dangerouslySetInnerHTML={{__html: showInfo.changeReason}}/>
-                    <Paragraph>{intl.get('createTime')}：{showInfo.create_time}</Paragraph>
-                    <Paragraph>{intl.get('updateTime')}：{showInfo.update_time}</Paragraph>
-                    <Paragraph>{intl.get('file')}：</Paragraph>
-                    {
-                        fileLoading ? (
-                            <div className={classes.skeletonFile}>
-                                <Skeleton.Node active>
-                                    <FileTextOutlined className={classes.skeletonFiles}/>
-                                </Skeleton.Node>
+        <Spin tip={RenderGetDataSourceButton()} delay={1000} indicator={antIcon} size="large" spinning={loading}>
+            <div className={classes.contentBody}>
+                <MoveModal
+                    title={intl.get('details')}
+                    showModal={showModal}
+                    getModalStatus={(e) => setShowModal(e)}
+                    footer={[
+                        <Button
+                            key="refresh"
+                            type="primary"
+                            loading={fileLoading}
+                            onClick={() => getFiles(showInfo.uid)}
+                            disabled={fileLoading}>
+                            {fileLoading ? intl.get('gettingFileList') : intl.get('refreshFileList')}
+                        </Button>,
+                        <Reject key="reject" state={showInfo} getNewContent={(isReject: boolean) => {
+                            if (isReject) {
+                                setShowModal(false);
+                                changeData();
+                            }
+                        }}/>,
+                        <Button
+                            key="pass"
+                            type="primary"
+                            disabled={lock}
+                            loading={lock}
+                            style={{
+                                backgroundColor: userToken.colorSuccess,
+                                borderColor: userToken.colorSuccess
+                            }}
+                            onClick={() => showResolveConfirm(showInfo.uid)}
+                        >{intl.get('pass')}</Button>,
+                        <Button
+                            key="link"
+                            disabled={lock}
+                            loading={loading}
+                            onClick={() => setShowModal(false)}
+                        >
+                            {intl.get('close')}
+                        </Button>,
+                    ]}
+                >
+                    <Typography>
+                        <Paragraph>{intl.get('submitPerson')}：{showInfo.releaseUid}</Paragraph>
+                        <Paragraph>{intl.get('departmentChange')}：{showInfo.departmentUid}</Paragraph>
+                        <Paragraph>{intl.get('reason')}：</Paragraph>
+                        <div className={classes.outPutHtml} dangerouslySetInnerHTML={{__html: showInfo.changeReason}}/>
+                        <Paragraph>{intl.get('createTime')}：{showInfo.create_time}</Paragraph>
+                        <Paragraph>{intl.get('updateTime')}：{showInfo.update_time}</Paragraph>
+                        <Paragraph>{intl.get('file')}：</Paragraph>
+                        {
+                            fileLoading ? (
+                                <div className={classes.skeletonFile}>
+                                    <Skeleton.Node active>
+                                        <FileTextOutlined className={classes.skeletonFiles}/>
+                                    </Skeleton.Node>
+                                </div>
+                            ) : <div className={classes.showFile}>
+                                {fileList.map((item: any, index: number) => {
+                                    return (
+                                        <Card size="small" className={classes.fileItem} hoverable key={index}
+                                              title={intl.get('file') + (index + 1)}
+                                              bordered={false}>
+                                            <Paragraph ellipsis>
+                                                <a href={`${DownLoadURL}/downloadFile?filename=${item.fileName}`}
+                                                   target="_self">{item.oldFileName}</a>
+                                            </Paragraph>
+                                        </Card>
+                                    )
+                                })}
                             </div>
-                        ) : <div className={classes.showFile}>
-                            {fileList.map((item: any, index: number) => {
-                                return (
-                                    <Card size="small" className={classes.fileItem} hoverable key={index}
-                                          title={intl.get('file') + (index + 1)}
-                                          bordered={false}>
-                                        <Paragraph ellipsis>
-                                            <a href={`${DownLoadURL}/downloadFile?filename=${item.fileName}`}
-                                               target="_self">{item.oldFileName}</a>
-                                        </Paragraph>
-                                    </Card>
-                                )
-                            })}
-                        </div>
-                    }
-                </Typography>
-            </MoveModal>
-            <div className={classes.contentHead}>
-                <Title level={2} className={classes.tit}>
-                    {intl.get('departmentChange') + ' ' + intl.get('approve')}&nbsp;&nbsp;
-                    <RenderGetDataSourceButton/>
-                </Title>
-                <Form name="search" layout="inline" onFinish={onFinish}>
-                    <Form.Item name="search">
-                        <Input prefix={<SearchOutlined className="site-form-item-icon"/>}
-                               placeholder={intl.get('search') + ' ' + intl.get('submitPerson')}/>
-                    </Form.Item>
-                    <Form.Item>
-                        <Button type="primary" htmlType="submit">Search</Button>
-                    </Form.Item>
-                </Form>
+                        }
+                    </Typography>
+                </MoveModal>
+                <div className={classes.contentHead}>
+                    <Title level={2} className={classes.tit}>
+                        {intl.get('departmentChange') + ' ' + intl.get('approve')}&nbsp;&nbsp;
+                        <RenderGetDataSourceButton/>
+                    </Title>
+                    <Form name="search" layout="inline" onFinish={onFinish}>
+                        <Form.Item name="search">
+                            <Input prefix={<SearchOutlined className="site-form-item-icon"/>}
+                                   placeholder={intl.get('search') + ' ' + intl.get('submitPerson')}/>
+                        </Form.Item>
+                        <Form.Item>
+                            <Button type="primary" htmlType="submit">Search</Button>
+                        </Form.Item>
+                    </Form>
+                </div>
+                {
+                    isEmpty ? (
+                        <Result
+                            icon={<FolderOpenOutlined/>}
+                            title={intl.get('noData')}
+                            extra={<RenderGetDataSourceButton/>}
+                        />
+                    ) : (
+                        userTable.tableType === "virtual" ?
+                            <VirtualTable columns={columns} dataSource={showData}
+                                          scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}/> :
+                            <Table
+                                columns={columns}
+                                dataSource={showData}
+                                scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}
+                                // @ts-ignore
+                                pagination={
+                                    userTable.tableType === "normal" ? {
+                                        position: ["none"]
+                                    } : {
+                                        // 是否展示 pageSize 切换器
+                                        showSizeChanger: true,
+                                        // 默认的每页条数
+                                        defaultPageSize: userTable.defaultPageSize,
+                                        // 指定每页可以显示多少条
+                                        pageSizeOptions: ['10', '20', '30', '40', '50', '100', '200', '500', '1000'],
+                                    }
+                                }
+                            />
+                    )
+                }
             </div>
-            <div className={classes.skeletonLoading} style={{display: loading ? 'block' : 'none'}}>
-                <RenderVirtualTableSkeleton/>
-            </div>
-            {
-                isEmpty ? (
-                    <Result
-                        icon={<FolderOpenOutlined/>}
-                        title={intl.get('noData')}
-                        extra={<RenderGetDataSourceButton/>}
-                    />
-                ) : (
-                    <VirtualTable columns={columns} dataSource={showData}
-                                  scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}/>
-                )
-            }
-        </div>
+        </Spin>
     )
 };
 

@@ -25,3 +25,7 @@ yarn-error.log*
 /.idea/inspectionProfiles/Project_Default.xml
 /.idea/vcs.xml
 /.idea/git_toolbox_prj.xml
+/.idea/.gitignore
+/.idea/cshbxy.iml
+/.idea/i18nSettings.xml
+/.idea/modules.xml

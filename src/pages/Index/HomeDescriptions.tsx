@@ -1,6 +1,6 @@
 import React from "react";
 import intl from "react-intl-universal";
-import {Descriptions, Typography, Button} from "antd";
+import {Button, Descriptions, Typography} from "antd";
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 

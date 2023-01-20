@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Button, Form, Input, message, Modal, Radio } from "antd";
+import React, {useEffect, useState} from "react";
+import {Button, Form, Input, message, Modal, Radio} from "antd";
 import intl from "react-intl-universal";
-import { updateUserInfo } from "../../../component/axios/api";
-import { useGaussianBlurStyles } from "../../../styles/gaussianBlurStyle";
-import { useSelector } from "react-redux";
+import {updateUserInfo} from "../../../component/axios/api";
+import {useGaussianBlurStyles} from "../../../styles/gaussianBlurStyle";
+import {useSelector} from "react-redux";
 
 interface propsCheck {
     info: any;

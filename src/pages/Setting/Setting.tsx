@@ -1,17 +1,16 @@
 import {Alert, Space, Tooltip, Typography} from 'antd';
 import React from 'react';
-import MenuModeSetting from "./MenuModeSetting";
-import ThemeSetting from "./ThemeSetting";
-import LanguageSetting from "./LanguageSetting";
+import MenuModeSetting from "./SettingItem/MenuModeSetting";
+import ThemeSetting from "./SettingItem/ThemeSetting";
+import LanguageSetting from "./SettingItem/LanguageSetting";
 import intl from "react-intl-universal";
-import UserPasswordSetting from "./UserPasswordSetting";
-import UserInfoSetting from "./UserInfoSetting";
-import UsernameSetting from "./UsernameSetting";
-import TokenSetting from "./TokenSetting";
-import ShowAlert from "./ShowAlert";
+import UserPasswordSetting from "./UserSetting/UserPasswordSetting";
+import UserInfoSetting from "./UserSetting/UserInfoSetting";
+import UsernameSetting from "./UserSetting/UsernameSetting";
+import ShowAlert from "./SettingItem/ShowAlert";
 import {LStorage} from "../../component/localStrong";
 import {useSelector} from "react-redux";
-import GaussianBlurSetting from "./GaussianBlurSetting";
+import GaussianBlurSetting from "./SettingItem/GaussianBlurSetting";
 import {useGaussianBlurStyles} from "../../styles/gaussianBlurStyle";
 
 const {Title, Text} = Typography;
@@ -37,16 +36,6 @@ const Setting = () => {
             }
             <Space size={"large"} align={"start"}>
                 <div style={{minWidth: 450}}>
-                    {
-                        isLogin ? <>
-                            <Title level={3}>{intl.get('userSetting')}</Title>
-                            <Space size={"middle"} align={"center"}>
-                                <UserPasswordSetting/>
-                                <UserInfoSetting/>
-                                <UsernameSetting/>
-                            </Space>
-                        </> : null
-                    }
                     <Title level={3}>{intl.get('baseSetting')}</Title>
                     <br/>
                     <Space size={"middle"} align={"center"}>
@@ -77,7 +66,18 @@ const Setting = () => {
                         <GaussianBlurSetting/>
                     </Space>
                 </div>
-                <TokenSetting/>
+                <div>
+                    {
+                        isLogin ? <>
+                            <Title level={3}>{intl.get('userSetting')}</Title>
+                            <Space size={"middle"} align={"center"}>
+                                <UserPasswordSetting/>
+                                <UserInfoSetting/>
+                                <UsernameSetting/>
+                            </Space>
+                        </> : null
+                    }
+                </div>
             </Space>
         </Typography>
     )

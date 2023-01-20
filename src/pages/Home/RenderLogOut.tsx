@@ -1,12 +1,12 @@
-import { App, Avatar, Button } from 'antd'
-import { useNavigate } from "react-router-dom";
-import { logout } from "../../component/redux/isLoginSlice";
-import { all } from "../../component/redux/userTypeSlice";
-import { useDispatch, useSelector } from "react-redux";
+import {App, Avatar, Button} from 'antd'
+import {useNavigate} from "react-router-dom";
+import {logout} from "../../component/redux/isLoginSlice";
+import {all} from "../../component/redux/userTypeSlice";
+import {useDispatch, useSelector} from "react-redux";
 import Cookie from "js-cookie";
 import intl from "react-intl-universal";
-import { ExclamationCircleOutlined, LoginOutlined, UserOutlined } from "@ant-design/icons";
-import { useGaussianBlurStyles } from "../../styles/gaussianBlurStyle";
+import {ExclamationCircleOutlined, LoginOutlined, UserOutlined} from "@ant-design/icons";
+import {useGaussianBlurStyles} from "../../styles/gaussianBlurStyle";
 
 
 const RenderLogOut = () => {

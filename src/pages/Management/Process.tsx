@@ -1,7 +1,7 @@
-import {Button, List, Modal, Skeleton, Steps, Tag, Transfer, Typography} from 'antd';
+import {Button, List, Modal, Skeleton, Spin, Steps, Tag, Transfer, Typography} from 'antd';
 import React, {useEffect, useState} from 'react';
 import intl from "react-intl-universal";
-import {ExclamationCircleOutlined, SearchOutlined} from "@ant-design/icons";
+import {ExclamationCircleOutlined, LoadingOutlined, SearchOutlined} from "@ant-design/icons";
 import {findAllProcess, findProcessUser, updateProcess} from "../../component/axios/api";
 import {useSelector} from "react-redux";
 
@@ -17,6 +17,8 @@ interface RecordType {
     description: string;
     chosen: boolean;
 }
+
+const antIcon = <LoadingOutlined style={{fontSize: 24}} spin/>;
 
 const ProcessManagement = () => {
 
@@ -138,92 +140,100 @@ const ProcessManagement = () => {
         setTargetKeys(newTargetKeys);
     };
 
+    const RenderGetDataSourceButton = () => {
+        return (
+            <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
+                    onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
+        )
+    }
+
     return (
-        <div className={classes.contentBody}>
-            <div className={classes.contentHead}>
-                <Title level={2} className={classes.tit}>
-                    {intl.get('processManagement')}&nbsp;&nbsp;
-                    <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
-                            onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
-                </Title>
-            </div>
-            <MoveModal
-                title={intl.get('changeProcess')}
-                showModal={open}
-                getModalStatus={(e) => setOpen(e)}
-                okText={intl.get('ok')}
-                cancelText={intl.get('cancel')}
-                onCancel={() => setOpen(false)}
-                onOk={() => {
-                    console.log(targetKeys)
-                    // 将 targetKeys 拼接成字符串,以 || 分割
-                    const process = targetKeys.join('||');
-                    Modal.confirm({
-                        title: intl.get('confirmChangeProcess'),
-                        icon: <ExclamationCircleOutlined/>,
-                        content: intl.get('confirmChangeProcessNotice'),
-                        className: gaussianBlur ? gaussianBlurClasses.gaussianBlurModal : '',
-                        mask: !gaussianBlur,
-                        onOk() {
-                            updateProcess(content.uid, process).then(res => {
-                                Modal.success({
-                                    title: intl.get('success'),
-                                    content: intl.get('changeProcessSuccess'),
-                                    className: gaussianBlur ? gaussianBlurClasses.gaussianBlurModal : '',
-                                    mask: !gaussianBlur,
+        <Spin tip={RenderGetDataSourceButton()} delay={1000} indicator={antIcon} size="large" spinning={loading}>
+            <div className={classes.contentBody}>
+                <div className={classes.contentHead}>
+                    <Title level={2} className={classes.tit}>
+                        {intl.get('processManagement')}&nbsp;&nbsp;
+                        {RenderGetDataSourceButton()}
+                    </Title>
+                </div>
+                <MoveModal
+                    title={intl.get('changeProcess')}
+                    showModal={open}
+                    getModalStatus={(e) => setOpen(e)}
+                    okText={intl.get('ok')}
+                    cancelText={intl.get('cancel')}
+                    onCancel={() => setOpen(false)}
+                    onOk={() => {
+                        console.log(targetKeys)
+                        // 将 targetKeys 拼接成字符串,以 || 分割
+                        const process = targetKeys.join('||');
+                        Modal.confirm({
+                            title: intl.get('confirmChangeProcess'),
+                            icon: <ExclamationCircleOutlined/>,
+                            content: intl.get('confirmChangeProcessNotice'),
+                            className: gaussianBlur ? gaussianBlurClasses.gaussianBlurModal : '',
+                            mask: !gaussianBlur,
+                            onOk() {
+                                updateProcess(content.uid, process).then(res => {
+                                    Modal.success({
+                                        title: intl.get('success'),
+                                        content: intl.get('changeProcessSuccess'),
+                                        className: gaussianBlur ? gaussianBlurClasses.gaussianBlurModal : '',
+                                        mask: !gaussianBlur,
+                                    })
+                                    getDataSource();
+                                    setOpen(false);
                                 })
-                                getDataSource();
-                                setOpen(false);
-                            })
-                        }
-                    });
-                }}
-            >
-                <Transfer
-                    dataSource={mockData}
-                    showSearch
-                    filterOption={filterOption}
-                    targetKeys={targetKeys}
-                    onChange={handleChange}
-                    render={item => item.title}
-                />
-            </MoveModal>
-            <>
-                {loading ? <Skeleton active paragraph={{rows: 10}}/> : <List
-                    itemLayout="horizontal"
-                    dataSource={dataSource}
-                    style={{width: tableSize.tableWidth - 100, height: tableSize.tableHeight}}
-                    renderItem={(item: any) => (
-                        <List.Item
-                            actions={[
-                                <Button
-                                    key={'changeProcess'}
-                                    type={'primary'}
-                                    onClick={() => {
-                                        setContent(item)
-                                        setOpen(true)
-                                        const processArray: string[] = item.process.split('||');
-                                        const targetKeys: string[] = [];
-                                        processArray.forEach((item: string) => {
-                                            // 在 mockData 中找到对应的 key
-                                            const key = mockData.find((mockItem: any) => mockItem.key === item)?.key;
-                                            if (key) {
-                                                targetKeys.push(key)
-                                            }
-                                        })
-                                        setTargetKeys(targetKeys)
-                                    }}>{intl.get('changeProcess')}</Button>
-                            ]}
-                        >
-                            <List.Item.Meta
-                                title={<Tag>{item.name}&nbsp;{intl.get('approveProcess')}</Tag>}
-                                description={RenderSteps(item.processRealName)}
-                            />
-                        </List.Item>
-                    )}
-                />}
-            </>
-        </div>
+                            }
+                        });
+                    }}
+                >
+                    <Transfer
+                        dataSource={mockData}
+                        showSearch
+                        filterOption={filterOption}
+                        targetKeys={targetKeys}
+                        onChange={handleChange}
+                        render={item => item.title}
+                    />
+                </MoveModal>
+                <>
+                    <List
+                        itemLayout="horizontal"
+                        dataSource={dataSource}
+                        style={{width: tableSize.tableWidth - 100, height: tableSize.tableHeight}}
+                        renderItem={(item: any) => (
+                            <List.Item
+                                actions={[
+                                    <Button
+                                        key={'changeProcess'}
+                                        type={'primary'}
+                                        onClick={() => {
+                                            setContent(item)
+                                            setOpen(true)
+                                            const processArray: string[] = item.process.split('||');
+                                            const targetKeys: string[] = [];
+                                            processArray.forEach((item: string) => {
+                                                // 在 mockData 中找到对应的 key
+                                                const key = mockData.find((mockItem: any) => mockItem.key === item)?.key;
+                                                if (key) {
+                                                    targetKeys.push(key)
+                                                }
+                                            })
+                                            setTargetKeys(targetKeys)
+                                        }}>{intl.get('changeProcess')}</Button>
+                                ]}
+                            >
+                                <List.Item.Meta
+                                    title={<Tag>{item.name}&nbsp;{intl.get('approveProcess')}</Tag>}
+                                    description={RenderSteps(item.processRealName)}
+                                />
+                            </List.Item>
+                        )}
+                    />
+                </>
+            </div>
+        </Spin>
     )
 };
 

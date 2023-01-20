@@ -1,13 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import VirtualTable from "../../../component/VirtualTable";
-import {App, Button, Form, Input, Modal, Result, Typography} from 'antd';
+import {App, Button, Form, Input, Modal, Result, Spin, Table, Typography} from 'antd';
 import {findProcurementWaitApprovalList, resolveProcurement} from "../../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
-import {ExclamationCircleOutlined, FolderOpenOutlined, SearchOutlined} from "@ant-design/icons";
+import {ExclamationCircleOutlined, FolderOpenOutlined, LoadingOutlined, SearchOutlined} from "@ant-design/icons";
 import {useSelector} from "react-redux";
 import {useStyles} from "../../../styles/webStyle";
-import {RenderVirtualTableSkeleton} from "../../../component/RenderVirtualTableSkeleton";
 import {useGaussianBlurStyles} from "../../../styles/gaussianBlurStyle";
 import MoveModal from '../../../component/MoveModal';
 
@@ -18,6 +17,8 @@ interface DataType {
     dataIndex: string;
     align: 'left' | 'right' | 'center';
 }
+
+const antIcon = <LoadingOutlined style={{fontSize: 24}} spin/>;
 
 const MyApp = () => {
 
@@ -46,6 +47,7 @@ const MyApp = () => {
     const tableSize = useSelector((state: any) => state.tableSize.value)
     const userToken = useSelector((state: any) => state.userToken.value)
     const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value)
+    const userTable = useSelector((state: any) => state.userTable.value)
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -192,75 +194,93 @@ const MyApp = () => {
     }
 
     return (
-        <div className={classes.contentBody}>
-            <MoveModal
-                title={intl.get('details')}
-                showModal={showModal}
-                getModalStatus={(e) => setShowModal(e)}
-                footer={[
-                    <Button
-                        key="pass"
-                        type="primary"
-                        disabled={lock}
-                        loading={lock}
-                        style={{
-                            backgroundColor: userToken.colorSuccess,
-                            borderColor: userToken.colorSuccess
-                        }}
-                        onClick={() => showResolveConfirm(showInfo.uid)}
-                    >{intl.get('pass')}</Button>,
-                    <Button
-                        key="link"
-                        disabled={lock}
-                        loading={loading}
-                        onClick={() => setShowModal(false)}
-                    >
-                        {intl.get('close')}
-                    </Button>,
-                ]}
-            >
-                <p>{intl.get('submitPerson')}：{showInfo.releaseUid}</p>
-                <p>{intl.get('procurementItem')}：</p>
-                <div className={classes.outPutHtml}
-                     dangerouslySetInnerHTML={{__html: showInfo.items}}/>
-                <p>{intl.get('procurementPrice')}：{showInfo.price}</p>
-                <p>{intl.get('reason')}：</p>
-                <div className={classes.outPutHtml}
-                     dangerouslySetInnerHTML={{__html: showInfo.reason}}/>
-                <p>{intl.get('createTime')}：{showInfo.create_time}</p>
-                <p>{intl.get('updateTime')}：{showInfo.update_time}</p>
-            </MoveModal>
-            <div className={classes.contentHead}>
-                <Title level={2} className={classes.tit}>
-                    {intl.get('procurement') + ' ' + intl.get('approve')}&nbsp;&nbsp;
-                    <RenderGetDataSourceButton/>
-                </Title>
-                <Form name="search" layout="inline" onFinish={onFinish}>
-                    <Form.Item name="search">
-                        <Input prefix={<SearchOutlined className="site-form-item-icon"/>}
-                               placeholder={intl.get('search') + ' ' + intl.get('submitPerson')}/>
-                    </Form.Item>
-                    <Form.Item>
-                        <Button type="primary" htmlType="submit">Search</Button>
-                    </Form.Item>
-                </Form>
+        <Spin tip={RenderGetDataSourceButton()} delay={1000} indicator={antIcon} size="large" spinning={loading}>
+            <div className={classes.contentBody}>
+                <MoveModal
+                    title={intl.get('details')}
+                    showModal={showModal}
+                    getModalStatus={(e) => setShowModal(e)}
+                    footer={[
+                        <Button
+                            key="pass"
+                            type="primary"
+                            disabled={lock}
+                            loading={lock}
+                            style={{
+                                backgroundColor: userToken.colorSuccess,
+                                borderColor: userToken.colorSuccess
+                            }}
+                            onClick={() => showResolveConfirm(showInfo.uid)}
+                        >{intl.get('pass')}</Button>,
+                        <Button
+                            key="link"
+                            disabled={lock}
+                            loading={loading}
+                            onClick={() => setShowModal(false)}
+                        >
+                            {intl.get('close')}
+                        </Button>,
+                    ]}
+                >
+                    <p>{intl.get('submitPerson')}：{showInfo.releaseUid}</p>
+                    <p>{intl.get('procurementItem')}：</p>
+                    <div className={classes.outPutHtml}
+                         dangerouslySetInnerHTML={{__html: showInfo.items}}/>
+                    <p>{intl.get('procurementPrice')}：{showInfo.price}</p>
+                    <p>{intl.get('reason')}：</p>
+                    <div className={classes.outPutHtml}
+                         dangerouslySetInnerHTML={{__html: showInfo.reason}}/>
+                    <p>{intl.get('createTime')}：{showInfo.create_time}</p>
+                    <p>{intl.get('updateTime')}：{showInfo.update_time}</p>
+                </MoveModal>
+                <div className={classes.contentHead}>
+                    <Title level={2} className={classes.tit}>
+                        {intl.get('procurement') + ' ' + intl.get('approve')}&nbsp;&nbsp;
+                        <RenderGetDataSourceButton/>
+                    </Title>
+                    <Form name="search" layout="inline" onFinish={onFinish}>
+                        <Form.Item name="search">
+                            <Input prefix={<SearchOutlined className="site-form-item-icon"/>}
+                                   placeholder={intl.get('search') + ' ' + intl.get('submitPerson')}/>
+                        </Form.Item>
+                        <Form.Item>
+                            <Button type="primary" htmlType="submit">Search</Button>
+                        </Form.Item>
+                    </Form>
+                </div>
+                {
+                    isEmpty ? (
+                        <Result
+                            icon={<FolderOpenOutlined/>}
+                            title={intl.get('noData')}
+                            extra={<RenderGetDataSourceButton/>}
+                        />
+                    ) : (
+                        userTable.tableType === "virtual" ?
+                            <VirtualTable columns={columns} dataSource={showData}
+                                          scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}/> :
+                            <Table
+                                columns={columns}
+                                dataSource={showData}
+                                scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}
+                                // @ts-ignore
+                                pagination={
+                                    userTable.tableType === "normal" ? {
+                                        position: ["none"]
+                                    } : {
+                                        // 是否展示 pageSize 切换器
+                                        showSizeChanger: true,
+                                        // 默认的每页条数
+                                        defaultPageSize: userTable.defaultPageSize,
+                                        // 指定每页可以显示多少条
+                                        pageSizeOptions: ['10', '20', '30', '40', '50', '100', '200', '500', '1000'],
+                                    }
+                                }
+                            />
+                    )
+                }
             </div>
-            <div className={classes.skeletonLoading} style={{display: loading ? 'block' : 'none'}}>
-                <RenderVirtualTableSkeleton/>
-            </div>
-            {
-                isEmpty ? (
-                    <Result
-                        icon={<FolderOpenOutlined/>}
-                        title={intl.get('noData')}
-                        extra={<RenderGetDataSourceButton/>}
-                    />
-                ) : (
-                    <VirtualTable columns={columns} dataSource={showData}
-                                  scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}/>
-                )
-            }
-        </div>
+        </Spin>
     )
 };
 

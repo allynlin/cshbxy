@@ -4,10 +4,10 @@ import {Dialog, List, Toast} from 'antd-mobile'
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import Cookie from "js-cookie";
-import {version} from '../../baseInfo'
-import {logout} from "../../component/redux/isLoginSlice";
-import {all} from "../../component/redux/userTypeSlice";
-import {useStyles} from "../../styles/mobileStyle";
+import {version} from '../../../baseInfo'
+import {logout} from "../../../component/redux/isLoginSlice";
+import {all} from "../../../component/redux/userTypeSlice";
+import {useStyles} from "../../../styles/mobileStyle";
 
 const Setting = () => {
 
