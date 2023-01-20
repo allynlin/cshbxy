@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {App, Button, Result, Spin, Typography} from 'antd';
+import {App, Button, Result, Spin, Table, Typography} from 'antd';
 import {useSelector} from "react-redux";
 import {findLoginRecord} from "../../component/axios/api";
 import intl from "react-intl-universal";
@@ -38,6 +38,7 @@ const MyApp = () => {
     const userInfo = useSelector((state: any) => state.userInfo.value)
     const tableSize = useSelector((state: any) => state.tableSize.value)
     const isLogin = useSelector((state: any) => state.isLogin.value)
+    const userTable = useSelector((state: any) => state.userTable.value)
 
     const key = "getLoginRecord";
 
@@ -133,29 +134,53 @@ const MyApp = () => {
     }
 
     return (
-        isLogin ? <>
-            <div className={classes.contentHead}>
-                <Title level={2} className={classes.tit}>
-                    {userInfo.realeName + ' ' + intl.get('loginRecord')}
-                    &nbsp;&nbsp;
-                    <RenderGetDataSourceButton/>
-                    &nbsp;&nbsp;
-                    <Button type="primary" onClick={() => navigate('/home')}>{intl.get('backToHome')}</Button>
-                </Title>
-            </div>
-            <Spin spinning={loading} tip={intl.get('loading')} indicator={antIcon}>
-                <VirtualTable columns={columns} dataSource={dataSource}
-                              scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}/>
-            </Spin>
-        </> : <Result
-            status="warning"
-            title={intl.get('loginRecordErrorTips')}
-            extra={
-                <Button type="primary" key="console" onClick={() => navigate('/login')}>
-                    {intl.get('login')}
-                </Button>
-            }
-        />
+        isLogin ?
+            <Spin size="large" spinning={loading} tip={RenderGetDataSourceButton()} delay={1000} indicator={antIcon}>
+                <div className={classes.contentHead}>
+                    <Title level={2} className={classes.tit}>
+                        {userInfo.realeName + ' ' + intl.get('loginRecord')}
+                        &nbsp;&nbsp;
+                        <RenderGetDataSourceButton/>
+                        &nbsp;&nbsp;
+                        <Button type="primary" onClick={() => navigate('/home')}>{intl.get('backToHome')}</Button>
+                    </Title>
+                </div>
+                {
+                    userTable.tableType === "virtual" ? (
+                        <VirtualTable
+                            columns={columns}
+                            dataSource={dataSource}
+                            scroll={{
+                                y: tableSize.tableHeight,
+                                x: tableSize.tableWidth
+                            }}/>) : <Table
+                        columns={columns}
+                        dataSource={dataSource}
+                        scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}
+                        // @ts-ignore
+                        pagination={
+                            userTable.tableType === "normal" ? {
+                                position: ["none"]
+                            } : {
+                                // 是否展示 pageSize 切换器
+                                showSizeChanger: true,
+                                // 默认的每页条数
+                                defaultPageSize: userTable.defaultPageSize,
+                                // 指定每页可以显示多少条
+                                pageSizeOptions: ['10', '20', '30', '40', '50', '100', '200', '500', '1000'],
+                            }
+                        }
+                    />
+                }
+            </Spin> : <Result
+                status="warning"
+                title={intl.get('loginRecordErrorTips')}
+                extra={
+                    <Button type="primary" key="console" onClick={() => navigate('/login')}>
+                        {intl.get('login')}
+                    </Button>
+                }
+            />
     )
 }
 
