@@ -10,12 +10,24 @@ import {deleteFile} from "./api";
 
 
 interface FileUpLoadProps {
+    /** 上传文件的表名 */
     setTableName: string
+    /** 接收父组件传递的 fileList 的回调 */
     getList: Function
+    /** 传递 fileList 给父组件 */
     setList: []
-    max?: number
 }
 
+/**
+ * 文件上传组件
+ * @param {FileUpLoadProps} props 传递参数
+ * @param {string} props.setTableName 上传文件的表名
+ * @param {Function} props.getList 传递 fileList 给父组件
+ * @param {[]} props.setList 接收父组件传递的 fileList
+ * @returns {JSX.Element}
+ * @example <FileUpLoad setTableName={'tableUid'} getList={(e)=>{}} setList={fileList}/>
+ * @version 1.0.0
+ */
 const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
     const [fileList, setFileList] = useState<any>([]);
 

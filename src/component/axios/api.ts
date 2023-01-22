@@ -2,7 +2,16 @@ import {MethodType} from "./promise";
 
 const promise = require('./promise');
 
-// 登录
+/**
+ * 登录
+ * @param {string} username 用户名
+ * @param {string} password 密码
+ * @param {string} userType 用户类型
+ * @returns {Promise<any>} 返回一个 Promise
+ * @example userLogin('admin', '123456', 'admin') // 登录,用户名为 admin,密码为 123456,用户类型为 admin
+ * @version 1.0.0
+ * @version 1.1.0 新增了用户类型参数
+ */
 export const userLogin = async (username: string, password: string, userType: string) => {
     return promise.Request('/api/user/login', MethodType.POST, {
         username,
@@ -11,7 +20,20 @@ export const userLogin = async (username: string, password: string, userType: st
     });
 }
 
-// 注册
+/**
+ * 注册
+ * @param {string} username 用户名
+ * @param {string} password 密码
+ * @param {string} realeName 真实姓名
+ * @param {string} gender 性别
+ * @param {string} tel 电话
+ * @param {string} email 邮箱
+ * @param {string} departmentUid 部门 Uid
+ * @param {string} userType 用户类型
+ * @returns {Promise<any>} 返回一个 Promise
+ * @example userRegister('admin', '123', '张三', '男', '123456789', '123@gmail.com', '123456','Employee') // 注册,用户名为 admin,密码为 123,真实姓名为 张三,性别为 男,电话为 123456789,邮箱为 123@gmail.com,部门 Uid 为 123456,用户类型为 Employee
+ * @version 1.0.0
+ */
 export const userRegister = async (username: String, password: String, realeName: String, gender: String, tel: String, email: String, departmentUid: String, userType: string) => {
     return promise.Request('/api/user/add', MethodType.POST, {
         username,
@@ -25,24 +47,49 @@ export const userRegister = async (username: String, password: String, realeName
     });
 }
 
-// 校验用户
+/**
+ * 校验当前用户状态，自动登录
+ * @returns {Promise<any>} 返回一个 Promise
+ * @example checkUser() // 校验当前用户状态
+ * @version 1.0.0
+ * @description 如果在 Cookie 中存在 Token，则会触发自动登录进行用户状态校验
+ */
 export const checkUser = async () => {
     return promise.Request('/api/user/checkUser', MethodType.POST);
 }
 
-// 获取用户登录记录
+/**
+ * 获取用户登录记录
+ * @param {string} userUid 用户 Uid
+ * @returns {Promise<any>} 返回一个 Promise
+ * @example findLoginRecord('123456') // 获取用户登录记录,用户 Uid 为 123456
+ * @version 1.0.0
+ * @description 该接口需要用户登录后才能调用，且获取用户登录记录涉及到后端查询数据库，所以会有一定的延迟
+ */
 export const findLoginRecord = async (userUid: string) => {
     return promise.Request('/api/user/findLoginRecord', MethodType.POST, {
         userUid
     });
 }
 
-// 获取用户上级列表
+/**
+ * 获取部门列表
+ * @returns {Promise<any>} 返回一个 Promise
+ * @example findUserSuperior() // 获取所有部门
+ * @version 1.0.0
+ */
 export const findUserType = async () => {
     return promise.Request('/api/user/findUserType', MethodType.GET);
 }
 
-// 校验用户名是否可用
+/**
+ * 校验用户名是否可用
+ * @param {string} username 用户名
+ * @param {string} userType 用户类型
+ * @returns {Promise<any>} 返回一个 Promise
+ * @example checkUsername('admin', 'admin') // 校验用户名是否可用,用户名为 admin,用户类型为 admin
+ * @version 1.0.0
+ */
 export const checkUsername = async (username: string, userType: string) => {
     return promise.Request('/api/user/checkUsername', MethodType.POST, {
         username,
@@ -50,33 +97,65 @@ export const checkUsername = async (username: string, userType: string) => {
     });
 }
 
-// 查询上次上传的文件
+/**
+ * 查询上次上传的文件
+ * @param {string} tableUid 表格 Uid
+ * @returns {Promise<any>} 返回一个 Promise
+ * @example checkLastTimeUploadFiles('123456') // 查询上次上传的文件,表格 Uid 为 123456
+ * @version 1.0.0
+ */
 export const checkLastTimeUploadFiles = async (tableUid: String) => {
     return promise.Request('/api/checkLastTimeUploadFiles', MethodType.POST, {}, {headers: {tableUid: tableUid}});
 }
 
-// 查询对应申请上传的文件
+/**
+ * 查询对应申请上传的文件
+ * @param {string} RowUid 行 Uid
+ * @param {string} tableUid 表格 Uid
+ * @returns {Promise<any>} 返回一个 Promise
+ * @example findUploadFiles('123456', 'test') // 查询对应申请上传的文件,行 Uid 为 123456,表格 Uid 为 test
+ * @version 1.0.0
+ */
 export const findUploadFilesByUid = async (RowUid: String, tableUid: String) => {
     return promise.Request('/api/findUploadFilesByUid', MethodType.POST, {
         RowUid
     }, {headers: {tableUid: tableUid}});
 }
 
-// 删除文件
+/**
+ * 删除文件
+ * @param {string} fileName 文件名
+ * @returns {Promise<any>} 返回一个 Promise
+ * @example deleteFile('123456') // 删除文件名为 123456 的文件
+ * @version 1.0.0
+ */
 export const deleteFile = async (fileName: String) => {
     return promise.Request('/api/deleteUploadFile', MethodType.POST, {
         fileName
     });
 }
 
-// 查询审批流程
+/**
+ * 查询工作报告审批流程
+ * @param {string} uid 申请 Uid
+ * @returns {Promise<any>} 返回一个 Promise
+ * @example findWorkReportByTeacherProcess('123456') // 查询工作报告审批流程,申请 Uid 为 123456
+ * @version 1.0.0
+ */
 export const findWorkReportByTeacherProcess = async (uid: String) => {
     return promise.Request('/apply/workReport/findProcess', MethodType.POST, {
         uid
     });
 }
 
-// 变更部门申请
+/**
+ * 提交变更部门申请
+ * @param {string} departmentUid 部门 Uid
+ * @param {string} changeReason 变更原因
+ * @returns {Promise<any>} 返回一个 Promise
+ * @example ChangeDepartment('123456','测试') // 提交变更部门申请,部门 Uid 为 123456,变更原因为 测试
+ * @version 1.0.0
+ */
 export const ChangeDepartment = async (departmentUid: String, changeReason: String) => {
     return promise.Request('/apply/departmentChange/add', MethodType.POST, {
         departmentUid,
@@ -84,26 +163,49 @@ export const ChangeDepartment = async (departmentUid: String, changeReason: Stri
     }, {headers: {tableUid: 'ChangeDepartment'}});
 }
 
-// 查询正在审批的部门变更申请
+/**
+ * 查询正在审批的部门变更申请，如果有正在审批的申请，则不允许再次申请
+ * @returns {Promise<any>} 返回一个 Promise
+ * @example checkTeacherChangeDepartment() // 查询正在审批的部门变更申请
+ * @version 1.0.0
+ */
 export const checkTeacherChangeDepartment = async () => {
     return promise.Request('/apply/departmentChange/checkLastTime', MethodType.POST);
 }
 
 
-// 查询部门变更记录
+/**
+ * 查询本人部门变更申请记录
+ * @returns {Promise<any>} 返回一个 Promise
+ * @example checkTeacherChangeDepartmentRecord() // 查询本人部门变更申请记录
+ * @version 1.0.0
+ */
 export const checkTeacherChangeDepartmentRecord = async () => {
     return promise.Request('/apply/departmentChange/findApplyList', MethodType.POST);
 }
 
 
-// 查询变更部门审批流程
+/**
+ * 查询部门变更申请审批流程
+ * @param {string} uid 申请 Uid
+ * @returns {Promise<any>} 返回一个 Promise
+ * @example findChangeDepartmentByTeacherProcess('123456') // 查询部门变更申请审批流程,申请 Uid 为 123456
+ * @version 1.0.0
+ */
 export const findChangeDepartmentByTeacherProcess = async (uid: String) => {
     return promise.Request('/apply/departmentChange/findProcess', MethodType.POST, {
         uid
     });
 }
 
-// 删除申请
+/**
+ * 删除部门变更申请
+ * @param {string} uid 申请 Uid
+ * @param {string} tableUid 表格 Uid
+ * @returns {Promise<any>} 返回一个 Promise
+ * @example deleteChangeDepartmentByTeacher('123456','test') // 删除部门变更申请,申请 Uid 为 123456,表格 Uid 为 test
+ * @version 1.0.0
+ */
 export const deleteChangeDepartmentByTeacher = async (uid: String, tableUid: String) => {
     return promise.Request('/apply/departmentChange/delete', MethodType.POST, {
         uid
@@ -344,7 +446,14 @@ export const resolveWorkReport = async (uid: String) => {
     });
 }
 
-// 驳回工作报告
+/**
+ * 驳回工作报告
+ * @param {string} uid 工作报告 uid
+ * @param {string} reject_reason 驳回原因
+ * @returns {Promise<any>} 返回一个 Promise 对象
+ * @example rejectWorkReport('123456789','测试') // 驳回工作报告 uid 为 123456789 的工作报告, 驳回原因为 测试
+ * @version 1.0.0
+ */
 export const rejectWorkReport = async (uid: String, reject_reason: string) => {
     return promise.Request('/apply/workReport/reject', MethodType.POST, {
         uid,
@@ -352,7 +461,14 @@ export const rejectWorkReport = async (uid: String, reject_reason: string) => {
     });
 }
 
-// 修改密码
+/**
+ * 修改密码
+ * @param {string} uid 用户 uid
+ * @param {string} password 密码
+ * @returns {Promise<any>} 返回一个 Promise 对象
+ * @example updatePassword('123456789','123456') // 修改用户 uid 为 123456789 的密码为 123456
+ * @version 1.0.0
+ */
 export const updatePassword = async (uid: string, password: string) => {
     return promise.Request('/api/user/updatePassword', MethodType.POST, {
         uid,
@@ -360,7 +476,17 @@ export const updatePassword = async (uid: string, password: string) => {
     });
 }
 
-// 更新用户信息
+/**
+ * 更新用户信息
+ * @param {string} uid 用户 uid
+ * @param {string} realeName 真实姓名
+ * @param  {string} gender 性别
+ * @param {string} tel 电话
+ * @param {string} email 邮箱
+ * @returns {Promise<any>} 返回一个 Promise 对象
+ * @example update('123456789', 'admin', '男', '123456789', '123@gmail.com') // 修改用户 uid 为 123456789 的信息为真实姓名为 admin 性别为男 电话为 123456789 邮箱为 123@gmail.com
+ * @version 1.0.0
+ */
 export const updateUserInfo = async (uid: string, realeName: string, gender: string, tel: string, email: string) => {
     return promise.Request('/api/user/update', MethodType.POST, {
         uid,
@@ -371,7 +497,14 @@ export const updateUserInfo = async (uid: string, realeName: string, gender: str
     });
 }
 
-// 更新用户名
+/**
+ * 修改用户名
+ * @param {string} uid 用户 uid
+ * @param {string} username 用户名
+ * @returns {Promise<any>} 返回一个 Promise 对象
+ * @example update('123456789', 'admin') // 修改用户 uid 为 123456789 的用户名为 admin
+ * @version 1.0.0
+ */
 export const updateUserName = async (uid: string, username: string) => {
     return promise.Request('/api/user/updateUsername', MethodType.POST, {
         uid,
@@ -379,17 +512,35 @@ export const updateUserName = async (uid: string, username: string) => {
     });
 }
 
-// 查询所有用户
+/**
+ * 查询所有用户
+ * @returns {Promise<any>} 返回一个 Promise 对象
+ * @example findAllUser()
+ * @version 1.0.0
+ */
 export const findAllUser = async () => {
     return promise.Request('/api/user/findAllUser', MethodType.POST);
 }
 
-// 查询部门下的所有用户
+/**
+ * 根据部门查询用户
+ * @param {string} departmentUid 部门 uid
+ * @returns {Promise<any>} 返回一个 Promise 对象
+ * @example findUserByDepartment('123456789') // 查询部门 uid 为 123456789 的用户
+ * @version 1.0.0
+ */
 export const findUserByDepartment = async (departmentUid: string) => {
     return promise.Request('/api/user/findAllUserByDepartmentUid', MethodType.POST, {departmentUid});
 }
 
-// 更新用户状态
+/**
+ * 修改用户状态
+ * @param {string} uid 用户 uid
+ * @param {number} status 用户状态
+ * @returns {Promise<any>} 返回一个 Promise 对象
+ * @example updateUserStatus('123456789',1) // 将用户 uid 为 123456789 的用户状态修改为 1
+ * @version 1.0.0
+ */
 export const updateUserStatus = async (uid: string, status: number) => {
     return promise.Request('/api/user/updateStatus', MethodType.POST, {
         uid,
@@ -397,24 +548,48 @@ export const updateUserStatus = async (uid: string, status: number) => {
     });
 }
 
-// 删除用户
+/**
+ * 删除用户
+ * @param {string} uid 用户 uid
+ * @returns {Promise<any>} 返回一个 Promise 对象
+ * @example deleteUser('123456789') // 删除用户 uid 为 123456789 的用户
+ * @version 1.0.0
+ * @description 该方法会删除用户的所有基本信息且无法恢复，但不会影响已经提交的申请
+ */
 export const deleteUser = async (uid: string) => {
     return promise.Request('/api/user/delete', MethodType.POST, {
         uid
     });
 }
 
-// 获取所有审批人
+/**
+ * 获取所有可以审批的用户
+ * @returns {Promise<any>} 返回一个 Promise 对象
+ * @example findProcessUser() // 获取所有可以审批的用户
+ * @version 1.0.0
+ */
 export const findProcessUser = async () => {
     return promise.Request('/api/user/findProcessUser', MethodType.POST);
 }
 
-// 查询所有审批流程
+/**
+ * 查询所有审批流程
+ * @returns {Promise<any>} 返回一个 Promise 对象
+ * @example findAllProcess() // 查询所有审批流程
+ * @version 1.0.0
+ */
 export const findAllProcess = async () => {
     return promise.Request('/process/findAllProcess', MethodType.POST);
 }
 
-// 更新审批流程
+/**
+ * 修改审批流程
+ * @param {string} uid 审批 uid
+ * @param {string} process 审批流程
+ * @returns {Promise<any>} 返回一个 Promise 对象
+ * @example updateProcess('1234', '5678') // 修改审批 1234 的流程为 5678
+ * @version 1.0.0
+ */
 export const updateProcess = async (uid: string, process: string) => {
     return promise.Request('/process/updateProcess', MethodType.POST, {
         uid,
@@ -422,7 +597,14 @@ export const updateProcess = async (uid: string, process: string) => {
     });
 }
 
-// 修改部门直属领导
+/**
+ * 修改部门直属领导
+ * @param {string} departmentUid 部门 uid
+ * @param {string} uid 领导 uid
+ * @returns {Promise<any>} 返回一个 Promise 对象
+ * @example updateDepartmentLeader('1234', '5678') // 修改部门 1234 的直属领导为 5678
+ * @version 1.0.0
+ */
 export const updateDepartmentLeader = async (departmentUid: string, uid: string) => {
     return promise.Request('/api/user/updateDepartmentLeader', MethodType.POST, {
         departmentUid,

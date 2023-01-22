@@ -50,6 +50,16 @@ class MyStorage {
         return PREFIX + key
     }
 
+    /**
+     * 设置数据
+     * @param {string} key 键值
+     * @param {any} value 数据
+     * @param {boolean | number} [expires] 过期时间，false 不过期，true 为默认过期时间，number 为指定过期时间
+     * @param {boolean} [encryption] 是否加密, 默认为 true
+     * @example set('name', 'allynlin') // 设置 name 的数据
+     * @version 1.0.0
+     * @description 如果数据过期，返回 null
+     */
     set(
         key: string,
         value: any,
@@ -70,6 +80,15 @@ class MyStorage {
         ) // 存储数据
     }
 
+    /**
+     * 根据键值获取数据
+     * @param {string} key 键值
+     * @param {boolean} [encryption] 是否加密, 默认为 true
+     * @returns {any} 返回数据
+     * @example get('name') // 获取 name 的数据
+     * @version 1.0.0
+     * @description 如果数据过期，返回 null
+     */
     get(key: string, encryption = true) {
         const value = this.storage.getItem(this.synthesisKey(key)) // 获取数据
         let realValue = ''
@@ -92,10 +111,23 @@ class MyStorage {
         }
     }
 
+    /**
+     * 删除数据
+     * @param {string} key 需要删除内容的键
+     * @returns {void}
+     * @example delete('name') // 删除 name 的数据
+     * @version 1.0.0
+     */
     delete(key: string) {
         this.storage.removeItem(this.synthesisKey(key)) // 删除数据
     }
 
+    /**
+     * 清空数据
+     * @returns {void}
+     * @example clear() // 清空数据
+     * @version 1.0.0
+     */
     clear() {
         this.storage.clear() // 清空数据
     }

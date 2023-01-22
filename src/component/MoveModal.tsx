@@ -7,15 +7,23 @@ import {renderFooter} from 'antd/es/modal/PurePanel';
 
 
 interface Iprops {
+    /** 标题 */
     title: React.ReactNode;
+    /** 是否显示模态框 */
     showModal: boolean;
+    /** 获取模态框显示状态 */
     getModalStatus: (status: boolean) => void;
+    /** 模态框页脚 */
     footer?: React.ReactNode;
+    /** 模态框内部内容 */
     children?: React.ReactNode;
+    /** 点击模态框确认状态时的回调 */
     onOk?: (e: React.MouseEvent<HTMLButtonElement>) => void;
     /** 点击模态框右上角叉、取消按钮、Props.maskClosable 值为 true 时的遮罩层或键盘按下 Esc 时的回调 */
     onCancel?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+    /** 默认确认按钮的文字 */
     okText?: string;
+    /** 默认取消按钮的文字 */
     cancelText?: string;
 }
 

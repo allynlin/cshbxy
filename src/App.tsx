@@ -79,7 +79,13 @@ const MyApp = () => {
         }
     }
 
-    // 路由跳转鉴权
+    /**
+     * 路由跳转鉴权
+     * @param {string} pathname 路由路径
+     * @param {object} meta 路由元信息
+     * @returns {string} 返回跳转路径
+     * @version 1.0.0
+     */
     const onRouteBefore = ({pathname, meta}: any) => {
         if (meta.title) {
             // 设置页面标题，如果中文标题不存在，就直接使用英文标题代替，否之就判断当前用户语言，根据用户语言判断是使用中文标题还是英文标题
