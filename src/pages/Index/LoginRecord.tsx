@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {App, Button, Result, Spin, Table, Typography} from 'antd';
+import {App, Button, Result, Spin, Typography} from 'antd';
 import {useSelector} from "react-redux";
 import {findLoginRecord} from "../../component/axios/api";
 import intl from "react-intl-universal";
@@ -7,7 +7,7 @@ import VirtualTable from "../../component/Table/VirtualTable";
 import {ColumnsType} from "antd/es/table";
 import {useNavigate} from "react-router-dom";
 import {useStyles} from "../../styles/webStyle";
-import {LoadingOutlined, SearchOutlined} from "@ant-design/icons";
+import {SearchOutlined} from "@ant-design/icons";
 import NormalTable from "../../component/Table/NormalTable";
 import type {DataType} from "../../component/Table";
 import {LoadingIcon} from "../../component/Icon";

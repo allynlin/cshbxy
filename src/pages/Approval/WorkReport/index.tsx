@@ -1,16 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import VirtualTable from "../../../component/Table/VirtualTable";
-import {App, Button, Card, Form, Input, Modal, Result, Skeleton, Spin, Table, Typography} from 'antd';
+import {App, Button, Card, Form, Input, Modal, Result, Skeleton, Spin, Typography} from 'antd';
 import {findUploadFilesByUid, findWorkReportWaitApprovalList, resolveWorkReport} from "../../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
-import {
-    ExclamationCircleOutlined,
-    FileTextOutlined,
-    FolderOpenOutlined,
-    LoadingOutlined,
-    SearchOutlined
-} from "@ant-design/icons";
+import {ExclamationCircleOutlined, FileTextOutlined, FolderOpenOutlined, SearchOutlined} from "@ant-design/icons";
 import {DownLoadURL, tableName} from "../../../baseInfo";
 import {useSelector} from "react-redux";
 import Reject from "./Reject";

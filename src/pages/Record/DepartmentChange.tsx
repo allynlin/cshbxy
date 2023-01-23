@@ -1,20 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import VirtualTable from "../../component/Table/VirtualTable";
-import {
-    App,
-    Button,
-    Card,
-    Form,
-    Input,
-    Popconfirm,
-    Result,
-    Skeleton,
-    Space,
-    Spin,
-    Steps,
-    Tag,
-    Typography
-} from 'antd';
+import {App, Button, Card, Form, Input, Popconfirm, Result, Skeleton, Space, Spin, Steps, Tag, Typography} from 'antd';
 import {
     checkTeacherChangeDepartmentRecord,
     deleteChangeDepartmentByTeacher,
@@ -25,7 +11,7 @@ import {
 import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
 import {RenderStatus} from "../../component/Tag/RenderStatus";
-import {FileTextOutlined, FolderOpenOutlined, LoadingOutlined, SearchOutlined} from "@ant-design/icons";
+import {FileTextOutlined, FolderOpenOutlined, SearchOutlined} from "@ant-design/icons";
 import {DownLoadURL, tableName} from "../../baseInfo";
 import {useSelector} from "react-redux";
 import {useStyles} from "../../styles/webStyle";

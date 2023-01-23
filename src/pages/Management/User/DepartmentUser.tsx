@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import VirtualTable from "../../../component/Table/VirtualTable";
-import {App, Button, Form, Input, Result, Skeleton, Spin, Table, Typography} from 'antd';
+import {App, Button, Form, Input, Result, Skeleton, Spin, Typography} from 'antd';
 import {findUserByDepartment} from "../../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
-import {FolderOpenOutlined, LoadingOutlined, SearchOutlined} from "@ant-design/icons";
+import {FolderOpenOutlined, SearchOutlined} from "@ant-design/icons";
 import {RenderUserStatusTag} from "../../../component/Tag/RenderUserStatusTag";
 import ChangeUserName from "./ChangeUserName";
 import ChangeUserInfo from "./ChangeUserInfo";

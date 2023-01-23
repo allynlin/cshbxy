@@ -1,7 +1,7 @@
 import {Segmented} from 'antd';
 import React from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {show, hide} from "../../../component/redux/isShowFloatButtonSlice";
+import {hide, show} from "../../../component/redux/isShowFloatButtonSlice";
 
 const ShowFloatButtonSetting: React.FC = () => {
 

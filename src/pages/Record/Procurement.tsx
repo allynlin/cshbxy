@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import VirtualTable from "../../component/Table/VirtualTable";
-import {App, Button, Form, Input, Popconfirm, Result, Skeleton, Space, Spin, Steps, Table, Tag, Typography} from 'antd';
+import {App, Button, Form, Input, Popconfirm, Result, Skeleton, Space, Spin, Steps, Tag, Typography} from 'antd';
 import {
     deleteProcurement,
     findProcurementList,
@@ -10,7 +10,7 @@ import {
 import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
 import {RenderStatus} from "../../component/Tag/RenderStatus";
-import {FolderOpenOutlined, LoadingOutlined, SearchOutlined} from "@ant-design/icons";
+import {FolderOpenOutlined, SearchOutlined} from "@ant-design/icons";
 import {useSelector} from "react-redux";
 import {useStyles} from "../../styles/webStyle";
 import {getProcessStatus} from '../../component/getProcessStatus';

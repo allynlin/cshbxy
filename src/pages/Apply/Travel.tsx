@@ -77,7 +77,7 @@ const LeaveForm = () => {
                         title: intl.get('travelReimburseApply') + ' ' + intl.get('submitSuccess'),
                         describe: intl.get('waitApprove'),
                         toPage: intl.get('showApplyList'),
-                        toURL: '/travel-webRecord',
+                        toURL: '/travel-Record',
                     }
                 }
             })

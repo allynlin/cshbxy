@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import VirtualTable from "../../../component/Table/VirtualTable";
-import {App, Button, Form, Input, Modal, Result, Spin, Table, Typography} from 'antd';
+import {App, Button, Form, Input, Modal, Result, Spin, Typography} from 'antd';
 import {findLeaveWaitApprovalList, resolveLeave} from "../../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
-import {ExclamationCircleOutlined, FolderOpenOutlined, LoadingOutlined, SearchOutlined} from "@ant-design/icons";
+import {ExclamationCircleOutlined, FolderOpenOutlined, SearchOutlined} from "@ant-design/icons";
 import {useSelector} from "react-redux";
 import Reject from "./Reject";
 import {useStyles} from "../../../styles/webStyle";

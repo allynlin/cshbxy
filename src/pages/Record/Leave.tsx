@@ -21,7 +21,7 @@ import {deleteLeave, findLeaveList, findLeaveProcess, refreshLeave} from "../../
 import {ColumnsType} from "antd/es/table";
 import intl from "react-intl-universal";
 import {RenderStatus} from "../../component/Tag/RenderStatus";
-import {FolderOpenOutlined, LoadingOutlined, SearchOutlined} from "@ant-design/icons";
+import {FolderOpenOutlined, SearchOutlined} from "@ant-design/icons";
 import {useSelector} from "react-redux";
 import {RenderWatermarkColor} from "../../component/Tag/RenderWatermarkColor";
 import {useStyles} from "../../styles/webStyle";
