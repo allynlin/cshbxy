@@ -87,7 +87,7 @@ const LeaveForm = () => {
                         title: intl.get('leaveApply') + ' ' + intl.get('submitSuccess'),
                         describe: intl.get('waitApprove'),
                         toPage: intl.get('showApplyList'),
-                        toURL: '/leave-record',
+                        toURL: '/leave-webRecord',
                         againTitle: intl.get('continueSubmit')
                     }
                 }

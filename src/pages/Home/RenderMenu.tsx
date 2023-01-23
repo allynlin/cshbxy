@@ -72,16 +72,16 @@ export const SliderMenu: React.FC = () => {
             <BarChartOutlined/>, [
                 getItem((
                     <Link
-                        to={'/departmentChange-record'}>{intl.get('departmentChange')}</Link>), '/departmentChange-record'),
+                        to={'/departmentChange-Record'}>{intl.get('departmentChange')}</Link>), '/departmentChange-Record'),
                 getItem((<Link
-                    to={'/travel-record'}>{intl.get('travelReimburse')}</Link>), '/travel-record'),
+                    to={'/travel-Record'}>{intl.get('travelReimburse')}</Link>), '/travel-Record'),
                 getItem((<Link
-                    to={'/leave-record'}>{intl.get('leave')}</Link>), '/leave-record'),
+                    to={'/leave-Record'}>{intl.get('leave')}</Link>), '/leave-Record'),
                 getItem((
                     <Link
-                        to={'/procurement-record'}>{intl.get('procurement')}</Link>), '/procurement-record'),
+                        to={'/procurement-Record'}>{intl.get('procurement')}</Link>), '/procurement-Record'),
                 getItem((<Link
-                    to={'/workReport-record'}>{intl.get('workReport')}</Link>), '/workReport-record'),
+                    to={'/workReport-Record'}>{intl.get('workReport')}</Link>), '/workReport-Record'),
             ]),
     ];
     const department: MenuProps['items'] = [

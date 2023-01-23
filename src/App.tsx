@@ -1,19 +1,16 @@
 import React, {useEffect, useState} from "react";
 import intl from 'react-intl-universal';
-import {BrowserRouter} from 'react-router-dom'
-import RouterWaiter from "react-router-waiter"
+import {RouterProvider} from 'react-router-dom'
 import {useDispatch, useSelector} from "react-redux";
 import {App as AntdApp, ConfigProvider} from "antd";
 
-import Spin from "./component/LoadingSkleton";
 import {dark, light} from "./component/redux/themeSlice";
-import ChangeSystem from "./component/ChangeSystem";
 
 import enUS from "antd/es/locale/en_US";
 import zhCN from "antd/es/locale/zh_CN";
 
-import routes from "./Router/routes";
 import {getBrowserInfo} from "./checkBrowser";
+import router from "./Router/route";
 
 // 导入自定义语言包
 const locales = {
@@ -32,7 +29,6 @@ const MyApp = () => {
     const sysColor = useSelector((state: any) => state.sysColor.value)
     const isLogin = useSelector((state: any) => state.isLogin.value)
     const userType = useSelector((state: any) => state.userType.value)
-    const isShowFloatButton = useSelector((state: any) => state.isShowFloatButton.value);
 
     useEffect(() => {
         getBrowserInfo();
@@ -79,40 +75,9 @@ const MyApp = () => {
         }
     }
 
-    /**
-     * 路由跳转鉴权
-     * @param {string} pathname 路由路径
-     * @param {object} meta 路由元信息
-     * @returns {string} 返回跳转路径
-     * @version 1.0.0
-     */
-    const onRouteBefore = ({pathname, meta}: any) => {
-        if (meta.title) {
-            // 设置页面标题，如果中文标题不存在，就直接使用英文标题代替，否之就判断当前用户语言，根据用户语言判断是使用中文标题还是英文标题
-            if (meta.titleCN === undefined) {
-                document.title = meta.title
-            } else {
-                userLanguage === 'English' ? document.title = meta.title : document.title = meta.titleCN
-            }
-        }
-        if (meta.Auth) {
-            if (userType === meta.Auth)
-                return pathname
-            if (!isLogin) {
-                message.warning(intl.get('pleaseLogin'))
-                return '/login'
-            }
-            return '/403'
-        }
-        return pathname
-    }
-
     return (
         <ConfigProvider locale={language}>
-            <BrowserRouter basename={process.env.PUBLIC_URL}>
-                {isShowFloatButton ? <ChangeSystem/> : null}
-                <RouterWaiter routes={routes} loading={<Spin/>} onRouteBefore={onRouteBefore}/>
-            </BrowserRouter>
+            <RouterProvider router={router}/>
         </ConfigProvider>
     );
 }

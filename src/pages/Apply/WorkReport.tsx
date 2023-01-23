@@ -99,7 +99,7 @@ const ChangeForm = () => {
                         title: intl.get('workReport') + ' ' + intl.get('submitSuccess'),
                         describe: intl.get('waitApprove'),
                         toPage: intl.get('showApplyList'),
-                        toURL: '/workReport-record',
+                        toURL: '/workReport-webRecord',
                     }
                 }
             })

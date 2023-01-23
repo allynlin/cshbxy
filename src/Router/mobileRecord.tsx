@@ -1,49 +1,69 @@
 import Record from "../pages/Record/Mobile/Record";
+import React, {lazy} from "react";
+import {RouterBefore} from "./route";
 
-const record = [{
-    path: 'record',
-    redirect: '/m/record/departmentChange'
-}, {
-    path: 'record',
-    element: <Record/>,
-    children: [
-        {
+const MobileDepartmentChange = lazy(() => import('../pages/Record/Mobile/DepartmentChange'));
+const MobileTravel = lazy(() => import('../pages/Record/Mobile/Travel'));
+const MobileLeave = lazy(() => import('../pages/Record/Mobile/Leave'));
+const MobileProcurement = lazy(() => import('../pages/Record/Mobile/Procurement'));
+const MobileWorkReport = lazy(() => import('../pages/Record/Mobile/WorkReport'));
+
+const mobileRecord = [
+    {
+        path: 'record',
+        element: <Record/>,
+        children: [{
             path: 'departmentChange',
-            component: () => import('../pages/Record/Mobile/DepartmentChange'),
-            meta: {
+            element: (<RouterBefore meta={{
                 title: '变更部门记录',
-                Auth: 'Employee'
-            }
+                auth: 'Employee'
+            }}>
+                <React.Suspense fallback={<div/>}>
+                    <MobileDepartmentChange/>
+                </React.Suspense>
+            </RouterBefore>)
         }, {
             path: 'travel',
-            component: () => import('../pages/Record/Mobile/Travel'),
-            meta: {
+            element: (<RouterBefore meta={{
                 title: '差旅报销记录',
-                Auth: 'Employee'
-            }
+                auth: 'Employee'
+            }}>
+                <React.Suspense fallback={<div/>}>
+                    <MobileTravel/>
+                </React.Suspense>
+            </RouterBefore>)
         }, {
             path: 'leave',
-            component: () => import('../pages/Record/Mobile/Leave'),
-            meta: {
-                title: '请假记录',
-                Auth: 'Employee'
-            }
+            element: (<RouterBefore meta={{
+                title: '请假申请记录',
+                auth: 'Employee'
+            }}>
+                <React.Suspense fallback={<div/>}>
+                    <MobileLeave/>
+                </React.Suspense>
+            </RouterBefore>)
         }, {
             path: 'procurement',
-            component: () => import('../pages/Record/Mobile/Procurement'),
-            meta: {
-                title: '采购记录',
-                Auth: 'Employee'
-            }
+            element: (<RouterBefore meta={{
+                title: '采购申请记录',
+                auth: 'Employee'
+            }}>
+                <React.Suspense fallback={<div/>}>
+                    <MobileProcurement/>
+                </React.Suspense>
+            </RouterBefore>)
         }, {
             path: 'workReport',
-            component: () => import('../pages/Record/Mobile/WorkReport'),
-            meta: {
+            element: (<RouterBefore meta={{
                 title: '工作报告记录',
-                Auth: 'Employee'
-            }
-        }
-    ]
-}]
+                auth: 'Employee'
+            }}>
+                <React.Suspense fallback={<div/>}>
+                    <MobileWorkReport/>
+                </React.Suspense>
+            </RouterBefore>)
+        }]
+    }
+]
 
-export default record;
+export default mobileRecord;

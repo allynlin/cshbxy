@@ -17,7 +17,7 @@ const HomeDescriptions: React.FC = () => {
             title={<div style={{display: "flex"}}>
                 <Title level={3}>{intl.get('hello') + ',' + userInfo.realeName}</Title>
                 &nbsp;&nbsp;
-                <Button type="primary" onClick={() => navigate('/login-record')}>{intl.get('loginRecord')}</Button>
+                <Button type="primary" onClick={() => navigate('/login-Record')}>{intl.get('loginRecord')}</Button>
             </div>}
             bordered
             layout="vertical"

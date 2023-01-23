@@ -112,7 +112,7 @@ const ChangeForm = () => {
                         title: intl.get('departmentChangeApply') + ' ' + intl.get('submitSuccess'),
                         describe: intl.get('waitApprove'),
                         toPage: intl.get('showApplyList'),
-                        toURL: '/departmentChange-record',
+                        toURL: '/departmentChange-webRecord',
                     }
                 }
             })

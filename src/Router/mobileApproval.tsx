@@ -1,49 +1,71 @@
 import Approval from '../pages/Approval/Mobile/Approval'
 
-const approval = [{
-    path: 'approval',
-    redirect: '/m/approval/departmentChange',
-}, {
-    path: 'approval',
-    element: <Approval/>,
-    children: [
-        {
-            path: 'departmentChange',
-            component: () => import('../pages/Approval/Mobile/DepartmentChange'),
-            meta: {
-                title: '部门变更',
-                Auth: 'Leader',
-            }
-        }, {
-            path: 'leave',
-            component: () => import('../pages/Approval/Mobile/Leave'),
-            meta: {
-                title: '请假',
-                Auth: 'Leader',
-            }
-        }, {
-            path: 'travel',
-            component: () => import('../pages/Approval/Mobile/Travel'),
-            meta: {
-                title: '差旅报销',
-                Auth: 'Leader',
-            }
-        }, {
-            path: 'procurement',
-            component: () => import('../pages/Approval/Mobile/Procurement'),
-            meta: {
-                title: '采购',
-                Auth: 'Leader',
-            }
-        }, {
-            path: 'workReport',
-            component: () => import('../pages/Approval/Mobile/WorkReport'),
-            meta: {
-                title: '工作汇报',
-                Auth: 'Leader',
-            }
-        }
-    ]
-}]
+import React, {lazy} from "react";
+import {RouterBefore} from "./route";
 
-export default approval;
+const DepartmentChange = lazy(() => import('../pages/Approval/Mobile/DepartmentChange'));
+const Travel = lazy(() => import('../pages/Approval/Mobile/Travel'));
+const Procurment = lazy(() => import('../pages/Approval/Mobile/Procurement'));
+const Leave = lazy(() => import('../pages/Approval/Mobile/Leave'));
+const WorkReport = lazy(() => import('../pages/Approval/Mobile/WorkReport'));
+
+const mobileApproval = [
+    {
+        path: 'approval',
+        element: <Approval/>,
+        children: [
+            {
+                path: 'departmentChange',
+                element: (<RouterBefore meta={{
+                    title: '部门变更',
+                    auth: 'Leader'
+                }}>
+                    <React.Suspense fallback={<div/>}>
+                        <DepartmentChange/>
+                    </React.Suspense>
+                </RouterBefore>)
+            }, {
+                path: 'travel',
+                element: (<RouterBefore meta={{
+                    title: '差旅报销',
+                    auth: 'Leader'
+                }}>
+                    <React.Suspense fallback={<div/>}>
+                        <Travel/>
+                    </React.Suspense>
+                </RouterBefore>)
+            }, {
+                path: 'procurement',
+                element: (<RouterBefore meta={{
+                    title: '采购',
+                    auth: 'Leader'
+                }}>
+                    <React.Suspense fallback={<div/>}>
+                        <Procurment/>
+                    </React.Suspense>
+                </RouterBefore>)
+            }, {
+                path: 'leave',
+                element: (<RouterBefore meta={{
+                    title: '请假',
+                    auth: 'Leader'
+                }}>
+                    <React.Suspense fallback={<div/>}>
+                        <Leave/>
+                    </React.Suspense>
+                </RouterBefore>)
+            }, {
+                path: 'workReport',
+                element: (<RouterBefore meta={{
+                    title: '工作报告',
+                    auth: 'Leader'
+                }}>
+                    <React.Suspense fallback={<div/>}>
+                        <WorkReport/>
+                    </React.Suspense>
+                </RouterBefore>)
+            }]
+    }
+]
+
+export default mobileApproval;

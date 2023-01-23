@@ -19,9 +19,10 @@ import {login} from "../../component/redux/isLoginSlice";
 import {Department, Employee, Leader} from "../../component/redux/userTypeSlice";
 import {useStyles} from "./style";
 import {useNavigate} from "react-router-dom";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {setTable} from "../../component/redux/userTableSlice";
 import {hide, show} from "../../component/redux/isShowFloatButtonSlice";
+import ChangeSystem from "../../component/ChangeSystem";
 
 const App: React.FC = () => {
 
@@ -31,6 +32,8 @@ const App: React.FC = () => {
 
     const [percent, setPercent] = useState<number>(0);
     const [title, setTitle] = useState<string>(intl.get('useSettingIng'));
+
+    const isShowFloatButton = useSelector((state: any) => state.isShowFloatButton.value);
 
     useEffect(() => {
         getLanguageSetting()
@@ -151,21 +154,26 @@ const App: React.FC = () => {
     }
 
     return (
-        percent === 100 ? (<div className={classes.flexCenter + ' ' + classes.webWaiting}>
-                <Result
-                    icon={<img src={logo} alt="logo" className={classes.webWaitingImg}/>}
-                    title={title}
-                />
-                <Progress className={classes.webWaitingProgress} percent={percent} status="active"
-                          strokeColor={{from: '#108ee9', to: '#87d068'}}/>
-            </div>) :
-            <WebComponent
-                title="长沙星辰软件有限公司 OA 系统"
-                copy={`长沙星辰软件有限公司 OA &copy; 2022-2023 Created by allynlin Version：${version}`}
-                menu={<SliderMenu/>}
-                headMenu={<HeaderMenu/>}
-                logOut={<RenderLogOut/>}
-            />
+        <>
+            {isShowFloatButton ? <ChangeSystem/> : null}
+            {percent === 100 ? (
+                    <div className={classes.flexCenter + ' ' + classes.webWaiting}>
+                        <Result
+                            icon={<img src={logo} alt="logo" className={classes.webWaitingImg}/>}
+                            title={title}
+                        />
+                        <Progress className={classes.webWaitingProgress} percent={percent} status="active"
+                                  strokeColor={{from: '#108ee9', to: '#87d068'}}/>
+                    </div>
+                ) :
+                <WebComponent
+                    title="长沙星辰软件有限公司 OA 系统"
+                    copy={`长沙星辰软件有限公司 OA &copy; 2022-2023 Created by allynlin Version：${version}`}
+                    menu={<SliderMenu/>}
+                    headMenu={<HeaderMenu/>}
+                    logOut={<RenderLogOut/>}
+                />}
+        </>
     );
 };
 

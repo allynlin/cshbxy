@@ -17,7 +17,7 @@ const MobileHomeDescriptions: React.FC = () => {
             title={<div style={{display: "flex"}}>
                 <Title level={3}>你好，{userInfo.realeName}</Title>
                 &nbsp;&nbsp;
-                <Button type="primary" onClick={() => navigate('/m/login-record')}>登录记录</Button>
+                <Button type="primary" onClick={() => navigate('/m/login-Record')}>登录记录</Button>
             </div>}
             bordered
             layout="vertical"
