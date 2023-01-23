@@ -1,5 +1,6 @@
 import React, {lazy} from "react";
 import {RouterBefore} from "./route";
+import WebSkeleton from "../component/Skeleton/WebSkeleton";
 
 const DepartmentChange = lazy(() => import('../pages/Record/DepartmentChange'));
 const Travel = lazy(() => import('../pages/Record/Travel'));
@@ -16,7 +17,7 @@ const record = [
             titleCN: '变更部门记录',
             auth: 'Employee'
         }}>
-            <React.Suspense fallback={<div/>}>
+            <React.Suspense fallback={<WebSkeleton/>}>
                 <DepartmentChange/>
             </React.Suspense>
         </RouterBefore>)
@@ -27,7 +28,7 @@ const record = [
             titleCN: '差旅报销记录',
             auth: 'Employee'
         }}>
-            <React.Suspense fallback={<div/>}>
+            <React.Suspense fallback={<WebSkeleton/>}>
                 <Travel/>
             </React.Suspense>
         </RouterBefore>)
@@ -38,7 +39,7 @@ const record = [
             titleCN: '请假记录',
             auth: 'Employee'
         }}>
-            <React.Suspense fallback={<div/>}>
+            <React.Suspense fallback={<WebSkeleton/>}>
                 <Leave/>
             </React.Suspense>
         </RouterBefore>)
@@ -49,7 +50,7 @@ const record = [
             titleCN: '工作报告记录',
             auth: 'Employee'
         }}>
-            <React.Suspense fallback={<div/>}>
+            <React.Suspense fallback={<WebSkeleton/>}>
                 <WorkReport/>
             </React.Suspense>
         </RouterBefore>)
@@ -60,7 +61,7 @@ const record = [
             titleCN: '采购记录',
             auth: 'Employee'
         }}>
-            <React.Suspense fallback={<div/>}>
+            <React.Suspense fallback={<WebSkeleton/>}>
                 <Procurment/>
             </React.Suspense>
         </RouterBefore>)
@@ -70,7 +71,7 @@ const record = [
             title: 'Login Record',
             titleCN: '登录记录',
         }}>
-            <React.Suspense fallback={<div/>}>
+            <React.Suspense fallback={<WebSkeleton/>}>
                 <Login/>
             </React.Suspense>
         </RouterBefore>)

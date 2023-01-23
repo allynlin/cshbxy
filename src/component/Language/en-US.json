@@ -331,5 +331,7 @@
   "tableSetting": "Table Setting",
   "theme-1": "You can set the theme below, including theme color, border and Gaussian blur level, which will display real-time effects in the current component, and will take effect globally after you confirm. (Note: There will be different waiting times for the global effect depending on the performance of the device)",
   "table-1": "You can set table-related content below, including pager and table basic settings, which will take effect after you click OK",
-  "floatButton": "Show Float Button"
+  "floatButton": "Show Float Button",
+  "loadingOutTimeTips-1": "The current network environment is not good, we recommend finding a better network environment for a better experience, or you can click the button below to try again",
+  "retry": "Retry"
 }

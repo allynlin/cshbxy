@@ -12,6 +12,11 @@ import mobileApproval from "./mobileApproval";
 import {createBrowserRouter, Navigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 
+import WebSkeletonLoading from "../component/Skeleton/WebLoading";
+import WebSkeleton from "../component/Skeleton/WebSkeleton";
+import MobileLoading from "../component/Skeleton/MobileLoading";
+import MobileSkeleton from "../component/Skeleton/MobileSkeleton";
+
 const WebHome = lazy(() => import('../pages/Index/Index'));
 const WebLogin = lazy(() => import('../pages/User/WebLogin'));
 const AddUser = lazy(() => import('../pages/User/AddUser'));
@@ -40,12 +45,15 @@ const routes = [
         path: '/',
         element: <Home/>,
         children: [{
+            path: '/',
+            element: <Navigate to="/home"/>,
+        }, {
             path: 'home',
             element: (<RouterBefore meta={{
                 title: 'Home',
                 titleCN: '首页'
             }}>
-                <React.Suspense fallback={<div/>}>
+                <React.Suspense fallback={<WebSkeletonLoading/>}>
                     <WebHome/>
                 </React.Suspense>
             </RouterBefore>),
@@ -55,7 +63,7 @@ const routes = [
                 title: 'Login',
                 titleCN: '登录'
             }}>
-                <React.Suspense fallback={<div/>}>
+                <React.Suspense fallback={<WebSkeletonLoading/>}>
                     <WebLogin/>
                 </React.Suspense>
             </RouterBefore>)
@@ -66,7 +74,7 @@ const routes = [
                 titleCN: '添加用户',
                 auth: 'Department'
             }}>
-                <React.Suspense fallback={<div/>}>
+                <React.Suspense fallback={<WebSkeleton/>}>
                     <AddUser/>
                 </React.Suspense>
             </RouterBefore>)
@@ -77,7 +85,7 @@ const routes = [
                 titleCN: '添加用户',
                 auth: 'Department'
             }}>
-                <React.Suspense fallback={<div/>}>
+                <React.Suspense fallback={<WebSkeleton/>}>
                     <DepartmentAddUser/>
                 </React.Suspense>
             </RouterBefore>)
@@ -87,7 +95,7 @@ const routes = [
                 title: 'Setting',
                 titleCN: '设置'
             }}>
-                <React.Suspense fallback={<div/>}>
+                <React.Suspense fallback={<WebSkeletonLoading/>}>
                     <WebSetting/>
                 </React.Suspense>
             </RouterBefore>)
@@ -97,7 +105,7 @@ const routes = [
                 title: 'Token Setting',
                 titleCN: 'Token设置'
             }}>
-                <React.Suspense fallback={<div/>}>
+                <React.Suspense fallback={<WebSkeletonLoading/>}>
                     <WebToken/>
                 </React.Suspense>
             </RouterBefore>)
@@ -107,7 +115,7 @@ const routes = [
                 title: 'Success',
                 titleCN: '成功'
             }}>
-                <React.Suspense fallback={<div/>}>
+                <React.Suspense fallback={<WebSkeletonLoading/>}>
                     <Success/>
                 </React.Suspense>
             </RouterBefore>)
@@ -131,7 +139,7 @@ const routes = [
                 title: 'Home',
                 titleCN: '首页'
             }}>
-                <React.Suspense fallback={<div/>}>
+                <React.Suspense fallback={<MobileLoading/>}>
                     <MobileHome/>
                 </React.Suspense>
             </RouterBefore>)
@@ -141,7 +149,7 @@ const routes = [
                 title: 'Login Record',
                 titleCN: '登录记录'
             }}>
-                <React.Suspense fallback={<div/>}>
+                <React.Suspense fallback={<MobileSkeleton/>}>
                     <MobileLoginRecord/>
                 </React.Suspense>
             </RouterBefore>)
@@ -151,7 +159,7 @@ const routes = [
                 title: 'Login',
                 titleCN: '登录'
             }}>
-                <React.Suspense fallback={<div/>}>
+                <React.Suspense fallback={<MobileLoading/>}>
                     <MobileLogin/>
                 </React.Suspense>
             </RouterBefore>)
@@ -161,7 +169,7 @@ const routes = [
                 title: 'Setting',
                 titleCN: '设置',
             }}>
-                <React.Suspense fallback={<div/>}>
+                <React.Suspense fallback={<MobileLoading/>}>
                     <MobileSetting/>
                 </React.Suspense>
             </RouterBefore>)
@@ -171,7 +179,7 @@ const routes = [
                 title: '部门用户',
                 auth: 'Department'
             }}>
-                <React.Suspense fallback={<div/>}>
+                <React.Suspense fallback={<MobileSkeleton/>}>
                     <MobileDepartmentUser/>
                 </React.Suspense>
             </RouterBefore>)
@@ -181,7 +189,7 @@ const routes = [
                 title: '用户管理',
                 auth: 'Department'
             }}>
-                <React.Suspense fallback={<div/>}>
+                <React.Suspense fallback={<MobileSkeleton/>}>
                     <MobileUserManagement/>
                 </React.Suspense>
             </RouterBefore>)
@@ -208,7 +216,7 @@ const routes = [
                 title: 'Loading',
                 titleCN: '加载中',
             }}>
-                <React.Suspense fallback={<div/>}>
+                <React.Suspense fallback={<WebSkeletonLoading/>}>
                     <WebLoading/>
                 </React.Suspense>
             </RouterBefore>

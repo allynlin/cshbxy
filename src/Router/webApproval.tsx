@@ -1,5 +1,6 @@
 import React, {lazy} from "react";
 import {RouterBefore} from "./route";
+import WebSkeleton from "../component/Skeleton/WebSkeleton";
 
 const DepartmentChange = lazy(() => import('../pages/Approval/DepartmentChange'));
 const Travel = lazy(() => import('../pages/Approval/Travel'));
@@ -15,7 +16,7 @@ const webApproval = [
             titleCN: '部门变更',
             auth: 'Leader'
         }}>
-            <React.Suspense fallback={<div/>}>
+            <React.Suspense fallback={<WebSkeleton/>}>
                 <DepartmentChange/>
             </React.Suspense>
         </RouterBefore>)
@@ -26,7 +27,7 @@ const webApproval = [
             titleCN: '请假',
             auth: 'Leader'
         }}>
-            <React.Suspense fallback={<div/>}>
+            <React.Suspense fallback={<WebSkeleton/>}>
                 <Leave/>
             </React.Suspense>
         </RouterBefore>)
@@ -37,7 +38,7 @@ const webApproval = [
             titleCN: '差旅报销',
             auth: 'Leader'
         }}>
-            <React.Suspense fallback={<div/>}>
+            <React.Suspense fallback={<WebSkeleton/>}>
                 <Travel/>
             </React.Suspense>
         </RouterBefore>)
@@ -48,7 +49,7 @@ const webApproval = [
             titleCN: '采购',
             auth: 'Leader'
         }}>
-            <React.Suspense fallback={<div/>}>
+            <React.Suspense fallback={<WebSkeleton/>}>
                 <Procurment/>
             </React.Suspense>
         </RouterBefore>)
@@ -59,7 +60,7 @@ const webApproval = [
             titleCN: '工作汇报',
             auth: 'Leader'
         }}>
-            <React.Suspense fallback={<div/>}>
+            <React.Suspense fallback={<WebSkeleton/>}>
                 <WorkReport/>
             </React.Suspense>
         </RouterBefore>)
