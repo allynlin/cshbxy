@@ -11,11 +11,9 @@ export const menuModeSlice = createSlice({
     reducers: {
         inline: state => {
             state.value = "inline"
-            LStorage.set('cshbxy-oa-menuMode', 'inline')
         },
         vertical: state => {
             state.value = "vertical"
-            LStorage.set('cshbxy-oa-menuMode', 'vertical')
         }
     },
 })

@@ -15,7 +15,6 @@ export const gaussianBlurSlice = createSlice({
                 'data-gaussianBlur',
                 'true'
             )
-            LStorage.set('cshbxy-oa-gaussianBlur', true)
         },
         close: state => {
             state.value = false
@@ -23,7 +22,6 @@ export const gaussianBlurSlice = createSlice({
                 'data-gaussianBlur',
                 'false'
             )
-            LStorage.set('cshbxy-oa-gaussianBlur', false)
         }
     },
 })

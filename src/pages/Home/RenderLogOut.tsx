@@ -7,6 +7,7 @@ import Cookie from "js-cookie";
 import intl from "react-intl-universal";
 import {ExclamationCircleOutlined, LoginOutlined, UserOutlined} from "@ant-design/icons";
 import {useGaussianBlurStyles} from "../../styles/gaussianBlurStyle";
+import {LStorage, SStorage} from "../../component/localStrong";
 
 
 const RenderLogOut = () => {
@@ -26,6 +27,8 @@ const RenderLogOut = () => {
         dispatch(logout())
         dispatch(all())
         Cookie.remove('cshbxy-oa-token');
+        SStorage.clear()
+        LStorage.delete('setting')
         message.success(intl.get('logOutSuccess'))
         navigate('/login', {replace: true})
     }

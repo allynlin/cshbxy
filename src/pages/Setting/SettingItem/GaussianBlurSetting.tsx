@@ -3,6 +3,7 @@ import React from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {close, open} from "../../../component/redux/gaussianBlurSlice";
 import {useNavigate} from "react-router-dom";
+import {settingChange} from "../../../component/settingChange";
 
 const GaussianBlurSetting: React.FC = () => {
 
@@ -16,13 +17,16 @@ const GaussianBlurSetting: React.FC = () => {
         switch (value) {
             case "开启":
                 dispatch(open())
+                settingChange('gaussianBlur', true)
                 navigate('/loading', {state: 3})
                 break;
             case "关闭":
                 dispatch(close())
+                settingChange('gaussianBlur', false)
                 break;
             default:
                 dispatch(close())
+                settingChange('gaussianBlur', false)
         }
     }
 

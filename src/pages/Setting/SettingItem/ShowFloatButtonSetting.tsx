@@ -2,6 +2,7 @@ import {Segmented} from 'antd';
 import React from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {hide, show} from "../../../component/redux/isShowFloatButtonSlice";
+import {settingChange} from "../../../component/settingChange";
 
 const ShowFloatButtonSetting: React.FC = () => {
 
@@ -13,12 +14,15 @@ const ShowFloatButtonSetting: React.FC = () => {
         switch (value) {
             case "显示":
                 dispatch(show())
+                settingChange('showFloatButton', true)
                 break;
             case "隐藏":
                 dispatch(hide())
+                settingChange('showFloatButton', false)
                 break;
             default:
                 dispatch(show())
+                settingChange('showFloatButton', true)
         }
     }
 

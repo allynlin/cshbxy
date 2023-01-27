@@ -11,15 +11,12 @@ export const sysColorSlice = createSlice({
     reducers: {
         lightTheme: state => {
             state.value = 'light'
-            LStorage.set('cshbxy-oa-sysColor', 'light')
         },
         darkTheme: state => {
             state.value = 'dark'
-            LStorage.set('cshbxy-oa-sysColor', 'dark')
         },
         sysTheme: state => {
             state.value = 'sys'
-            LStorage.set('cshbxy-oa-sysColor', 'sys')
         }
     },
 })

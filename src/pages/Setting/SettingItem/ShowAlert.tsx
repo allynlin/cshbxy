@@ -3,6 +3,7 @@ import {useNavigate} from "react-router-dom";
 import {App, Segmented} from "antd";
 import intl from "react-intl-universal";
 import {LStorage} from "../../../component/localStrong";
+import {settingChange} from "../../../component/settingChange";
 
 const ShowAlert: React.FC = () => {
 
@@ -16,8 +17,8 @@ const ShowAlert: React.FC = () => {
         switch (e) {
             case '显示':
                 LStorage.delete('cshbxy-oa-isShowAlert')
-                LStorage.delete('cshbxy-oa-isShowTour')
                 LStorage.delete('cshbxy-oa-settingAlert')
+                settingChange('showAlert', true)
                 message.open({
                     key,
                     type: "success",
@@ -27,8 +28,8 @@ const ShowAlert: React.FC = () => {
                 break;
             case '隐藏':
                 LStorage.set('cshbxy-oa-isShowAlert', false)
-                LStorage.set('cshbxy-oa-isShowTour', false)
                 LStorage.set('cshbxy-oa-settingAlert', false)
+                settingChange('showAlert', false)
                 message.open({
                     key,
                     type: "success",

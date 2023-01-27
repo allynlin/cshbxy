@@ -2,7 +2,7 @@ import {createSlice} from '@reduxjs/toolkit'
 import {LStorage} from "../localStrong";
 
 const initialState: { value: boolean } = {
-    value: false,
+    value: true,
 }
 
 export const isShowFloatButtonSlice = createSlice({
@@ -11,11 +11,9 @@ export const isShowFloatButtonSlice = createSlice({
     reducers: {
         show: state => {
             state.value = true
-            LStorage.set('cshbxy-oa-isShowFloatButton', true)
         },
         hide: state => {
             state.value = false
-            LStorage.set('cshbxy-oa-isShowFloatButton', false)
         }
     },
 })

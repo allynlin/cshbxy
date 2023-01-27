@@ -611,3 +611,26 @@ export const updateDepartmentLeader = async (departmentUid: string, uid: string)
         uid
     });
 }
+
+/**
+ * 获取用户设置
+ * @param {string} uid 用户 uid
+ * @returns {Promise<any>} 返回一个 Promise 对象
+ * @example findUserSetting('123456789') // 获取用户 uid 为 123456789 的设置
+ * @version 1.0.0
+ */
+export const findUserSetting = async (uid: string) => {
+    return promise.Request('/api/user/findUserSetting', MethodType.POST, {uid})
+}
+
+/**
+ * 修改用户设置
+ * @param {string} uid 用户 uid
+ * @param {string} setting 用户设置
+ * @returns {Promise<any>} 返回一个 Promise 对象
+ * @example updateUserSetting('123456789', '123456789') // 修改用户 uid 为 123456789 的设置为 123456789
+ * @version 1.0.0
+ */
+export const updateUserSetting = async (uid: string, setting: string) => {
+    return promise.Request('/api/user/updateUserSetting', MethodType.POST, {uid, setting})
+}

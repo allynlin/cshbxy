@@ -1,4 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit'
+import {SStorage} from "../localStrong";
 
 interface Interface {
     value: object
@@ -14,6 +15,7 @@ export const userInfoSlice = createSlice({
     reducers: {
         setUser: (state, action) => {
             state.value = action.payload
+            SStorage.set('userInfo', action.payload)
         }
     },
 })

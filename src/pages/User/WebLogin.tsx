@@ -9,6 +9,10 @@ import {login} from "../../component/redux/isLoginSlice";
 import {Department, Employee, Leader} from "../../component/redux/userTypeSlice";
 import {setUser} from "../../component/redux/userInfoSlice";
 import intl from "react-intl-universal";
+import {close, open} from "../../component/redux/gaussianBlurSlice";
+import {inline, vertical} from "../../component/redux/menuModeSlice";
+import {hide, show} from "../../component/redux/isShowFloatButtonSlice";
+import {darkTheme, lightTheme, sysTheme} from "../../component/redux/sysColorSlice";
 
 const LoginForm = () => {
 
@@ -64,6 +68,22 @@ const LoginForm = () => {
                 content: res.msg,
                 duration: 0.5,
             }).then(() => {
+                const userSetting = JSON.parse(res.body.setting);
+                const {menuMode, gaussianBlur, showFloatButton, theme} = userSetting;
+                switch (theme) {
+                    case 'light':
+                        dispatch(lightTheme());
+                        break;
+                    case 'dark':
+                        dispatch(darkTheme());
+                        break;
+                    case 'sys':
+                        dispatch(sysTheme());
+                        break;
+                }
+                gaussianBlur ? dispatch(open()) : dispatch(close())
+                menuMode === 'vertical' ? dispatch(vertical()) : dispatch(inline())
+                showFloatButton ? dispatch(show()) : dispatch(hide())
                 dispatch(setUser(res.body))
                 isRemember()
                 loginSuccess(res.body.userType)
