@@ -68,6 +68,7 @@ const LoginForm = () => {
                 content: res.msg,
                 duration: 0.5,
             }).then(() => {
+                if(res.body.setting){
                 const userSetting = JSON.parse(res.body.setting);
                 const {menuMode, gaussianBlur, showFloatButton, theme} = userSetting;
                 switch (theme) {
@@ -84,6 +85,7 @@ const LoginForm = () => {
                 gaussianBlur ? dispatch(open()) : dispatch(close())
                 menuMode === 'vertical' ? dispatch(vertical()) : dispatch(inline())
                 showFloatButton ? dispatch(show()) : dispatch(hide())
+                }
                 dispatch(setUser(res.body))
                 isRemember()
                 loginSuccess(res.body.userType)
