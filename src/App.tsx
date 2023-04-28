@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import intl from 'react-intl-universal';
 import {RouterProvider} from 'react-router-dom'
 import {useDispatch, useSelector} from "react-redux";
-import {App as AntdApp, ConfigProvider} from "antd";
+import {ConfigProvider} from "antd";
 
 import {dark, light} from "./component/redux/themeSlice";
 
@@ -21,14 +21,10 @@ const locales = {
 const MyApp = () => {
     const [language, setLanguage] = useState<any>(zhCN);
 
-    const {message} = AntdApp.useApp();
-
     const dispatch = useDispatch();
 
     const userLanguage = useSelector((state: any) => state.userLanguage.value)
     const sysColor = useSelector((state: any) => state.sysColor.value)
-    const isLogin = useSelector((state: any) => state.isLogin.value)
-    const userType = useSelector((state: any) => state.userType.value)
 
     useEffect(() => {
         getBrowserInfo();
@@ -82,12 +78,4 @@ const MyApp = () => {
     );
 }
 
-const App = () => {
-    return (
-        <AntdApp>
-            <MyApp/>
-        </AntdApp>
-    )
-}
-
-export default App;
+export default MyApp;

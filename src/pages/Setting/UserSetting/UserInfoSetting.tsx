@@ -101,7 +101,7 @@ const UserInfo: React.FC = () => {
                             {
                                 required: true,
                                 message: intl.get('pleaseInputRealName'),
-                                pattern: /^[\u4e00-\u9fa5]{2,4}$/
+                                pattern: /^[\u4e00-\u9fa5]{2,100}$/
                             },
                         ]}
                     >
