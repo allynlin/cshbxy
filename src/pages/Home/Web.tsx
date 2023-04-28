@@ -148,7 +148,7 @@ const App: React.FC = () => {
             {isShowFloatButton ? <ChangeSystem/> : null}
             {isRender ? <WebComponent
                     title="长沙星辰软件有限公司 OA 系统"
-                    copy={`长沙星辰软件有限公司 OA &copy; 2022-2023 Created by allynlin Version：${version}`}
+                    copy={`长沙星辰软件有限公司 OA @ 2022-2023 Created by allynlin Version：${version}`}
                     menu={<SliderMenu/>}
                     headMenu={<HeaderMenu/>}
                     logOut={<RenderLogOut/>}

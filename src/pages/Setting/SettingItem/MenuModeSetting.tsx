@@ -12,11 +12,11 @@ const MenuModeSetting = () => {
 
     const onChange = (e: any) => {
         switch (e) {
-            case "水平":
+            case "水平（inline）":
                 dispatch(inline())
                 settingChange('menuMode', 'inline')
                 break;
-            case "垂直":
+            case "垂直（vertical）":
                 dispatch(vertical())
                 settingChange('menuMode', 'vertical')
                 break;
@@ -28,8 +28,8 @@ const MenuModeSetting = () => {
 
     return (
         <Segmented
-            defaultValue={menuModeSlice === 'inline' ? "水平" : "垂直"}
-            options={['水平', '垂直']}
+            defaultValue={menuModeSlice === 'inline' ? "水平（inline）" : "垂直（vertical）"}
+            options={['水平（inline）', '垂直（vertical）']}
             onChange={(e: any) => onChange(e)}
         />
     );

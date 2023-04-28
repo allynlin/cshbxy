@@ -15,7 +15,7 @@ const ShowAlert: React.FC = () => {
 
     const changeTipsShow = (e: any) => {
         switch (e) {
-            case '显示':
+            case '显示（show）':
                 LStorage.delete('cshbxy-oa-isShowAlert')
                 LStorage.delete('cshbxy-oa-settingAlert')
                 settingChange('showAlert', true)
@@ -26,7 +26,7 @@ const ShowAlert: React.FC = () => {
                 })
                 navigate('/setting')
                 break;
-            case '隐藏':
+            case '隐藏（hide）':
                 LStorage.set('cshbxy-oa-isShowAlert', false)
                 LStorage.set('cshbxy-oa-settingAlert', false)
                 settingChange('showAlert', false)
@@ -48,8 +48,8 @@ const ShowAlert: React.FC = () => {
 
     return (
         <Segmented
-            defaultValue={LStorage.get('cshbxy-oa-isShowAlert') ? "显示" : "隐藏"}
-            options={['显示', '隐藏']}
+            defaultValue={LStorage.get('cshbxy-oa-isShowAlert') ? "显示（show）" : "隐藏（hide）"}
+            options={['显示（show）', '隐藏（hide）']}
             onChange={(e: any) => changeTipsShow(e)}
         />
     )

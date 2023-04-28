@@ -12,11 +12,11 @@ const ShowFloatButtonSetting: React.FC = () => {
 
     const handleChange = (value: string) => {
         switch (value) {
-            case "显示":
+            case "显示（show）":
                 dispatch(show())
                 settingChange('showFloatButton', true)
                 break;
-            case "隐藏":
+            case "隐藏（hide）":
                 dispatch(hide())
                 settingChange('showFloatButton', false)
                 break;
@@ -28,8 +28,8 @@ const ShowFloatButtonSetting: React.FC = () => {
 
     return (
         <Segmented
-            defaultValue={isShowFloatButton ? "显示" : "隐藏"}
-            options={['显示', '隐藏']}
+            defaultValue={isShowFloatButton ? "显示（show）" : "隐藏（hide）"}
+            options={['显示（show）', '隐藏（hide）']}
             onChange={(e: any) => handleChange(e)}
         />
     );

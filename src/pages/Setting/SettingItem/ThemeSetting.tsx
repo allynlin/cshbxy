@@ -12,15 +12,15 @@ const ThemeSetting = () => {
 
     const onChange = (e: any) => {
         switch (e) {
-            case '浅色模式':
+            case '浅色模式（light）':
                 dispatch(lightTheme())
                 settingChange('theme', "light")
                 break;
-            case '深色模式':
+            case '深色模式（dark）':
                 dispatch(darkTheme())
                 settingChange('theme', "dark")
                 break;
-            case '跟随系统':
+            case '跟随系统（sys）':
                 dispatch(sysTheme());
                 settingChange('theme', "sys")
                 break;
@@ -33,20 +33,20 @@ const ThemeSetting = () => {
     const getDefaultValue = () => {
         switch (sysColor) {
             case 'light':
-                return '浅色模式'
+                return '浅色模式（light）'
             case 'dark':
-                return '深色模式'
+                return '深色模式（dark）'
             case 'sys':
-                return '跟随系统'
+                return '跟随系统（sys）'
             default:
-                return '跟随系统'
+                return '跟随系统（sys）'
         }
     }
 
     return (
         <Segmented
             defaultValue={getDefaultValue()}
-            options={['浅色模式', '深色模式', '跟随系统']}
+            options={['浅色模式（light）', '深色模式（dark）', '跟随系统（sys）']}
             onChange={(e: any) => onChange(e)}
         />
     );
