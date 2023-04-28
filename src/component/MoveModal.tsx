@@ -1,9 +1,8 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Modal} from 'antd';
+import {Button, Modal} from 'antd';
 import {useSelector} from "react-redux";
 import {useGaussianBlurStyles} from "../styles/gaussianBlurStyle";
 import Draggable, {DraggableData, DraggableEvent} from "react-draggable";
-import {renderFooter} from 'antd/es/modal/PurePanel';
 
 
 interface Iprops {
@@ -109,11 +108,15 @@ const MoveModal: React.FC<Iprops> = (props) => {
                     <div ref={draggleRef}>{modal}</div>
                 </Draggable>
             )}
-            footer={renderFooter({
-                ...props,
-                onOk: handleOk,
-                onCancel: handleCancel,
-            })}
+            footer={[
+                props.onOk ? <Button key="back" onClick={() => handleOk}>
+                    {props.cancelText}
+                </Button> : null,
+                props.onCancel ? <Button key="submit" type="primary" onClick={() => handleCancel}>
+                    {props.okText}
+                </Button> : null,
+                props.footer
+            ]}
         >
             {props.children}
         </Modal>
