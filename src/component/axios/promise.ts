@@ -25,7 +25,7 @@ export const MethodType = {
  */
 export const Request = (api: String, method = MethodType.GET, params = {}, config = {headers: {}}) => {
     const apiToken = Cookie.get('cshbxy-oa-token');
-    const language = Cookie.get('cshbxy-oa-language') || 'zh';
+    const language = 'zh';
     const baseURL = BaseInfo;
     const data = (method === 'GET') ? 'params' : 'data';
     let headers = {

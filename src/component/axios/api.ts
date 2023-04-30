@@ -47,30 +47,6 @@ export const userRegister = async (username: String, password: String, realeName
     });
 }
 
-/**
- * 校验当前用户状态，自动登录
- * @returns {Promise<any>} 返回一个 Promise
- * @example checkUser() // 校验当前用户状态
- * @version 1.0.0
- * @description 如果在 Cookie 中存在 Token，则会触发自动登录进行用户状态校验
- */
-export const checkUser = async () => {
-    return promise.Request('/api/user/checkUser', MethodType.POST);
-}
-
-/**
- * 获取用户登录记录
- * @param {string} userUid 用户 Uid
- * @returns {Promise<any>} 返回一个 Promise
- * @example findLoginRecord('123456') // 获取用户登录记录,用户 Uid 为 123456
- * @version 1.0.0
- * @description 该接口需要用户登录后才能调用，且获取用户登录记录涉及到后端查询数据库，所以会有一定的延迟
- */
-export const findLoginRecord = async (userUid: string) => {
-    return promise.Request('/api/user/findLoginRecord', MethodType.POST, {
-        userUid
-    });
-}
 
 /**
  * 获取部门列表
@@ -222,11 +198,6 @@ export const submitWorkReport = async (tableUid: String) => {
     return promise.Request('/apply/workReport/add', MethodType.POST, {}, {headers: {tableUid: tableUid}});
 }
 
-// 查询本周是否提交过工作报告
-export const checkLastWeekWorkReport = async () => {
-    return promise.Request('/apply/workReport/checkLastTime', MethodType.POST);
-}
-
 // 查询工作报告列表
 export const findWorkReportList = async () => {
     return promise.Request('/apply/workReport/findApplyList', MethodType.POST);
@@ -271,12 +242,6 @@ export const deleteLeave = async (uid: String) => {
         uid
     });
 }
-
-// 检查上一次提交的请假申请
-export const checkLastTimeLeave = async () => {
-    return promise.Request('/apply/leave/checkLastTime', MethodType.POST);
-}
-
 // 刷新当前请假申请
 export const refreshLeave = async (uid: string) => {
     return promise.Request('/apply/leave/refresh', MethodType.POST, {uid});
@@ -610,27 +575,4 @@ export const updateDepartmentLeader = async (departmentUid: string, uid: string)
         departmentUid,
         uid
     });
-}
-
-/**
- * 获取用户设置
- * @param {string} uid 用户 uid
- * @returns {Promise<any>} 返回一个 Promise 对象
- * @example findUserSetting('123456789') // 获取用户 uid 为 123456789 的设置
- * @version 1.0.0
- */
-export const findUserSetting = async (uid: string) => {
-    return promise.Request('/api/user/findUserSetting', MethodType.POST, {uid})
-}
-
-/**
- * 修改用户设置
- * @param {string} uid 用户 uid
- * @param {string} setting 用户设置
- * @returns {Promise<any>} 返回一个 Promise 对象
- * @example updateUserSetting('123456789', '123456789') // 修改用户 uid 为 123456789 的设置为 123456789
- * @version 1.0.0
- */
-export const updateUserSetting = async (uid: string, setting: string) => {
-    return promise.Request('/api/user/updateUserSetting', MethodType.POST, {uid, setting})
 }
