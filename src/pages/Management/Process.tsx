@@ -158,7 +158,6 @@ const ProcessManagement = () => {
                     cancelText="取消"
                     onCancel={() => setOpen(false)}
                     footer={[
-                        <Button type="default">取消</Button>,
                         <Button type="primary" loading={changeIng} onClick={() => {
                             // 将 targetKeys 拼接成字符串,以 || 分割
                             const process = targetKeys.join('||');
