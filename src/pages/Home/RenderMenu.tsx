@@ -3,6 +3,7 @@ import {
     BarChartOutlined,
     EditOutlined,
     FormOutlined,
+    HomeOutlined,
     Loading3QuartersOutlined,
     LoginOutlined,
     ProjectOutlined,
@@ -12,15 +13,12 @@ import React, {useEffect, useState} from 'react';
 import {Link, useLocation} from 'react-router-dom';
 import {useSelector} from "react-redux";
 import type {MenuProps} from 'antd/es/menu';
-import intl from "react-intl-universal";
-import {useGaussianBlurStyles} from "../../styles/gaussianBlurStyle";
 
 type MenuItem = Required<MenuProps>['items'][number];
 
 function getItem(
     label: React.ReactNode,
     key: React.Key,
-    popupClassName?: string,
     icon?: React.ReactNode,
     children?: MenuItem[],
     type?: 'group',
@@ -31,7 +29,6 @@ function getItem(
         children,
         label,
         type,
-        popupClassName,
     } as MenuItem;
 }
 
@@ -42,83 +39,87 @@ export const SliderMenu: React.FC = () => {
     const location = useLocation()
 
     const userType = useSelector((state: any) => state.userType.value)
-    const menuModeSlice = useSelector((state: any) => state.menuMode.value)
     const userInfo = useSelector((state: any) => state.userInfo.value);
     const isLogin = useSelector((state: any) => state.isLogin.value)
-    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value)
-
-    const gaussianBlurStyles = useGaussianBlurStyles();
 
     useEffect(() => {
         setActiveKey(location.pathname)
     }, [location.pathname])
 
     const employee: MenuProps['items'] = [
-        getItem(intl.get('apply'), 'apply', gaussianBlur ? gaussianBlurStyles.gaussianBlurMenu : '', <EditOutlined/>, [
+        getItem((<Link
+            to={'/home'}>首页</Link>), '/home', <HomeOutlined/>),
+        getItem("申请", 'apply', <EditOutlined/>, [
             getItem((
                 <Link
-                    to={'departmentChange-apply'}>{intl.get('departmentChange')}</Link>), '/departmentChange-apply'),
+                    to={'departmentChange-apply'}>部门变更</Link>), '/departmentChange-apply'),
             getItem((<Link
-                to={'/travel-apply'}>{intl.get('travelReimburse')}</Link>), '/travel-apply'),
+                to={'/travel-apply'}>差旅报销</Link>), '/travel-apply'),
             getItem((
                 <Link
-                    to={'/leave-apply'}>{intl.get('leave')}</Link>), '/leave-apply'),
+                    to={'/leave-apply'}>请假</Link>), '/leave-apply'),
             getItem((<Link
-                to={'/procurement-apply'}>{intl.get('procurement')}</Link>), '/procurement-apply'),
+                to={'/procurement-apply'}>采购</Link>), '/procurement-apply'),
             getItem((<Link
-                to={'/workReport-apply'}>{intl.get('workReport')}</Link>), '/workReport-apply'),
+                to={'/workReport-apply'}>工作报告</Link>), '/workReport-apply'),
         ]),
-        getItem(intl.get('record'), 'record', gaussianBlur ? gaussianBlurStyles.gaussianBlurMenu : '',
+        getItem("申请记录", 'record',
             <BarChartOutlined/>, [
                 getItem((
                     <Link
-                        to={'/departmentChange-Record'}>{intl.get('departmentChange')}</Link>), '/departmentChange-Record'),
+                        to={'/departmentChange-Record'}>部门变更</Link>), '/departmentChange-Record'),
                 getItem((<Link
-                    to={'/travel-Record'}>{intl.get('travelReimburse')}</Link>), '/travel-Record'),
+                    to={'/travel-Record'}>差旅报销</Link>), '/travel-Record'),
                 getItem((<Link
-                    to={'/leave-Record'}>{intl.get('leave')}</Link>), '/leave-Record'),
+                    to={'/leave-Record'}>请假</Link>), '/leave-Record'),
                 getItem((
                     <Link
-                        to={'/procurement-Record'}>{intl.get('procurement')}</Link>), '/procurement-Record'),
+                        to={'/procurement-Record'}>采购</Link>), '/procurement-Record'),
                 getItem((<Link
-                    to={'/workReport-Record'}>{intl.get('workReport')}</Link>), '/workReport-Record'),
+                    to={'/workReport-Record'}>工作报告</Link>), '/workReport-Record'),
             ]),
     ];
     const department: MenuProps['items'] = [
         getItem((<Link
-                to={'/departmentRegister'}>{intl.get('register')}</Link>), '/departmentRegister', gaussianBlur ? gaussianBlurStyles.gaussianBlurMenu : '',
+            to={'/home'}>首页</Link>), '/home', <HomeOutlined/>),
+        getItem((<Link
+                to={'/departmentRegister'}>添加用户</Link>), '/departmentRegister',
             <FormOutlined/>),
         getItem(<Link
-                to={'/departmentUser-management'}>{intl.get('departmentUser')}</Link>, '/departmentUser-management', gaussianBlur ? gaussianBlurStyles.gaussianBlurMenu : '',
+                to={'/departmentUser-management'}>用户管理</Link>, '/departmentUser-management',
             <TeamOutlined/>),
     ];
     const leader: MenuProps['items'] = [
-        getItem(intl.get('approve'), 'approve', gaussianBlur ? gaussianBlurStyles.gaussianBlurMenu : '',
+        getItem((<Link
+            to={'/home'}>首页</Link>), '/home', <HomeOutlined/>),
+        getItem("审批", 'approve',
             <ProjectOutlined/>, [
                 getItem(<Link
-                    to={'/departmentChange-approval'}>{intl.get('departmentChange')}</Link>, '/departmentChange-approval'),
-                getItem(<Link to={'/leave-approval'}>{intl.get('leave')}</Link>, '/leave-approval'),
-                getItem(<Link to={'/travel-approval'}>{intl.get('travelReimburse')}</Link>, '/travel-approval'),
+                    to={'/departmentChange-approval'}>部门变更</Link>, '/departmentChange-approval'),
+                getItem(<Link to={'/leave-approval'}>请假</Link>, '/leave-approval'),
+                getItem(<Link to={'/travel-approval'}>差旅报销</Link>, '/travel-approval'),
                 getItem(<Link
-                    to={'/procurement-approval'}>{intl.get('procurement')}</Link>, '/procurement-approval'),
+                    to={'/procurement-approval'}>采购</Link>, '/procurement-approval'),
                 getItem(<Link
-                    to={'/workReport-approval'}>{intl.get('workReport')}</Link>, '/workReport-approval'),
+                    to={'/workReport-approval'}>工作报告</Link>, '/workReport-approval'),
             ]),
     ];
     const adminMenu: MenuProps['items'] = [
+        getItem((<Link
+            to={'/home'}>首页</Link>), '/home', <HomeOutlined/>),
         getItem(<Link
-                to={'/user-management'}>{intl.get('userManagement')}</Link>, '/user-management', gaussianBlur ? gaussianBlurStyles.gaussianBlurMenu : '',
+                to={'/user-management'}>用户管理</Link>, '/user-management',
             <TeamOutlined/>),
         getItem((<Link
-                to={'/register'}>{intl.get('addDepartment')}</Link>), '/register', gaussianBlur ? gaussianBlurStyles.gaussianBlurMenu : '',
+                to={'/register'}>添加部门</Link>), '/register',
             <FormOutlined/>),
         getItem(<Link
-                to={'/process-management'}>{intl.get('processManagement')}</Link>, '/process-management', gaussianBlur ? gaussianBlurStyles.gaussianBlurMenu : '',
+                to={'/process-management'}>流程管理</Link>, '/process-management',
             <Loading3QuartersOutlined/>),
     ];
     const errorMenu: MenuProps['items'] = [
         getItem((<Link
-                to={'/login'}>{intl.get('login')}</Link>), '/login', gaussianBlur ? gaussianBlurStyles.gaussianBlurMenu : '',
+                to={'/login'}>登录</Link>), '/login',
             <LoginOutlined/>)
     ];
 
@@ -144,40 +145,8 @@ export const SliderMenu: React.FC = () => {
     return (
         <Menu
             selectedKeys={[activeKey]}
-            mode={menuModeSlice === 'inline' ? 'inline' : 'vertical'}
+            mode='inline'
             items={getMenu()}
         />
     )
-}
-
-export const HeaderMenu: React.FC = () => {
-
-    const [activeKey, setActiveKey] = useState<string>('');
-
-    const location = useLocation()
-
-    useEffect(() => {
-        setActiveKey(location.pathname)
-    }, [location.pathname])
-
-    const items: MenuProps['items'] = [
-        getItem((<Link
-            to={'/home'}>{intl.get('home')}</Link>), '/home'),
-        getItem(intl.get('setting'), 'setting', '', '', [
-            getItem((<Link
-                to={'/setting'}>{intl.get('setting')}</Link>), '/setting'),
-            getItem((<Link
-                to={'/token'}>{intl.get('tokenSetting')}</Link>), '/token')
-        ]),
-
-    ];
-
-    return (
-        <Menu
-            selectedKeys={[activeKey]}
-            mode="horizontal"
-            items={items}
-        />
-    )
-
 }

@@ -1,78 +1,35 @@
 import React, {useEffect, useState} from 'react';
-import {App, Button, Form, Modal, Result, Typography} from 'antd';
+import {App, Button, Form, Modal, Typography} from 'antd';
 import {useNavigate} from 'react-router-dom';
-import intl from "react-intl-universal";
 
-import {checkLastTimeUploadFiles, checkLastWeekWorkReport, submitWorkReport} from "../../component/axios/api";
+import {checkLastTimeUploadFiles, submitWorkReport} from "../../component/axios/api";
 import {DownLoadURL, tableName} from "../../baseInfo";
 import FileUpLoad from "../../component/axios/FileUpLoad";
-import {ExclamationCircleOutlined, LoadingOutlined} from "@ant-design/icons";
+import {ExclamationCircleOutlined} from "@ant-design/icons";
 import {useStyles} from "../../styles/webStyle";
-import logo from "../../images/logo.png";
-import {useGaussianBlurStyles} from "../../styles/gaussianBlurStyle";
-import {useSelector} from "react-redux";
 
 const {Title} = Typography;
 
-const antIcon = <LoadingOutlined style={{fontSize: 24}} spin/>;
 
 const ChangeForm = () => {
 
     const classes = useStyles();
-    const gaussianBlurClasses = useGaussianBlurStyles();
 
     const {message} = App.useApp();
 
-    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value);
-
     const navigate = useNavigate();
-    // 防止反复查询变更记录
-    const [isQuery, setIsQuery] = useState<boolean>(false);
-    const [waitTime, setWaitTime] = useState<number>(0);
     // 文件上传列表
     const [fileList, setFileList] = useState<[]>([]);
-    const [isRenderResult, setIsRenderResult] = useState<boolean>(true);
-    const [RenderResultTitle, setRenderResultTitle] = useState<String>(intl.get('obtainLastTimeUploadWorkReport'));
     // 监听表单数据
     const [form] = Form.useForm();
 
     useEffect(() => {
-        checkIsSubmitWorkReport();
+        checkUploadFilesList();
     }, [])
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            if (waitTime > 1) {
-                setIsQuery(true)
-                setWaitTime(e => e - 1)
-                setIsQuery(true)
-            } else {
-                setIsQuery(false)
-            }
-        }, 1000)
-        return () => {
-            clearTimeout(timer)
-        }
-    }, [waitTime])
-
-    // 查询本周是否已经提交过工作报告
-    const checkIsSubmitWorkReport = () => {
-        setIsQuery(true)
-        setWaitTime(10)
-        checkLastWeekWorkReport().then(res => {
-            if (res.code !== 200) {
-                setRenderResultTitle(res.msg)
-            }
-            setRenderResultTitle(intl.get('obtainLastTimeUploadFiles'))
-            checkUploadFilesList();
-        })
-    }
-
 
     // 查询上次上传的文件列表
     const checkUploadFilesList = () => {
         checkLastTimeUploadFiles(tableName.workReport).then(res => {
-            setIsRenderResult(false)
             // 遍历 res.body
             const fileList = res.body.map((item: any) => {
                 return {
@@ -96,9 +53,9 @@ const ChangeForm = () => {
             navigate('/success', {
                 state: {
                     object: {
-                        title: intl.get('workReport') + ' ' + intl.get('submitSuccess'),
-                        describe: intl.get('waitApprove'),
-                        toPage: intl.get('showApplyList'),
+                        title: "工作报告提交成功",
+                        describe: "等待审批",
+                        toPage: "查看申请记录",
                         toURL: '/workReport-Record',
                     }
                 }
@@ -108,10 +65,8 @@ const ChangeForm = () => {
 
     const showConfirm = () => {
         Modal.confirm({
-            title: intl.get('confirm'),
+            title: "确认",
             icon: <ExclamationCircleOutlined/>,
-            className: gaussianBlur ? gaussianBlurClasses.gaussianBlurModal : '',
-            mask: !gaussianBlur,
             onOk() {
                 submitForm();
             }
@@ -126,21 +81,9 @@ const ChangeForm = () => {
         form.resetFields();
     };
 
-    return isRenderResult ? (
-        <Result
-            status="info"
-            icon={<img src={logo} alt="logo" className={classes.webWaitingImg}/>}
-            title={RenderResultTitle}
-            extra={
-                <Button disabled={isQuery} type="primary" onClick={() => {
-                    checkUploadFilesList()
-                }}>
-                    {isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}
-                </Button>
-            }
-        />) : (
+    return (
         <div className={classes.cshbxy100Per}>
-            <Title level={2}>{intl.get('workReport')}</Title>
+            <Title level={2}>工作报告</Title>
             <Form
                 form={form}
                 name="basic"
@@ -151,9 +94,9 @@ const ChangeForm = () => {
                 }}
             >
                 <Form.Item
-                    label={intl.get('workReport')}
+                    label="工作报告"
                     name="file"
-                    rules={[{required: true, message: intl.get('pleaseUploadWorkReport')}]}
+                    rules={[{required: true, message: "请上传工作报告"}]}
                 >
                     <FileUpLoad
                         setTableName={tableName.workReport}
@@ -174,12 +117,8 @@ const ChangeForm = () => {
                 </Form.Item>
 
                 <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                        {intl.get('submit')}
-                    </Button>
-                    <Button htmlType="button" onClick={onReset} style={{marginLeft: 8}}>
-                        {intl.get('reset')}
-                    </Button>
+                    <Button type="primary" htmlType="submit">提交</Button>
+                    <Button htmlType="button" onClick={onReset} style={{marginLeft: 8}}>重置</Button>
                 </Form.Item>
             </Form>
         </div>

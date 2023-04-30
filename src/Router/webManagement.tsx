@@ -10,8 +10,7 @@ const webManagement = [
     {
         path: 'user-management',
         element: (<RouterBefore meta={{
-            title: 'User management',
-            titleCN: '用户管理',
+            title: '用户管理',
             auth: 'Department'
         }}>
             <React.Suspense fallback={<WebSkeleton/>}>
@@ -21,8 +20,7 @@ const webManagement = [
     }, {
         path: 'departmentUser-management',
         element: (<RouterBefore meta={{
-            title: 'Department user',
-            titleCN: '部门用户',
+            title: '部门用户',
             auth: 'Department'
         }}>
             <React.Suspense fallback={<WebSkeleton/>}>
@@ -32,8 +30,7 @@ const webManagement = [
     }, {
         path: 'process-management',
         element: (<RouterBefore meta={{
-            title: 'Process management',
-            titleCN: '流程管理',
+            title: '流程管理',
             auth: 'Department'
         }}>
             <React.Suspense fallback={<WebSkeleton/>}>

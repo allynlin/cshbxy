@@ -1,27 +1,40 @@
-import React, {useEffect, useState} from "react";
-import {Button, Form, Input, message, Modal, Radio} from "antd";
-import intl from "react-intl-universal";
+import React, {useEffect, useRef, useState} from "react";
+import {Button, Divider, Form, Input, InputRef, message, Modal, Select, Space} from "antd";
 import {updateUserInfo} from "../../../component/axios/api";
-import {useGaussianBlurStyles} from "../../../styles/gaussianBlurStyle";
-import {useSelector} from "react-redux";
+import {PlusOutlined} from "@ant-design/icons";
 
 interface propsCheck {
     info: any;
     getChange: any;
 }
 
+let index = 0;
+
 export default function ChangeUserInfo(props: propsCheck) {
-
-    const gaussianBlurClasses = useGaussianBlurStyles();
-
-    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value);
 
     // 打开修改弹窗
     const [open, setOpen] = useState(false);
     // 给按钮添加 loading 并且禁用
     const [loading, setLoading] = useState(false);
+    const [items, setItems] = useState(['Man(男)', 'Woman(女)', 'Cis-gender woman', 'Transgender Woman', 'Woman of Trans experience', 'Woman with a history of gender transition', 'Trans feminine', 'Feminine-of-center', 'MTF (male-to-female)', 'Demigirl', 'T-girl', 'Transgirl', 'Sistergirl', 'Cis-gender man', 'Transgender man', 'Man of Trans experience', 'Man with a history of gender transition', 'Trans masculine', 'Masculine-of-center', 'FTM (female-to-male)', 'Demiboy', 'T-boy', 'Transguy', 'Brotherboy', 'Trans', 'Transgender', 'Transsexual', 'Non-binary', 'Genderqueer', 'Agender', 'Xenogender', 'Fem', 'Femme', 'Butch', 'Boi', 'Stud', 'Aggressive (AG)', 'Androgyne', 'Tomboy', 'Gender outlaw', 'Gender non-conforming', 'Gender variant', 'Gender fluid', 'Genderfuck', 'Bi-gender', 'Multi-gender', 'Pangender', 'Gender creative', 'Gender expansive', 'Third gender', 'Neutrois', 'Omnigender', 'Polygender', 'Graygender', 'Intergender', 'Maverique', 'Novigender', 'Two-spirit', 'Hijra', 'Kathoey', 'Muxe', 'Khanith/Xanith', 'X-gender', 'MTX', 'FTX', 'Bakla', 'Mahu', 'Fa’afafine', 'Waria', 'Palao’ana', 'Ashtime', 'Mashoga', 'Mangaiko', 'Chibados', 'Tida wena', 'Bixa’ah', 'Alyha', 'Hwame', 'Lhamana', 'Nadleehi', 'Dilbaa', 'Winkte', 'Ninauposkitzipxpe', 'Machi-embra', 'Quariwarmi', 'Chuckchi', 'Whakawahine', 'Fakaleiti', 'Calabai', 'Calalai', 'Bissu', 'Acault', 'Travesti', 'Questioning', 'I don’t use labels', 'Declined', 'Not listed']);
+    const [name, setName] = useState('');
+    const inputRef = useRef<InputRef>(null);
 
     const [form] = Form.useForm();
+
+    // 用于英文性别
+    const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setName(event.target.value);
+    };
+
+    const addItem = (e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => {
+        e.preventDefault();
+        setItems([...items, name || `New item ${index++}`]);
+        setName('');
+        setTimeout(() => {
+            inputRef.current?.focus();
+        }, 0);
+    };
 
     useEffect(() => {
         form.setFieldsValue({
@@ -36,7 +49,7 @@ export default function ChangeUserInfo(props: propsCheck) {
         setLoading(true);
         updateUserInfo(props.info.uid, values.realeName, values.gender, values.tel, values.email).then(res => {
             if (res.code === 200) {
-                message.success(intl.get('changeSuccess'));
+                message.success("修改成功");
                 const newContent = {
                     realeName: values.realeName,
                     gender: values.gender,
@@ -61,16 +74,14 @@ export default function ChangeUserInfo(props: propsCheck) {
                     setOpen(true);
                 }}
             >
-                {intl.get('changeUserInfo')}
+                修改用户信息
             </Button>
             <Modal
                 open={open}
-                className={gaussianBlur ? gaussianBlurClasses.gaussianBlurModal : ''}
-                mask={!gaussianBlur}
-                title={intl.get("changeUserInfo")}
-                okText={intl.get('ok')}
+                title="修改用户信息"
+                okText="确认"
                 confirmLoading={loading}
-                cancelText={intl.get('cancel')}
+                cancelText="取消"
                 onCancel={() => setOpen(false)}
                 onOk={() => {
                     form
@@ -89,12 +100,12 @@ export default function ChangeUserInfo(props: propsCheck) {
                     name="form_in_modal"
                 >
                     <Form.Item
-                        label={intl.get('realName')}
+                        label="真实姓名"
                         name="realeName"
                         rules={[
                             {
                                 required: true,
-                                message: intl.get('pleaseInputRealName'),
+                                message: "请输入真实姓名",
                             },
                         ]}
                     >
@@ -102,28 +113,46 @@ export default function ChangeUserInfo(props: propsCheck) {
                     </Form.Item>
 
                     <Form.Item
-                        label={intl.get('gender')}
+                        label="性别"
                         name="gender"
                         rules={[
                             {
                                 required: true,
-                                message: intl.get('pleaseChooseGender'),
+                                message: "请选择性别",
                             },
                         ]}
                     >
-                        <Radio.Group buttonStyle="solid" style={{display: "flex"}}>
-                            <Radio.Button value="男">{intl.get('male')}</Radio.Button>
-                            <Radio.Button value="女">{intl.get('female')}</Radio.Button>
-                        </Radio.Group>
+                        <Select
+                            style={{width: 300}}
+                            placeholder="请选择性别"
+                            dropdownRender={(menu) => (
+                                <>
+                                    {menu}
+                                    <Divider style={{margin: '8px 0'}}/>
+                                    <Space style={{padding: '0 8px 4px'}}>
+                                        <Input
+                                            placeholder="Please enter item"
+                                            ref={inputRef}
+                                            value={name}
+                                            onChange={onNameChange}
+                                        />
+                                        <Button type="text" icon={<PlusOutlined/>} onClick={addItem}>
+                                            Add item
+                                        </Button>
+                                    </Space>
+                                </>
+                            )}
+                            options={items.map((item) => ({label: item, value: item}))}
+                        />
                     </Form.Item>
 
                     <Form.Item
-                        label={intl.get('tel')}
+                        label="联系电话"
                         name="tel"
                         rules={[
                             {
                                 required: true,
-                                message: intl.get('pleaseInputTel'),
+                                message: "请输入联系电话",
                                 pattern: /^1[3456789]\d{9}$/
                             },
                         ]}
@@ -132,12 +161,12 @@ export default function ChangeUserInfo(props: propsCheck) {
                     </Form.Item>
 
                     <Form.Item
-                        label={intl.get('email')}
+                        label="电子邮件地址"
                         name="email"
                         rules={[
                             {
                                 required: true,
-                                message: intl.get('pleaseInputEmail'),
+                                message: "请输入电子邮件地址",
                                 pattern: /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/,
                             },
                         ]}

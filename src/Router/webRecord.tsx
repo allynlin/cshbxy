@@ -7,14 +7,12 @@ const Travel = lazy(() => import('../pages/Record/Travel'));
 const Procurment = lazy(() => import('../pages/Record/Procurement'));
 const Leave = lazy(() => import('../pages/Record/Leave'));
 const WorkReport = lazy(() => import('../pages/Record/WorkReport'));
-const Login = lazy(() => import('../pages/Index/LoginRecord'));
 
 const record = [
     {
         path: 'departmentChange-record',
         element: (<RouterBefore meta={{
-            title: 'Department Change Record',
-            titleCN: '变更部门记录',
+            title: '变更部门记录',
             auth: 'Employee'
         }}>
             <React.Suspense fallback={<WebSkeleton/>}>
@@ -24,8 +22,7 @@ const record = [
     }, {
         path: 'travel-record',
         element: (<RouterBefore meta={{
-            title: 'Travel Reimbursement Record',
-            titleCN: '差旅报销记录',
+            title: '差旅报销记录',
             auth: 'Employee'
         }}>
             <React.Suspense fallback={<WebSkeleton/>}>
@@ -35,8 +32,7 @@ const record = [
     }, {
         path: 'leave-record',
         element: (<RouterBefore meta={{
-            title: 'Leave Record',
-            titleCN: '请假记录',
+            title: '请假记录',
             auth: 'Employee'
         }}>
             <React.Suspense fallback={<WebSkeleton/>}>
@@ -46,8 +42,7 @@ const record = [
     }, {
         path: 'workReport-record',
         element: (<RouterBefore meta={{
-            title: 'WorkReport Record',
-            titleCN: '工作报告记录',
+            title: '工作报告记录',
             auth: 'Employee'
         }}>
             <React.Suspense fallback={<WebSkeleton/>}>
@@ -57,25 +52,13 @@ const record = [
     }, {
         path: 'procurement-record',
         element: (<RouterBefore meta={{
-            title: 'Procurement',
-            titleCN: '采购记录',
+            title: '采购记录',
             auth: 'Employee'
         }}>
             <React.Suspense fallback={<WebSkeleton/>}>
                 <Procurment/>
             </React.Suspense>
         </RouterBefore>)
-    }, {
-        path: 'login-record',
-        element: (<RouterBefore meta={{
-            title: 'Login Record',
-            titleCN: '登录记录',
-        }}>
-            <React.Suspense fallback={<WebSkeleton/>}>
-                <Login/>
-            </React.Suspense>
-        </RouterBefore>)
-    }
-]
+    }]
 
 export default record;

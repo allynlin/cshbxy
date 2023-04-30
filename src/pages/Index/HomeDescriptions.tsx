@@ -1,23 +1,16 @@
 import React from "react";
-import intl from "react-intl-universal";
-import {Button, Descriptions, Typography} from "antd";
+import {Descriptions, Typography} from "antd";
 import {useSelector} from "react-redux";
-import {useNavigate} from "react-router-dom";
 
 const {Title} = Typography;
 
 const HomeDescriptions: React.FC = () => {
 
-    const navigate = useNavigate();
-
     const userInfo = useSelector((state: { userInfo: { value: any } }) => state.userInfo.value)
-
     return (
         <Descriptions
             title={<div style={{display: "flex"}}>
-                <Title level={3}>{intl.get('hello') + ',' + userInfo.realeName}</Title>
-                &nbsp;&nbsp;
-                <Button type="primary" onClick={() => navigate('/login-Record')}>{intl.get('loginRecord')}</Button>
+                <Title level={3}>{'你好,' + userInfo.realeName}</Title>
             </div>}
             bordered
             layout="vertical"
@@ -25,31 +18,31 @@ const HomeDescriptions: React.FC = () => {
             <Descriptions.Item label={'UID'}>
                 {userInfo.uid}
             </Descriptions.Item>
-            <Descriptions.Item label={intl.get('username')}>
+            <Descriptions.Item label="用户名">
                 {userInfo.username}
             </Descriptions.Item>
-            <Descriptions.Item label={intl.get('realName')}>
+            <Descriptions.Item label="真实姓名">
                 {userInfo.realeName}
             </Descriptions.Item>
-            <Descriptions.Item label={intl.get('gender')}>
+            <Descriptions.Item label="性别">
                 {userInfo.gender}
             </Descriptions.Item>
-            <Descriptions.Item label={intl.get('tel')}>
+            <Descriptions.Item label="联系电话">
                 {userInfo.tel}
             </Descriptions.Item>
-            <Descriptions.Item label={intl.get('email')}>
+            <Descriptions.Item label="电子邮件地址">
                 {userInfo.email}
             </Descriptions.Item>
-            <Descriptions.Item label={intl.get('createTime')}>
+            <Descriptions.Item label="用户创建时间">
                 {userInfo.create_time}
             </Descriptions.Item>
-            <Descriptions.Item label={intl.get('updateTime')}>
+            <Descriptions.Item label="最后更新时间">
                 {userInfo.update_time}
             </Descriptions.Item>
-            <Descriptions.Item label={intl.get('status')}>
-                {userInfo.status === 0 ? intl.get('normal') : intl.get('disabled')}
+            <Descriptions.Item label="用户状态">
+                {userInfo.status === 0 ? "正常" : "禁用"}
             </Descriptions.Item>
-            {userInfo.departmentUid ? <Descriptions.Item label={intl.get('department')}>
+            {userInfo.departmentUid ? <Descriptions.Item label="管理员">
                 {userInfo.departmentUid}
             </Descriptions.Item> : null}
         </Descriptions>

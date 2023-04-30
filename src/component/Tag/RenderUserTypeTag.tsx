@@ -1,19 +1,18 @@
-import intl from "react-intl-universal";
 import {Tag} from "antd";
 import React from "react";
 
 export const RenderUserTypeTag = (item: any) => {
     if (item.departmentKey) {
-        return <Tag color='#531dab'>{intl.get('directLeadership')}</Tag>
+        return <Tag color='#531dab'>直属领导</Tag>
     }
     switch (item.userType) {
         case 'Department':
-            return <Tag color='#ffa940'>{intl.get('department')}</Tag>
+            return <Tag color='#ffa940'>管理员</Tag>
         case 'Leader':
-            return <Tag color='#9254de'>{intl.get('leader')}</Tag>
+            return <Tag color='#9254de'>领导</Tag>
         case 'Employee':
-            return <Tag color='#7cb305'>{intl.get('employee')}</Tag>
+            return <Tag color='#7cb305'>员工</Tag>
         default:
-            return <Tag color={"processing"}>{intl.get('unKnowUserType')}</Tag>
+            return <Tag color={"processing"}>未知用户类型</Tag>
     }
 }

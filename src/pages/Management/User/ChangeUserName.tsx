@@ -1,9 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Button, Form, Input, message, Modal} from "antd";
-import intl from "react-intl-universal";
 import {checkUsername, updateUserName} from "../../../component/axios/api";
-import {useGaussianBlurStyles} from "../../../styles/gaussianBlurStyle";
-import {useSelector} from "react-redux";
 
 interface propsCheck {
     info: any;
@@ -11,10 +8,6 @@ interface propsCheck {
 }
 
 export default function ChangeUserNamePreview(props: propsCheck) {
-
-    const gaussianBlurClasses = useGaussianBlurStyles();
-
-    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value);
 
     // 打开修改弹窗
     const [open, setOpen] = useState(false);
@@ -48,7 +41,7 @@ export default function ChangeUserNamePreview(props: propsCheck) {
         setLoading(true);
         updateUserName(props.info.uid, values.username).then(res => {
             if (res.code === 200) {
-                message.success(intl.get("changeSuccess"));
+                message.success("修改成功");
                 props.getChange(values.username)
                 setOpen(false);
             }
@@ -66,21 +59,17 @@ export default function ChangeUserNamePreview(props: propsCheck) {
                 onClick={() => {
                     setOpen(true);
                 }}
-            >
-                {intl.get('changeUsername')}
-            </Button>
+            >修改用户名</Button>
             <Modal
                 open={open}
-                className={gaussianBlur ? gaussianBlurClasses.gaussianBlurModal : ''}
-                mask={!gaussianBlur}
-                title={intl.get("changeUsername")}
-                okText={intl.get('ok')}
-                cancelText={intl.get('cancel')}
+                title="修改用户名"
+                okText="确认"
+                cancelText="取消"
                 confirmLoading={loading}
                 onCancel={() => setOpen(false)}
                 onOk={() => {
                     if (!usernameUse) {
-                        message.error(intl.get("usernameIsExist"))
+                        message.error("用户名已存在")
                         return
                     }
                     form
@@ -100,12 +89,12 @@ export default function ChangeUserNamePreview(props: propsCheck) {
                     name="form_in_modal"
                 >
                     <Form.Item
-                        label={intl.get('username')}
+                        label="用户名"
                         name="username"
                         rules={[
                             {
                                 required: true,
-                                message: intl.get('pleaseInputUsername'),
+                                message: "请输入用户名",
                                 pattern: /^[a-zA-Z0-9]{1,20}$/
                             },
                         ]}

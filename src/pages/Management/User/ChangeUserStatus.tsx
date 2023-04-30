@@ -1,10 +1,7 @@
 import {Button, message, Popconfirm} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {updateUserStatus} from "../../../component/axios/api";
-import intl from "react-intl-universal";
 import {RenderUserStatusColor} from "../../../component/Tag/RenderUserStatusColor";
-import {useGaussianBlurStyles} from "../../../styles/gaussianBlurStyle";
-import {useSelector} from "react-redux";
 
 interface propsCheck {
     info: any;
@@ -13,10 +10,6 @@ interface propsCheck {
 
 export default function ChangeUserStatus(props: propsCheck) {
 
-    const gaussianBlurClasses = useGaussianBlurStyles();
-
-    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value);
-
     const [open, setOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [userStatus, setUserStatus] = useState<string>('');
@@ -24,13 +17,13 @@ export default function ChangeUserStatus(props: propsCheck) {
     useEffect(() => {
         switch (props.info.status) {
             case 0:
-                setUserStatus(intl.get('disabled'));
+                setUserStatus("禁用");
                 break;
             case -1:
-                setUserStatus(intl.get('normal'));
+                setUserStatus("正常");
                 break;
             default:
-                setUserStatus(intl.get('statusError'));
+                setUserStatus("状态错误");
                 break;
         }
     }, [props.info.status])
@@ -44,20 +37,18 @@ export default function ChangeUserStatus(props: propsCheck) {
 
         let status: number;
         switch (userStatus) {
-            case 'Normal':
             case '正常':
                 status = 0;
                 break;
-            case 'Disabled':
             case '禁用':
                 status = -1;
                 break;
             default:
-                message.error(intl.get('statusError'));
+                message.error("状态错误");
                 return;
         }
         updateUserStatus(props.info.uid, status).then(() => {
-            message.success(intl.get('changeSuccess'));
+            message.success("修改成功");
         }).finally(() => {
             setConfirmLoading(false);
             setOpen(false);
@@ -71,8 +62,7 @@ export default function ChangeUserStatus(props: propsCheck) {
 
     return (
         <Popconfirm
-            overlayClassName={gaussianBlur ? gaussianBlurClasses.gaussianBlurPopconfirm : ''}
-            title={intl.get('confirmChangeUserStatus', {status: userStatus})}
+            title={`确认修改用户状态为${userStatus}吗？`}
             open={open}
             onConfirm={handleOk}
             okButtonProps={{loading: confirmLoading}}

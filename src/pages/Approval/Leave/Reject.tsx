@@ -1,9 +1,6 @@
 import {Button, Form, Input, message, Modal} from 'antd';
 import React, {useState} from 'react';
 import {rejectLeave} from "../../../component/axios/api";
-import intl from "react-intl-universal";
-import {useGaussianBlurStyles} from "../../../styles/gaussianBlurStyle";
-import {useSelector} from "react-redux";
 
 interface Values {
     title: string;
@@ -26,19 +23,13 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
                                                                    }) => {
     const [form] = Form.useForm();
 
-    const gaussianBlurClasses = useGaussianBlurStyles();
-
-    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value)
-
     return (
         <Modal
             open={open}
-            className={gaussianBlur ? gaussianBlurClasses.gaussianBlurModal : ''}
-            mask={!gaussianBlur}
-            title={intl.get('confirm')}
-            okText={intl.get('reject')}
+            title="确认"
+            okText="驳回"
             okType="danger"
-            cancelText={intl.get('cancel')}
+            cancelText="取消"
             onCancel={onCancel}
             confirmLoading={onLoading}
             onOk={() => {
@@ -60,8 +51,8 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
             >
                 <Form.Item
                     name="reject_reason"
-                    label={intl.get('rejectReason')}
-                    rules={[{required: true, message: intl.get('pleaseInputRejectReason')}]}
+                    label="驳回原因"
+                    rules={[{required: true, message: "请输入驳回原因"}]}
                 >
                     <Input.TextArea rows={4} maxLength={100} showCount={true}/>
                 </Form.Item>
@@ -84,7 +75,6 @@ const Reject = (props: any) => {
             props.getNewContent(true);
         }).catch(err => {
             setIsLoading(false);
-            message.error(err.msg);
         })
     };
 
@@ -97,7 +87,7 @@ const Reject = (props: any) => {
                 }}
                 danger
             >
-                {intl.get('reject')}
+                驳回
             </Button>
             <CollectionCreateForm
                 open={open}

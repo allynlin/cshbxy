@@ -1,12 +1,9 @@
 import {Button, List, Modal, Spin, Steps, Tag, Transfer, Typography} from 'antd';
 import React, {useEffect, useState} from 'react';
-import intl from "react-intl-universal";
 import {ExclamationCircleOutlined, LoadingOutlined, SearchOutlined} from "@ant-design/icons";
 import {findAllProcess, findProcessUser, updateProcess} from "../../component/axios/api";
-import {useSelector} from "react-redux";
 
 import {useStyles} from "../../styles/webStyle";
-import {useGaussianBlurStyles} from "../../styles/gaussianBlurStyle";
 import MoveModal from "../../component/MoveModal";
 
 const {Title} = Typography;
@@ -23,7 +20,6 @@ const antIcon = <LoadingOutlined style={{fontSize: 24}} spin/>;
 const ProcessManagement = () => {
 
     const classes = useStyles();
-    const gaussianBlurClasses = useGaussianBlurStyles();
 
     const [isQuery, setIsQuery] = useState<boolean>(false);
     const [waitTime, setWaitTime] = useState<number>(0);
@@ -31,9 +27,7 @@ const ProcessManagement = () => {
     const [dataSource, setDataSource] = useState<any>([]);
     const [content, setContent] = useState<any>(null);
     const [open, setOpen] = useState(false);
-
-    const tableSize = useSelector((state: any) => state.tableSize.value);
-    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value);
+    const [changeIng, setChangeIng] = useState(false);
 
     useEffect(() => {
         getProcessPerson();
@@ -108,7 +102,7 @@ const ProcessManagement = () => {
         // 过滤 processArray，将其中的 nowDepartment 改为当前部门直属领导
         const processArrayFilter = processArray.map((item: string) => {
             if (item === 'nowDepartment') {
-                return intl.get('directLeadership')
+                return "直属领导"
             } else {
                 return item
             }
@@ -143,7 +137,7 @@ const ProcessManagement = () => {
     const RenderGetDataSourceButton = () => {
         return (
             <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
-                    onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
+                    onClick={getDataSource}>{isQuery ? `刷新(${waitTime})` : "刷新"}</Button>
         )
     }
 
@@ -152,41 +146,42 @@ const ProcessManagement = () => {
             <div className={classes.contentBody}>
                 <div className={classes.contentHead}>
                     <Title level={2} className={classes.tit}>
-                        {intl.get('processManagement')}&nbsp;&nbsp;
+                        流程管理&nbsp;&nbsp;
                         {RenderGetDataSourceButton()}
                     </Title>
                 </div>
                 <MoveModal
-                    title={intl.get('changeProcess')}
+                    title="修改流程"
                     showModal={open}
                     getModalStatus={(e) => setOpen(e)}
-                    okText={intl.get('ok')}
-                    cancelText={intl.get('cancel')}
+                    okText="确定"
+                    cancelText="取消"
                     onCancel={() => setOpen(false)}
-                    onOk={() => {
-                        console.log(targetKeys)
-                        // 将 targetKeys 拼接成字符串,以 || 分割
-                        const process = targetKeys.join('||');
-                        Modal.confirm({
-                            title: intl.get('confirmChangeProcess'),
-                            icon: <ExclamationCircleOutlined/>,
-                            content: intl.get('confirmChangeProcessNotice'),
-                            className: gaussianBlur ? gaussianBlurClasses.gaussianBlurModal : '',
-                            mask: !gaussianBlur,
-                            onOk() {
-                                updateProcess(content.uid, process).then(res => {
-                                    Modal.success({
-                                        title: intl.get('success'),
-                                        content: intl.get('changeProcessSuccess'),
-                                        className: gaussianBlur ? gaussianBlurClasses.gaussianBlurModal : '',
-                                        mask: !gaussianBlur,
+                    footer={[
+                        <Button type="default">取消</Button>,
+                        <Button type="primary" loading={changeIng} onClick={() => {
+                            // 将 targetKeys 拼接成字符串,以 || 分割
+                            const process = targetKeys.join('||');
+                            Modal.confirm({
+                                title: "确认修改流程吗",
+                                icon: <ExclamationCircleOutlined/>,
+                                content: "修改成功后所有新的提交申请都会按照新的流程进行审批",
+                                onOk() {
+                                    setChangeIng(true)
+                                    updateProcess(content.uid, process).then(res => {
+                                        Modal.success({
+                                            title: "成功",
+                                            content: "修改流程成功"
+                                        })
+                                        getDataSource();
+                                        setOpen(false);
+                                    }).finally(() => {
+                                        setChangeIng(false)
                                     })
-                                    getDataSource();
-                                    setOpen(false);
-                                })
-                            }
-                        });
-                    }}
+                                }
+                            });
+                        }}>确定</Button>
+                    ]}
                 >
                     <Transfer
                         dataSource={mockData}
@@ -201,7 +196,6 @@ const ProcessManagement = () => {
                     <List
                         itemLayout="horizontal"
                         dataSource={dataSource}
-                        style={{width: tableSize.tableWidth - 100, height: tableSize.tableHeight}}
                         renderItem={(item: any) => (
                             <List.Item
                                 actions={[
@@ -221,11 +215,11 @@ const ProcessManagement = () => {
                                                 }
                                             })
                                             setTargetKeys(targetKeys)
-                                        }}>{intl.get('changeProcess')}</Button>
+                                        }}>修改流程</Button>
                                 ]}
                             >
                                 <List.Item.Meta
-                                    title={<Tag>{item.name}&nbsp;{intl.get('approveProcess')}</Tag>}
+                                    title={<Tag>{item.name}&nbsp;审批流程</Tag>}
                                     description={RenderSteps(item.processRealName)}
                                 />
                             </List.Item>

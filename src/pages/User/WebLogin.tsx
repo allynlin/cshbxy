@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {App, Button, Form, Input, Radio, Switch} from 'antd';
+import {App, Button, Form, Input, Select, Switch} from 'antd';
 import Cookie from 'js-cookie';
 import setCookie from "../../component/setCookie";
 import {userLogin} from "../../component/axios/api";
@@ -8,11 +8,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {login} from "../../component/redux/isLoginSlice";
 import {Department, Employee, Leader} from "../../component/redux/userTypeSlice";
 import {setUser} from "../../component/redux/userInfoSlice";
-import intl from "react-intl-universal";
-import {close, open} from "../../component/redux/gaussianBlurSlice";
-import {inline, vertical} from "../../component/redux/menuModeSlice";
-import {hide, show} from "../../component/redux/isShowFloatButtonSlice";
-import {darkTheme, lightTheme, sysTheme} from "../../component/redux/sysColorSlice";
 
 const LoginForm = () => {
 
@@ -42,7 +37,7 @@ const LoginForm = () => {
         message.open({
             key,
             type: 'loading',
-            content: intl.get('userLoging'),
+            content: "用户登录中",
             duration: 0,
         })
         loginUser();
@@ -68,36 +63,13 @@ const LoginForm = () => {
                 content: res.msg,
                 duration: 0.5,
             }).then(() => {
-                if(res.body.setting){
-                const userSetting = JSON.parse(res.body.setting);
-                const {menuMode, gaussianBlur, showFloatButton, theme} = userSetting;
-                switch (theme) {
-                    case 'light':
-                        dispatch(lightTheme());
-                        break;
-                    case 'dark':
-                        dispatch(darkTheme());
-                        break;
-                    case 'sys':
-                        dispatch(sysTheme());
-                        break;
-                }
-                gaussianBlur ? dispatch(open()) : dispatch(close())
-                menuMode === 'vertical' ? dispatch(vertical()) : dispatch(inline())
-                showFloatButton ? dispatch(show()) : dispatch(hide())
-                }
                 dispatch(setUser(res.body))
                 isRemember()
                 loginSuccess(res.body.userType)
             })
         }).catch(() => {
-            message.open({
-                key,
-                type: 'loading',
-                content: intl.get('tryingAgain'),
-                duration: 0,
-            })
-            loginUser()
+            message.destroy()
+            setLoading(false)
         })
     }
 
@@ -134,6 +106,7 @@ const LoginForm = () => {
     }
 
     const loginError = () => {
+        setLoading(false);
         Cookie.remove('cshbxy-oa-username');
         Cookie.remove('cshbxy-oa-password');
         Cookie.remove('cshbxy-oa-userType');
@@ -163,63 +136,65 @@ const LoginForm = () => {
                 userType: Cookie.get("cshbxy-oa-userType") || 'Employee',
             }}>
             <Form.Item
-                label={intl.get('username')}
+                label="用户名"
                 name="username"
                 rules={[{
                     required: true,
-                    message: intl.get('pleaseInputUsername'),
+                    message: "请输入用户名"
                 }]}
             >
                 <Input showCount maxLength={20} allowClear={true}/>
             </Form.Item>
 
             <Form.Item
-                label={intl.get('password')}
+                label="密码"
                 name="password"
                 rules={[{
                     required: true,
-                    message: intl.get('pleaseInputPassword'),
+                    message: "请输入密码"
                 }]}
             >
                 <Input.Password showCount maxLength={20} allowClear={true}/>
             </Form.Item>
 
             <Form.Item
-                label={intl.get('userType')}
+                label="用户类型"
                 name="userType"
                 rules={[{
                     required: true,
-                    message: intl.get('pleaseChooseUserType'),
+                    message: "请选择用户类型"
                 }]}
             >
-                <Radio.Group style={{display: "flex"}} buttonStyle="solid">
-                    <Radio.Button value="Employee">{intl.get('employee')}</Radio.Button>
-                    <Radio.Button value="Leader">{intl.get('leader')}</Radio.Button>
-                    <Radio.Button value="Department">{intl.get
-                    ('department')}</Radio.Button>
-                </Radio.Group>
+                <Select
+                    style={{width: 120}}
+                    options={[
+                        {value: 'Employee', label: '员工'},
+                        {value: 'Leader', label: '领导'},
+                        {value: 'Department', label: '管理员'},
+                    ]}
+                />
             </Form.Item>
 
             <Form.Item
-                label={intl.get('rememberPassword')}
+                label="记住密码"
                 name='rememberme'
                 valuePropName='checked'
                 rules={[{
                     required: true,
-                    message: intl.get('pleaseChooseRememberPassword'),
+                    message: "请选择是否记住密码"
                 }]}
             >
-                <Switch style={{display: "flex"}} checkedChildren={intl.get('yes')}
-                        unCheckedChildren={intl.get('no')}/>
+                <Switch style={{display: "flex"}} checkedChildren="是"
+                        unCheckedChildren="否"/>
             </Form.Item>
 
             <Form.Item wrapperCol={{offset: 8, span: 16}}>
                 <Button type="primary" htmlType="submit" loading={loading} disabled={loading}>
-                    {intl.get('login')}
+                    登录
                 </Button>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <Button htmlType="button" onClick={onReset} disabled={loading}>
-                    {intl.get('reset')}
+                    重置
                 </Button>
             </Form.Item>
         </Form>

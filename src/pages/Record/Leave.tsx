@@ -1,29 +1,9 @@
-import React, {useEffect, useRef, useState} from 'react';
-import domtoimage from 'dom-to-image';
-import VirtualTable from "../../component/Table/VirtualTable";
-import {
-    App,
-    Button,
-    Card,
-    Form,
-    Input,
-    Popconfirm,
-    Result,
-    Skeleton,
-    Space,
-    Spin,
-    Steps,
-    Tag,
-    Typography,
-    Watermark
-} from 'antd';
+import React, {useEffect, useState} from 'react';
+import {App, Button, Form, Input, Popconfirm, Result, Skeleton, Space, Spin, Steps, Tag, Typography} from 'antd';
 import {deleteLeave, findLeaveList, findLeaveProcess, refreshLeave} from "../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
-import intl from "react-intl-universal";
 import {RenderStatus} from "../../component/Tag/RenderStatus";
 import {FolderOpenOutlined, SearchOutlined} from "@ant-design/icons";
-import {useSelector} from "react-redux";
-import {RenderWatermarkColor} from "../../component/Tag/RenderWatermarkColor";
 import {useStyles} from "../../styles/webStyle";
 import {getProcessStatus} from '../../component/getProcessStatus';
 import {RenderStatusTag} from "../../component/Tag/RenderStatusTag";
@@ -33,15 +13,12 @@ import type {DataType} from "../../component/Table";
 import {LoadingIcon} from "../../component/Icon";
 
 const {Title, Paragraph} = Typography;
-const {Meta} = Card;
 
 const MyApp: React.FC = () => {
 
     const classes = useStyles();
 
     const {message} = App.useApp();
-
-    const ref = useRef<any>(null);
 
     // 全局数据防抖
     const [isQuery, setIsQuery] = useState<boolean>(false);
@@ -66,15 +43,8 @@ const MyApp: React.FC = () => {
     // 删除确认框
     const [open, setOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
-    // 生成图片模式
-    const [showImage, setShowImage] = useState<boolean>(false);
     // 是否为空数据
     const [isEmpty, setIsEmpty] = useState<boolean>(false);
-
-    const tableSize = useSelector((state: any) => state.tableSize.value)
-    const userToken = useSelector((state: any) => state.userToken.value)
-    const userInfo = useSelector((state: any) => state.userInfo.value)
-    const userTable = useSelector((state: any) => state.userTable.value)
 
     const key = "refresh"
 
@@ -111,7 +81,7 @@ const MyApp: React.FC = () => {
         message.open({
             key,
             type: 'loading',
-            content: intl.get("refreshing"),
+            content: "正在刷新中",
             duration: 0,
         })
         setIsRefresh(true)
@@ -123,59 +93,41 @@ const MyApp: React.FC = () => {
                 type: 'success',
                 content: res.msg
             })
-            let newContent = {
+            const data = {
+                ...res.body,
                 key: res.body.uid,
-                id: showInfo.id,
-                tag: RenderStatus(res.body),
-                statusTag: RenderStatusTag(res.body),
-                operation: <Button
-                    type="primary"
-                    onClick={() => {
-                        setShowInfo({...res.body, id: showInfo.id, statusTag: RenderStatusTag(res.body)})
-                        getProcess(res.body.uid);
-                        setShowModal(true);
-                        setShowContent(false);
-                    }}>
-                    {intl.get('check')}
-                </Button>,
-                ...res.body
+                id: showInfo.id
             }
-            const newDataSource = dataSource.map((item: any) => {
-                if (item.key === newContent.key) {
-                    return newContent
+            const newData = dataSource.map((item: any) => {
+                if (item.uid === uid) {
+                    return data
                 }
                 return item
             })
             const newShowData = showData.map((item: any) => {
-                if (item.key === newContent.key) {
-                    return newContent
+                if (item.uid === uid) {
+                    return data
                 }
                 return item
             })
-            setShowInfo(newContent)
-            setDataSource(newDataSource)
+            setShowInfo(data)
+            setDataSource(newData)
             setShowData(newShowData)
             setShowContent(false)
         }).catch(() => {
-            message.open({
-                key,
-                type: 'error',
-                content: intl.get('refreshingFailed')
-            })
+            message.destroy();
         })
     }
 
     const getProcess = (uid: string) => {
         setProcessLoading(true)
         findLeaveProcess(uid).then((res: any) => {
-            const newProcessList = res.body.map((item: any, index: number) => {
+            const newProcessList = res.body.map((item: any) => {
                 return {
                     title: item
                 }
             })
             setProcessList(newProcessList)
-        }).catch(err => {
-            message.error(err.message)
         }).finally(() => {
             setProcessLoading(false)
         })
@@ -203,27 +155,15 @@ const MyApp: React.FC = () => {
                 setIsEmpty(true)
                 return
             }
-            const newDataSource = res.body.map((item: any, index: number) => {
+            const data = res.body.map((item: any, index: number) => {
                 return {
                     ...item,
                     id: index + 1,
                     key: item.uid,
-                    tag: RenderStatus(item),
-                    statusTag: RenderStatusTag(item),
-                    operation: <Button
-                        type="primary"
-                        onClick={() => {
-                            setShowInfo({...item, id: index + 1, statusTag: RenderStatusTag(item)});
-                            getProcess(item.uid);
-                            setShowModal(true);
-                            setShowContent(false);
-                        }}>
-                        {intl.get('check')}
-                    </Button>
                 }
-            });
-            setDataSource(newDataSource);
-            setShowData(newDataSource);
+            })
+            setDataSource(data);
+            setShowData(data);
         }).finally(() => {
             setLoading(false)
         })
@@ -273,58 +213,44 @@ const MyApp: React.FC = () => {
         dataIndex: 'id',
         align: 'center',
     }, {
-        title: intl.get('startTime'),
+        title: "请假时间",
         dataIndex: 'start_time',
         align: 'center',
     }, {
-        title: intl.get('endTime'),
+        title: "销假时间",
         dataIndex: 'end_time',
         align: 'center',
     }, {
-        title: intl.get('status'),
-        dataIndex: 'tag',
+        title: "状态",
+        dataIndex: 'status',
         align: 'center',
+        render: (text: any, item: any) => {
+            return RenderStatus(item)
+        }
     }, {
-        title: intl.get('operate'),
+        title: "操作",
         dataIndex: 'operation',
         align: 'center',
-    }];
-
-    const savePic = () => {
-        setTimeout(() => {
-            domtoimage.toPng(ref.current).then((dataUrl) => {
-                const downloadLink = document.createElement('a');
-                downloadLink.href = dataUrl;
-                downloadLink.download = 'my-image.jpg';
-                downloadLink.click();
-            }).catch((error) => {
-                message.error(intl.get('sysError'));
-                console.error('oops, something went wrong!', error);
-            }).finally(() => {
-                setShowImage(false)
-                setLoading(false)
-                setIsRefresh(false)
-            })
-        }, 1000)
-    }
-
-    const getStatus = (status: number) => {
-        switch (status) {
-            case 0:
-                return intl.get('underApprove')
-            case 1:
-                return intl.get('passApprove')
-            case 2:
-                return intl.get('rejectApprove')
-            default:
-                return intl.get('errorApprove')
+        render: (text: any, item: any) => {
+            return (
+                <Button
+                    type="primary"
+                    onClick={() => {
+                        setShowInfo(item);
+                        getProcess(item.uid);
+                        setShowModal(true);
+                        setShowContent(false);
+                    }}>
+                    查看
+                </Button>
+            )
         }
-    }
+    }];
 
     const RenderGetDataSourceButton = () => {
         return (
             <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
-                    onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
+                    onClick={getDataSource}>{isQuery ? `刷新(${waitTime})` : "刷新"}</Button>
         )
     }
 
@@ -332,18 +258,18 @@ const MyApp: React.FC = () => {
         <Spin tip={RenderGetDataSourceButton()} delay={1000} indicator={<LoadingIcon/>} size="large" spinning={loading}>
             <div className={classes.contentBody}>
                 <MoveModal
-                    title={intl.get('details')}
+                    title="详情"
                     footer={[
                         showInfo.status === 0 ?
                             <Popconfirm
-                                title={intl.get('deleteConfirm')}
+                                title="确认删除"
                                 open={open}
                                 onConfirm={() => deleteItem(showInfo.uid)}
                                 onCancel={() => setOpen(false)}
                             >
                                 <Button loading={confirmLoading} type="primary" danger key="delete"
                                         onClick={() => setOpen(true)}>
-                                    {intl.get('delete')}
+                                    删除
                                 </Button>
                             </Popconfirm> : null,
                         <Button
@@ -355,147 +281,67 @@ const MyApp: React.FC = () => {
                                 refresh(showInfo.uid)
                             }}
                             disabled={isRefresh}>
-                            {isRefresh ? `${intl.get('refreshProcessList')}(${isRefreshWaitTime})` : intl.get('refreshProcessList')}
-                        </Button>,
-                        <Button
-                            key="save"
-                            type="primary"
-                            loading={loading}
-                            onClick={() => {
-                                setLoading(true)
-                                setIsRefresh(true)
-                                setShowImage(true)
-                                savePic()
-                            }}
-                        >
-                            {intl.get('savePicture')}
+                            {isRefresh ? `刷新当前申请项(${isRefreshWaitTime})` : "刷新当前申请项"}
                         </Button>,
                         <Button
                             key="link"
                             loading={loading}
                             onClick={() => setShowModal(false)}
                         >
-                            {intl.get('close')}
+                            关闭
                         </Button>
                     ]}
                     showModal={showModal}
                     getModalStatus={(e) => setShowModal(e)}
                 >
-                    {
-
-                        showImage ?
-                            <div ref={ref} style={{
-                                padding: showImage ? 16 : 0
-                            }}>
-                                <Card>
-                                    <Watermark
-                                        content={["OA", userInfo.realeName, getStatus(showInfo.status)]}
-                                        gap={[70, 70]}
-                                        font={{
-                                            color: RenderWatermarkColor(showInfo.status),
-                                        }}
-                                    >
-                                        <Title level={2} className={classes.tit}>
-                                            {intl.get('leave') + ' ' + intl.get('record')}
-                                        </Title>
-                                        {showContent ? (<Skeleton active/>) : (
-                                            <>
-                                                <Paragraph>{intl.get('status')}：{showInfo.statusTag}</Paragraph>
-                                                <Paragraph>UID：{showInfo.uid}</Paragraph>
-                                                <Paragraph>{intl.get('startTime')}：{showInfo.start_time}</Paragraph>
-                                                <Paragraph>{intl.get('endTime')}：{showInfo.end_time}</Paragraph>
-                                                <Paragraph>{intl.get('reason')}：</Paragraph>
-                                                <div className={classes.outPutHtml}
-                                                     dangerouslySetInnerHTML={{__html: showInfo.reason}}/>
-                                                {showInfo.reject_reason ?
-                                                    <Paragraph>
-                                                        {intl.get('rejectReason')}：
-                                                        <Tag color={userToken.colorError}>{showInfo.reject_reason}</Tag>
-                                                    </Paragraph> : null}
-                                                <Paragraph>{intl.get('createTime')}：{showInfo.create_time}</Paragraph>
-                                                <Paragraph>{intl.get('updateTime')}：{showInfo.update_time}</Paragraph>
-                                                <div>{intl.get('approveProcess')}：</div>
-                                                {processLoading ? (
-                                                        <Space style={{flexDirection: 'column', marginTop: 16}}>
-                                                            <Skeleton.Input active={true} block={false}/>
-                                                            <Skeleton.Input active={true} block={false}/>
-                                                            <Skeleton.Input active={true} block={false}/>
-                                                            <Skeleton.Input active={true} block={false}/>
-                                                        </Space>) :
-                                                    <div style={{marginTop: 16}}>
-                                                        <Steps
-                                                            direction="vertical"
-                                                            progressDot
-                                                            current={showInfo.count}
-                                                            status={getProcessStatus(showInfo.status)}
-                                                            size="small"
-                                                            items={processList}
-                                                        />
-                                                    </div>}
-                                            </>
-                                        )}
-                                    </Watermark>
-                                    <Meta title={userInfo.realeName + ' ' + userInfo.uid} description={
-                                        <>
-                                            <Tag>{userInfo.departmentUid}</Tag>
-                                            <Tag>{userInfo.gender}</Tag>
-                                            <Tag>{userInfo.email}</Tag>
-                                            <Tag>{userInfo.tel}</Tag>
-                                        </>
-                                    }/>
-                                </Card>
-                            </div> :
-                            <>
-                                {showContent ? (<Skeleton active/>) : (
-                                    <Typography>
-                                        <Paragraph>{intl.get('status')}：{showInfo.statusTag}</Paragraph>
-                                        <Paragraph>{intl.get('startTime')}：{showInfo.start_time}</Paragraph>
-                                        <Paragraph>{intl.get('endTime')}：{showInfo.end_time}</Paragraph>
-                                        <Paragraph>{intl.get('reason')}：</Paragraph>
-                                        <div className={classes.outPutHtml}
-                                             dangerouslySetInnerHTML={{__html: showInfo.reason}}/>
-                                        {showInfo.reject_reason ?
-                                            <Paragraph>
-                                                {intl.get('rejectReason')}：
-                                                <Tag color={userToken.colorError}>{showInfo.reject_reason}</Tag>
-                                            </Paragraph> : null}
-                                        <Paragraph>{intl.get('createTime')}：{showInfo.create_time}</Paragraph>
-                                        <Paragraph>{intl.get('updateTime')}：{showInfo.update_time}</Paragraph>
-                                        <Paragraph>{intl.get('approveProcess')}：</Paragraph>
-                                        {processLoading ? (
-                                                <Space style={{flexDirection: 'column'}}>
-                                                    <Skeleton.Input active={true} block={false}/>
-                                                    <Skeleton.Input active={true} block={false}/>
-                                                    <Skeleton.Input active={true} block={false}/>
-                                                    <Skeleton.Input active={true} block={false}/>
-                                                </Space>) :
-                                            <div style={{marginTop: 16}}>
-                                                <Steps
-                                                    direction="vertical"
-                                                    progressDot
-                                                    current={showInfo.count}
-                                                    status={getProcessStatus(showInfo.status)}
-                                                    size="small"
-                                                    items={processList}
-                                                />
-                                            </div>}
-                                    </Typography>
-                                )}
-                            </>
-                    }
+                    <>
+                        {showContent ? (<Skeleton active/>) : (
+                            <Typography>
+                                <Paragraph>状态：{RenderStatusTag(showInfo)}</Paragraph>
+                                <Paragraph>请假时间：{showInfo.start_time}</Paragraph>
+                                <Paragraph>销假时间：{showInfo.end_time}</Paragraph>
+                                <Paragraph>原因：{showInfo.reason}</Paragraph>
+                                {showInfo.reject_reason ?
+                                    <Paragraph>
+                                        驳回原因：
+                                        <Tag color="error">{showInfo.reject_reason}</Tag>
+                                    </Paragraph> : null}
+                                <Paragraph>提交时间：{showInfo.create_time}</Paragraph>
+                                <Paragraph>更新时间：{showInfo.update_time}</Paragraph>
+                                <Paragraph>审批流程：</Paragraph>
+                                {processLoading ? (
+                                        <Space style={{flexDirection: 'column'}}>
+                                            <Skeleton.Input active={true} block={false}/>
+                                            <Skeleton.Input active={true} block={false}/>
+                                            <Skeleton.Input active={true} block={false}/>
+                                            <Skeleton.Input active={true} block={false}/>
+                                        </Space>) :
+                                    <div style={{marginTop: 16}}>
+                                        <Steps
+                                            direction="vertical"
+                                            progressDot
+                                            current={showInfo.count}
+                                            status={getProcessStatus(showInfo.status)}
+                                            size="small"
+                                            items={processList}
+                                        />
+                                    </div>}
+                            </Typography>
+                        )}
+                    </>
                 </MoveModal>
                 <div className={classes.contentHead}>
                     <Title level={2} className={classes.tit}>
-                        {intl.get('leave') + ' ' + intl.get('record')}&nbsp;&nbsp;
+                        请假记录&nbsp;&nbsp;
                         <RenderGetDataSourceButton/>
                     </Title>
                     <Form name="search" layout="inline" onFinish={onFinish}>
                         <Form.Item name="search">
                             <Input prefix={<SearchOutlined className="site-form-item-icon"/>}
-                                   placeholder={intl.get('search') + ' ' + intl.get('reason')}/>
+                                   placeholder="搜索原因"/>
                         </Form.Item>
                         <Form.Item>
-                            <Button disabled={isEmpty} type="primary" htmlType="submit">Search</Button>
+                            <Button disabled={isEmpty} type="primary" htmlType="submit">搜索</Button>
                         </Form.Item>
                     </Form>
                 </div>
@@ -503,14 +349,11 @@ const MyApp: React.FC = () => {
                     isEmpty ? (
                         <Result
                             icon={<FolderOpenOutlined/>}
-                            title={intl.get('noData')}
+                            title="暂无数据"
                             extra={<RenderGetDataSourceButton/>}
                         />
                     ) : (
-                        userTable.tableType === "virtual" ?
-                            <VirtualTable columns={columns} dataSource={showData}
-                                          scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}/> :
-                            <NormalTable columns={columns} dataSource={showData}/>
+                        <NormalTable columns={columns} dataSource={showData}/>
                     )
                 }
             </div>

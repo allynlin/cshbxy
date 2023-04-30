@@ -1,9 +1,7 @@
 import React, {useRef, useState} from "react";
-import {App, Button, Form, Input, Radio, Select, Divider, Space} from 'antd';
-import {PlusOutlined} from '@ant-design/icons';
-import intl from "react-intl-universal";
-import Cookie from "js-cookie";
 import type {InputRef} from 'antd';
+import {App, Button, Divider, Form, Input, Select, Space} from 'antd';
+import {PlusOutlined} from '@ant-design/icons';
 
 import {checkUsername, userRegister} from "../../component/axios/api";
 
@@ -12,7 +10,7 @@ let index = 0;
 const AddUserByAdmin = () => {
 
     const [loading, setLoading] = useState<boolean>(false);
-    const [items, setItems] = useState(['Cis-gender woman', 'Woman', 'Transgender Woman', 'Woman of Trans experience', 'Woman with a history of gender transition', 'Trans feminine', 'Feminine-of-center', 'MTF (male-to-female)', 'Demigirl', 'T-girl', 'Transgirl', 'Sistergirl', 'Cis-gender man', 'Man', 'Transgender man', 'Man of Trans experience', 'Man with a history of gender transition', 'Trans masculine', 'Masculine-of-center', 'FTM (female-to-male)', 'Demiboy', 'T-boy', 'Transguy', 'Brotherboy', 'Trans', 'Transgender', 'Transsexual', 'Non-binary', 'Genderqueer', 'Agender', 'Xenogender', 'Fem', 'Femme', 'Butch', 'Boi', 'Stud', 'Aggressive (AG)', 'Androgyne', 'Tomboy', 'Gender outlaw', 'Gender non-conforming', 'Gender variant', 'Gender fluid', 'Genderfuck', 'Bi-gender', 'Multi-gender', 'Pangender', 'Gender creative', 'Gender expansive', 'Third gender', 'Neutrois', 'Omnigender', 'Polygender', 'Graygender', 'Intergender', 'Maverique', 'Novigender', 'Two-spirit', 'Hijra', 'Kathoey', 'Muxe', 'Khanith/Xanith', 'X-gender', 'MTX', 'FTX', 'Bakla', 'Mahu', 'Fa’afafine', 'Waria', 'Palao’ana', 'Ashtime', 'Mashoga', 'Mangaiko', 'Chibados', 'Tida wena', 'Bixa’ah', 'Alyha', 'Hwame', 'Lhamana', 'Nadleehi', 'Dilbaa', 'Winkte', 'Ninauposkitzipxpe', 'Machi-embra', 'Quariwarmi', 'Chuckchi', 'Whakawahine', 'Fakaleiti', 'Calabai', 'Calalai', 'Bissu', 'Acault', 'Travesti', 'Questioning', 'I don’t use labels', 'Declined', 'Not listed']);
+    const [items, setItems] = useState(['Man(男)', 'Woman(女)', 'Cis-gender woman', 'Transgender Woman', 'Woman of Trans experience', 'Woman with a history of gender transition', 'Trans feminine', 'Feminine-of-center', 'MTF (male-to-female)', 'Demigirl', 'T-girl', 'Transgirl', 'Sistergirl', 'Cis-gender man', 'Transgender man', 'Man of Trans experience', 'Man with a history of gender transition', 'Trans masculine', 'Masculine-of-center', 'FTM (female-to-male)', 'Demiboy', 'T-boy', 'Transguy', 'Brotherboy', 'Trans', 'Transgender', 'Transsexual', 'Non-binary', 'Genderqueer', 'Agender', 'Xenogender', 'Fem', 'Femme', 'Butch', 'Boi', 'Stud', 'Aggressive (AG)', 'Androgyne', 'Tomboy', 'Gender outlaw', 'Gender non-conforming', 'Gender variant', 'Gender fluid', 'Genderfuck', 'Bi-gender', 'Multi-gender', 'Pangender', 'Gender creative', 'Gender expansive', 'Third gender', 'Neutrois', 'Omnigender', 'Polygender', 'Graygender', 'Intergender', 'Maverique', 'Novigender', 'Two-spirit', 'Hijra', 'Kathoey', 'Muxe', 'Khanith/Xanith', 'X-gender', 'MTX', 'FTX', 'Bakla', 'Mahu', 'Fa’afafine', 'Waria', 'Palao’ana', 'Ashtime', 'Mashoga', 'Mangaiko', 'Chibados', 'Tida wena', 'Bixa’ah', 'Alyha', 'Hwame', 'Lhamana', 'Nadleehi', 'Dilbaa', 'Winkte', 'Ninauposkitzipxpe', 'Machi-embra', 'Quariwarmi', 'Chuckchi', 'Whakawahine', 'Fakaleiti', 'Calabai', 'Calalai', 'Bissu', 'Acault', 'Travesti', 'Questioning', 'I don’t use labels', 'Declined', 'Not listed']);
     const [name, setName] = useState('');
     const inputRef = useRef<InputRef>(null);
     const {message} = App.useApp();
@@ -47,7 +45,7 @@ const AddUserByAdmin = () => {
         message.open({
             key,
             type: 'loading',
-            content: intl.get('checkUserNameing'),
+            content: "正在检测用户名是否可用",
             duration: 0,
         });
         checkUserName();
@@ -59,7 +57,7 @@ const AddUserByAdmin = () => {
                 message.open({
                     key,
                     type: 'error',
-                    content: intl.get('usernameIsExist'),
+                    content: "用户名已存在",
                     duration: 3,
                 });
                 form.resetFields(['username']);
@@ -69,21 +67,15 @@ const AddUserByAdmin = () => {
                 message.open({
                     key,
                     type: 'error',
-                    content: intl.get('twoPasswordIsNotSame'),
+                    content: "两次密码不一致",
                     duration: 3,
                 });
                 return
             }
             setLoading(true);
             register();
-        }).catch(() => {
-            message.open({
-                key,
-                type: 'error',
-                content: intl.get('tryingAgain'),
-                duration: 3,
-            });
-            checkUserName()
+        }).catch(err => {
+            message.destroy();
         });
     }
 
@@ -107,13 +99,7 @@ const AddUserByAdmin = () => {
             });
             onReset();
         }).catch(() => {
-            message.open({
-                key,
-                type: 'error',
-                content: intl.get('tryingAgain'),
-                duration: 3,
-            });
-            register()
+            message.destroy();
         });
     }
 
@@ -129,12 +115,12 @@ const AddUserByAdmin = () => {
             onFinish={onFinish}
         >
             <Form.Item
-                label={intl.get('username')}
+                label="用户名"
                 name="username"
                 rules={[
                     {
                         required: true,
-                        message: intl.get('pleaseInputUsername'),
+                        message: "请输入用户名",
                         pattern: /^[a-zA-Z0-9]{1,20}$/
                     },
                 ]}
@@ -143,12 +129,12 @@ const AddUserByAdmin = () => {
             </Form.Item>
 
             <Form.Item
-                label={intl.get('password')}
+                label="密码"
                 name="password"
                 rules={[
                     {
                         required: true,
-                        message: intl.get('pleaseInputPassword'),
+                        message: "请输入密码",
                         pattern: /^[a-zA-Z0-9]{8,20}$/
                     },
                 ]}
@@ -157,12 +143,12 @@ const AddUserByAdmin = () => {
             </Form.Item>
 
             <Form.Item
-                label={intl.get('repeatPassword')}
+                label="确认密码"
                 name="enterPassword"
                 rules={[
                     {
                         required: true,
-                        message: intl.get('pleaseRepeatPassword'),
+                        message: "请再次输入密码",
                         pattern: /^[a-zA-Z0-9]{8,20}$/
                     },
                 ]}
@@ -171,12 +157,12 @@ const AddUserByAdmin = () => {
             </Form.Item>
 
             <Form.Item
-                label={intl.get('realName')}
+                label="真实姓名"
                 name="realeName"
                 rules={[
                     {
                         required: true,
-                        message: intl.get('pleaseInputRealName'),
+                        message: "请输入真实姓名",
                     },
                 ]}
             >
@@ -184,53 +170,46 @@ const AddUserByAdmin = () => {
             </Form.Item>
 
             <Form.Item
-                label={intl.get('gender')}
+                label="性别"
                 name="gender"
                 rules={[
                     {
                         required: true,
-                        message: intl.get('pleaseChooseGender'),
+                        message: "请选择性别",
                     },
                 ]}
             >
-                {
-                    Cookie.get("cshbxy-oa-language") === "zh" ?
-                        <Radio.Group buttonStyle="solid" style={{display: "flex"}}>
-                            <Radio.Button value="男">{intl.get('male')}</Radio.Button>
-                            <Radio.Button value="女">{intl.get('female')}</Radio.Button>
-                        </Radio.Group> :
-                        <Select
-                            style={{width: 300}}
-                            placeholder={intl.get('pleaseChooseGender')}
-                            dropdownRender={(menu) => (
-                                <>
-                                    {menu}
-                                    <Divider style={{margin: '8px 0'}}/>
-                                    <Space style={{padding: '0 8px 4px'}}>
-                                        <Input
-                                            placeholder="Please enter item"
-                                            ref={inputRef}
-                                            value={name}
-                                            onChange={onNameChange}
-                                        />
-                                        <Button type="text" icon={<PlusOutlined/>} onClick={addItem}>
-                                            Add item
-                                        </Button>
-                                    </Space>
-                                </>
-                            )}
-                            options={items.map((item) => ({label: item, value: item}))}
-                        />
-                }
+                <Select
+                    style={{width: 300}}
+                    placeholder="请选择性别"
+                    dropdownRender={(menu) => (
+                        <>
+                            {menu}
+                            <Divider style={{margin: '8px 0'}}/>
+                            <Space style={{padding: '0 8px 4px'}}>
+                                <Input
+                                    placeholder="Please enter item"
+                                    ref={inputRef}
+                                    value={name}
+                                    onChange={onNameChange}
+                                />
+                                <Button type="text" icon={<PlusOutlined/>} onClick={addItem}>
+                                    Add item
+                                </Button>
+                            </Space>
+                        </>
+                    )}
+                    options={items.map((item) => ({label: item, value: item}))}
+                />
             </Form.Item>
 
             <Form.Item
-                label={intl.get('tel')}
+                label="联系电话"
                 name="tel"
                 rules={[
                     {
                         required: true,
-                        message: intl.get('pleaseInputTel'),
+                        message: "请输入联系电话",
                         pattern: /^1[3456789]\d{9}$/
                     },
                 ]}
@@ -239,12 +218,12 @@ const AddUserByAdmin = () => {
             </Form.Item>
 
             <Form.Item
-                label={intl.get('email')}
+                label="电子邮件地址"
                 name="email"
                 rules={[
                     {
                         required: true,
-                        message: intl.get('pleaseInputEmail'),
+                        message: "请输入电子邮件地址",
                         pattern: /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/,
                     },
                 ]}
@@ -254,11 +233,11 @@ const AddUserByAdmin = () => {
 
             <Form.Item>
                 <Button type="primary" htmlType="submit" loading={loading} disabled={loading}>
-                    {intl.get('addDepartment')}
+                    添加部门
                 </Button>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <Button htmlType="button" disabled={loading} onClick={onReset}>
-                    {intl.get('reset')}
+                    重置
                 </Button>
             </Form.Item>
         </Form>

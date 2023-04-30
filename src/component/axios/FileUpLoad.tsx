@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import {UploadProps} from "antd/es/upload/interface";
-import intl from "react-intl-universal";
 import {message, Upload} from "antd";
 import Cookie from "js-cookie";
 import {InboxOutlined} from "@ant-design/icons";
@@ -56,7 +55,7 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
         // 如果上传的文件大于 500M，就提示错误
         beforeUpload: (file: any) => {
             if (file.size / 1024 / 1024 > 500) {
-                api.warning(intl.get('maxFileSize', {size: 500}));
+                api.warning("文件大小不能超过500MB");
                 // 将对应文件的状态设置为 error
                 file.status = 'error';
                 return false;
@@ -70,7 +69,7 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
                 api.open({
                     key: info.file.uid,
                     type: "loading",
-                    content: `${info.file.name} ${intl.get('uploading')} ${info.file.percent?.toFixed(2)}%`,
+                    content: `${info.file.name}正在上传中${info.file.percent?.toFixed(2)}%`,
                     duration: 0,
                 })
             }
@@ -85,11 +84,11 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
                     case 401:
                     case 403:
                         info.file.status = 'error';
-                        api.error(intl.get('noPermission'));
+                        api.error("权限不足");
                         break;
                     case 500:
                         info.file.status = 'error';
-                        api.error(intl.get('sysError'));
+                        api.error("服务器错误");
                         break;
                     default:
                         // 传递参数给父组件, 用于更新父组件的 fileList，如果 info.fileList 为空，就传递一个空数组
@@ -126,7 +125,7 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
                 api.open({
                     key: info.file.uid,
                     type: 'error',
-                    content: `${info.file.name} ${intl.get('uploadFailed')}`,
+                    content: `${info.file.name}上传失败`,
                 })
                 info.file.status = 'error';
                 const newFileList = fileList.map((item: any) => {
@@ -153,7 +152,7 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
             api.open({
                 key: info.uid,
                 type: 'error',
-                content: `${info.name} ${intl.get('uploadCanceled')}`,
+                content: `${info.name}上传已取消`,
             })
             info.status = 'removed';
             const newFileList = fileList.filter((item: any) => item.uid !== info.uid);
@@ -179,10 +178,8 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
             <p className="ant-upload-drag-icon">
                 <InboxOutlined/>
             </p>
-            <p className="ant-upload-text">{intl.get('uploadTitle')}</p>
-            <p className="ant-upload-hint">
-                {intl.get('uploadDescription', {size: 500})}
-            </p>
+            <p className="ant-upload-text">点击或拖拽文件到此区域进行上传</p>
+            <p className="ant-upload-hint">支持单个或批量上传。每个文件最大500MB</p>
         </Upload.Dragger>
     )
 }

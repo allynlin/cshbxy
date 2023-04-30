@@ -3,11 +3,10 @@ import ReactDOM from 'react-dom/client';
 import {Provider} from "react-redux";
 
 import './index.css';
-import Token from "./Token";
 import store from "./component/redux/store";
 
 import 'antd/dist/reset.css';
-import 'braft-editor/dist/index.css'
+import App from "./App";
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
@@ -15,7 +14,7 @@ const root = ReactDOM.createRoot(
 root.render(
     <React.StrictMode>
         <Provider store={store}>
-            <Token/>
+            <App/>
         </Provider>
     </React.StrictMode>
 );

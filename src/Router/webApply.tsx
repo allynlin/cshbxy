@@ -12,8 +12,7 @@ const webApply = [
     {
         path: 'departmentChange-apply',
         element: (<RouterBefore meta={{
-            title: 'Department Change',
-            titleCN: '部门变更',
+            title: '部门变更',
             auth: 'Employee'
         }}>
             <React.Suspense fallback={<WebSkeleton/>}>
@@ -23,8 +22,7 @@ const webApply = [
     }, {
         path: 'travel-apply',
         element: (<RouterBefore meta={{
-            title: 'Travel Reimbursement',
-            titleCN: '差旅报销',
+            title: '差旅报销',
             auth: 'Employee'
         }}>
             <React.Suspense fallback={<WebSkeleton/>}>
@@ -34,8 +32,7 @@ const webApply = [
     }, {
         path: 'procurement-apply',
         element: (<RouterBefore meta={{
-            title: 'Procurement',
-            titleCN: '采购',
+            title: '采购',
             auth: 'Employee'
         }}>
             <React.Suspense fallback={<WebSkeleton/>}>
@@ -45,8 +42,7 @@ const webApply = [
     }, {
         path: 'leave-apply',
         element: (<RouterBefore meta={{
-            title: 'Leave',
-            titleCN: '请假',
+            title: '请假',
             auth: 'Employee'
         }}>
             <React.Suspense fallback={<WebSkeleton/>}>
@@ -56,8 +52,7 @@ const webApply = [
     }, {
         path: 'workReport-apply',
         element: (<RouterBefore meta={{
-            title: 'WorkReport',
-            titleCN: '工作报告',
+            title: '工作报告',
             auth: 'Employee'
         }}>
             <React.Suspense fallback={<WebSkeleton/>}>

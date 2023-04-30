@@ -1,17 +1,16 @@
 import {Button, Result} from 'antd';
 import React from 'react';
 import {Link, useLocation, useNavigate} from "react-router-dom";
-import intl from "react-intl-universal";
 
 export const Error404 = () => (
     <Result
         status="404"
         title="404"
-        subTitle={intl.get('404Title')}
+        subTitle="您访问的页面不存在"
         extra={
             <Link
                 to={'/home'}>
-                <Button type="primary">{intl.get('backToHome')}</Button>
+                <Button type="primary">返回首页</Button>
             </Link>
         }
     />
@@ -21,10 +20,10 @@ export const Error403 = () => (
     <Result
         status="403"
         title="403"
-        subTitle={intl.get('403Title')}
+        subTitle="您没有权限访问此页面"
         extra={
             <Link to={'/login'}>
-                <Button type="primary">{intl.get('login')}</Button>
+                <Button type="primary">去登录</Button>
             </Link>
         }
     />
@@ -33,11 +32,11 @@ export const Error403 = () => (
 export const Error500 = () => (<Result
         status="500"
         title="500"
-        subTitle={intl.get('500Title')}
+        subTitle="服务器出错了"
         extra={
             <Link
                 to={'/home'}>
-                <Button type="primary">{intl.get('backToHome')}</Button>
+                <Button type="primary">返回首页</Button>
             </Link>
         }
     />

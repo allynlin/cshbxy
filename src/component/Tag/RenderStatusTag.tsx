@@ -1,34 +1,25 @@
 import {Tag} from "antd";
 import {CheckCircleOutlined, CloseCircleOutlined, ExclamationCircleOutlined, SyncOutlined} from "@ant-design/icons";
 import React from "react";
-import intl from "react-intl-universal";
 
 export const RenderStatusTag = (item: any) => {
 
     switch (item.status) {
         case 0:
             return (
-                <Tag icon={<SyncOutlined spin/>} color={"processing"}>
-                    {intl.get('waitApproval')}
-                </Tag>
+                <Tag icon={<SyncOutlined spin/>} color={"processing"}>等待审批</Tag>
             )
         case 1:
             return (
-                <Tag icon={<CheckCircleOutlined/>} color={"success"}>
-                    {intl.get('passApprove')}
-                </Tag>
+                <Tag icon={<CheckCircleOutlined/>} color={"success"}>通过审批</Tag>
             )
         case 2:
             return (
-                <Tag icon={<CloseCircleOutlined/>} color={"error"}>
-                    {intl.get('rejectApprove')}
-                </Tag>
+                <Tag icon={<CloseCircleOutlined/>} color={"error"}>驳回审批</Tag>
             )
         default:
             return (
-                <Tag icon={<ExclamationCircleOutlined/>} color={"warning"}>
-                    {intl.get('errorApprove')}
-                </Tag>
+                <Tag icon={<ExclamationCircleOutlined/>} color={"warning"}>审批出错</Tag>
             )
     }
 }

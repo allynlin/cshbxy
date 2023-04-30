@@ -3,6 +3,7 @@ import qs from 'qs';
 import Cookie from "js-cookie";
 import setCookie from "../setCookie";
 import {BaseInfo, version} from "../../baseInfo";
+import {message} from "antd";
 
 /**
  * 请求方法,内置 GET 和 POST
@@ -24,7 +25,7 @@ export const MethodType = {
  */
 export const Request = (api: String, method = MethodType.GET, params = {}, config = {headers: {}}) => {
     const apiToken = Cookie.get('cshbxy-oa-token');
-    const language = Cookie.get('cshbxy-oa-language') || 'en_US';
+    const language = Cookie.get('cshbxy-oa-language') || 'zh';
     const baseURL = BaseInfo;
     const data = (method === 'GET') ? 'params' : 'data';
     let headers = {
@@ -46,6 +47,7 @@ export const Request = (api: String, method = MethodType.GET, params = {}, confi
         method,
         [data]: qs.stringify(params),
         headers,
+        timeout: 10000,
     };
 
     return new Promise((resolve, reject) => {
@@ -54,6 +56,7 @@ export const Request = (api: String, method = MethodType.GET, params = {}, confi
                 setCookie({name: "cshbxy-oa-token", value: res.data.token})
             resolve(res.data);
         }).catch(error => {
+            message.error(error.message + "，请联系管理员");
             reject(error);
         })
     });

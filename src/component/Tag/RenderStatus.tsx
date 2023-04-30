@@ -1,7 +1,6 @@
 import {Steps, Tag} from "antd";
 import {CheckCircleOutlined, CloseCircleOutlined, ExclamationCircleOutlined} from "@ant-design/icons";
 import React from "react";
-import intl from "react-intl-universal";
 
 export const RenderStatus = (item: any) => {
 
@@ -9,12 +8,12 @@ export const RenderStatus = (item: any) => {
 
         const getTitle = (index: number) => {
             if (index > count) {
-                return intl.get('waitApproval')
+                return "等待审批"
             }
             if (index === count) {
-                return intl.get('approvaling')
+                return "审批中"
             }
-            return intl.get('approvalPass')
+            return "审批通过"
         }
 
         // 将 item.process 中的字符串按照 || 分割成数组
@@ -47,21 +46,15 @@ export const RenderStatus = (item: any) => {
             )
         case 1:
             return (
-                <Tag icon={<CheckCircleOutlined/>} color={"success"}>
-                    {intl.get('passApprove')}
-                </Tag>
+                <Tag icon={<CheckCircleOutlined/>} color={"success"}>通过审批</Tag>
             )
         case 2:
             return (
-                <Tag icon={<CloseCircleOutlined/>} color={"error"}>
-                    {intl.get('rejectApprove')}
-                </Tag>
+                <Tag icon={<CloseCircleOutlined/>} color={"error"}>驳回审批</Tag>
             )
         default:
             return (
-                <Tag icon={<ExclamationCircleOutlined/>} color={"processing"}>
-                    {intl.get('errorApprove')}
-                </Tag>
+                <Tag icon={<ExclamationCircleOutlined/>} color={"processing"}>审批出错</Tag>
             )
     }
 }

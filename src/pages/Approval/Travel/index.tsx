@@ -1,15 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import VirtualTable from "../../../component/Table/VirtualTable";
 import {App, Button, Card, Form, Input, Modal, Result, Skeleton, Spin, Typography} from 'antd';
 import {findTravelWaitApprovalList, findUploadFilesByUid, resolveTravel} from "../../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
-import intl from "react-intl-universal";
 import {ExclamationCircleOutlined, FileTextOutlined, FolderOpenOutlined, SearchOutlined} from "@ant-design/icons";
 import {DownLoadURL, tableName} from "../../../baseInfo";
-import {useSelector} from "react-redux";
 import Reject from "./Reject";
 import {useStyles} from "../../../styles/webStyle";
-import {useGaussianBlurStyles} from "../../../styles/gaussianBlurStyle";
 import MoveModal from '../../../component/MoveModal';
 import NormalTable from "../../../component/Table/NormalTable";
 import type {DataType} from "../../../component/Table";
@@ -20,7 +16,6 @@ const {Title, Paragraph} = Typography;
 const MyApp = () => {
 
     const classes = useStyles();
-    const gaussianBlurClasses = useGaussianBlurStyles();
 
     const {message} = App.useApp();
 
@@ -45,11 +40,6 @@ const MyApp = () => {
     const [isEmpty, setIsEmpty] = useState<boolean>(false);
 
     const getFile = "getFile"
-
-    const tableSize = useSelector((state: any) => state.tableSize.value)
-    const userToken = useSelector((state: any) => state.userToken.value)
-    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value)
-    const userTable = useSelector((state: any) => state.userTable.value)
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -94,16 +84,6 @@ const MyApp = () => {
                     ...item,
                     id: index + 1,
                     key: item.uid,
-                    operation: <Button
-                        type="primary"
-                        onClick={() => {
-                            setShowInfo({...item, id: index + 1});
-                            getFiles(item.uid);
-                            setShowModal(true);
-                        }}>
-                        {intl.get('check')}
-                    </Button>
-
                 }
             });
             setDataSource(newDataSource);
@@ -117,7 +97,7 @@ const MyApp = () => {
         message.open({
             key: getFile,
             type: 'loading',
-            content: intl.get("gettingFileList"),
+            content: "正在获取文件列表",
             duration: 0,
         })
         setFileLoading(true)
@@ -141,32 +121,20 @@ const MyApp = () => {
                 content: res.msg,
             })
         }).catch(() => {
-            message.open({
-                key: getFile,
-                type: 'loading',
-                content: intl.get('tryingAgain'),
-                duration: 0,
-            })
-            findFiles(uid)
+            message.destroy();
+        }).finally(() => {
+            setFileLoading(false)
         })
     }
 
     const showResolveConfirm = (uid: string) => {
         Modal.confirm({
-            title: intl.get('confirmPassApprove'),
+            title: "确认通过审批",
             icon: <ExclamationCircleOutlined/>,
-            content: intl.get('afterPassCannotChange'),
-            okText: intl.get('ok'),
-            mask: !gaussianBlur,
-            className: gaussianBlur ? gaussianBlurClasses.gaussianBlurModalMethod : '',
-            okButtonProps: {
-                style: {
-                    backgroundColor: userToken.colorSuccess,
-                    borderColor: userToken.colorSuccess
-                }
-            },
+            content: "通过后不可变更，请谨慎操作",
+            okText: "确认",
             okType: 'primary',
-            cancelText: intl.get('cancel'),
+            cancelText: "取消",
             onOk() {
                 setLock(true);
                 resolveTravel(uid).then((res: any) => {
@@ -214,27 +182,38 @@ const MyApp = () => {
         dataIndex: 'id',
         align: 'center',
     }, {
-        title: intl.get('submitPerson'),
+        title: "提交人",
         dataIndex: 'releaseUid',
         align: 'center',
     }, {
-        title: intl.get('destination'),
+        title: "目的地",
         dataIndex: 'destination',
         align: 'center',
     }, {
-        title: intl.get('cost'),
+        title: "费用",
         dataIndex: 'expenses',
         align: 'center',
     }, {
-        title: intl.get('operate'),
+        title: "操作",
         dataIndex: 'operation',
         align: 'center',
+        render: (text: any, item: any) => {
+            return <Button
+                type="primary"
+                onClick={() => {
+                    setShowInfo(item);
+                    getFiles(item.uid);
+                    setShowModal(true);
+                }}>
+                查看
+            </Button>
+        }
     }];
 
     const RenderGetDataSourceButton = () => {
         return (
             <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
-                    onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
+                    onClick={getDataSource}>{isQuery ? `刷新(${waitTime})` : "刷新"}</Button>
         )
     }
 
@@ -242,7 +221,7 @@ const MyApp = () => {
         <Spin tip={RenderGetDataSourceButton()} delay={1000} indicator={<LoadingIcon/>} size="large" spinning={loading}>
             <div className={classes.contentBody}>
                 <MoveModal
-                    title={intl.get('details')}
+                    title="详情"
                     showModal={showModal}
                     getModalStatus={(e) => setShowModal(e)}
                     footer={[
@@ -252,7 +231,7 @@ const MyApp = () => {
                             loading={fileLoading}
                             onClick={() => getFiles(showInfo.uid)}
                             disabled={fileLoading}>
-                            {fileLoading ? intl.get('gettingFileList') : intl.get('refreshFileList')}
+                            {fileLoading ? "正在获取文件列表" : "刷新文件列表"}
                         </Button>,
                         <Reject key="reject" state={showInfo} getNewContent={(isReject: boolean) => {
                             if (isReject) {
@@ -266,31 +245,29 @@ const MyApp = () => {
                             disabled={lock}
                             loading={lock}
                             style={{
-                                backgroundColor: userToken.colorSuccess,
-                                borderColor: userToken.colorSuccess
+                                backgroundColor: "green",
+                                borderColor: "green"
                             }}
                             onClick={() => showResolveConfirm(showInfo.uid)}
-                        >{intl.get('pass')}</Button>,
+                        >通过</Button>,
                         <Button
                             key="link"
                             disabled={lock}
                             loading={loading}
                             onClick={() => setShowModal(false)}
                         >
-                            {intl.get('close')}
+                            关闭
                         </Button>,
                     ]}
                 >
                     <Typography>
-                        <Paragraph>{intl.get('submitPerson')}：{showInfo.releaseUid}</Paragraph>
-                        <Paragraph>{intl.get('destination')}：{showInfo.destination}</Paragraph>
-                        <Paragraph>{intl.get('cost')}：{showInfo.expenses}</Paragraph>
-                        <Paragraph>{intl.get('reason')}：</Paragraph>
-                        <div className={classes.outPutHtml}
-                             dangerouslySetInnerHTML={{__html: showInfo.reason}}/>
-                        <Paragraph>{intl.get('createTime')}：{showInfo.create_time}</Paragraph>
-                        <Paragraph>{intl.get('updateTime')}：{showInfo.update_time}</Paragraph>
-                        <Paragraph>{intl.get('file')}：</Paragraph>
+                        <Paragraph>提交人：{showInfo.releaseUid}</Paragraph>
+                        <Paragraph>目的地：{showInfo.destination}</Paragraph>
+                        <Paragraph>费用：{showInfo.expenses}</Paragraph>
+                        <Paragraph>原因：{showInfo.reason}</Paragraph>
+                        <Paragraph>提交时间：{showInfo.create_time}</Paragraph>
+                        <Paragraph>更新时间：{showInfo.update_time}</Paragraph>
+                        <Paragraph>文件：</Paragraph>
                         {
                             fileLoading ? (
                                 <div className={classes.skeletonFile}>
@@ -302,7 +279,7 @@ const MyApp = () => {
                                 {fileList.map((item: any, index: number) => {
                                     return (
                                         <Card size="small" className={classes.fileItem} hoverable key={index}
-                                              title={intl.get('file') + (index + 1)}
+                                              title={"文件" + (index + 1)}
                                               bordered={false}>
                                             <Typography.Paragraph ellipsis>
                                                 <a href={`${DownLoadURL}/downloadFile?filename=${item.fileName}`}
@@ -317,16 +294,16 @@ const MyApp = () => {
                 </MoveModal>
                 <div className={classes.contentHead}>
                     <Title level={2} className={classes.tit}>
-                        {intl.get('travelReimburse') + ' ' + intl.get('approve')}&nbsp;&nbsp;
+                        差旅报销审批&nbsp;&nbsp;
                         <RenderGetDataSourceButton/>
                     </Title>
                     <Form name="search" layout="inline" onFinish={onFinish}>
                         <Form.Item name="search">
                             <Input prefix={<SearchOutlined className="site-form-item-icon"/>}
-                                   placeholder={intl.get('search') + ' ' + intl.get('submitPerson')}/>
+                                   placeholder="搜索提交人"/>
                         </Form.Item>
                         <Form.Item>
-                            <Button type="primary" htmlType="submit">Search</Button>
+                            <Button type="primary" htmlType="submit">搜索</Button>
                         </Form.Item>
                     </Form>
                 </div>
@@ -334,14 +311,11 @@ const MyApp = () => {
                     isEmpty ? (
                         <Result
                             icon={<FolderOpenOutlined/>}
-                            title={intl.get('noData')}
+                            title="暂无数据"
                             extra={<RenderGetDataSourceButton/>}
                         />
                     ) : (
-                        userTable.tableType === "virtual" ?
-                            <VirtualTable columns={columns} dataSource={showData}
-                                          scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}/> :
-                            <NormalTable columns={columns} dataSource={showData}/>
+                        <NormalTable columns={columns} dataSource={showData}/>
                     )
                 }
             </div>

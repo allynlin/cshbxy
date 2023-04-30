@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import VirtualTable from "../../component/Table/VirtualTable";
 import {App, Button, Form, Input, Popconfirm, Result, Skeleton, Space, Spin, Steps, Tag, Typography} from 'antd';
 import {
     deleteProcurement,
@@ -8,17 +7,15 @@ import {
     refreshProcurement
 } from "../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
-import intl from "react-intl-universal";
 import {RenderStatus} from "../../component/Tag/RenderStatus";
 import {FolderOpenOutlined, SearchOutlined} from "@ant-design/icons";
-import {useSelector} from "react-redux";
 import {useStyles} from "../../styles/webStyle";
 import {getProcessStatus} from '../../component/getProcessStatus';
-import {RenderStatusTag} from "../../component/Tag/RenderStatusTag";
 import MoveModal from "../../component/MoveModal";
 import NormalTable from "../../component/Table/NormalTable";
 import type {DataType} from "../../component/Table";
 import {LoadingIcon} from "../../component/Icon";
+import {RenderStatusTag} from "../../component/Tag/RenderStatusTag";
 
 const {Title, Paragraph} = Typography;
 
@@ -53,10 +50,6 @@ const MyApp: React.FC = () => {
     const [confirmLoading, setConfirmLoading] = useState(false);
     // 是否为空数据
     const [isEmpty, setIsEmpty] = useState<boolean>(false);
-
-    const tableSize = useSelector((state: any) => state.tableSize.value);
-    const userToken = useSelector((state: any) => state.userToken.value);
-    const userTable = useSelector((state: any) => state.userTable.value)
 
     const key = "refresh"
 
@@ -93,7 +86,7 @@ const MyApp: React.FC = () => {
         message.open({
             key,
             type: 'loading',
-            content: intl.get("refreshing"),
+            content: "正在刷新中",
             duration: 0,
         })
         setIsRefresh(true)
@@ -105,45 +98,29 @@ const MyApp: React.FC = () => {
                 type: 'success',
                 content: res.msg
             })
-            let newContent = {
+            const data = {
+                ...res.body,
                 key: res.body.uid,
-                id: showInfo.id,
-                tag: RenderStatus(res.body),
-                statusTag: RenderStatusTag(res.body),
-                operation: <Button
-                    type="primary"
-                    onClick={() => {
-                        setShowInfo({...res.body, id: showInfo.id, statusTag: RenderStatusTag(res.body)})
-                        getProcess(res.body.uid);
-                        setShowModal(true);
-                        setShowContent(false);
-                    }}>
-                    {intl.get('check')}
-                </Button>,
-                ...res.body
+                id: showInfo.id
             }
-            const newDataSource = dataSource.map((item: any) => {
-                if (item.key === newContent.key) {
-                    return newContent
+            const newData = dataSource.map((item: any) => {
+                if (item.uid === uid) {
+                    return data
                 }
                 return item
             })
             const newShowData = showData.map((item: any) => {
-                if (item.key === newContent.key) {
-                    return newContent
+                if (item.uid === uid) {
+                    return data
                 }
                 return item
             })
-            setShowInfo(newContent)
-            setDataSource(newDataSource)
+            setShowInfo(data)
+            setDataSource(newData)
             setShowData(newShowData)
             setShowContent(false)
         }).catch(() => {
-            message.open({
-                key,
-                type: 'error',
-                content: intl.get('refreshingFailed')
-            })
+            message.destroy()
         })
     }
 
@@ -156,8 +133,6 @@ const MyApp: React.FC = () => {
                 }
             })
             setProcessList(newProcessList)
-        }).catch(err => {
-            message.error(err.message)
         }).finally(() => {
             setProcessLoading(false)
         })
@@ -186,27 +161,15 @@ const MyApp: React.FC = () => {
                 setIsEmpty(true)
                 return
             }
-            const newDataSource = res.body.map((item: any, index: number) => {
+            const data = res.body.map((item: any, index: number) => {
                 return {
                     ...item,
                     id: index + 1,
                     key: item.uid,
-                    tag: RenderStatus(item),
-                    statusTag: RenderStatusTag(item),
-                    operation: <Button
-                        type="primary"
-                        onClick={() => {
-                            setShowInfo({...item, id: index + 1, statusTag: RenderStatusTag(item)});
-                            getProcess(item.uid);
-                            setShowModal(true);
-                            setShowContent(false);
-                        }}>
-                        {intl.get('check')}
-                    </Button>
                 }
-            });
-            setDataSource(newDataSource);
-            setShowData(newDataSource);
+            })
+            setDataSource(data);
+            setShowData(data);
         }).finally(() => {
             setLoading(false)
         })
@@ -255,23 +218,40 @@ const MyApp: React.FC = () => {
         dataIndex: 'id',
         align: 'center',
     }, {
-        title: intl.get('procurementPrice'),
+        title: "采购金额",
         dataIndex: 'price',
         align: 'center',
     }, {
-        title: intl.get('status'),
-        dataIndex: 'tag',
+        title: "状态",
+        dataIndex: 'status',
         align: 'center',
+        render: (text: any, item: any) => {
+            return RenderStatus(item)
+        }
     }, {
-        title: intl.get('operate'),
+        title: "操作",
         dataIndex: 'operation',
         align: 'center',
+        render: (text: any, item: any) => {
+            return (
+                <Button
+                    type="primary"
+                    onClick={() => {
+                        setShowInfo(item);
+                        getProcess(item.uid);
+                        setShowModal(true);
+                        setShowContent(false);
+                    }}>
+                    查看
+                </Button>
+            )
+        }
     }];
 
     const RenderGetDataSourceButton = () => {
         return (
             <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
-                    onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
+                    onClick={getDataSource}>{isQuery ? `刷新(${waitTime})` : "刷新"}</Button>
         )
     }
 
@@ -279,18 +259,18 @@ const MyApp: React.FC = () => {
         <Spin tip={RenderGetDataSourceButton()} delay={1000} indicator={<LoadingIcon/>} size="large" spinning={loading}>
             <div className={classes.contentBody}>
                 <MoveModal
-                    title={intl.get('details')}
+                    title="详情"
                     footer={[
                         showInfo.status === 0 ?
                             <Popconfirm
-                                title={intl.get('deleteConfirm')}
+                                title="确认删除"
                                 open={open}
                                 onConfirm={() => deleteItem(showInfo.uid)}
                                 onCancel={() => setOpen(false)}
                             >
                                 <Button loading={confirmLoading} type="primary" danger key="delete"
                                         onClick={() => setOpen(true)}>
-                                    {intl.get('delete')}
+                                    删除
                                 </Button>
                             </Popconfirm> : null,
                         <Button
@@ -302,14 +282,14 @@ const MyApp: React.FC = () => {
                                 refresh(showInfo.uid)
                             }}
                             disabled={isRefresh}>
-                            {isRefresh ? `${intl.get('refreshProcessList')}(${isRefreshWaitTime})` : intl.get('refreshProcessList')}
+                            {isRefresh ? `刷新当前申请项(${isRefreshWaitTime})` : "刷新当前申请项"}
                         </Button>,
                         <Button
                             key="link"
                             loading={loading}
                             onClick={() => setShowModal(false)}
                         >
-                            {intl.get('close')}
+                            关闭
                         </Button>,
                     ]}
                     showModal={showModal}
@@ -317,22 +297,18 @@ const MyApp: React.FC = () => {
                 >
                     {showContent ? (<Skeleton active/>) : (
                         <Typography>
-                            <Paragraph>{intl.get('status')}：{showInfo.statusTag}</Paragraph>
-                            <Paragraph>{intl.get('procurementItem')}：</Paragraph>
-                            <div className={classes.outPutHtml}
-                                 dangerouslySetInnerHTML={{__html: showInfo.items}}/>
-                            <Paragraph>{intl.get('procurementPrice')}：{showInfo.price} ￥</Paragraph>
-                            <Paragraph>{intl.get('reason')}：</Paragraph>
-                            <div className={classes.outPutHtml}
-                                 dangerouslySetInnerHTML={{__html: showInfo.reason}}/>
+                            <Paragraph>状态：{RenderStatusTag(showInfo)}</Paragraph>
+                            <Paragraph>采购项：{showInfo.items}</Paragraph>
+                            <Paragraph>采购金额：{showInfo.price} ￥</Paragraph>
+                            <Paragraph>原因：{showInfo.reason}</Paragraph>
                             {showInfo.reject_reason ?
                                 <Paragraph>
-                                    {intl.get('rejectReason')}：
-                                    <Tag color={userToken.colorError}>{showInfo.reject_reason}</Tag>
+                                    驳回原因：
+                                    <Tag color="error">{showInfo.reject_reason}</Tag>
                                 </Paragraph> : null}
-                            <Paragraph>{intl.get('createTime')}：{showInfo.create_time}</Paragraph>
-                            <Paragraph>{intl.get('updateTime')}：{showInfo.update_time}</Paragraph>
-                            <Paragraph>{intl.get('approveProcess')}：</Paragraph>
+                            <Paragraph>提交时间：{showInfo.create_time}</Paragraph>
+                            <Paragraph>更新时间：{showInfo.update_time}</Paragraph>
+                            <Paragraph>审批流程：</Paragraph>
                             {
                                 processLoading ? (
                                         <Space style={{flexDirection: 'column', marginTop: 16}}>
@@ -357,16 +333,16 @@ const MyApp: React.FC = () => {
                 </MoveModal>
                 <div className={classes.contentHead}>
                     <Title level={2} className={classes.tit}>
-                        {intl.get('procurement') + ' ' + intl.get('record')}&nbsp;&nbsp;
+                        采购记录&nbsp;&nbsp;
                         <RenderGetDataSourceButton/>
                     </Title>
                     <Form name="search" layout="inline" onFinish={onFinish}>
                         <Form.Item name="search">
                             <Input prefix={<SearchOutlined className="site-form-item-icon"/>}
-                                   placeholder={intl.get('search') + ' ' + intl.get('procurementItem')}/>
+                                   placeholder="搜索采购项"/>
                         </Form.Item>
                         <Form.Item>
-                            <Button type="primary" htmlType="submit">Search</Button>
+                            <Button type="primary" htmlType="submit">搜索</Button>
                         </Form.Item>
                     </Form>
                 </div>
@@ -374,14 +350,11 @@ const MyApp: React.FC = () => {
                     isEmpty ? (
                         <Result
                             icon={<FolderOpenOutlined/>}
-                            title={intl.get('noData')}
+                            title="暂无数据"
                             extra={<RenderGetDataSourceButton/>}
                         />
                     ) : (
-                        userTable.tableType === "virtual" ?
-                            <VirtualTable columns={columns} dataSource={showData}
-                                          scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}/> :
-                            <NormalTable columns={columns} dataSource={showData}/>
+                        <NormalTable columns={columns} dataSource={showData}/>
                     )
                 }
             </div>

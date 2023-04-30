@@ -1,9 +1,7 @@
 import {Button, message, Modal} from 'antd';
 import React, {useState} from 'react';
 import {updateDepartmentLeader} from "../../../component/axios/api";
-import intl from "react-intl-universal";
 import {ExclamationCircleOutlined} from '@ant-design/icons';
-import {useGaussianBlurStyles} from "../../../styles/gaussianBlurStyle";
 import {useSelector} from "react-redux";
 
 interface propsCheck {
@@ -12,10 +10,6 @@ interface propsCheck {
 }
 
 export default function ChangeDirectLeadership(props: propsCheck) {
-
-    const gaussianBlurClasses = useGaussianBlurStyles();
-
-    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value);
     const userInfo = useSelector((state: any) => state.userInfo.value);
 
     const [loading, setLoading] = useState(false);
@@ -23,15 +17,13 @@ export default function ChangeDirectLeadership(props: propsCheck) {
 
     const showConfirm = () => {
         modal.confirm({
-            title: intl.get('confirmSettingDirectLeadership'),
+            title: "确认",
             icon: <ExclamationCircleOutlined/>,
-            content: intl.get('settingDirectLeadershipNotice'),
-            className: gaussianBlur ? gaussianBlurClasses.gaussianBlurModalMethod : '',
-            mask: !gaussianBlur,
+            content: "您正在设置当前部门直属领导，您只能设置一个直属领导，如您已设置直属领导，再次设置将会覆盖之前的设置，是否继续？",
             onOk() {
                 setLoading(true);
                 updateDepartmentLeader(userInfo.uid, props.content.uid).then(() => {
-                    message.success(intl.get('settingSuccess'));
+                    message.success("设置成功");
                     props.getChange('yes');
                 }).finally(() => {
                     setLoading(false);
@@ -47,9 +39,7 @@ export default function ChangeDirectLeadership(props: propsCheck) {
                 disabled={loading}
                 loading={loading}
                 onClick={() => showConfirm()}
-                type="primary" danger>
-                {intl.get('settingDirectLeadership')}
-            </Button>
+                type="primary" danger>设置直属领导</Button>
         </>
     )
 };

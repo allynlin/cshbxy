@@ -1,28 +1,22 @@
 import React, {useEffect, useState} from 'react';
 import {App, Button, Form, Input, InputNumber, Modal, Select, Typography} from 'antd';
 import {useNavigate} from 'react-router-dom';
-import intl from "react-intl-universal";
-import BraftEditor from "braft-editor";
 
 import {addTravelReimbursement, checkLastTimeUploadFiles} from "../../component/axios/api";
-import {BaseInfo, controls, tableName} from "../../baseInfo";
+import {BaseInfo, tableName} from "../../baseInfo";
 import Spin from "../../component/LoadingSkleton";
 import FileUpLoad from "../../component/axios/FileUpLoad";
 import {useStyles} from "../../styles/webStyle";
-import {useGaussianBlurStyles} from "../../styles/gaussianBlurStyle";
-import {useSelector} from "react-redux";
 
 const {Title, Paragraph} = Typography;
 const {Option} = Select;
+const {TextArea} = Input;
 
 const URL = `${BaseInfo}/api`;
 
 const LeaveForm = () => {
 
     const classes = useStyles();
-    const gaussianBlurClasses = useGaussianBlurStyles();
-
-    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value)
 
     const {message} = App.useApp();
 
@@ -66,7 +60,7 @@ const LeaveForm = () => {
 
     // 表单提交
     const submitForm = () => {
-        addTravelReimbursement(destination, (expenses + moneyType), reason.toHTML(), tableName.travel).then(res => {
+        addTravelReimbursement(destination, (expenses + moneyType), reason, tableName.travel).then(res => {
             if (res.code !== 200) {
                 message.error(res.msg);
                 return
@@ -74,9 +68,9 @@ const LeaveForm = () => {
             navigate('/success', {
                 state: {
                     object: {
-                        title: intl.get('travelReimburseApply') + ' ' + intl.get('submitSuccess'),
-                        describe: intl.get('waitApprove'),
-                        toPage: intl.get('showApplyList'),
+                        title: "差旅报销申请提交成功",
+                        describe: "等待审批",
+                        toPage: "查看申请记录",
                         toURL: '/travel-Record',
                     }
                 }
@@ -107,25 +101,22 @@ const LeaveForm = () => {
         isRenderResult ? <Spin/> :
             <div className={classes.cshbxy100Per}>
                 <Modal
-                    title={intl.get('confirm')}
+                    title="确认"
                     open={isModalVisible}
                     onOk={handleOk}
                     confirmLoading={confirmLoading}
                     onCancel={handleCancel}
-                    className={gaussianBlur ? gaussianBlurClasses.gaussianBlurModal : ''}
-                    mask={!gaussianBlur}
                 >
                     <Typography>
-                        <Paragraph>{intl.get('destination')}：{destination}</Paragraph>
-                        <Paragraph>{intl.get('cost')}：{expenses} {moneyType}</Paragraph>
-                        <Paragraph>{intl.get('reason')}：</Paragraph>
-                        <div className={classes.outPutHtml} dangerouslySetInnerHTML={{__html: reason?.toHTML()}}/>
-                        <Paragraph>{intl.get('file') + ': '}{
+                        <Paragraph>目的地：{destination}</Paragraph>
+                        <Paragraph>费用：{expenses} {moneyType}</Paragraph>
+                        <Paragraph>原因：{reason}</Paragraph>
+                        <Paragraph>文件：{
                             fileList.filter((item: any) => item.status === 'done').map((item: any) => item.name).join('、')
                         }</Paragraph>
                     </Typography>
                 </Modal>
-                <Title level={2}>{intl.get('travelReimburseApply')}</Title>
+                <Title level={2}>差旅报销申请</Title>
                 <Form
                     form={form}
                     name="basic"
@@ -136,24 +127,24 @@ const LeaveForm = () => {
                     }}
                 >
                     <Form.Item
-                        label={intl.get('destination')}
+                        label="目的地"
                         name="destination"
                         rules={[{
                             required: true,
-                            message: intl.get('pleaseInputDestination')
+                            message: "请输入目的地"
                         }]}
                     >
                         <Input showCount={true} maxLength={50}
-                               placeholder={intl.get('pleaseInputDestination')}/>
+                               placeholder="请输入目的地"/>
                     </Form.Item>
 
                     <Form.Item
-                        label={intl.get('cost')}
+                        label="费用"
                         name="expenses"
-                        rules={[{required: true, message: intl.get('pleaseInputCost')}]}
+                        rules={[{required: true, message: "请输入费用"}]}
                     >
                         <InputNumber
-                            placeholder={intl.get('pleaseInputCost')}
+                            placeholder="请输入费用"
                             addonAfter={
                                 <Select defaultValue={moneyType} style={{width: 60}} onChange={e => {
                                     setMoneyType(e)
@@ -167,21 +158,17 @@ const LeaveForm = () => {
                     </Form.Item>
 
                     <Form.Item
-                        label={intl.get('reason')}
+                        label="原因"
                         name="reason"
-                        rules={[{required: true, message: intl.get('pleaseInputReason')}]}
+                        rules={[{required: true, message: "请输入原因"}]}
                     >
-                        <BraftEditor
-                            // @ts-ignore
-                            controls={controls}
-                            placeholder={intl.get('pleaseInputReason')}
-                        />
+                        <TextArea showCount rows={4} maxLength={1000} placeholder="请输入原因"/>
                     </Form.Item>
 
                     <Form.Item
-                        label={intl.get('file')}
+                        label="文件"
                         name="file"
-                        rules={[{required: true, message: intl.get('pleaseChooseFiles')}]}
+                        rules={[{required: true, message: "请选择文件"}]}
                     >
                         <FileUpLoad
                             setTableName={tableName.travel}
@@ -196,12 +183,8 @@ const LeaveForm = () => {
                     </Form.Item>
 
                     <Form.Item>
-                        <Button type="primary" htmlType="submit">
-                            {intl.get('submit')}
-                        </Button>
-                        <Button htmlType="button" onClick={onReset} style={{marginLeft: 8}}>
-                            {intl.get('reset')}
-                        </Button>
+                        <Button type="primary" htmlType="submit">提交</Button>
+                        <Button htmlType="button" onClick={onReset} style={{marginLeft: 8}}>重置</Button>
                     </Form.Item>
                 </Form>
             </div>

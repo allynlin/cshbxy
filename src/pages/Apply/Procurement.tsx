@@ -1,23 +1,16 @@
 import React, {useState} from 'react';
-import {App, Button, Form, InputNumber, Modal, Typography} from 'antd';
+import {App, Button, Form, Input, InputNumber, Modal, Typography} from 'antd';
 import {useNavigate} from 'react-router-dom';
-import intl from "react-intl-universal";
-import BraftEditor from "braft-editor";
 
 import {addProcurement} from "../../component/axios/api";
 import {useStyles} from "../../styles/webStyle";
-import {controls} from "../../baseInfo";
-import {useGaussianBlurStyles} from "../../styles/gaussianBlurStyle";
-import {useSelector} from "react-redux";
 
 const {Title, Paragraph} = Typography;
+const {TextArea} = Input;
 
 const ProcurementForm = () => {
 
     const classes = useStyles();
-    const gaussianBlurClasses = useGaussianBlurStyles();
-
-    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value)
 
     const {message} = App.useApp();
 
@@ -33,7 +26,7 @@ const ProcurementForm = () => {
 
     // 表单提交
     const submitForm = () => {
-        addProcurement(items.toHTML(), price, reason.toHTML()).then(res => {
+        addProcurement(items, price, reason).then(res => {
             if (res.code !== 200) {
                 message.error(res.msg)
                 return
@@ -41,11 +34,11 @@ const ProcurementForm = () => {
             navigate('/success', {
                 state: {
                     object: {
-                        title: intl.get('procurementApply') + ' ' + intl.get('submitSuccess'),
-                        describe: intl.get('waitApprove'),
-                        toPage: intl.get('showApplyList'),
+                        title: "采购申请提交成功",
+                        describe: "等待审批",
+                        toPage: "查看申请记录",
                         toURL: '/procurement-Record',
-                        againTitle: intl.get('continueSubmit')
+                        againTitle: "再次提交"
                     }
                 }
             })
@@ -74,23 +67,19 @@ const ProcurementForm = () => {
     return (
         <div className={classes.cshbxy100Per}>
             <Modal
-                title={intl.get('confirm')}
+                title="确认"
                 open={isModalVisible}
                 onOk={handleOk}
                 confirmLoading={confirmLoading}
                 onCancel={handleCancel}
-                className={gaussianBlur ? gaussianBlurClasses.gaussianBlurModal : ''}
-                mask={!gaussianBlur}
             >
                 <Typography>
-                    <Paragraph>{intl.get('procurementItem')}：</Paragraph>
-                    <div className={classes.outPutHtml} dangerouslySetInnerHTML={{__html: items?.toHTML()}}/>
-                    <Paragraph>{intl.get('procurementPrice')}：{price}</Paragraph>
-                    <Paragraph>{intl.get('reason')}：</Paragraph>
-                    <div className={classes.outPutHtml} dangerouslySetInnerHTML={{__html: reason?.toHTML()}}/>
+                    <Paragraph>采购项：{items}</Paragraph>
+                    <Paragraph>采购金额：{price}</Paragraph>
+                    <Paragraph>原因：{reason}</Paragraph>
                 </Typography>
             </Modal>
-            <Title level={2}>{intl.get('procurementApply')}</Title>
+            <Title level={2}>采购申请</Title>
             <Form
                 form={form}
                 name="basic"
@@ -98,44 +87,32 @@ const ProcurementForm = () => {
                 onFinish={onFinish}
             >
                 <Form.Item
-                    label={intl.get('procurementItem')}
+                    label="采购项"
                     name="items"
-                    rules={[{required: true, message: intl.get('pleaseInputProcurementItem')}]}
+                    rules={[{required: true, message: "请输入采购项"}]}
                 >
-                    <BraftEditor
-                        // @ts-ignore
-                        controls={controls}
-                        placeholder={intl.get('pleaseInputProcurementItem')}
-                    />
+                    <TextArea showCount rows={4} maxLength={1000} placeholder="请输入采购项"/>
                 </Form.Item>
 
                 <Form.Item
-                    label={intl.get('procurementPrice')}
+                    label="采购金额"
                     name="price"
-                    rules={[{required: true, message: intl.get('pleaseInputProcurementPrice')}]}
+                    rules={[{required: true, message: "请输入采购金额"}]}
                 >
                     <InputNumber addonAfter={'¥'}/>
                 </Form.Item>
 
                 <Form.Item
-                    label={intl.get('reason')}
+                    label="原因"
                     name="reason"
-                    rules={[{required: true, message: intl.get('pleaseInputReason')}]}
+                    rules={[{required: true, message: "请输入原因"}]}
                 >
-                    <BraftEditor
-                        // @ts-ignore
-                        controls={controls}
-                        placeholder={intl.get('pleaseInputReason')}
-                    />
+                    <TextArea showCount rows={4} maxLength={1000} placeholder="请输入原因"/>
                 </Form.Item>
 
                 <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                        {intl.get('submit')}
-                    </Button>
-                    <Button htmlType="button" onClick={onReset} style={{marginLeft: 8}}>
-                        {intl.get('reset')}
-                    </Button>
+                    <Button type="primary" htmlType="submit">提交</Button>
+                    <Button htmlType="button" onClick={onReset} style={{marginLeft: 8}}>重置</Button>
                 </Form.Item>
             </Form>
         </div>

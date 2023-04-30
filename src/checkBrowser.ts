@@ -1,5 +1,4 @@
-import intl from "react-intl-universal";
-
+const tips = "您当前浏览器暂不支持现代 CSS Selectors 特性，本系统已暂停对低版本浏览器的支持，请更新当前浏览器或更换受支持的浏览器访问。建议使用现代浏览器（如 Chrome,Edge,Firefox 等等）"
 export const getBrowserInfo = () => {
     const browserInfo = navigator.userAgent.toLowerCase();
     // 检测 chrome 浏览器，如果 chrome 浏览器的内核低于 88 版本，就提示用户请使用最新版 chrome 浏览器
@@ -7,7 +6,7 @@ export const getBrowserInfo = () => {
         // @ts-ignore
         const version = browserInfo.match(/chrome\/([\d.]+)/)[1];
         if (parseInt(version) < 88) {
-            alert(intl.get('lowBrowserVersion'));
+            alert(tips);
             return false
         }
     }
@@ -16,7 +15,7 @@ export const getBrowserInfo = () => {
         // @ts-ignore
         const version = browserInfo.match(/edg\/([\d.]+)/)[1];
         if (parseInt(version) < 88) {
-            alert(intl.get('lowBrowserVersion'));
+            alert(tips);
             return false
         }
     }
@@ -25,7 +24,7 @@ export const getBrowserInfo = () => {
         // @ts-ignore
         const version = browserInfo.match(/firefox\/([\d.]+)/)[1];
         if (parseInt(version) < 78) {
-            alert(intl.get('lowBrowserVersion'));
+            alert(tips);
             return false
         }
     }
@@ -34,7 +33,7 @@ export const getBrowserInfo = () => {
         // @ts-ignore
         const version = browserInfo.match(/opr\/([\d.]+)/)[1];
         if (parseInt(version) < 74) {
-            alert(intl.get('lowBrowserVersion'));
+            alert(tips);
             return false
         }
     }
@@ -43,7 +42,7 @@ export const getBrowserInfo = () => {
         // @ts-ignore
         const version = browserInfo.match(/version\/([\d.]+)/)[1];
         if (parseInt(version) < 14) {
-            alert(intl.get('lowBrowserVersion'));
+            alert(tips);
             return false
         }
     }
@@ -52,7 +51,7 @@ export const getBrowserInfo = () => {
         // @ts-ignore
         const version = browserInfo.match(/chrome\/([\d.]+)/)[1];
         if (parseInt(version) < 88) {
-            alert(intl.get('lowBrowserVersion'));
+            alert(tips);
             return false
         }
     }
@@ -61,7 +60,7 @@ export const getBrowserInfo = () => {
         // @ts-ignore
         const version = browserInfo.match(/firefox\/([\d.]+)/)[1];
         if (parseInt(version) < 79) {
-            alert(intl.get('lowBrowserVersion'));
+            alert(tips);
             return false
         }
     }
@@ -70,7 +69,7 @@ export const getBrowserInfo = () => {
         // @ts-ignore
         const version = browserInfo.match(/opr\/([\d.]+)/)[1];
         if (parseInt(version) < 63) {
-            alert(intl.get('lowBrowserVersion'));
+            alert(tips);
             return false
         }
     }
@@ -79,7 +78,7 @@ export const getBrowserInfo = () => {
         // @ts-ignore
         const version = browserInfo.match(/version\/([\d.]+)/)[1];
         if (parseInt(version) < 14) {
-            alert(intl.get('lowBrowserVersion'));
+            alert(tips);
             return false
         }
     }
@@ -88,7 +87,7 @@ export const getBrowserInfo = () => {
         // @ts-ignore
         const version = browserInfo.match(/samsungbrowser\/([\d.]+)/)[1];
         if (parseInt(version) < 15) {
-            alert(intl.get('lowBrowserVersion'));
+            alert(tips);
             return false
         }
     }
@@ -97,7 +96,7 @@ export const getBrowserInfo = () => {
         // @ts-ignore
         const version = browserInfo.match(/wv\/([\d.]+)/)[1];
         if (parseInt(version) < 88) {
-            alert(intl.get('lowBrowserVersion'));
+            alert(tips);
             return false
         }
     }

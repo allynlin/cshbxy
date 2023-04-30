@@ -1,8 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {App, Button, Form, Modal, Result, Select, Typography} from 'antd';
-import BraftEditor from 'braft-editor';
-import intl from "react-intl-universal";
+import {App, Button, Form, Input, Modal, Result, Select, Typography} from 'antd';
 
 import {
     ChangeDepartment,
@@ -10,12 +8,12 @@ import {
     checkTeacherChangeDepartment,
     findUserType
 } from "../../component/axios/api";
-import {controls, DownLoadURL, tableName} from "../../baseInfo";
+import {DownLoadURL, tableName} from "../../baseInfo";
 import FileUpLoad from "../../component/axios/FileUpLoad";
 import {useStyles} from "../../styles/webStyle";
-import {useGaussianBlurStyles} from "../../styles/gaussianBlurStyle";
-import {useSelector} from "react-redux";
 import logo from "../../images/logo.png";
+
+const {TextArea} = Input;
 
 
 const {Title, Paragraph} = Typography;
@@ -23,9 +21,6 @@ const {Title, Paragraph} = Typography;
 const ChangeForm = () => {
 
     const classes = useStyles();
-    const gaussianBlurClasses = useGaussianBlurStyles();
-
-    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value)
 
     const {message} = App.useApp();
 
@@ -40,8 +35,7 @@ const ChangeForm = () => {
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
     // 展示表单还是提示信息,两种状态，分别是 info 或者 loading
     const [isRenderResult, setIsRenderResult] = useState<boolean>(true);
-    const [RenderResultTitle, setRenderResultTitle] = useState<String>(intl.get('obtainLastTimeApplyRecord'));
-    const [isRenderInfo, setIsRenderInfo] = useState<boolean>(false);
+    const [RenderResultTitle, setRenderResultTitle] = useState<String>("获取上次申请记录");
     // 部门列表
     const [departmentOptions, setDepartmentOptions] = useState([]);
     // 监听表单数据
@@ -73,11 +67,10 @@ const ChangeForm = () => {
         setWaitTime(10)
         checkTeacherChangeDepartment().then(res => {
             if (res.code !== 200) {
-                setIsRenderInfo(true)
-                setRenderResultTitle(intl.get('pleaseWaitApprove'))
+                setRenderResultTitle("请等待审批")
                 return
             }
-            setRenderResultTitle(intl.get('obtainLastTimeUploadFiles'))
+            setRenderResultTitle("获取上次上传文件")
             checkUploadFilesList();
         })
     }
@@ -101,7 +94,7 @@ const ChangeForm = () => {
 
     // 表单提交
     const submitForm = () => {
-        ChangeDepartment(departmentUid, changeReason.toHTML()).then(res => {
+        ChangeDepartment(departmentUid, changeReason).then(res => {
             if (res.code !== 200) {
                 message.error(res.msg)
                 return
@@ -109,9 +102,9 @@ const ChangeForm = () => {
             navigate('/success', {
                 state: {
                     object: {
-                        title: intl.get('departmentChangeApply') + ' ' + intl.get('submitSuccess'),
-                        describe: intl.get('waitApprove'),
-                        toPage: intl.get('showApplyList'),
+                        title: "部门变更申请提交成功",
+                        describe: "等待审批",
+                        toPage: "查看申请记录",
                         toURL: '/departmentChange-Record',
                     }
                 }
@@ -166,30 +159,27 @@ const ChangeForm = () => {
                 <Button disabled={isQuery} type="primary" onClick={() => {
                     checkDepartmentChange()
                 }}>
-                    {isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}
+                    {isQuery ? `刷新(${waitTime})` : "刷新"}
                 </Button>
             }
         />) : (
         <div className={classes.cshbxy100Per}>
             <Modal
-                title={intl.get('Confirm')}
+                title="确认"
                 open={isModalVisible}
                 onOk={handleOk}
                 confirmLoading={confirmLoading}
                 onCancel={handleCancel}
-                className={gaussianBlur ? gaussianBlurClasses.gaussianBlurModal : ''}
-                mask={!gaussianBlur}
             >
                 <Typography>
-                    <Paragraph>{intl.get('departmentChange') + ': '}{departmentUid}</Paragraph>
-                    <Paragraph>{intl.get('reason') + ': '}</Paragraph>
-                    <div className={classes.outPutHtml} dangerouslySetInnerHTML={{__html: changeReason?.toHTML()}}/>
-                    <Paragraph>{intl.get('file') + ': '}{
+                    <Paragraph>变更部门：{departmentUid}</Paragraph>
+                    <Paragraph>原因：{changeReason}</Paragraph>
+                    <Paragraph>文件：{
                         fileList.filter((item: any) => item.status === 'done').map((item: any) => item.name).join('、')
                     }</Paragraph>
                 </Typography>
             </Modal>
-            <Title level={2}>{intl.get('departmentChangeApply')}</Title>
+            <Title level={2}>部门变更申请</Title>
             <Form
                 form={form}
                 name="basic"
@@ -200,16 +190,16 @@ const ChangeForm = () => {
                 }}
             >
                 <Form.Item
-                    label={intl.get('department')}
+                    label="部门"
                     name="departmentUid"
                     rules={[{
                         required: true,
-                        message: intl.get('pleaseChooseDepartment')
+                        message: "请选择部门"
                     }]}
                 >
                     <Select
                         showSearch
-                        placeholder={intl.get('pleaseChooseDepartment')}
+                        placeholder="请选择部门"
                         optionFilterProp="children"
                         onFocus={getDepartmentOptions}
                         options={departmentOptions}
@@ -217,27 +207,20 @@ const ChangeForm = () => {
                 </Form.Item>
 
                 <Form.Item
-                    label={intl.get('reason')}
+                    label="原因"
                     name="changeReason"
                     rules={[{
                         required: true,
-                        message: intl.get('pleaseInputReason')
+                        message: "请输入原因"
                     }]}
                 >
-                    <BraftEditor
-                        // @ts-ignore
-                        controls={controls}
-                        placeholder={intl.get('textarea-enter-placeholder', {
-                            name: intl.get('Reason'),
-                            max: 1000
-                        })}
-                    />
+                    <TextArea showCount rows={4} maxLength={1000} placeholder="请输入原因"/>
                 </Form.Item>
 
                 <Form.Item
-                    label={intl.get('file')}
+                    label="文件"
                     name="file"
-                    rules={[{required: true, message: intl.get('pleaseChooseFiles')}]}
+                    rules={[{required: true, message: "请选择文件"}]}
                 >
                     <FileUpLoad
                         setTableName={tableName.departmentChange}
@@ -258,12 +241,8 @@ const ChangeForm = () => {
                 </Form.Item>
 
                 <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                        {intl.get('submit')}
-                    </Button>
-                    <Button htmlType="button" onClick={onReset} style={{marginLeft: 8}}>
-                        {intl.get('reset')}
-                    </Button>
+                    <Button type="primary" htmlType="submit">提交</Button>
+                    <Button htmlType="button" onClick={onReset} style={{marginLeft: 8}}>重置</Button>
                 </Form.Item>
             </Form>
         </div>

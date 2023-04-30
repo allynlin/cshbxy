@@ -1,13 +1,11 @@
 import {App, Button, Form, Input, Modal} from 'antd';
 import React, {useState} from 'react';
 import {useNavigate} from "react-router-dom";
-import intl from "react-intl-universal";
-import {updatePassword} from "../../../component/axios/api";
+import {updatePassword} from "../../component/axios/api";
 import {useDispatch, useSelector} from "react-redux";
-import {logout} from "../../../component/redux/isLoginSlice";
-import {all} from "../../../component/redux/userTypeSlice";
+import {logout} from "../../component/redux/isLoginSlice";
+import {all} from "../../component/redux/userTypeSlice";
 import Cookie from "js-cookie";
-import {useGaussianBlurStyles} from "../../../styles/gaussianBlurStyle";
 
 interface Values {
     title: string;
@@ -31,9 +29,6 @@ const UserPassword: React.FC = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const gaussianBlurClasses = useGaussianBlurStyles();
-
-    const gaussianBlur = useSelector((state: any) => state.gaussianBlur.value)
     const userInfo = useSelector((state: { userInfo: { value: any } }) => state.userInfo.value);
 
     const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
@@ -45,11 +40,9 @@ const UserPassword: React.FC = () => {
         return (
             <Modal
                 open={open}
-                className={gaussianBlur ? gaussianBlurClasses.gaussianBlurModal : ''}
-                mask={!gaussianBlur}
-                title={intl.get("changePassword")}
-                okText={intl.get('ok')}
-                cancelText={intl.get('cancel')}
+                title="修改密码"
+                okText="确认"
+                cancelText="取消"
                 onCancel={onCancel}
                 onOk={() => {
                     form
@@ -62,7 +55,7 @@ const UserPassword: React.FC = () => {
                             message.open({
                                 key,
                                 type: "error",
-                                content: intl.get('pleaseInputAllInfo')
+                                content: "请填写完整信息"
                             })
                         });
                 }}
@@ -74,17 +67,17 @@ const UserPassword: React.FC = () => {
                 >
                     <Form.Item
                         name={'password'}
-                        label={intl.get("password")}
-                        rules={[{required: true, message: intl.get('pleaseInputPassword')}]}
+                        label="新密码"
+                        rules={[{required: true, message: "请输入新密码"}]}
                     >
-                        <Input.Password maxLength={20} showCount placeholder={intl.get('pleaseInputPassword')}/>
+                        <Input.Password maxLength={20} showCount placeholder="请输入新密码"/>
                     </Form.Item>
                     <Form.Item
                         name="repeatPassword"
-                        label={intl.get('repeatPassword')}
-                        rules={[{required: true, message: intl.get('pleaseRepeatPassword')}]}
+                        label="重复新密码"
+                        rules={[{required: true, message: "请重复新密码"}]}
                     >
-                        <Input.Password maxLength={20} showCount placeholder={intl.get('pleaseRepeatPassword')}/>
+                        <Input.Password maxLength={20} showCount placeholder="请重复新密码"/>
                     </Form.Item>
                 </Form>
             </Modal>
@@ -96,7 +89,7 @@ const UserPassword: React.FC = () => {
             message.open({
                 key,
                 type: "error",
-                content: intl.get('twoPasswordIsNotSame')
+                content: "两次密码不一致"
             })
             return
         }
@@ -105,7 +98,7 @@ const UserPassword: React.FC = () => {
                 message.open({
                     key,
                     type: "success",
-                    content: intl.get('changeSuccessNotice')
+                    content: "密码修改成功，请重新登录"
                 })
                 dispatch(logout())
                 dispatch(all())
@@ -113,6 +106,8 @@ const UserPassword: React.FC = () => {
                 Cookie.remove('password');
                 navigate('/login', {replace: true})
             }
+        }).catch(() => {
+            message.destroy();
         })
         setOpen(false);
     };
@@ -126,11 +121,11 @@ const UserPassword: React.FC = () => {
                     message.open({
                         key,
                         type: "warning",
-                        content: intl.get('changePasswordNotice')
+                        content: "请谨慎修改密码，修改后需要重新登录"
                     })
                 }}
             >
-                {intl.get('changePassword')}
+                修改密码
             </Button>
             <CollectionCreateForm
                 open={open}

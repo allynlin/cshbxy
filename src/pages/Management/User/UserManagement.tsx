@@ -1,9 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import VirtualTable from "../../../component/Table/VirtualTable";
 import {App, Button, Form, Input, Result, Skeleton, Spin, Typography} from 'antd';
 import {findAllUser} from "../../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
-import intl from "react-intl-universal";
 import {FolderOpenOutlined, SearchOutlined} from "@ant-design/icons";
 import {RenderUserStatusTag} from "../../../component/Tag/RenderUserStatusTag";
 import {RenderUserTypeTag} from "../../../component/Tag/RenderUserTypeTag";
@@ -12,7 +10,6 @@ import ChangeUserInfo from "./ChangeUserInfo";
 import ChangePassword from "./ChangePassword";
 import ChangeUserStatus from "./ChangeUserStatus";
 import DeleteUser from "./DeleteUser";
-import {useSelector} from "react-redux";
 
 import {useStyles} from "../../../styles/webStyle";
 import MoveModal from "../../../component/MoveModal";
@@ -44,9 +41,6 @@ const MyApp = () => {
     // 是否为空数据
     const [isEmpty, setIsEmpty] = useState<boolean>(false);
 
-    const tableSize = useSelector((state: any) => state.tableSize.value);
-    const userTable = useSelector((state: any) => state.userTable.value);
-
     useEffect(() => {
         const timer = setTimeout(() => {
             if (waitTime > 1) {
@@ -65,11 +59,11 @@ const MyApp = () => {
     const RenderUserStatus = (status: number) => {
         switch (status) {
             case 0:
-                return RenderUserStatusTag(intl.get('normal'))
+                return RenderUserStatusTag("正常")
             case -1:
-                return RenderUserStatusTag(intl.get('disabled'))
+                return RenderUserStatusTag("禁用")
             default:
-                return RenderUserStatusTag(intl.get('unKnow'))
+                return RenderUserStatusTag("未知")
         }
     }
 
@@ -96,32 +90,15 @@ const MyApp = () => {
                 setIsEmpty(true)
                 return
             }
-            const newDataSource = res.body.map((item: any, index: number) => {
+            const data = res.body.map((item: any, index: number) => {
                 return {
                     ...item,
                     id: index + 1,
-                    key: item.uid,
-                    tag: RenderUserStatus(item.status),
-                    showUserType: RenderUserTypeTag(item),
-                    operation: <Button
-                        type="primary"
-                        onClick={() => {
-                            setShowInfo({
-                                ...item,
-                                id: index + 1,
-                                key: item.uid,
-                                tag: RenderUserStatus(item.status),
-                                showUserType: RenderUserTypeTag(item),
-                            });
-                            setShowModal(true);
-                            setShowContent(false);
-                        }}>
-                        {intl.get('management')}
-                    </Button>
+                    key: item.uid
                 }
-            });
-            setDataSource(newDataSource);
-            setShowData(newDataSource);
+            })
+            setDataSource(data);
+            setShowData(data);
         }).finally(() => {
             setLoading(false)
         })
@@ -145,31 +122,50 @@ const MyApp = () => {
         dataIndex: 'id',
         align: 'center',
     }, {
-        title: intl.get('username'),
+        title: "用户名",
         dataIndex: 'username',
         align: 'center',
     }, {
-        title: intl.get('realName'),
+        title: "真实姓名",
         dataIndex: 'realeName',
         align: 'center',
     }, {
-        title: intl.get('status'),
-        dataIndex: 'tag',
+        title: "状态",
+        dataIndex: 'status',
         align: 'center',
+        render: (text: any, item: any) => {
+            return RenderUserStatus(item.status)
+        }
     }, {
-        title: intl.get('userType'),
-        dataIndex: 'showUserType',
+        title: "用户类型",
+        dataIndex: 'userType',
         align: 'center',
+        render: (text: any, item: any) => {
+            return RenderUserTypeTag(item)
+        }
     }, {
-        title: intl.get('operate'),
+        title: "操作",
         dataIndex: 'operation',
         align: 'center',
+        render: (text: any, item: any) => {
+            return (
+                <Button
+                    type="primary"
+                    onClick={() => {
+                        setShowInfo(item);
+                        setShowModal(true);
+                        setShowContent(false);
+                    }}>
+                    管理
+                </Button>
+            )
+        }
     }];
 
     const RenderGetDataSourceButton = () => {
         return (
             <Button type="primary" disabled={isQuery} icon={<SearchOutlined/>}
-                    onClick={getDataSource}>{isQuery ? `${intl.get('refresh')}(${waitTime})` : intl.get('refresh')}</Button>
+                    onClick={getDataSource}>{isQuery ? `刷新(${waitTime})` : "刷新"}</Button>
         )
     }
 
@@ -177,7 +173,7 @@ const MyApp = () => {
         <Spin tip={RenderGetDataSourceButton()} delay={1000} indicator={<LoadingIcon/>} size="large" spinning={loading}>
             <div className={classes.contentBody}>
                 <MoveModal
-                    title={intl.get('userInfo')}
+                    title="用户信息"
                     showModal={showModal}
                     getModalStatus={(e) => setShowModal(e)}
                     onCancel={() => setShowModal(false)}
@@ -187,53 +183,39 @@ const MyApp = () => {
                             loading={loading}
                             onClick={() => setShowModal(false)}
                         >
-                            {intl.get('close')}
+                            关闭
                         </Button>,
                     ]}
                 >
                     {showContent ? (<Skeleton paragraph={{rows: 18}} active/>) : (
                         <Typography>
-                            <Title level={3}>{intl.get('baseInfo')}</Title>
+                            <Title level={3}>基本信息</Title>
                             <Paragraph>UID：{showInfo.uid}</Paragraph>
                             {showInfo.departmentUid ? (
-                                <Paragraph>{intl.get('department')}：{showInfo.departmentUid}</Paragraph>) : null}
-                            <Paragraph>{intl.get('username')}：{showInfo.username}</Paragraph>
-                            <Paragraph>{intl.get('realName')}：{showInfo.realeName}</Paragraph>
-                            <Paragraph>{intl.get('gender')}：{showInfo.gender}</Paragraph>
-                            <Paragraph>{intl.get('email')}：{showInfo.email}</Paragraph>
-                            <Paragraph>{intl.get('tel')}：{showInfo.tel}</Paragraph>
-                            <Paragraph>{intl.get('createTime')}：{showInfo.create_time}</Paragraph>
-                            <Paragraph>{intl.get('updateTime')}：{showInfo.update_time}</Paragraph>
-                            <Paragraph>{intl.get('status')}：{showInfo.tag}</Paragraph>
-                            <Paragraph>{intl.get('userType')}：{showInfo.showUserType}</Paragraph>
-                            <Title level={3}>{intl.get('userOperation')}</Title>
+                                <Paragraph>管理员：{showInfo.departmentUid}</Paragraph>) : null}
+                            <Paragraph>用户名：{showInfo.username}</Paragraph>
+                            <Paragraph>真实姓名：{showInfo.realeName}</Paragraph>
+                            <Paragraph>性别：{showInfo.gender}</Paragraph>
+                            <Paragraph>电子邮件地址：{showInfo.email}</Paragraph>
+                            <Paragraph>联系电话：{showInfo.tel}</Paragraph>
+                            <Paragraph>提交时间：{showInfo.create_time}</Paragraph>
+                            <Paragraph>更新时间：{showInfo.update_time}</Paragraph>
+                            <Paragraph>状态：{RenderUserStatus(showInfo.status)}</Paragraph>
+                            <Paragraph>用户类型：{RenderUserTypeTag(showInfo)}</Paragraph>
+                            <Title level={3}>用户操作</Title>
                             <Paragraph>{<ChangePassword uid={showInfo.uid}/>}</Paragraph>
                             <Paragraph>
                                 {<ChangeUserName info={showInfo} getChange={(newUsername: string) => {
-                                    // 修改 showInfo 中的 username
-                                    setShowInfo({
+                                    const newData = {
                                         ...showInfo,
                                         username: newUsername
-                                    })
+                                    }
+                                    // 修改 showInfo 中的 username
+                                    setShowInfo(newData)
                                     // 修改 dataSource 中的 username
                                     const newDataSource = dataSource.map((item: any) => {
                                         if (item.uid === showInfo.uid) {
-                                            return {
-                                                ...item,
-                                                username: newUsername,
-                                                operation: <Button
-                                                    type="primary"
-                                                    onClick={() => {
-                                                        setShowInfo({
-                                                            ...showInfo,
-                                                            username: newUsername
-                                                        });
-                                                        setShowModal(true);
-                                                        setShowContent(false);
-                                                    }}>
-                                                    {intl.get('management')}
-                                                </Button>
-                                            }
+                                            return newData
                                         }
                                         return item
                                     })
@@ -241,22 +223,7 @@ const MyApp = () => {
                                     // 修改 showData 中的 username
                                     const newShowData = showData.map((item: any) => {
                                         if (item.uid === showInfo.uid) {
-                                            return {
-                                                ...item,
-                                                username: newUsername,
-                                                operation: <Button
-                                                    type="primary"
-                                                    onClick={() => {
-                                                        setShowInfo({
-                                                            ...showInfo,
-                                                            username: newUsername
-                                                        });
-                                                        setShowModal(true);
-                                                        setShowContent(false);
-                                                    }}>
-                                                    {intl.get('management')}
-                                                </Button>
-                                            }
+                                            return newData
                                         }
                                         return item
                                     })
@@ -265,47 +232,21 @@ const MyApp = () => {
                             </Paragraph>
                             <Paragraph>
                                 {<ChangeUserInfo info={showInfo} getChange={(newContent: any) => {
-                                    setShowInfo({...showInfo, ...newContent})
+                                    const newData = {
+                                        ...showInfo,
+                                        ...newContent
+                                    }
+                                    setShowInfo(newData)
                                     const newDateSource = dataSource.map((item: any) => {
                                         if (item.uid === showInfo.uid) {
-                                            return {
-                                                ...showInfo,
-                                                ...newContent,
-                                                operation: <Button
-                                                    type="primary"
-                                                    onClick={() => {
-                                                        setShowInfo({
-                                                            ...showInfo,
-                                                            ...newContent
-                                                        });
-                                                        setShowModal(true);
-                                                        setShowContent(false);
-                                                    }}>
-                                                    {intl.get('management')}
-                                                </Button>
-                                            }
+                                            return newData
                                         }
                                         return item
                                     })
                                     setDataSource(newDateSource)
                                     const newShowData = showData.map((item: any) => {
                                         if (item.uid === showInfo.uid) {
-                                            return {
-                                                ...showInfo,
-                                                ...newContent,
-                                                operation: <Button
-                                                    type="primary"
-                                                    onClick={() => {
-                                                        setShowInfo({
-                                                            ...showInfo,
-                                                            ...newContent
-                                                        });
-                                                        setShowModal(true);
-                                                        setShowContent(false);
-                                                    }}>
-                                                    {intl.get('management')}
-                                                </Button>
-                                            }
+                                            return newData
                                         }
                                         return item
                                     })
@@ -314,62 +255,28 @@ const MyApp = () => {
                             </Paragraph>
                             <Paragraph>
                                 {<ChangeUserStatus info={showInfo} getChange={(newStatus: number) => {
-                                    setShowInfo({
+                                    const newData = {
                                         ...showInfo,
-                                        tag: RenderUserStatus(newStatus),
                                         status: newStatus,
-                                    })
+                                    }
+                                    setShowInfo(newData)
                                     const newDateSource = dataSource.map((item: any) => {
                                         if (item.uid === showInfo.uid) {
-                                            return {
-                                                ...item,
-                                                tag: RenderUserStatus(newStatus),
-                                                status: newStatus,
-                                                operation: <Button
-                                                    type="primary"
-                                                    onClick={() => {
-                                                        setShowInfo({
-                                                            ...showInfo,
-                                                            status: newStatus,
-                                                            tag: RenderUserStatus(newStatus),
-                                                        });
-                                                        setShowModal(true);
-                                                        setShowContent(false);
-                                                    }}>
-                                                    {intl.get('management')}
-                                                </Button>
-                                            }
+                                            return newData
                                         }
                                         return item
                                     })
                                     setDataSource(newDateSource)
                                     const newShowData = showData.map((item: any) => {
                                         if (item.uid === showInfo.uid) {
-                                            return {
-                                                ...item,
-                                                tag: RenderUserStatus(newStatus),
-                                                status: newStatus,
-                                                operation: <Button
-                                                    type="primary"
-                                                    onClick={() => {
-                                                        setShowInfo({
-                                                            ...showInfo,
-                                                            status: newStatus,
-                                                            tag: RenderUserStatus(newStatus),
-                                                        });
-                                                        setShowModal(true);
-                                                        setShowContent(false);
-                                                    }}>
-                                                    {intl.get('management')}
-                                                </Button>
-                                            }
+                                            return newData
                                         }
                                         return item
                                     })
                                     setShowData(newShowData)
                                 }}/>}
                             </Paragraph>
-                            <Title level={3}>{intl.get('advancedFeatures')}</Title>
+                            <Title level={3}>高级功能</Title>
                             <Paragraph>
                                 {<DeleteUser content={showInfo} getChange={(newContent: string) => {
                                     if (newContent === 'yes') {
@@ -397,16 +304,16 @@ const MyApp = () => {
                 </MoveModal>
                 <div className={classes.contentHead}>
                     <Title level={2} className={classes.tit}>
-                        {intl.get('userManagement')}&nbsp;&nbsp;
+                        用户管理&nbsp;&nbsp;
                         <RenderGetDataSourceButton/>
                     </Title>
                     <Form name="search" layout="inline" onFinish={onFinish}>
                         <Form.Item name="search">
                             <Input prefix={<SearchOutlined className="site-form-item-icon"/>}
-                                   placeholder={intl.get('search') + ' ' + intl.get('username')}/>
+                                   placeholder="搜索用户名"/>
                         </Form.Item>
                         <Form.Item>
-                            <Button type="primary" htmlType="submit">Search</Button>
+                            <Button type="primary" htmlType="submit">搜索</Button>
                         </Form.Item>
                     </Form>
                 </div>
@@ -414,17 +321,14 @@ const MyApp = () => {
                     isEmpty ? (
                         <Result
                             icon={<FolderOpenOutlined/>}
-                            title={intl.get('noData')}
+                            title="暂无数据"
                             extra={<RenderGetDataSourceButton/>}
                         />
                     ) : (
-                        userTable.tableType === "virtual" ?
-                            <VirtualTable columns={columns} dataSource={showData}
-                                          scroll={{y: tableSize.tableHeight, x: tableSize.tableWidth}}/> :
-                            <NormalTable
-                                columns={columns}
-                                dataSource={showData}
-                            />
+                        <NormalTable
+                            columns={columns}
+                            dataSource={showData}
+                        />
                     )
                 }
             </div>

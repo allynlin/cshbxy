@@ -4,35 +4,17 @@ import webRecord from "./webRecord";
 import webApproval from "./webApproval";
 import webManagement from "./webManagement";
 import {Error403, Error404, Error500, Success} from "../pages/Result/Result";
-import {Error404 as MobileError404,} from "../pages/Result/MobileResult";
 import Home from "../pages/Home/Web";
-import Mobile from "../pages/Home/Mobile";
-import mobileRecord from "./mobileRecord";
-import mobileApproval from "./mobileApproval";
 import {createBrowserRouter, Navigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 
 import WebSkeletonLoading from "../component/Skeleton/WebLoading";
 import WebSkeleton from "../component/Skeleton/WebSkeleton";
-import MobileLoading from "../component/Skeleton/MobileLoading";
-import MobileSkeleton from "../component/Skeleton/MobileSkeleton";
 
 const WebHome = lazy(() => import('../pages/Index/Index'));
 const WebLogin = lazy(() => import('../pages/User/WebLogin'));
 const AddUser = lazy(() => import('../pages/User/AddUser'));
 const DepartmentAddUser = lazy(() => import('../pages/User/DepartmentRegister'));
-const WebSetting = lazy(() => import('../pages/Setting/Setting'));
-const WebToken = lazy(() => import('../pages/Setting/Token/TokenSetting'));
-
-const MobileHome = lazy(() => import('../pages/Index/MobileIndex'));
-const MobileLoginRecord = lazy(() => import('../pages/Index/MobileLoginRecord'));
-const MobileLogin = lazy(() => import('../pages/User/MobileLogin'));
-const MobileSetting = lazy(() => import('../pages/Setting/MobileSetting/MobileSetting'));
-const MobileDepartmentUser = lazy(() => import('../pages/Management/DepartmentUser'));
-const MobileUserManagement = lazy(() => import('../pages/Management/UserManagement'));
-
-
-const WebLoading = lazy(() => import('../pages/Setting/WaitSetting'));
 
 interface metaProps {
     title?: string,
@@ -50,8 +32,7 @@ const routes = [
         }, {
             path: 'home',
             element: (<RouterBefore meta={{
-                title: 'Home',
-                titleCN: '首页'
+                title: '首页',
             }}>
                 <React.Suspense fallback={<WebSkeletonLoading/>}>
                     <WebHome/>
@@ -60,8 +41,7 @@ const routes = [
         }, {
             path: 'login',
             element: (<RouterBefore meta={{
-                title: 'Login',
-                titleCN: '登录'
+                title: '登录',
             }}>
                 <React.Suspense fallback={<WebSkeletonLoading/>}>
                     <WebLogin/>
@@ -70,8 +50,7 @@ const routes = [
         }, {
             path: 'register',
             element: (<RouterBefore meta={{
-                title: 'Add User',
-                titleCN: '添加用户',
+                title: '添加用户',
                 auth: 'Department'
             }}>
                 <React.Suspense fallback={<WebSkeleton/>}>
@@ -81,8 +60,7 @@ const routes = [
         }, {
             path: 'departmentRegister',
             element: (<RouterBefore meta={{
-                title: 'Add User',
-                titleCN: '添加用户',
+                title: '添加用户',
                 auth: 'Department'
             }}>
                 <React.Suspense fallback={<WebSkeleton/>}>
@@ -90,30 +68,9 @@ const routes = [
                 </React.Suspense>
             </RouterBefore>)
         }, {
-            path: 'setting',
-            element: (<RouterBefore meta={{
-                title: 'Setting',
-                titleCN: '设置'
-            }}>
-                <React.Suspense fallback={<WebSkeletonLoading/>}>
-                    <WebSetting/>
-                </React.Suspense>
-            </RouterBefore>)
-        }, {
-            path: 'token',
-            element: (<RouterBefore meta={{
-                title: 'Token Setting',
-                titleCN: 'Token设置'
-            }}>
-                <React.Suspense fallback={<WebSkeletonLoading/>}>
-                    <WebToken/>
-                </React.Suspense>
-            </RouterBefore>)
-        }, {
             path: 'success',
             element: (<RouterBefore meta={{
-                title: 'Success',
-                titleCN: '成功'
+                title: '成功',
             }}>
                 <React.Suspense fallback={<WebSkeletonLoading/>}>
                     <Success/>
@@ -125,102 +82,6 @@ const routes = [
             ...webApproval,
             ...webManagement
         ]
-    }, {
-        path: 'm',
-        element: (<RouterBefore meta={{
-            title: 'Home',
-            titleCN: '首页'
-        }}>
-            <Mobile/>
-        </RouterBefore>),
-        children: [{
-            path: 'home',
-            element: (<RouterBefore meta={{
-                title: 'Home',
-                titleCN: '首页'
-            }}>
-                <React.Suspense fallback={<MobileLoading/>}>
-                    <MobileHome/>
-                </React.Suspense>
-            </RouterBefore>)
-        }, {
-            path: 'login-Record',
-            element: (<RouterBefore meta={{
-                title: 'Login Record',
-                titleCN: '登录记录'
-            }}>
-                <React.Suspense fallback={<MobileSkeleton/>}>
-                    <MobileLoginRecord/>
-                </React.Suspense>
-            </RouterBefore>)
-        }, {
-            path: 'login',
-            element: (<RouterBefore meta={{
-                title: 'Login',
-                titleCN: '登录'
-            }}>
-                <React.Suspense fallback={<MobileLoading/>}>
-                    <MobileLogin/>
-                </React.Suspense>
-            </RouterBefore>)
-        }, {
-            path: 'setting',
-            element: (<RouterBefore meta={{
-                title: 'Setting',
-                titleCN: '设置',
-            }}>
-                <React.Suspense fallback={<MobileLoading/>}>
-                    <MobileSetting/>
-                </React.Suspense>
-            </RouterBefore>)
-        }, {
-            path: 'departmentUser',
-            element: (<RouterBefore meta={{
-                title: '部门用户',
-                auth: 'Department'
-            }}>
-                <React.Suspense fallback={<MobileSkeleton/>}>
-                    <MobileDepartmentUser/>
-                </React.Suspense>
-            </RouterBefore>)
-        }, {
-            path: 'userManagement',
-            element: (<RouterBefore meta={{
-                title: '用户管理',
-                auth: 'Department'
-            }}>
-                <React.Suspense fallback={<MobileSkeleton/>}>
-                    <MobileUserManagement/>
-                </React.Suspense>
-            </RouterBefore>)
-        }, {
-            path: '404',
-            element: (
-                <RouterBefore meta={{
-                    title: '404'
-                }}>
-                    <MobileError404/>
-                </RouterBefore>
-            )
-        }, {
-            path: '*',
-            element: <Navigate to="/m/404"/>
-        },
-            ...mobileApproval,
-            ...mobileRecord
-        ]
-    }, {
-        path: 'loading',
-        element: (
-            <RouterBefore meta={{
-                title: 'Loading',
-                titleCN: '加载中',
-            }}>
-                <React.Suspense fallback={<WebSkeletonLoading/>}>
-                    <WebLoading/>
-                </React.Suspense>
-            </RouterBefore>
-        )
     }, {
         path: '403',
         element: (
@@ -261,17 +122,11 @@ const router = createBrowserRouter(routes, {
 // 路由跳转前操作
 export function RouterBefore({children, meta = {}}: { children: JSX.Element, meta?: metaProps }) {
 
-    const userLanguage = useSelector((state: any) => state.userLanguage.value)
     const isLogin = useSelector((state: any) => state.isLogin.value)
     const userType = useSelector((state: any) => state.userType.value)
 
     if (meta.title) {
-        // 设置页面标题，如果中文标题不存在，就直接使用英文标题代替，否之就判断当前用户语言，根据用户语言判断是使用中文标题还是英文标题
-        if (meta.titleCN === undefined) {
-            document.title = meta.title
-        } else {
-            userLanguage === 'English' ? document.title = meta.title : document.title = meta.titleCN
-        }
+        document.title = meta.title
     }
     if (meta.auth) {
         if (userType === meta.auth)
