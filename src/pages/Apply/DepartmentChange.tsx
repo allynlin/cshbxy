@@ -10,7 +10,7 @@ import {
 } from "../../component/axios/api";
 import {DownLoadURL, tableName} from "../../baseInfo";
 import FileUpLoad from "../../component/axios/FileUpLoad";
-import {useStyles} from "../../styles/webStyle";
+import {useStyles} from "../../webStyle";
 import logo from "../../images/logo.png";
 
 const {TextArea} = Input;

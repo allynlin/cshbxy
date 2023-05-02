@@ -4,7 +4,7 @@ import {deleteLeave, findLeaveList, findLeaveProcess, refreshLeave} from "../../
 import {ColumnsType} from "antd/es/table";
 import {RenderStatus} from "../../component/Tag/RenderStatus";
 import {FolderOpenOutlined, SearchOutlined} from "@ant-design/icons";
-import {useStyles} from "../../styles/webStyle";
+import {useStyles} from "../../webStyle";
 import {getProcessStatus} from '../../component/getProcessStatus';
 import {RenderStatusTag} from "../../component/Tag/RenderStatusTag";
 import MoveModal from "../../component/MoveModal";

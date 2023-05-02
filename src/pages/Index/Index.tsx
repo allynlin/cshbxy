@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {useSelector} from "react-redux";
-import {useStyles} from "../../styles/webStyle";
+import {useStyles} from "../../webStyle";
 import HomeDescriptions from "./HomeDescriptions";
 
 const {useNavigate} = require("react-router-dom");

@@ -9,7 +9,7 @@ import {
 import {ColumnsType} from "antd/es/table";
 import {RenderStatus} from "../../component/Tag/RenderStatus";
 import {FolderOpenOutlined, SearchOutlined} from "@ant-design/icons";
-import {useStyles} from "../../styles/webStyle";
+import {useStyles} from "../../webStyle";
 import {getProcessStatus} from '../../component/getProcessStatus';
 import MoveModal from "../../component/MoveModal";
 import NormalTable from "../../component/Table/NormalTable";

@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {ExclamationCircleOutlined, LoadingOutlined, SearchOutlined} from "@ant-design/icons";
 import {findAllProcess, findProcessUser, updateProcess} from "../../component/axios/api";
 
-import {useStyles} from "../../styles/webStyle";
+import {useStyles} from "../../webStyle";
 import MoveModal from "../../component/MoveModal";
 
 const {Title} = Typography;

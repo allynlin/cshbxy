@@ -5,7 +5,7 @@ import {ColumnsType} from "antd/es/table";
 import {ExclamationCircleOutlined, FileTextOutlined, FolderOpenOutlined, SearchOutlined} from "@ant-design/icons";
 import {DownLoadURL, tableName} from "../../../baseInfo";
 import Reject from "./Reject";
-import {useStyles} from "../../../styles/webStyle";
+import {useStyles} from "../../../webStyle";
 import MoveModal from '../../../component/MoveModal';
 import NormalTable from "../../../component/Table/NormalTable";
 import type {DataType} from "../../../component/Table";

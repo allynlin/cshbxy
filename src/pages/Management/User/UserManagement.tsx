@@ -11,7 +11,7 @@ import ChangePassword from "./ChangePassword";
 import ChangeUserStatus from "./ChangeUserStatus";
 import DeleteUser from "./DeleteUser";
 
-import {useStyles} from "../../../styles/webStyle";
+import {useStyles} from "../../../webStyle";
 import MoveModal from "../../../component/MoveModal";
 import NormalTable from "../../../component/Table/NormalTable";
 import type {DataType} from "../../../component/Table";

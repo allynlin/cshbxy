@@ -3,7 +3,7 @@ import {App, Button, Form, Input, Modal, Result, Spin, Typography} from 'antd';
 import {findProcurementWaitApprovalList, resolveProcurement} from "../../../component/axios/api";
 import {ColumnsType} from "antd/es/table";
 import {ExclamationCircleOutlined, FolderOpenOutlined, SearchOutlined} from "@ant-design/icons";
-import {useStyles} from "../../../styles/webStyle";
+import {useStyles} from "../../../webStyle";
 import MoveModal from '../../../component/MoveModal';
 import NormalTable from "../../../component/Table/NormalTable";
 import type {DataType} from "../../../component/Table";

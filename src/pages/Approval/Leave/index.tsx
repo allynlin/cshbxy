@@ -4,7 +4,7 @@ import {findLeaveWaitApprovalList, resolveLeave} from "../../../component/axios/
 import {ColumnsType} from "antd/es/table";
 import {ExclamationCircleOutlined, FolderOpenOutlined, SearchOutlined} from "@ant-design/icons";
 import Reject from "./Reject";
-import {useStyles} from "../../../styles/webStyle";
+import {useStyles} from "../../../webStyle";
 import MoveModal from '../../../component/MoveModal';
 import NormalTable from "../../../component/Table/NormalTable";
 import type {DataType} from "../../../component/Table";

@@ -6,7 +6,7 @@ import {addTravelReimbursement, checkLastTimeUploadFiles} from "../../component/
 import {BaseInfo, tableName} from "../../baseInfo";
 import Spin from "../../component/LoadingSkleton";
 import FileUpLoad from "../../component/axios/FileUpLoad";
-import {useStyles} from "../../styles/webStyle";
+import {useStyles} from "../../webStyle";
 
 const {Title, Paragraph} = Typography;
 const {Option} = Select;

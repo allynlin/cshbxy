@@ -9,7 +9,7 @@ import ChangeUserInfo from "./ChangeUserInfo";
 import ChangePassword from "./ChangePassword";
 import ChangeUserStatus from "./ChangeUserStatus";
 import {useSelector} from "react-redux";
-import {useStyles} from "../../../styles/webStyle";
+import {useStyles} from "../../../webStyle";
 import {RenderUserTypeTag} from "../../../component/Tag/RenderUserTypeTag";
 import ChangeDirectLeadership from "./ChangeDirectLeadership";
 import MoveModal from '../../../component/MoveModal';

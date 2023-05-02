@@ -4,7 +4,7 @@ import {message, Upload} from "antd";
 import Cookie from "js-cookie";
 import {InboxOutlined} from "@ant-design/icons";
 
-import {DownLoadURL, version} from "../../baseInfo";
+import {DownLoadURL} from "../../baseInfo";
 import {deleteFile} from "./api";
 
 
@@ -46,8 +46,6 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
         headers: {
             'Authorization': `${apiToken}`,
             'tableUid': tableName,
-            'version': version,
-            'Accept-Language': language
         },
         multiple: true,
         action: `${DownLoadURL}/uploadFile`,

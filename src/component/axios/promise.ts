@@ -2,7 +2,7 @@ import axios from 'axios';
 import qs from 'qs';
 import Cookie from "js-cookie";
 import setCookie from "../setCookie";
-import {BaseInfo, version} from "../../baseInfo";
+import {BaseInfo} from "../../baseInfo";
 import {message} from "antd";
 
 /**
@@ -25,15 +25,12 @@ export const MethodType = {
  */
 export const Request = (api: String, method = MethodType.GET, params = {}, config = {headers: {}}) => {
     const apiToken = Cookie.get('cshbxy-oa-token');
-    const language = 'zh';
     const baseURL = BaseInfo;
     const data = (method === 'GET') ? 'params' : 'data';
     let headers = {
         'X-Requested-With': 'XMLHttpRequest',
         'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
         'Authorization': `${apiToken}`,
-        'version': version,
-        'Accept-Language': language
     };
     if (config.headers) {
         headers = {

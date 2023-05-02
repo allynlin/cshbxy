@@ -6,7 +6,7 @@ import {checkLastTimeUploadFiles, submitWorkReport} from "../../component/axios/
 import {DownLoadURL, tableName} from "../../baseInfo";
 import FileUpLoad from "../../component/axios/FileUpLoad";
 import {ExclamationCircleOutlined} from "@ant-design/icons";
-import {useStyles} from "../../styles/webStyle";
+import {useStyles} from "../../webStyle";
 
 const {Title} = Typography;
 

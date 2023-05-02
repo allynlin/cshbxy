@@ -3,7 +3,7 @@ import {App, Button, Form, Input, InputNumber, Modal, Typography} from 'antd';
 import {useNavigate} from 'react-router-dom';
 
 import {addProcurement} from "../../component/axios/api";
-import {useStyles} from "../../styles/webStyle";
+import {useStyles} from "../../webStyle";
 
 const {Title, Paragraph} = Typography;
 const {TextArea} = Input;

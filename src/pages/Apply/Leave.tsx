@@ -5,7 +5,7 @@ import type {Dayjs} from 'dayjs';
 import dayjs from 'dayjs';
 
 import {addLeave} from "../../component/axios/api";
-import {useStyles} from "../../styles/webStyle";
+import {useStyles} from "../../webStyle";
 
 const {Title, Paragraph} = Typography;
 const {TextArea} = Input;

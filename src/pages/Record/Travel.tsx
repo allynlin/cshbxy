@@ -11,7 +11,7 @@ import {ColumnsType} from "antd/es/table";
 import {RenderStatus} from "../../component/Tag/RenderStatus";
 import {FileTextOutlined, FolderOpenOutlined, SearchOutlined} from "@ant-design/icons";
 import {DownLoadURL, tableName} from "../../baseInfo";
-import {useStyles} from "../../styles/webStyle";
+import {useStyles} from "../../webStyle";
 import {getProcessStatus} from '../../component/getProcessStatus';
 import {RenderStatusTag} from "../../component/Tag/RenderStatusTag";
 import MoveModal from "../../component/MoveModal";
