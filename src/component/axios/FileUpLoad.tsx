@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from "react";
 import {UploadProps} from "antd/es/upload/interface";
 import {message, Upload} from "antd";
-import Cookie from "js-cookie";
 import {InboxOutlined} from "@ant-design/icons";
 
 import {DownLoadURL} from "../../baseInfo";
 import {deleteFile} from "./api";
+import {SStorage} from "../localStrong";
 
 
 interface FileUpLoadProps {
@@ -32,8 +32,7 @@ const RenderUpLoadFiles: React.FC<FileUpLoadProps> = (props) => {
 
     const [api, contextHolder] = message.useMessage();
 
-    const apiToken = Cookie.get('cshbxy-oa-token');
-    const language = Cookie.get('cshbxy-oa-language') || 'en_US';
+    const apiToken = SStorage.get('token');
     const tableName = props.setTableName;
 
     // 接收父组件传递的 fileList

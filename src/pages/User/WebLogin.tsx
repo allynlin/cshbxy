@@ -1,13 +1,12 @@
 import React, {useEffect, useState} from "react";
 import {App, Button, Form, Input, Select, Switch} from 'antd';
-import Cookie from 'js-cookie';
-import setCookie from "../../component/setCookie";
 import {userLogin} from "../../component/axios/api";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {login} from "../../component/redux/isLoginSlice";
 import {Department, Employee, Leader} from "../../component/redux/userTypeSlice";
 import {setUser} from "../../component/redux/userInfoSlice";
+import {LStorage} from "../../component/localStrong";
 
 const LoginForm = () => {
 
@@ -96,25 +95,24 @@ const LoginForm = () => {
 
     const isRemember = () => {
         if (rememberme) {
-            setCookie({name: 'cshbxy-oa-username', value: username});
-            setCookie({name: 'cshbxy-oa-password', value: password});
-            setCookie({name: 'cshbxy-oa-userType', value: userType});
+            LStorage.set("username", username);
+            LStorage.set("password", password);
+            LStorage.set("userType", userType);
         } else {
-            Cookie.remove('cshbxy-oa-username');
-            Cookie.remove('cshbxy-oa-password');
+            LStorage.delete("username");
+            LStorage.delete("password");
         }
     }
 
     const loginError = () => {
         setLoading(false);
-        Cookie.remove('cshbxy-oa-username');
-        Cookie.remove('cshbxy-oa-password');
-        Cookie.remove('cshbxy-oa-userType');
+        LStorage.delete("username");
+        LStorage.delete("password");
     }
 
     const onReset = () => {
-        Cookie.remove('cshbxy-oa-username');
-        Cookie.remove('cshbxy-oa-password');
+        LStorage.delete("username");
+        LStorage.delete("password");
         form.resetFields();
         form.setFieldsValue({
             rememberme: true,
@@ -130,10 +128,10 @@ const LoginForm = () => {
             wrapperCol={{span: 8}}
             onFinish={onFinish}
             initialValues={{
-                username: Cookie.get("cshbxy-oa-username") || "",
-                password: Cookie.get("cshbxy-oa-password") || "",
+                username: LStorage.get("username") || "",
+                password: LStorage.get("password") || "",
                 rememberme: true,
-                userType: Cookie.get("cshbxy-oa-userType") || 'Employee',
+                userType: LStorage.get("userType") || 'Employee',
             }}>
             <Form.Item
                 label="用户名"

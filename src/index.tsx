@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {Provider} from "react-redux";
+import {StyleProvider, legacyLogicalPropertiesTransformer} from '@ant-design/cssinjs';
 
 import './index.css';
 import store from "./component/redux/store";
 
-import 'antd/dist/reset.css';
 import App from "./App";
 
 const root = ReactDOM.createRoot(
@@ -14,7 +14,9 @@ const root = ReactDOM.createRoot(
 root.render(
     <React.StrictMode>
         <Provider store={store}>
-            <App/>
+            <StyleProvider hashPriority="high" transformers={[legacyLogicalPropertiesTransformer]}>
+                <App/>
+            </StyleProvider>
         </Provider>
     </React.StrictMode>
 );

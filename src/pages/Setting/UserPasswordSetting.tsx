@@ -5,7 +5,7 @@ import {updatePassword} from "../../component/axios/api";
 import {useDispatch, useSelector} from "react-redux";
 import {logout} from "../../component/redux/isLoginSlice";
 import {all} from "../../component/redux/userTypeSlice";
-import Cookie from "js-cookie";
+import {SStorage} from "../../component/localStrong";
 
 interface Values {
     title: string;
@@ -102,8 +102,8 @@ const UserPassword: React.FC = () => {
                 })
                 dispatch(logout())
                 dispatch(all())
-                Cookie.remove('token');
-                Cookie.remove('password');
+                SStorage.delete("token");
+                SStorage.delete("password");
                 navigate('/login', {replace: true})
             }
         }).catch(() => {

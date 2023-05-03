@@ -1,9 +1,8 @@
 import axios from 'axios';
 import qs from 'qs';
-import Cookie from "js-cookie";
-import setCookie from "../setCookie";
 import {BaseInfo} from "../../baseInfo";
 import {message} from "antd";
+import {SStorage} from "../localStrong";
 
 /**
  * 请求方法,内置 GET 和 POST
@@ -24,7 +23,7 @@ export const MethodType = {
  * @version 1.0.0
  */
 export const Request = (api: String, method = MethodType.GET, params = {}, config = {headers: {}}) => {
-    const apiToken = Cookie.get('cshbxy-oa-token');
+    const apiToken = SStorage.get('token');
     const baseURL = BaseInfo;
     const data = (method === 'GET') ? 'params' : 'data';
     let headers = {
@@ -50,7 +49,7 @@ export const Request = (api: String, method = MethodType.GET, params = {}, confi
     return new Promise((resolve, reject) => {
         axios(axiosConfig).then(res => {
             if (res.data.token !== null && res.data.token !== undefined)
-                setCookie({name: "cshbxy-oa-token", value: res.data.token})
+                SStorage.set("token", res.data.token);
             resolve(res.data);
         }).catch(error => {
             message.error(error.message + "，请联系管理员");

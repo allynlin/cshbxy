@@ -3,9 +3,8 @@ import {useNavigate} from "react-router-dom";
 import {logout} from "../../component/redux/isLoginSlice";
 import {all} from "../../component/redux/userTypeSlice";
 import {useDispatch, useSelector} from "react-redux";
-import Cookie from "js-cookie";
 import {ExclamationCircleOutlined, LoginOutlined, PoweroffOutlined} from "@ant-design/icons";
-import {LStorage, SStorage} from "../../component/localStrong";
+import {SStorage} from "../../component/localStrong";
 import UserPasswordSetting from "../Setting/UserPasswordSetting";
 import React from "react";
 
@@ -22,9 +21,7 @@ const RenderLogOut = () => {
     const logOut = () => {
         dispatch(logout())
         dispatch(all())
-        Cookie.remove('cshbxy-oa-token');
-        SStorage.clear()
-        LStorage.delete('setting')
+        SStorage.delete("token")
         message.success("退出成功")
         navigate('/login', {replace: true})
     }
