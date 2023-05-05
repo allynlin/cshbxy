@@ -24,6 +24,7 @@ const AddUserByAdmin = () => {
     const tel = Form.useWatch('tel', form);
     const email = Form.useWatch('email', form);
     const departmentUid = Form.useWatch('departmentUid', form);
+    const userType = Form.useWatch('userType', form);
 
     const key = 'register'
 
@@ -52,7 +53,7 @@ const AddUserByAdmin = () => {
     };
 
     const checkUserName = () => {
-        checkUsername(username, "Department").then(res => {
+        checkUsername(username, userType).then(res => {
             if (res.code !== 200) {
                 message.open({
                     key,
@@ -80,7 +81,7 @@ const AddUserByAdmin = () => {
     }
 
     const register = () => {
-        userRegister(username, password, realeName, gender, tel, email, departmentUid, "Department").then(res => {
+        userRegister(username, password, realeName, gender, tel, email, departmentUid, userType).then(res => {
             setLoading(false)
             if (res.code !== 200) {
                 message.open({
@@ -231,9 +232,25 @@ const AddUserByAdmin = () => {
                 <Input type={"email"} showCount maxLength={30} allowClear={true}/>
             </Form.Item>
 
+            <Form.Item
+                label="请选择用户类型"
+                name="userType"
+                rules={[
+                    {
+                        required: true,
+                        message: "请选择用户类型",
+                    },
+                ]}
+            >
+                <Select
+                    style={{width: 120}}
+                    options={[{value: 'Leader', label: '领导'}, {value: 'Department', label: '部门'}]}
+                />
+            </Form.Item>
+
             <Form.Item>
                 <Button type="primary" htmlType="submit" loading={loading} disabled={loading}>
-                    添加部门
+                    添加领导/部门
                 </Button>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <Button htmlType="button" disabled={loading} onClick={onReset}>

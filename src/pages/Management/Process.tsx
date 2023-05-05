@@ -45,8 +45,8 @@ const ProcessManagement = () => {
             })
             data.push({
                 key: 'nowDepartment',
-                title: '申请人部门最高领导',
-                description: '申请人部门最高领导',
+                title: '申请人部门领导',
+                description: '申请人部门领导',
                 chosen: false
             })
             setMockData(data)
@@ -102,7 +102,7 @@ const ProcessManagement = () => {
         // 过滤 processArray，将其中的 nowDepartment 改为当前部门直属领导
         const processArrayFilter = processArray.map((item: string) => {
             if (item === 'nowDepartment') {
-                return "申请人部门最高领导"
+                return "申请人部门领导"
             } else {
                 return item
             }

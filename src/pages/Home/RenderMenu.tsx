@@ -111,7 +111,7 @@ export const SliderMenu: React.FC = () => {
                 to={'/user-management'}>用户管理</Link>, '/user-management',
             <TeamOutlined/>),
         getItem((<Link
-                to={'/register'}>添加部门</Link>), '/register',
+                to={'/register'}>添加部门/领导</Link>), '/register',
             <FormOutlined/>),
         getItem(<Link
                 to={'/process-management'}>流程管理</Link>, '/process-management',
