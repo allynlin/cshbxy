@@ -3,7 +3,7 @@ import React from "react";
 
 export const RenderUserTypeTag = (item: any) => {
     if (item.departmentKey) {
-        return <Tag color='#531dab'>直属领导</Tag>
+        return <Tag color='#531dab'>部门最高领导</Tag>
     }
     switch (item.userType) {
         case 'Department':

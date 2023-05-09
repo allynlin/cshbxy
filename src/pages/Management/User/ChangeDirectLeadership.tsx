@@ -19,7 +19,7 @@ export default function ChangeDirectLeadership(props: propsCheck) {
         modal.confirm({
             title: "确认",
             icon: <ExclamationCircleOutlined/>,
-            content: "您正在设置当前部门直属领导，您只能设置一个直属领导，如您已设置直属领导，再次设置将会覆盖之前的设置，是否继续？",
+            content: "您正在设置当前部门最高领导，您只能设置一个部门最高领导，如您已设置部门最高领导，再次设置将会覆盖之前的设置，是否继续？",
             onOk() {
                 setLoading(true);
                 updateDepartmentLeader(userInfo.uid, props.content.uid).then(() => {
@@ -39,7 +39,7 @@ export default function ChangeDirectLeadership(props: propsCheck) {
                 disabled={loading}
                 loading={loading}
                 onClick={() => showConfirm()}
-                type="primary" danger>设置直属领导</Button>
+                type="primary" danger>设置部门最高领导</Button>
         </>
     )
 };
