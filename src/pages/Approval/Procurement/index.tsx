@@ -9,6 +9,7 @@ import NormalTable from "../../../component/Table/NormalTable";
 import type {DataType} from "../../../component/Table";
 import {LoadingIcon} from "../../../component/Icon";
 import Reject from "../Procurement/Reject";
+import {addCache, readCache} from "../../../component/cache";
 
 const {Title} = Typography;
 
@@ -51,6 +52,20 @@ const MyApp = () => {
     }, [waitTime])
 
     useEffect(() => {
+        if (dataSource.length === 0) {
+            return
+        }
+        addCache('procurementApproval', dataSource)
+    }, [dataSource])
+
+    useEffect(() => {
+        const cache = readCache('procurementApproval');
+        if (cache) {
+            setDataSource(cache)
+            setShowData(cache)
+            setLoading(false)
+            return
+        }
         getDataSource();
     }, [])
 

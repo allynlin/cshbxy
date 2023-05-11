@@ -39,10 +39,7 @@ const HomeDescriptions: React.FC = () => {
             <Descriptions.Item label="最后更新时间">
                 {userInfo.update_time}
             </Descriptions.Item>
-            <Descriptions.Item label="用户状态">
-                {userInfo.status === 0 ? "正常" : "禁用"}
-            </Descriptions.Item>
-            {userInfo.departmentUid ? <Descriptions.Item label="管理员">
+            {userInfo.departmentUid ? <Descriptions.Item label="所属部门">
                 {userInfo.departmentUid}
             </Descriptions.Item> : null}
         </Descriptions>

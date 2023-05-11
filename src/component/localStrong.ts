@@ -7,7 +7,7 @@ interface Config {
 
 const config: Config = {
     name: 'OA_allynlin',
-    version: '1.0.0',
+    version: '2.0.0',
 }
 
 enum StorageType {
@@ -70,7 +70,7 @@ class MyStorage {
         if (expires) {
             source.expires =
                 new Date().getTime() +
-                (expires === true ? 1000 * 60 * 60 * 24 * 365 : expires) // 默认一年
+                (expires === true ? 1000 * 60 * 60 * 24 * 7 : expires) // 默认 7 天过期
         }
         source.value = value
         const data = JSON.stringify(source) // 转换为字符串

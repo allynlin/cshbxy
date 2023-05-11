@@ -16,6 +16,7 @@ import NormalTable from "../../component/Table/NormalTable";
 import type {DataType} from "../../component/Table";
 import {LoadingIcon} from "../../component/Icon";
 import {RenderStatusTag} from "../../component/Tag/RenderStatusTag";
+import {addCache, readCache} from "../../component/cache";
 
 const {Title, Paragraph} = Typography;
 
@@ -139,6 +140,20 @@ const MyApp: React.FC = () => {
     }
 
     useEffect(() => {
+        if (dataSource.length === 0) {
+            return
+        }
+        addCache('procurementRecord', dataSource)
+    }, [dataSource])
+
+    useEffect(() => {
+        const cache = readCache('procurementRecord');
+        if (cache) {
+            setDataSource(cache)
+            setShowData(cache)
+            setLoading(false)
+            return
+        }
         getDataSource();
     }, [])
 

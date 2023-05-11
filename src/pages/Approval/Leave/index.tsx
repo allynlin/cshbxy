@@ -9,6 +9,7 @@ import MoveModal from '../../../component/MoveModal';
 import NormalTable from "../../../component/Table/NormalTable";
 import type {DataType} from "../../../component/Table";
 import {LoadingIcon} from "../../../component/Icon";
+import {addCache, readCache} from "../../../component/cache";
 
 const {Title, Paragraph} = Typography;
 
@@ -51,6 +52,20 @@ const MyApp = () => {
     }, [waitTime])
 
     useEffect(() => {
+        if (dataSource.length === 0) {
+            return
+        }
+        addCache('leaveApproval', dataSource)
+    }, [dataSource])
+
+    useEffect(() => {
+        const cache = readCache('leaveApproval');
+        if (cache) {
+            setDataSource(cache)
+            setShowData(cache)
+            setLoading(false)
+            return
+        }
         getDataSource();
     }, [])
 
