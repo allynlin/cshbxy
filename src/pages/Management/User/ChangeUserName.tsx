@@ -38,6 +38,10 @@ export default function ChangeUserNamePreview(props: propsCheck) {
     }
 
     const changeUsername = (values: any) => {
+        if(usernameUse){
+            message.error("用户名已被占用");
+            return;
+        }
         setLoading(true);
         updateUserName(props.info.uid, values.username).then(res => {
             if (res.code === 200) {
